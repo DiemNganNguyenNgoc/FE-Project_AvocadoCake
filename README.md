@@ -32,6 +32,3 @@ Website không chỉ bán bánh mà còn hỗ trợ khách hàng tự thiết k�
 - Thêm vào giỏ hàng, áp dụng mã giảm giá, thanh toán trực tuyến.
 - Theo dõi đơn hàng và lịch sử mua sắm.
 
-
-cd ../ai-service
-pip install -r requirements.txt
