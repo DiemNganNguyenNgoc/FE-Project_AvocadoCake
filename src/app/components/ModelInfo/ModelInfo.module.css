@@ -1,0 +1,182 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--brown100);
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.statusCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e6e6e6;
+}
+
+.statusHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.statusLabel {
+  font-weight: 600;
+  color: var(--brown100);
+}
+
+.status {
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.available {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.unavailable {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.metrics {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.metrics h4 {
+  margin: 0 0 1rem 0;
+  color: var(--brown100);
+  font-size: 1.1rem;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
+}
+
+.metricLabel {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.metricValue {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--brown100);
+}
+
+.info {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f0f8ff;
+  border-radius: 8px;
+  border-left: 4px solid var(--green100);
+}
+
+.info p {
+  margin: 0.5rem 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+.refreshButton {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--green100);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-top: 1rem;
+}
+
+.refreshButton:hover {
+  background: var(--brown100);
+}
+
+.warning {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+}
+
+.warning h4 {
+  margin: 0 0 0.5rem 0;
+  color: #856404;
+}
+
+.warning p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  font-size: 1.1rem;
+  color: var(--brown100);
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  padding: 1rem;
+  background-color: #fff0f0;
+  border: 1px solid #ffa7a7;
+  border-radius: 8px;
+  color: #d32f2f;
+  font-size: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .statusHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .metricGrid {
+    grid-template-columns: 1fr;
+  }
+}

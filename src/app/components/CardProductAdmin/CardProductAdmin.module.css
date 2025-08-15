@@ -1,0 +1,90 @@
+.primary {
+    display: flex;
+    background-color: white !important;
+    /* Đảm bảo background là màu trắng */
+    color: #3A060E !important;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border: none;
+    box-shadow: 0px 2px 4px 0px #203c1640;
+    padding: 0;
+
+}
+
+.primary:hover {
+    transition: 0.25s;
+    transform: translateY(-8px);
+    cursor: pointer;
+}
+
+.secondary {
+    display: flex;
+    background-color: rgb(246, 255, 249) !important;
+    color: green !important;
+    border-radius: 15px;
+}
+
+
+.flying-product {
+    position: fixed;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 1;
+}
+
+.flying-product img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.ProductImage {
+    border-radius: 15px 15px 0 0;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    cursor: "pointer";
+    overflow: hidden;
+    
+}
+
+.cartButton {
+    background-color: var(--green100);
+    border: none;
+    font-size: 13px;
+    color: black;
+    font-weight: 500;
+    width: 100%;
+}
+.cartButton:hover,
+.cartButton:active
+{
+    background-color: rgb(187, 248, 5);
+    color: black;
+}
+
+
+
+#CardProduct{
+        width: 29rem;
+        overflow: hidden;
+        border-radius: 15px;
+        margin-Bottom:20px;
+}
+
+.cardTitle,
+.priceProduct,
+.priceProductOld{
+    text-align: center;
+}
+.priceProduct{
+    font-weight: 500;
+}
+.priceProductOld{
+    font-size: 13px;
+    color: grey;
+    text-decoration: line-through;
+}

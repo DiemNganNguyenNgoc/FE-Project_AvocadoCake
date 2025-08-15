@@ -1,0 +1,64 @@
+.btn__admin {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 50px;
+  /* font-size: 1.1rem; */
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: #1890ff;
+  color: white;
+  min-width: var(--button-width);
+  min-height: var(--button-height);
+}
+
+.btn__admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn__admin:disabled {
+  background-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Style cho nút xóa */
+.btn__admin.delete {
+  background-color: #ff4d4f;
+}
+
+.btn__admin.delete:hover {
+  background-color: #ff7875;
+}
+
+/* Style cho nút thêm mới */
+.btn__admin.add {
+  background-color: var(--green100);
+  color: var(--brown100);
+}
+
+.btn__admin.add:hover {
+  background-color: var(--brown100);
+  color: var(--green100);
+}
+
+/* Style cho nút sửa */
+.btn__admin.edit {
+  background-color: #1890ff;
+}
+
+.btn__admin.edit:hover {
+  background-color: #40a9ff;
+}
+
+/* Style cho nút quay lại */
+.btn__admin.back {
+  background-color: #722ed1;
+}
+
+.btn__admin.back:hover {
+  background-color: #9254de;
+}

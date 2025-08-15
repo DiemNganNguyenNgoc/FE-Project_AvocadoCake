@@ -1,0 +1,37 @@
+.recommendation-container {
+  padding: 20px 0;
+  margin: 20px 0;
+}
+
+.carousel-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-item:hover {
+  transform: translateY(-5px);
+}
+
+.slick-slide {
+  transition: all 0.3s ease;
+}
+
+.slick-slide:hover {
+  transform: translateY(-5px);
+}
+
+.slick-dots {
+  bottom: -30px;
+}
+
+.slick-dots li button:before {
+  color: #000;
+}
+
+.no-products {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}

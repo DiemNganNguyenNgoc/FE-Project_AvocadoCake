@@ -1,0 +1,226 @@
+/* .title-row {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.back-icon {
+  color: var(--brown100);
+}
+
+.back-icon:hover {
+  color: var(--brown50);
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.container-banking {
+  margin: 20px 0 50px;
+}
+
+.banking-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+}
+
+.item-banking {
+  width: 35rem;
+  height: auto;
+  box-shadow: 0 0 4px 0 var(--shadow);
+  text-align: center;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.img-banking {
+  width: 26rem;
+  height: 26rem;
+  flex-shrink: 0;
+} */
+/* .container-xl {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+} */
+
+/* .container-xl { */
+/* max-width: 1200px; */
+/* margin: 0 auto; */
+/* padding: 20px; */
+/* background-color: #fff; */
+/* border-radius: 20px; */
+/* box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); */
+/* } */
+
+.title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.title__content {
+  font-size: 28px;
+  font-weight: 700;
+  margin-left: 15px;
+  color: #2c3e50;
+}
+
+.container-banking {
+  display: flex;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* Chi tiết đơn hàng */
+.order-details {
+  flex: 1;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.order-details h3 {
+  font-size: 22px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.order-item {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease;
+}
+
+.order-item:hover {
+  transform: translateY(-2px);
+}
+
+.order-item p {
+  margin: 0;
+  font-size: 16px;
+  color: #495057;
+}
+
+.order-total {
+  margin-top: 20px;
+  padding: 15px;
+  /* background: #e9ecef; */
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.expiry-time {
+  margin-top: 25px;
+  padding: 20px;
+  background: #fff3cd;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #ffeeba;
+}
+
+.expiry-time p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #856404;
+  margin: 0;
+}
+
+/* Phần QR Code */
+.banking-info {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.item-banking {
+  background: white;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-banking img {
+  width: 500px;
+  height: auto;
+  object-fit: cover;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-info {
+  display: none;
+}
+
+.qr-info label {
+  display: block;
+  font-size: 1.6rem;
+  color: #495057;
+  margin: 10px 0;
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.payment-message {
+  text-align: center;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.payment-message h3 {
+  font-size: 2.4rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.payment-message p {
+  font-size: 18px;
+  color: #6c757d;
+}
+
+/* Nút thanh toán */
+.payment-button {
+  width: 80%;
+  margin: 30px auto;
+  padding: 15px 30px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.payment-button:hover {
+  background: #218838 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}

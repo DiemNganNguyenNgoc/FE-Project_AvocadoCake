@@ -1,0 +1,21 @@
+.order-history__info {
+  width: 100%;
+  max-height: 1000px;
+  margin: 0 auto;
+  border-radius: 15px;
+  /* box-shadow: 0px 0px 4px 0px var(--shadow); */
+  padding: 10px 0;
+  background-color: var(--grey9);
+  overflow-y: auto;
+}
+
+.order-history__title {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.user-info__container {
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,94 @@
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 32px;
+  justify-content: space-between;
+}
+
+.statCard {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(80, 80, 120, 0.08);
+  padding: 28px 36px;
+  flex: 1 1 200px;
+  min-width: 220px;
+  text-align: center;
+  transition: box-shadow 0.2s;
+  position: relative;
+}
+.statCard:hover {
+  box-shadow: 0 8px 32px rgba(80, 80, 120, 0.16);
+}
+.statCard h3 {
+  font-size: 1.1rem;
+  color: #422403;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.statCard p {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #29b039;
+  margin: 0;
+}
+
+.chartContainer {
+  display: grid;
+  /* This creates a 2-column layout on larger screens */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px; /* Increased gap for more breathing room */
+}
+
+.chartBox {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(80, 80, 120, 0.08);
+  /* Increased padding to make charts feel bigger */
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0; /* Prevents overflow */
+}
+.chartBox h4 {
+  font-size: 1.15rem;
+  color: #3a060e; /* Consistent title color */
+  font-weight: 600;
+  margin-bottom: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* Make full-width on smaller screens */
+@media (max-width: 900px) {
+  .cardContainer {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .chartContainer {
+    /* Stacks charts into 1 column on smaller screens */
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .statCard,
+  .chartBox {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+/* Nền tổng thể cho container-xl */
+.container-xl {
+  background: linear-gradient(120deg, #f8fafc 60%, #e9eafc 100%);
+  min-height: 100vh;
+  padding: 36px 0 48px 0;
+}
+
+h2 {
+  color: #3a060e; /* Consistent main title color */
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}

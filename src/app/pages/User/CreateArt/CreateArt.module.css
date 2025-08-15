@@ -1,0 +1,105 @@
+.container {
+  padding: 2rem 0;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 3rem;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .content {
+    flex-direction: row;
+  }
+}
+
+.drawingSection,
+.resultSection {
+  padding: 1.6rem;
+  flex: 1;
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  margin-bottom: 1.6rem;
+  color: var(--color1);
+}
+
+.canvasContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: crosshair;
+  touch-action: none;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.note {
+  display: block;
+  text-align: center;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.button {
+  flex: 1;
+}
+
+.loadingIcon {
+  margin-right: 0.5rem;
+}
+
+.error {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.resultImage {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.downloadButton {
+  width: 100%;
+  margin-top: 1rem;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}

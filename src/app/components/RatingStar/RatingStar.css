@@ -1,0 +1,31 @@
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stars-container {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  transition: color 0.2s ease-in-out;
+}
+
+.rating-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.rating-value {
+  font-weight: bold;
+  color: #ffc107;
+}
+
+.rating-count {
+  color: #999;
+}

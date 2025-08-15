@@ -1,0 +1,110 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  color: var(--brown100);
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--brown100);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="number"],
+.formGroup select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1.4rem;
+}
+
+.formGroup input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.optionsSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.optionsSection h3 {
+  color: var(--brown100);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.optionGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.optionGroup input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1.4rem;
+}
+
+.removeButton {
+  background-color: #ff4d4f !important;
+  color: white !important;
+  padding: 0.8rem 1.2rem !important;
+}
+
+.removeButton:hover {
+  background-color: #ff7875 !important;
+}
+
+.removeButton:disabled {
+  background-color: #ffccc7 !important;
+  cursor: not-allowed;
+}
+
+.formActions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.error {
+  background-color: #fff0f0;
+  border: 1px solid #ffa7a7;
+  border-radius: 8px;
+  color: #d32f2f;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  text-align: center;
+}

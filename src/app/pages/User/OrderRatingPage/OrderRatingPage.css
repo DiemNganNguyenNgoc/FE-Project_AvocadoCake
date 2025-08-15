@@ -1,0 +1,192 @@
+.rating-page {
+  padding: 20px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* color: var(--brown100); */
+}
+
+.rating-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.back-icon-wrapper {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.rating-title {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--brown100);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.order-info {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2.5rem;
+  line-height: 2;
+}
+
+.order-info p {
+  margin-bottom: 0.75rem;
+  color: var(--brown100);
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.product-rating-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  padding: 1.8rem;
+}
+
+.product-rating-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-rating-card .product-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.product-rating-card .product-info {
+  flex: 1;
+  padding: 0.5rem 0;
+  line-height: 2;
+}
+
+.product-rating-card .product-info h5 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  /* color: #2c3e50; */
+  color: var(--brown100);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.product-rating-card .product-info p {
+  margin-bottom: 0.75rem;
+  font-size: 1.7rem;
+  /* color: #444; */
+  color: var(--brown100);
+}
+
+.rating-section {
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+  margin-top: 1.2rem;
+}
+
+.rating-section label {
+  display: block;
+  margin-bottom: 0.75rem;
+  /* color: #2c3e50; */
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--brown100);
+}
+
+.rating-section .form-control {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 1.2rem;
+  font-size: 1.7rem;
+  transition: border-color 0.2s ease;
+  line-height: 2;
+}
+
+.rating-section .form-control:focus {
+  /* border-color: #4a90e2; */
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.15);
+}
+
+.rating-section .btn-primary {
+  min-width: 180px;
+  padding: 1.2rem 2.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.7rem;
+  transition: all 0.2s ease;
+  /* background-color: #4a90e2; */
+  border: none;
+}
+
+.rating-section .btn-primary:hover {
+  /* background-color: #357abd; */
+  transform: translateY(-1px);
+}
+
+.rating-section .btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.rating-section .text-danger {
+  font-size: 1.6rem;
+  margin-top: 0.5rem;
+  color: #dc3545;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .rating-page {
+    padding: 15px;
+    font-size: 1.6rem;
+  }
+
+  .rating-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .rating-title {
+    font-size: 2.4rem;
+  }
+
+  .product-rating-card .product-image {
+    width: 100px;
+    height: 100px;
+    margin-right: 1.5rem;
+  }
+
+  .product-rating-card .product-info h5 {
+    font-size: 1.9rem;
+  }
+
+  .product-rating-card .product-info p {
+    font-size: 1.5rem;
+  }
+
+  .rating-section .btn-primary {
+    min-width: 140px;
+    padding: 1rem 1.6rem;
+    font-size: 1.4rem;
+  }
+
+  .rating-section label {
+    font-size: 1.5rem;
+  }
+
+  .rating-section .form-control {
+    font-size: 1.5rem;
+  }
+}
