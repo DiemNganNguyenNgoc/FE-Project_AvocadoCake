@@ -9,6 +9,7 @@ import App from "./App";
 import "./app/assets/css/reset.css";
 import "./app/assets/css/style.css";
 import "./index.css";
+import "./lib/i18n/config";
 import { store } from "./app/redux/store";
 
 
