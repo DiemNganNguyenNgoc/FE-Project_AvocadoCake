@@ -5,12 +5,12 @@ import ButtonComponent from "../../../../components/ButtonComponent/ButtonCompon
 import "./AddStatusPage.css";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createStatus } from "../../../../services/StatusService";
+import { createStatus } from "../../../../api/services/StatusService";
 import Loading from "../../../../components/LoadingComponent/Loading";
 import Message from "../../../../components/MessageComponent/Message";
-import * as StatusService from "../../../../services/StatusService";
+import * as StatusService from "../../../../api/services/StatusService";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
-import { isAdmin } from "../../../../utils";
+import { isAdmin } from "../../../../../utils";
 
 const AddStatusPage = () => {
   const accessToken = localStorage.getItem("access_token");

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import ProductInforCustom from "../../components/ProductInfor/ProductInforCustom";
 import RatingStar from "../RatingStar/RatingStar";
-import { getUserProductRating } from "../../services/OrderService";
+import { getUserProductRating } from "../../api/services/OrderService";
 import { useSelector } from "react-redux";
 
 const OrderHistoryCardComponent = ({ order, onRateClick }) => {

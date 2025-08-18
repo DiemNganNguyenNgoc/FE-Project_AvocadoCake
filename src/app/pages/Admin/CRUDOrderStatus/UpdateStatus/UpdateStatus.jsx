@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./UpdateStatus.css"; // Import file CSS
-import SideMenuComponent from "../../../../components/SideMenuComponent/SideMenuComponent";
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
 import TruckIconComponent from "../../../../components/TruckIconComponent/TruckIconComponent";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as StatusService from "../../../../services/StatusService";
-import * as OrderService from "../../../../services/OrderService";
+import * as StatusService from "../../../../api/services/StatusService";
+import * as OrderService from "../../../../api/services/OrderService";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
 
 const UpdateStatus = () => {

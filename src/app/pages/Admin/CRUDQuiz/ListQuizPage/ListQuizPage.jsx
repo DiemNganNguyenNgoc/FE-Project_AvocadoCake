@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ListQuizPage.module.css";
-import QuizService from "../../../../services/QuizService";
+import QuizService from "../../../../api/services/QuizService";
 import AdminButtonComponent from "../../../../components/AdminButtonComponent/AdminButtonComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
 

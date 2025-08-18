@@ -9,7 +9,7 @@ import {
   getDetailsOrder,
   updateProductRating,
   getUserProductRating,
-} from "../../../services/OrderService";
+} from "../../../api/services/OrderService";
 import { useSelector } from "react-redux";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 

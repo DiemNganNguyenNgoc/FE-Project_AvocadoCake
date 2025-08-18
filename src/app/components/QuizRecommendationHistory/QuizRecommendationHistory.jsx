@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import QuizRecommendationService from "../../services/QuizRecommendationService";
+import QuizRecommendationService from "../../api/services/QuizRecommendationService";
 import CardProduct from "../CardProduct/CardProduct";
 import styles from "./QuizRecommendationHistory.module.css";
 

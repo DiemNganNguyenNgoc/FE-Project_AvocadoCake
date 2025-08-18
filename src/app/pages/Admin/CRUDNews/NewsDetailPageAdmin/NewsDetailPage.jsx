@@ -1,10 +1,8 @@
-import { React, useState, useEffect } from "react";
+import { useState } from "react";
 import "./NewsDetailPage.css";
-// import "../../../assets/css/style.css";
-import { useNavigate, useLocation } from "react-router-dom";
-// import img1 from "../../../assets/img/hero_2.jpg";
+import { useLocation, useNavigate } from "react-router-dom";
+import { deleteNews } from "../../../../api/services/NewsService";
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
-import { deleteNews } from "../../../../services/NewsService";
 const NewsDetailPage = () => {
   const accessToken = localStorage.getItem("access_token");
     const navigate = useNavigate();

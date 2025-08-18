@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import GameService from "../../services/GameService";
+import GameService from "../../api/services/GameService";
 import styles from "./UserCoins.module.css";
 
 const UserCoins = () => {

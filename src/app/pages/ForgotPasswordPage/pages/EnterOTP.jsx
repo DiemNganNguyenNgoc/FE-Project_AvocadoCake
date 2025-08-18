@@ -4,7 +4,7 @@ import img2 from "../../../assets/img/AVOCADO.png";
 import img1 from "../../../assets/img/hero_2.jpg";
 import ButtonFormComponent from "../../../components/ButtonFormComponent/ButtonFormComponent";
 import OTPComponent from "../../../components/OTPComponent/OTPComponent";
-import * as AuthService from "../../../services/AuthService";
+import * as AuthService from "../../../api/services/AuthService";
 import Message from "../../../components/MessageComponent/Message";
 import Loading from "../../../components/LoadingComponent/Loading";
 import "./EnterOTP.css";

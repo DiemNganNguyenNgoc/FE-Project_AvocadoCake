@@ -12,9 +12,9 @@ import {
   getRecommendations,
   getDetailsproduct,
   getProductsByCategory,
-} from "../../../services/productServices";
+} from "../../../api/services/productServices";
 import RatingStar from "../../../components/RatingStar/RatingStar";
-import { getProductRatings } from "../../../services/OrderService";
+import { getProductRatings } from "../../../api/services/OrderService";
 import { Card, ListGroup } from "react-bootstrap";
 
 const ViewProductDetailPage = () => {

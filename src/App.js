@@ -8,24 +8,23 @@ import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "bootstrap-datepicker";
-import "./assets/css/reset.css";
-import "./assets/css/style.css";
-import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
-import FooterComponent from "./components/FooterComponent/FooterComponent";
-import { routes } from "./routes";
-import { AuthProvider } from "./context/AuthContext";
-import { isJsonString } from "./utils";
+import "./app/assets/css/reset.css";
+import "./app/assets/css/style.css";
+import DefaultComponent from "./app/components/DefaultComponent/DefaultComponent";
+import FooterComponent from "./app/components/FooterComponent/FooterComponent";
+import { routes } from "./app/routes";
+import { AuthProvider } from "./app/context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import { updateUser } from "./redux/slides/userSlide";
-import * as UserService from "./services/UserService";
+import { updateUser } from "./app/redux/slides/userSlide";
+import * as UserService from "./app/api/services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./components/LoadingComponent/Loading";
+import Loading from "./app/components/LoadingComponent/Loading";
 
 function App() {
   const dispatch = useDispatch();
   const [showLoading, setShowLoading] = useState(false);
   const user = useSelector((state) => state.user);
-  // console.log("user", user);
+  
 
   useEffect(() => {
     WebFont.load({

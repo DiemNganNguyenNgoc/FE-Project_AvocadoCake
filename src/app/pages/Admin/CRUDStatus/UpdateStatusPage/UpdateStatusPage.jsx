@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
 import Loading from "../../../../components/LoadingComponent/Loading";
 import Message from "../../../../components/MessageComponent/Message";
-import * as StatusService from "../../../../services/StatusService";
+import * as StatusService from "../../../../api/services/StatusService";
 import { useEffect, useState } from "react";
 import EditIconComponent from "../../../../components/EditIconComponent/EditIconComponent";
 
@@ -57,12 +57,9 @@ const UpdateStatusPage = () => {
       statusDescription: formValues.statusDescription,
       // access_token: accessToken,
     };
-    // console.log("User  data to update:", userData); // Log dữ liệu
-    // console.log("Size of userData:", JSON.stringify(userData).length); // Log kích thước
-    // console.log("statusData:", statusData);
+   
     mutation.mutate(statusData);
-    // const dataSize = new Blob([JSON.stringify(userData)]).size; // Sử dụng Blob để tính kích thước
-    // console.log("Size of userData:", dataSize, "bytes");
+   
     setIsEditing(false);
   };
 

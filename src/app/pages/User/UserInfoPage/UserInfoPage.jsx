@@ -9,11 +9,11 @@ import img from "../../../assets/img/hero_5.jpg";
 import EditIconComponent from "../../../components/EditIconComponent/EditIconComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUser, updateUser } from "../../../redux/slides/userSlide";
-import * as UserService from "../../../services/UserService";
+import * as UserService from "../../../api/services/UserService";
 import { useMutationHook } from "../../../hooks/useMutationHook";
 import Loading from "../../../components/LoadingComponent/Loading";
 import Message from "../../../components/MessageComponent/Message";
-import { getBase64 } from "../../../utils";
+import { getBase64 } from "../../../../utils";
 import { useNavigate } from "react-router-dom";
 import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
 
@@ -67,9 +67,9 @@ function UserInfoPage() {
   //   setSelectedCity(cityCode);
   //   const selectedCity = cities.find((city) => city.code === cityCode);
   //   setDistricts(selectedCity?.districts || []); // Cập nhật danh sách quận/huyện
-  //   setWards([]); // Reset danh sách phường/xã
-  //   setSelectedDistrict(""); // Reset quận/huyện
-  //   setSelectedWard(""); // Reset phường/xã
+  //   setWards([]); 
+  //   setSelectedDistrict(""); 
+  //   setSelectedWard("");
   // };
 
   const handleCityChange = (cityCode) => {

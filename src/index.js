@@ -1,5 +1,4 @@
 import "@glints/poppins";
-import { useQuery } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
@@ -7,11 +6,11 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
-import "./assets/css/reset.css";
-import "./assets/css/style.css";
+import "./app/assets/css/reset.css";
+import "./app/assets/css/style.css";
 import "./index.css";
-import { store } from "./redux/store";
-import { AuthProvider } from "./context/AuthContext";
+import { store } from "./app/redux/store";
+
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));

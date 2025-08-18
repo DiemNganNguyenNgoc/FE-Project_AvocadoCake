@@ -5,7 +5,7 @@ import FormComponent from "../../../../components/FormComponent/FormComponent";
 import Message from "../../../../components/MessageComponent/Message";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
-import * as UserService from "../../../../services/UserService";
+import * as UserService from "../../../../api/services/UserService";
 
 const AddUserPage = () => {
   // const accessToken = localStorage.getItem("access_token");

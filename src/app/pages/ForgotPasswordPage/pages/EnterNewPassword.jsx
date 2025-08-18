@@ -5,7 +5,7 @@ import img2 from "../../../assets/img/AVOCADO.png";
 import ButtonFormComponent from "../../../components/ButtonFormComponent/ButtonFormComponent";
 import FormComponent from "../../../components/FormComponent/FormComponent";
 import { useNavigate, useLocation } from "react-router-dom";
-import * as AuthService from "../../../services/AuthService";
+import * as AuthService from "../../../api/services/AuthService";
 import Message from "../../../components/MessageComponent/Message";
 import Loading from "../../../components/LoadingComponent/Loading";
 

@@ -4,13 +4,13 @@ import "./PaymentPage.css";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 import ProductInforCustom from "../../../components/ProductInfor/ProductInforCustom";
 import { useSelector, useDispatch } from "react-redux";
-import * as PaymentService from "../../../services/PaymentService";
-import * as UserService from "../../../services/UserService";
-import * as OrderService from "../../../services/OrderService";
+import * as PaymentService from "../../../api/services/PaymentService";
+import * as UserService from "../../../api/services/UserService";
+import * as OrderService from "../../../api/services/OrderService";
 import { createPayment } from "../../../redux/slides/paymentSlide";
 import { updateUserCoins } from "../../../redux/slides/userSlide";
 import axios from "axios";
-import { getDetailsOrder } from "../../../services/OrderService";
+import { getDetailsOrder } from "../../../api/services/OrderService";
 import {
   clearSelectedProductDetails,
   updateOrder,

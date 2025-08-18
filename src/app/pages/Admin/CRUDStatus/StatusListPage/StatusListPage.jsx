@@ -10,12 +10,12 @@ import {
   setAllStatus,
   setDetailStatus,
 } from "../../../../redux/slides/statusSlide";
-import { deleteStatus, getAllStatus } from "../../../../services/StatusService";
+import { deleteStatus, getAllStatus } from "../../../../api/services/StatusService";
 
-import { isAdmin } from "../../../../utils";
+import { isAdmin } from "../../../../../utils";
 import Message from "../../../../components/MessageComponent/Message";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
-import * as StatusService from "../../../../services/StatusService";
+import * as StatusService from "../../../../api/services/StatusService";
 
 const StatusListPage = () => {
   const status = useSelector((state) => state.status.allStatus || []);

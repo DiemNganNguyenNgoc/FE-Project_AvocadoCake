@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import GameService from "../../../services/GameService";
+import GameService from "../../../api/services/GameService";
 import CardProduct from "../../../components/CardProduct/CardProduct";
 import styles from "./MiniGamePage.module.css";
 import ButtonFormComponent from "../../../components/ButtonFormComponent/ButtonFormComponent";

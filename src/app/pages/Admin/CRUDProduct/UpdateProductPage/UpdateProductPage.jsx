@@ -6,7 +6,7 @@ import DropdownComponent from "../../../../components/DropdownComponent/Dropdown
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
 import SizeComponent from "../../../../components/SizeComponent/SizeComponent";
 import { useNavigate } from "react-router-dom";
-import * as productService from "../../../../services/productServices";
+import * as productService from "../../../../api/services/productServices";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
 
 

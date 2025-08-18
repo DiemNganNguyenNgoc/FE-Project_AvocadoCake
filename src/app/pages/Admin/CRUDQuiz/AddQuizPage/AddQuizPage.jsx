@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AddQuizPage.module.css";
-import QuizService from "../../../../services/QuizService";
+import QuizService from "../../../../api/services/QuizService";
 import AdminButtonComponent from "../../../../components/AdminButtonComponent/AdminButtonComponent";
 
 const AddQuizPage = () => {

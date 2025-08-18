@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
 import CheckboxComponent from "../../../../components/CheckboxComponent/CheckboxComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
-import { deleteDiscount, getAllDiscount } from "../../../../services/DiscountService";
+import { deleteDiscount, getAllDiscount } from "../../../../api/services/DiscountService";
 import "./DiscountListPage.css";
 
 const DiscountListPage = () => {

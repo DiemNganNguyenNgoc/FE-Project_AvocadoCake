@@ -7,7 +7,7 @@ import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../../redux/slides/cartSlide";
 import { updateOrder } from "../../../redux/slides/orderSlide";
-import { getDetailsOrder } from "../../../services/OrderService";
+import { getDetailsOrder } from "../../../api/services/OrderService";
 
 const BankingInfoPage = () => {
   const navigate = useNavigate();

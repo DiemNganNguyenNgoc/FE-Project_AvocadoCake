@@ -4,7 +4,7 @@ import ButtonComponent from "../../../../components/ButtonComponent/ButtonCompon
 import FormComponent from "../../../../components/FormComponent/FormComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
-import { createDiscount } from "../../../../services/DiscountService";
+import { createDiscount } from "../../../../api/services/DiscountService";
 import "./AddDiscountPage.css";
 
 const AddDiscountPage = () => {
