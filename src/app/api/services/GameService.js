@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../../constants/index"; // Đường dẫn đến file constant
+import { API_URL } from "../../../lib/constants"; // Đường dẫn đến file constant
 
 const GameService = {
   getDailyPuzzle: async () => {
