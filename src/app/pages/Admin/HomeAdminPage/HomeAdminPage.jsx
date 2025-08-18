@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Pie, Line, Doughnut } from "react-chartjs-2";
-import * as UserService from "../../../services/UserService";
-import * as OrderService from "../../../services/OrderService";
-import * as ProductService from "../../../services/productServices";
-import * as CategoryService from "../../../services/CategoryService";
-import * as StatusService from "../../../services/StatusService";
+import * as UserService from "../../../api/services/UserService";
+import * as OrderService from "../../../api/services/OrderService";
+import * as ProductService from "../../../api/services/productServices";
+import * as CategoryService from "../../../api/services/CategoryService";
+import * as StatusService from "../../../api/services/StatusService";
 import styles from "./HomeAdminPage.module.css";
 
 // Import chart.js components

@@ -3,10 +3,10 @@ import { useLocation, useNavigate} from "react-router-dom";
 import SideMenuComponent from "../../../components/SideMenuComponent/SideMenuComponent";
 import ProductRowComponent from "../../../components/ProductRowComponent/ProductRowComponent"; 
 import "./OrderDetailHistoryPage.css";
-import * as UserService from "../../../services/UserService";
-import { resetUser, updateUser } from "../../../redux/slides/userSlide";
-import { React, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import * as UserService from "../../../api/services/UserService";
+import { resetUser } from "../../../redux/slides/userSlide";
+import { React,useState } from "react";
+import { useDispatch } from "react-redux";
 
 
 const OrderDetailHistoryPage = () => {

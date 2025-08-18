@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './AddNews.css'
 import ButtonComponent from '../../../../components/ButtonComponent/ButtonComponent';
-import * as NewsService from '../../../../services/NewsService'
+import * as NewsService from '../../../../api/services/NewsService'
 import Loading from "../../../../components/LoadingComponent/Loading";
 import { useNavigate } from "react-router-dom";
 import { useMutationHook } from "../../../../hooks/useMutationHook";

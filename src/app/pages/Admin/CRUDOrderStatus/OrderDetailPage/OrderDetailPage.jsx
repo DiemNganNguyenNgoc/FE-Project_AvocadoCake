@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
 import ProductRowComponent from "../../../../components/ProductRowComponent/ProductRowComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
-import * as OrderService from "../../../../services/OrderService";
-import * as StatusService from "../../../../services/StatusService";
+import * as OrderService from "../../../../api/services/OrderService";
+import * as StatusService from "../../../../api/services/StatusService";
 import "./OrderDetailPage.css";
 
 const OrderDetailPage = () => {

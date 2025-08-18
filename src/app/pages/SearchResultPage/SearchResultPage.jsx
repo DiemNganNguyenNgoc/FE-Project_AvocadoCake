@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ProductCard from "../../components/CardProduct/CardProduct"; // Giả sử bạn có một component để hiển thị sản phẩm
-import { searchProducts } from "../../services/productServices"; // Giả sử bạn có một dịch vụ để gọi API
+import { searchProducts } from "../../api/services/productServices"; // Giả sử bạn có một dịch vụ để gọi API
 import CardProduct from "../../components/CardProduct/CardProduct";
 
 const SearchResultPage = () => {
@@ -72,7 +71,6 @@ const SearchResultPage = () => {
         <div className="container product__list">
           {products.length > 0 ? (
             products.map((product) => {
-              // console.log("productPage", products.length);
               const imageUrl = product.productImage.startsWith("http")
                 ? product.productImage
                 : `https://res.cloudinary.com/dlyl41lgq/image/upload/v2/${product.productImage.replace(
@@ -80,7 +78,6 @@ const SearchResultPage = () => {
                     "/"
                   )}`;
               console.log("Product ID in ProductsPage:", product._id);
-              //console.log("Product image URL:", imageUrl);  // Debug URL ảnh
               return (
                 <CardProduct
                   key={product._id} // Dùng _id làm key cho mỗi sản phẩm

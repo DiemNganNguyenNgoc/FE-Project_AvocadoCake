@@ -7,7 +7,7 @@ import img2 from "../../assets/img/AVOCADO.png";
 import { Link, useNavigate } from "react-router-dom";
 import ForgotPassword from "../ForgotPasswordPage/pages/EnterEmail";
 import { useMutation } from "@tanstack/react-query";
-import * as UserService from "../../services/UserService";
+import * as UserService from "../../api/services/UserService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import Message from "../../components/MessageComponent/Message";

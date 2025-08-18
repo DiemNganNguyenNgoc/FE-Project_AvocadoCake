@@ -9,7 +9,7 @@ import CheckboxComponent from "../../../components/CheckboxComponent/CheckboxCom
 import BackIconComponent from "../../../components/BackIconComponent/BackIconComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../../../redux/slides/cartSlide";
-import { getAllDiscount } from "../../../services/DiscountService"; // gọi API trực tiếp
+import { getAllDiscount } from "../../../api/services/DiscountService"; // gọi API trực tiếp
 
 const CartPage = () => {
   const navigate = useNavigate();

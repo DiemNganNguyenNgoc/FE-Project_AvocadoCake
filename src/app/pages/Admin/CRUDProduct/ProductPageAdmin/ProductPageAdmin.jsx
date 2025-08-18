@@ -1,15 +1,12 @@
-import { useState, useEffect } from "react";
-import "./ProductPageAdmin.css";
-import CardProductAdmin from "../../../../components/CardProductAdmin/CardProductAdmin";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getAllCategory } from "../../../../api/services/CategoryService";
+import { getAllDiscount } from "../../../../api/services/DiscountService";
+import { getAllProduct, getProductsByCategory } from "../../../../api/services/productServices";
 import AddBtn from "../../../../components/AddBtn(+)/AddBtn";
+import CardProductAdmin from "../../../../components/CardProductAdmin/CardProductAdmin";
 import SideMenuComponent from "../../../../components/SideMenuComponent/SideMenuComponent";
-import * as productService from "../../../../services/productServices";
-import axios from 'axios'; // For making API calls
-import { Button, Modal } from "react-bootstrap";
-import { getAllCategory } from "../../../../services/CategoryService";
-import { useNavigate, useLocation } from "react-router-dom";
-import { getProductsByCategory, getAllProduct } from "../../../../services/productServices";
-import { getAllDiscount } from "../../../../services/DiscountService";
+import "./ProductPageAdmin.css";
 
 const ProductPageAdmin = () => {
   const [products, setProducts] = useState([]); // State lưu danh sách sản phẩm

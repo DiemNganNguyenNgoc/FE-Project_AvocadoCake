@@ -7,15 +7,15 @@ import CardNews from "../../../components/CardNews/CardNews";
 import news from "../../../assets/img/news.jpg";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 import { useNavigate } from "react-router-dom";
-import { getAllDiscount } from "../../../services/DiscountService";
-import { getAllNews } from "../../../services/NewsService";
+import { getAllDiscount } from "../../../api/services/DiscountService";
+import { getAllNews } from "../../../api/services/NewsService";
 import img12 from "../../../assets/img/hero_2.jpg";
 import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
-import { getAllCategory } from "../../../services/CategoryService";
+import { getAllCategory } from "../../../api/services/CategoryService";
 import {
   getAllProduct,
   getProductsByCategory,
-} from "../../../services/productServices";
+} from "../../../api/services/productServices";
 import AOS from "aos";
 import "aos/dist/aos.css";
 

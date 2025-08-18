@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import ButtonFormComponent from "../../components/ButtonFormComponent/ButtonFormComponent";
 import FormComponent from "../../components/FormComponent/FormComponent";
 import "./SignUpPage.css";
@@ -7,7 +6,7 @@ import img1 from "../../assets/img/hero_2.jpg";
 import img2 from "../../assets/img/AVOCADO.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import * as UserService from "../../services/UserService";
+import * as UserService from "../../api/services/UserService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import Message from "../../components/MessageComponent/Message";

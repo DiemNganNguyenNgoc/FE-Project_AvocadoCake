@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./UpdateQuizPage.module.css";
-import QuizService from "../../../../services/QuizService";
+import QuizService from "../../../../api/services/QuizService";
 import AdminButtonComponent from "../../../../components/AdminButtonComponent/AdminButtonComponent";
 
 const UpdateQuizPage = () => {

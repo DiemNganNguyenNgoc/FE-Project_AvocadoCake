@@ -8,7 +8,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import AIService from "../../../services/AIService";
+import AIService from "../../../api/services/AIService";
 
 const CreateArt = () => {
   const canvasRef = useRef(null);

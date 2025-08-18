@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
-import "./AddProductPage.css";
-import FormComponent from "../../../../components/FormComponent/FormComponent";
-import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
-import { data, error } from "jquery";
-import Compressor from 'compressorjs';
-import { createProduct } from "../../../../services/productServices";
-import { useMutationHook } from "../../../../hooks/useMutationHook";
-import * as productService from "../../../../services/productServices";
-import Loading from "../../../../components/LoadingComponent/Loading";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../../../api/services/productServices";
+import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
+import FormComponent from "../../../../components/FormComponent/FormComponent";
+import Loading from "../../../../components/LoadingComponent/Loading";
+import { useMutationHook } from "../../../../hooks/useMutationHook";
+import "./AddProductPage.css";
 
 const AddProductPage = () => {
   const navigate = useNavigate();
@@ -92,20 +89,12 @@ const AddProductPage = () => {
 
   const mutation = useMutationHook(
     async (data) => {
-      // const { 
-      //   productName,
-      //   productPrice,
-      //   productImage,
-      //   productCategory,
-      //   productSize,
-      //   productDescription
-      //  } = data;
 
       const response = await createProduct(data, accessToken);
       console.log("RESKLT", response);
       try {
         const result = await response;
-        //console.log("RESKLT",result);
+        
         if (result.status === "OK") {
           alert("Thêm bánh thành công!");
           navigate('/admin/products')
@@ -139,36 +128,7 @@ const AddProductPage = () => {
     }
 
     const response = mutation.mutate(formData)
-    // console.log("RESPONSE", response)
-
-    // console.log("Result", JSON.stringify(stateproduct, null, 2));
-
-    //e.preventDefault();
-
-
-
-    //     // Lấy access token từ localStorage
-    //     const accessToken = localStorage.getItem("access_token");
-    //     console.log(localStorage.getItem("access_token"));
-
-    //     if (!accessToken) {
-    //       alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để thực hiện thao tác này.");
-    //       return;
-    //     }
-    //   const response = await fetch(
-    //     "http://localhost:3001/api/product/create-product",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         //"Content-Type": "multipart/form-data", // Dành cho việc gửi tệp
-    //         Token: `Bearer ${accessToken}`
-
-    //       },
-    //       body: formData,
-    //     }
-    //   );
-
-
+   
   };
 
 

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 import CheckboxComponent from "../../../components/CheckboxComponent/CheckboxComponent";
 import SideMenuComponent_AdminManage from "../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
-import * as OrderService from "../../../services/OrderService";
-import * as ProductService from "../../../services/productServices";
+import * as OrderService from "../../../api/services/OrderService";
+import * as ProductService from "../../../api/services/productServices";
 import "./ReportPage.css";
 
 const ReportDropdown = ({

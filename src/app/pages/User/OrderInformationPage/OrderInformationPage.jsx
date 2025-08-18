@@ -8,10 +8,10 @@ import BackIconComponent from "../../../components/BackIconComponent/BackIconCom
 import FormComponent from "../../../components/FormComponent/FormComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutationHook } from "../../../hooks/useMutationHook";
-import * as OrderService from "../../../services/OrderService";
-import * as UserService from "../../../services/UserService";
+import * as OrderService from "../../../api/services/OrderService";
+import * as UserService from "../../../api/services/UserService";
 import { addOrder, setOrderDetails } from "../../../redux/slides/orderSlide";
-import * as DiscountService from "../../../services/DiscountService";
+import * as DiscountService from "../../../api/services/DiscountService";
 
 const OrderInformationPage = () => {
   const location = useLocation();
@@ -150,55 +150,6 @@ const OrderInformationPage = () => {
     }
   };
 
-  // const handleClickNext = async () => {
-  //   const orderData = {
-  //     orderItems: selectedProducts.map((product) => ({
-  //       product: product.id,
-  //       quantity: product.quantity,
-  //       total:
-  //         typeof product.price === "number"
-  //           ? product.price * product.quantity
-  //           : parseFloat(product.price.replace(/[^0-9.-]+/g, "")) *
-  //             product.quantity,
-  //     })),
-  //     shippingAddress,
-  //     paymentMethod: "Online Payment",
-  //     userId: user?.id || null,
-  //     deliveryDate,
-  //     deliveryTime,
-  //     orderNote,
-  //     shippingPrice: 30000,
-  //     status: "676180405f022353257b7ddd", // PENDING (dùng _id từ collection statuses)
-  //     totalItemPrice,
-  //     totalPrice,
-  //   };
-
-  //   console.log("orderData", orderData);
-
-  //   try {
-  //     const response = await mutation.mutateAsync(orderData);
-  //     console.log("Create order response:", response); // Debug
-
-  //     if (response?.data?._id) {
-  //       const fullOrderData = { ...orderData, _id: response.data._id }; // Sửa: dùng _id thay vì orderId
-
-  //       dispatch(addOrder(fullOrderData));
-
-  //       navigate("/payment", {
-  //         state: { ...fullOrderData },
-  //       });
-  //     } else {
-  //       console.error("Failed to create order:", response);
-  //       alert(
-  //         "Tạo đơn hàng thất bại: " +
-  //           (response?.message || "Lỗi không xác định")
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating order:", error);
-  //     alert("Đã xảy ra lỗi khi tạo đơn hàng.");
-  //   }
-  // };
 
   const [shippingAddress, setShippingAddress] = useState({
     familyName: "",
@@ -225,7 +176,6 @@ const OrderInformationPage = () => {
     typeof price === "number"
       ? price
       : parseFloat(String(price).replace(/[^0-9.-]+/g, ""));
-  // console.log("selectedPro", selectedProducts);
 
   const totalItemPrice = selectedProducts.reduce((sum, product) => {
     const discount = getDiscountValue(product.id);
@@ -234,14 +184,12 @@ const OrderInformationPage = () => {
   }, 0);
 
   // Tổng tiền đơn = tiền hàng + ship
-  //const totalPrice = totalItemPrice + shippingPrice;
 
   const totalPrice = useMemo(
     () => totalItemPrice + shippingPrice,
     [totalItemPrice, shippingPrice]
   );
 
-  // console.log("totalPrice", totalPrice);
 
   useEffect(() => {
     if (isLoggedIn) {

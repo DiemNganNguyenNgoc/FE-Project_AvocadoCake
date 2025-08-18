@@ -9,7 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { Popover, OverlayTrigger, Button } from "react-bootstrap";
 import SideMenuComponent from "../SideMenuComponent/SideMenuComponent";
-import * as UserService from "../../services/UserService";
+import * as UserService from "../../api/services/UserService";
 import { resetUser, updateUserCoins } from "../../redux/slides/userSlide";
 import Loading from "../LoadingComponent/Loading";
 import UserIconComponent from "../UserIconComponent/UserIconComponent";

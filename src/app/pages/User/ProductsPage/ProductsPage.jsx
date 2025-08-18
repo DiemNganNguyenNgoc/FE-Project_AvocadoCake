@@ -1,15 +1,15 @@
 import "./ProductsPage.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getAllCategory } from "../../../services/CategoryService";
-import { getAllDiscount } from "../../../services/DiscountService";
+import { getAllCategory } from "../../../api/services/CategoryService";
+import { getAllDiscount } from "../../../api/services/DiscountService";
 import CardProduct from "../../../components/CardProduct/CardProduct";
 import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
 import SideMenuComponent from "../../../components/SideMenuComponent/SideMenuComponent";
 import {
   getAllProduct,
   getProductsByCategory,
-} from "../../../services/productServices";
+} from "../../../api/services/productServices";
 const PAGE_SIZE = 9;
 
 const ProductsPage = () => {

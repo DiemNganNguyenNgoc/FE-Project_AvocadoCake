@@ -7,11 +7,11 @@ import {
   createProductRating,
   getUserProductRating,
   updateProductRating,
-} from "../../../services/OrderService";
+} from "../../../api/services/OrderService";
 import img from "../../../assets/img/hero_1.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import * as UserService from "../../../services/UserService";
+import * as UserService from "../../../api/services/UserService";
 import { resetUser, updateUser } from "../../../redux/slides/userSlide";
 import RatingStar from "../../../components/RatingStar/RatingStar";
 import { Modal, Button, Form } from "react-bootstrap";

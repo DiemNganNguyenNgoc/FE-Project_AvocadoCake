@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import QuizRecommendationService from "../../services/QuizRecommendationService";
+import QuizRecommendationService from "../../api/services/QuizRecommendationService";
 import styles from "./ModelInfo.module.css";
 
 const ModelInfo = () => {
