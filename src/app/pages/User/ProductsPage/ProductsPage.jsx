@@ -1,31 +1,38 @@
 import "./ProductsPage.css";
+import { useTranslation } from "react-i18next";
+import  i18n from "../../../../lib/i18n/config"
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import CardProduct from "../../../components/CardProduct/CardProduct";
 import { getAllCategory } from "../../../api/services/CategoryService";
 import { getAllDiscount } from "../../../api/services/DiscountService";
 import {
   getAllProduct,
   getProductsByCategory,
 } from "../../../api/services/productServices";
-import CardProduct from "../../../components/CardProduct/CardProduct";
 import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
 import SideMenuComponent from "../../../components/SideMenuComponent/SideMenuComponent";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 12;
 const PROMO_PER_PAGE = 1;
 
 const ProductsPage = () => {
+
+  //Hook
+  const {t} = useTranslation();
+
+  //State
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [promoGroups, setPromoGroups] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState(null);
   const [currentCategoryName, setCurrentCategoryName] =
-    useState("Tất cả sản phẩm");
+  useState(t("product_page.all_products"));
   const [currentPage, setCurrentPage] = useState(0);
   const [promoPage, setPromoPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-
+  const [currentCategory, setCurrentCategory] = useState(null);
+  
   const navigate = useNavigate();
   const location = useLocation();
   const showPromo = location.state?.showPromo || false;
@@ -75,7 +82,7 @@ const ProductsPage = () => {
 
   const handlePromoProductsClick = async () => {
     setCurrentCategory(1);
-    setCurrentCategoryName("Khuyến mãi");
+    setCurrentCategoryName(t("product_page.discount"));
     setPromoPage(0);
     setCurrentPage(0);
 
@@ -117,7 +124,7 @@ const ProductsPage = () => {
 
   const handleAllProductsClick = () => {
     setCurrentCategory(null);
-    setCurrentCategoryName("Tất cả sản phẩm");
+    setCurrentCategoryName(t("product_page.all_products"));
     setCurrentPage(0);
     fetchAllProducts();
   };
@@ -188,7 +195,7 @@ const ProductsPage = () => {
   // Render products list
   const renderProductsList = () => {
     if (currentCategory === 1) {
-      if (!promoGroups.length) return <p>Không có khuyến mãi nào</p>;
+      if (!promoGroups.length) return <p>{t("product_page.unavailable", {data:t("product_page.discount").toLowerCase()})}</p>;
 
       return promoGroups
         .slice(promoPage * PROMO_PER_PAGE, (promoPage + 1) * PROMO_PER_PAGE)
@@ -211,14 +218,14 @@ const ProductsPage = () => {
                   size={p.productSize}
                   averageRating={p.averageRating}
                   totalRatings={p.totalRatings}
-                  onClick={() => handleDetail(p._id, g.products)}
+                  onCardClick={handleDetail(p._id, g.products)}
                 />
               ))}
             </div>
           </div>
         ));
     } else {
-      if (!products.length) return <p>Không có sản phẩm nào</p>;
+      if (!products.length) return <p>{t("product_page.unavailable", {data:t("product").toLowerCase()})}</p>;
 
       return products.map((p) => (
         <CardProduct
@@ -233,7 +240,7 @@ const ProductsPage = () => {
           size={p.productSize}
           averageRating={p.averageRating}
           totalRatings={p.totalRatings}
-          onClick={() => handleDetail(p._id, products)}
+          onCardClick={() => handleDetail(p._id, products)}
         />
       ));
     }
@@ -254,12 +261,15 @@ const ProductsPage = () => {
     </div>
   );
 
+  useEffect(() => {
+  console.log("RESOURCES pages (vi):", i18n.getResourceBundle("vi", "pages"));
+}, []);
   return (
     <div className="container-xl product-container">
       <ChatbotComponent />
       <div className="product">
         <div className="product__top">
-          <h1 className="product__title">SẢN PHẨM</h1>
+          <h1 className="product__title">{t("product_page.title")}</h1>
           <p className="product__current-category">{currentCategoryName}</p>
         </div>
 
@@ -271,7 +281,7 @@ const ProductsPage = () => {
               isActive={currentCategory === null}
               onClick={handleAllProductsClick}
             >
-              Tất cả sản phẩm
+              {t("product_page.all_products")}
             </SideMenuComponent>
 
             <SideMenuComponent
@@ -280,7 +290,7 @@ const ProductsPage = () => {
               isActive={currentCategory === 1}
               onClick={handlePromoProductsClick}
             >
-              Khuyến mãi
+              {t("product_page.discount")}
             </SideMenuComponent>
 
             {categories.map((c) => (

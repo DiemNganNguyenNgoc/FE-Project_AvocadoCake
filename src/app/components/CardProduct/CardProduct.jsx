@@ -70,7 +70,7 @@ const CardProduct = ({
         {/* Add to cart button */}
         <ButtonComponent
           onClick={handleAddToCart}
-          className="mt-2 rounded-xl bg-lime-400 text-amber-950 py-2 px-4 w-full md:text-xl sm:text-base"
+          className="mt-2 rounded-xl bg-lime-400 text-amber-950 py-2 px-4 w-full md:text-xl sm:text-base z-10"
         >
           {t("button.add_to_cart")}
         </ButtonComponent>
