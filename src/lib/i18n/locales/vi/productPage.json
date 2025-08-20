@@ -1,0 +1,12 @@
+{
+   "product_page":
+   {
+    "title": "Sản phẩm",
+    "discount": "Khuyến mãi",
+    "all_products": "Tất cả sản phẩm",
+    "unavailable": "Không có {{data}} nào"
+
+   }
+    
+
+}
