@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../../../lib/constants/index";
+import { API_URL } from "../../constants/index";
 
 class QuizService {
   // Lấy danh sách quiz
