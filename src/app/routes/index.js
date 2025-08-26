@@ -54,6 +54,7 @@ import DeleteQuizPage from "../pages/Admin/CRUDQuiz/DeleteQuizPage/DeleteQuizPag
 import MiniGamePage from "../pages/User/MiniGamePage/MiniGamePage.jsx";
 import HomeAdminPage from "../pages/Admin/HomeAdminPage/HomeAdminPage.jsx";
 import DesignCakePage from "../pages/User/DesignCakePage/DesignCakePage.jsx";
+import AdminDashboard from "../pages/Admin/AdminDashboard/AdminDashboard";
 export const routes = [
   {
     path: "/",
@@ -376,6 +377,13 @@ export const routes = [
     isPrivate: true,
   },
   {
+    path: "/admin/dashboard",
+    page: AdminDashboard,
+    // isShowHeader: true,
+    // isShowFooter: true,
+    isPrivate: true,
+  },
+  {
     path: "*",
     page: NotFoundPage,
     isShowHeader: false,
@@ -426,7 +434,7 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/admin/list-quiz",
+    path: "/admin/quiz-list",
     page: ListQuizPage,
     isShowHeader: true,
   },
