@@ -56,6 +56,9 @@ import HomeAdminPage from "../pages/Admin/HomeAdminPage/HomeAdminPage.jsx";
 import DesignCakePage from "../pages/User/DesignCakePage/DesignCakePage.jsx";
 import AdminDashboard from "../pages/Admin/AdminDashboard/AdminDashboard";
 import AdminTab from "../pages/Admin/AdminTab/AdminTab.jsx";
+import AddCategory from "../pages/Admin/AdminCategory/usecases/AddCategory.jsx";
+import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory.jsx";
+import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
 
 export const routes = [
   {
@@ -356,7 +359,6 @@ export const routes = [
     // isShowFooter: true,
     isPrivate: true,
   },
-
   {
     path: "/admin/news",
     page: NewsPageAdmin,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ButtonSideMenuAdmin from "../../../components/ButtonSideMenuAdmin/ButtonSideMenuAdmin";
 import {
@@ -17,6 +17,30 @@ import {
 import logo from "../../../assets/img/AVOCADO.svg";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import HeaderAdmin from "../AdminDashboard/partials/HeaderAdmin";
+import AdminCategory from "../AdminCategory/AdminCategory";
+import AddCategory from "../AdminCategory/usecases/AddCategory";
+import UpdateCategory from "../AdminCategory/usecases/UpdateCategory";
+
+// Configuration cho từng module - dễ mở rộng
+const moduleConfigs = {
+  category: {
+    main: AdminCategory,
+    subPages: {
+      add: AddCategory,
+      update: UpdateCategory,
+    },
+    basePath: "/admin/category",
+  },
+  // Dễ dàng thêm module mới
+  // status: {
+  //   main: AdminStatus,
+  //   subPages: {
+  //     add: AddStatus,
+  //     update: UpdateStatus,
+  //   },
+  //   basePath: "/admin/status",
+  // },
+};
 
 const navItems = [
   {
@@ -52,7 +76,7 @@ const navItems = [
     text: "Category",
     icon: <LibraryBig />,
     path: "/admin/category",
-    component: () => <div>Category Content</div>,
+    component: AdminCategory,
   },
   {
     id: "status",
@@ -101,6 +125,8 @@ const navItems = [
 const AdminTab = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [currentView, setCurrentView] = useState("main");
+  const [currentModule, setCurrentModule] = useState(null);
 
   const handleTabClick = (path) => {
     if (path === "/login") {
@@ -108,7 +134,76 @@ const AdminTab = () => {
       navigate(path);
       return;
     }
+
+    // Reset to main view when clicking main tabs
+    setCurrentView("main");
+    setCurrentModule(null);
     navigate(path);
+  };
+
+  // Generic navigation handler - tái sử dụng cho mọi module
+  const handleModuleNavigation = (moduleId, view) => {
+    const moduleConfig = moduleConfigs[moduleId];
+    if (!moduleConfig) return;
+
+    setCurrentModule(moduleId);
+    setCurrentView(view);
+
+    // Update URL
+    if (view === "main") {
+      navigate(moduleConfig.basePath);
+    } else {
+      navigate(`${moduleConfig.basePath}/${view}`);
+    }
+  };
+
+  // Generic back handler - tái sử dụng cho mọi module
+  const handleBackToModule = (moduleId) => {
+    const moduleConfig = moduleConfigs[moduleId];
+    if (!moduleConfig) return;
+
+    setCurrentView("main");
+    setCurrentModule(null);
+    navigate(moduleConfig.basePath);
+  };
+
+  // Render current view based on state - tái sử dụng cho mọi module
+  const renderCurrentView = () => {
+    // Nếu đang ở sub-page của một module
+    if (currentModule && currentView !== "main") {
+      const moduleConfig = moduleConfigs[currentModule];
+      const SubPageComponent = moduleConfig.subPages[currentView];
+
+      if (SubPageComponent) {
+        return (
+          <SubPageComponent onBack={() => handleBackToModule(currentModule)} />
+        );
+      }
+    }
+
+    // Render main views
+    return (
+      <Routes>
+        {navItems
+          .filter((item) => item.component)
+          .map((item) => (
+            <Route
+              key={item.id}
+              path={item.path.replace("/admin", "")}
+              element={
+                // Nếu là module có config, truyền navigation handler
+                moduleConfigs[item.id] ? (
+                  <item.component
+                    onNavigate={(view) => handleModuleNavigation(item.id, view)}
+                  />
+                ) : (
+                  <item.component />
+                )
+              }
+            />
+          ))}
+      </Routes>
+    );
   };
 
   return (
@@ -124,7 +219,9 @@ const AdminTab = () => {
               key={item.id}
               icon={item.icon}
               text={item.text}
-              isActive={location.pathname === item.path}
+              isActive={
+                location.pathname === item.path && currentView === "main"
+              }
               onClick={() => handleTabClick(item.path)}
             />
           ))}
@@ -134,19 +231,7 @@ const AdminTab = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         <HeaderAdmin />
-        <div className="flex-1 overflow-auto">
-          <Routes>
-            {navItems
-              .filter((item) => item.component)
-              .map((item) => (
-                <Route
-                  key={item.id}
-                  path={item.path.replace("/admin", "")}
-                  element={<item.component />}
-                />
-              ))}
-          </Routes>
-        </div>
+        <div className="flex-1 overflow-auto">{renderCurrentView()}</div>
       </div>
     </div>
   );

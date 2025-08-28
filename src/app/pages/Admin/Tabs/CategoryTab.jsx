@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const CategoryTab = () => {
   return (
-    <div>CategoryTab</div>
-  )
-}
+    <div>
+      <AdminCategory />
+    </div>
+  );
+};
 
-export default CategoryTab
+export default CategoryTab;
