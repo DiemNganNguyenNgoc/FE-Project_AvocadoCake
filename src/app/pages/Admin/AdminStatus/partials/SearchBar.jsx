@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchBar = ({ searchTerm, onSearchChange }) => {
+const SearchBar = ({ searchTerm, onSearchChange, placeholder }) => {
   const handleSearchChange = (e) => {
     onSearchChange(e.target.value);
   };
@@ -30,7 +30,7 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
         type="text"
         value={searchTerm}
         onChange={handleSearchChange}
-        placeholder="Tìm kiếm theo mã hoặc tên danh mục..."
+        placeholder={placeholder || "Tìm kiếm theo mã hoặc tên trạng thái..."}
         className="block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       />
       {searchTerm && (

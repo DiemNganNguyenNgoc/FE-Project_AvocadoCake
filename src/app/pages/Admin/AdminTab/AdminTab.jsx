@@ -20,6 +20,9 @@ import HeaderAdmin from "../AdminDashboard/partials/HeaderAdmin";
 import AdminCategory from "../AdminCategory/AdminCategory";
 import AddCategory from "../AdminCategory/usecases/AddCategory";
 import UpdateCategory from "../AdminCategory/usecases/UpdateCategory";
+import AdminStatus from "../AdminStatus/AdminStatus";
+import AddStatus from "../AdminStatus/usecases/AddStatus";
+import UpdateStatus from "../AdminStatus/usecases/UpdateStatus";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -32,14 +35,14 @@ const moduleConfigs = {
     basePath: "/admin/category",
   },
   // Dễ dàng thêm module mới
-  // status: {
-  //   main: AdminStatus,
-  //   subPages: {
-  //     add: AddStatus,
-  //     update: UpdateStatus,
-  //   },
-  //   basePath: "/admin/status",
-  // },
+  status: {
+    main: AdminStatus,
+    subPages: {
+      add: AddStatus,
+      update: UpdateStatus,
+    },
+    basePath: "/admin/status",
+  },
 };
 
 const navItems = [
@@ -83,7 +86,7 @@ const navItems = [
     text: "Status",
     icon: <SquareCheckBig />,
     path: "/admin/status",
-    component: () => <div>Status Content</div>,
+    component: AdminStatus,
   },
   {
     id: "users",

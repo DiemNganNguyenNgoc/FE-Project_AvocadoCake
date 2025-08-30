@@ -25,11 +25,11 @@ const Breadcrumb = () => {
       });
     }
 
-    // Category
-    if (pathSegments.includes("category")) {
+    // Status
+    if (pathSegments.includes("status")) {
       items.push({
-        label: "Category",
-        path: "/admin/category",
+        label: "Status",
+        path: "/admin/status",
         isClickable: true,
       });
     }
@@ -37,13 +37,13 @@ const Breadcrumb = () => {
     // Add/Update
     if (pathSegments.includes("add")) {
       items.push({
-        label: "Create Category",
+        label: "Create Status",
         path: null,
         isClickable: false,
       });
     } else if (pathSegments.includes("update")) {
       items.push({
-        label: "Update Category",
+        label: "Update Status",
         path: null,
         isClickable: false,
       });
