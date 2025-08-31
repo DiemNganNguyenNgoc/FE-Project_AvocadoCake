@@ -23,6 +23,9 @@ import UpdateCategory from "../AdminCategory/usecases/UpdateCategory";
 import AdminStatus from "../AdminStatus/AdminStatus";
 import AddStatus from "../AdminStatus/usecases/AddStatus";
 import UpdateStatus from "../AdminStatus/usecases/UpdateStatus";
+import AdminLanguage from "../AdminLanguage/AdminLanguage";
+import AddLanguage from "../AdminLanguage/usecases/AddLanguage";
+import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -42,6 +45,14 @@ const moduleConfigs = {
       update: UpdateStatus,
     },
     basePath: "/admin/status",
+  },
+  language: {
+    main: AdminLanguage,
+    subPages: {
+      add: AddLanguage,
+      edit: EditLanguage,
+    },
+    basePath: "/admin/language",
   },
 };
 
@@ -87,6 +98,13 @@ const navItems = [
     icon: <SquareCheckBig />,
     path: "/admin/status",
     component: AdminStatus,
+  },
+  {
+    id: "language",
+    text: "Language",
+    icon: <LibraryBig />,
+    path: "/admin/language",
+    component: AdminLanguage,
   },
   {
     id: "users",
