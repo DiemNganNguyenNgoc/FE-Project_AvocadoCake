@@ -26,6 +26,9 @@ import UpdateStatus from "../AdminStatus/usecases/UpdateStatus";
 import AdminLanguage from "../AdminLanguage/AdminLanguage";
 import AddLanguage from "../AdminLanguage/usecases/AddLanguage";
 import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
+import AdminOrder from "../AdminOrder/AdminOrder";
+import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
+import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -54,6 +57,15 @@ const moduleConfigs = {
     },
     basePath: "/admin/language",
   },
+  orders: {
+    main: AdminOrder,
+    subPages: {
+      "update-status": UpdateOrderStatus,
+      "view-detail": ViewOrderDetail,
+      "view-detail/:orderId": ViewOrderDetail,
+    },
+    basePath: "/admin/orders",
+  },
 };
 
 const navItems = [
@@ -69,7 +81,7 @@ const navItems = [
     text: "Orders",
     icon: <ShoppingBag />,
     path: "/admin/orders",
-    component: () => <div>Orders Content</div>,
+    component: AdminOrder,
   },
   {
     id: "products",
@@ -223,6 +235,19 @@ const AdminTab = () => {
               }
             />
           ))}
+
+        {/* Dynamic routes for modules */}
+        {Object.entries(moduleConfigs).map(([moduleId, config]) =>
+          Object.entries(config.subPages).map(([view, Component]) => (
+            <Route
+              key={`${moduleId}-${view}`}
+              path={`${config.basePath.replace("/admin", "")}/${view}`}
+              element={
+                <Component onBack={() => handleBackToModule(moduleId)} />
+              }
+            />
+          ))
+        )}
       </Routes>
     );
   };
