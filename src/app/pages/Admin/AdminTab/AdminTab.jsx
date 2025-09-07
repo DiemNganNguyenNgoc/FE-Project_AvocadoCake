@@ -29,6 +29,7 @@ import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
 import AdminOrder from "../AdminOrder/AdminOrder";
 import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
+import AdminUser from "../AdminUser/AdminUser";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -123,7 +124,7 @@ const navItems = [
     text: "Users",
     icon: <UsersRound />,
     path: "/admin/users",
-    component: () => <div>Users Content</div>,
+    component: AdminUser,
   },
   {
     id: "strategies",
