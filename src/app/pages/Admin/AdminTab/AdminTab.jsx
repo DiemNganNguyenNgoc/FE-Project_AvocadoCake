@@ -30,6 +30,7 @@ import AdminOrder from "../AdminOrder/AdminOrder";
 import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
 import AdminUser from "../AdminUser/AdminUser";
+import AdminQuiz from "../AdminQuiz/AdminQuiz";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -138,7 +139,7 @@ const navItems = [
     text: "Quiz",
     icon: <Gamepad2 />,
     path: "/admin/quiz",
-    component: () => <div>Quiz Content</div>,
+    component: AdminQuiz,
   },
   {
     id: "settings",
