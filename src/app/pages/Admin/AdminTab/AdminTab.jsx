@@ -31,6 +31,7 @@ import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
 import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
+import AdminDiscount from "../AdminDiscount";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -97,7 +98,7 @@ const navItems = [
     text: "Discount",
     icon: <TicketPercent />,
     path: "/admin/discount",
-    component: () => <div>Discount Content</div>,
+    component: AdminDiscount,
   },
   {
     id: "category",
