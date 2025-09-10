@@ -82,10 +82,10 @@ const TopProducts = () => {
                   src={product.image}
                   alt={product.name}
                   className="w-20 h-20 rounded-lg object-cover"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/120x120/fbbf24/ffffff?text=🍰";
-                  }}
+                  // onError={(e) => {
+                  //   e.target.src =
+                  //     "https://via.placeholder.com/120x120/fbbf24/ffffff?text=🍰";
+                  // }}
                 />
               </div>
 

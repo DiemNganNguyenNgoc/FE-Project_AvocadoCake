@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ChevronDown, Filter, Eye } from "lucide-react";
 import { DashboardService } from "../services/dashboardService";
 
@@ -43,10 +43,9 @@ const RecentOrders = () => {
     }
   };
 
-  const filteredOrders =
-    selectedFilter === "All"
-      ? orders
-      : orders.filter((order) => order.status === selectedFilter);
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => order.status !== "cancelled");
+  }, [orders]);
 
   if (loading) {
     return (
@@ -131,10 +130,9 @@ const RecentOrders = () => {
                         src={order.product.image}
                         alt={order.product.name}
                         className="w-10 h-10 rounded-lg object-cover"
-                        onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/40x40/8b5cf6/ffffff?text=SP";
-                        }}
+                        // onError={(e) => {
+                        //   e.target.src = "/assets/images/fallback.png"; // Use a local fallback image
+                        // }}
                       />
                       <div>
                         <p className="font-medium text-gray-900">

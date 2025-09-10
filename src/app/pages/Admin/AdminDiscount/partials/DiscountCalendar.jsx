@@ -58,11 +58,11 @@ const DiscountCalendar = () => {
             interactionPlugin,
             timelinePlugin,
           ]}
-          initialView="timelineDay"
+          initialView="dayGridMonth"
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "timelineDay,timelineWeek,timelineMonth",
+            right: "dayGridDay,dayGridWeek,dayGridMonth",
           }}
           events={events}
           selectable={true}

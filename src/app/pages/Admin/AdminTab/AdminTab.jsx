@@ -32,6 +32,7 @@ import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
 import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
 import AdminDiscount from "../AdminDiscount";
+import AdminProduct from "../AdminProduct/AdminProduct";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -90,8 +91,8 @@ const navItems = [
     id: "products",
     text: "Products",
     icon: <PackageOpen />,
-    path: "/admin/products",
-    component: () => <div>Products Content</div>,
+    path: "/admin/product",
+    component: AdminProduct,
   },
   {
     id: "discount",
