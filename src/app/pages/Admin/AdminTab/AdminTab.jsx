@@ -33,6 +33,14 @@ import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
 import AdminDiscount from "../AdminDiscount";
 import AdminProduct from "../AdminProduct/AdminProduct";
+import AdminSetting from "../AdminSetting/AdminSetting";
+import StoreInfo from "../AdminSetting/usecases/StoreInfo";
+import LogoSettings from "../AdminSetting/usecases/LogoSettings";
+import PaymentSettings from "../AdminSetting/usecases/PaymentSettings";
+import SEOSettings from "../AdminSetting/usecases/SEOSettings";
+import ThemeSettings from "../AdminSetting/usecases/ThemeSettings";
+import NotificationSettings from "../AdminSetting/usecases/NotificationSettings";
+import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -69,6 +77,19 @@ const moduleConfigs = {
       "view-detail/:orderId": ViewOrderDetail,
     },
     basePath: "/admin/orders",
+  },
+  settings: {
+    main: AdminSetting,
+    subPages: {
+      storeInfo: StoreInfo,
+      logo: LogoSettings,
+      payment: PaymentSettings,
+      seo: SEOSettings,
+      theme: ThemeSettings,
+      notification: NotificationSettings,
+      shipping: ShippingSettings,
+    },
+    basePath: "/admin/settings",
   },
 };
 
@@ -148,7 +169,7 @@ const navItems = [
     text: "Settings",
     icon: <Settings />,
     path: "/admin/settings",
-    component: () => <div>Settings Content</div>,
+    component: AdminSetting,
   },
   {
     id: "logout",
