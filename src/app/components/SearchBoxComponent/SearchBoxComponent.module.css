@@ -1,3 +1,16 @@
+/* Container chính cho search box */
+.search__wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* Container cho input và suggestions */
+.search__input_container {
+  position: relative;
+  margin-right: 10px;
+}
+
+/* Styling cho search input */
 .search__component {
   width: var(--search-box-width);
   height: 4.4rem;
@@ -9,9 +22,7 @@
   padding: 0 25px;
   outline: none;
   color: var(--brown100);
-  /* box-shadow: 0 0 0 2px var(--green30); */
   box-shadow: 0 0 4px var(--green50), 0 0 15px var(--green30);
-  margin-right: 10px;
 }
 
 .search__component::placeholder {
@@ -27,10 +38,83 @@
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--brown100)"><path d="M18.3 5.71a1 1 0 0 0-1.42 0L12 10.59 7.12 5.71a1 1 0 0 0-1.42 1.42L10.59 12l-4.89 4.88a1 1 0 0 0 1.42 1.42L12 13.41l4.88 4.89a1 1 0 0 0 1.42-1.42L13.41 12l4.89-4.88a1 1 0 0 0 0-1.41z"/></svg>')
     no-repeat center;
 }
-.search__wrapper{
-  display: flex;
+
+/* Styling cho suggestions dropdown */
+.suggestions__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 5px;
+  border: 1px solid var(--green30);
 }
-.search__button{
+
+/* Individual suggestion items */
+.suggestion__item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: var(--brown100);
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion__item:last-child {
+  border-bottom: none;
+}
+
+.suggestion__item:hover {
+  background-color: var(--green10);
+}
+
+.suggestion__icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+/* Loading state */
+.suggestion__item_loading {
+  padding: 12px 20px;
+  font-size: 1.4rem;
+  color: var(--brown60);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Search button styling */
+.search__button {
   margin-left: 20px;
   padding: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search__component {
+    width: 100%;
+    min-width: 250px;
+  }
+
+  .search__wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search__input_container {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .search__button {
+    margin-left: 0;
+    width: 100%;
+  }
 }

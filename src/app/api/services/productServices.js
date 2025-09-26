@@ -236,3 +236,41 @@ export const logSearch = async (userId, query) => {
     console.error("Lỗi khi lưu lịch sử tìm kiếm:", error);
   }
 };
+
+export const getWeeklyNewProducts = async (access_token) => {
+  try {
+    const res = await axiosJWT.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/product/weekly-new-products`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    throw {
+      message: error.response?.data?.message || "Không thể lấy sản phẩm mới",
+    };
+  }
+};
+
+export const getPreviousWeekNewProducts = async (access_token) => {
+  try {
+    const res = await axiosJWT.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/product/previous-week-new-products`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    throw {
+      message: error.response?.data?.message || "Không thể lấy sản phẩm mới",
+    };
+  }
+};

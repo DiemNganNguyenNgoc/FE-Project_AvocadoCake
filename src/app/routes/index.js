@@ -54,6 +54,12 @@ import DeleteQuizPage from "../pages/Admin/CRUDQuiz/DeleteQuizPage/DeleteQuizPag
 import MiniGamePage from "../pages/User/MiniGamePage/MiniGamePage.jsx";
 import HomeAdminPage from "../pages/Admin/HomeAdminPage/HomeAdminPage.jsx";
 import DesignCakePage from "../pages/User/DesignCakePage/DesignCakePage.jsx";
+import AdminDashboard from "../pages/Admin/AdminDashboard/AdminDashboard";
+import AdminTab from "../pages/Admin/AdminTab/AdminTab.jsx";
+import AddCategory from "../pages/Admin/AdminCategory/usecases/AddCategory.jsx";
+import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory.jsx";
+import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
+
 export const routes = [
   {
     path: "/",
@@ -288,6 +294,11 @@ export const routes = [
     // isShowFooter: true,
     isPrivate: true,
   },
+  {
+    path: "/admin/*", // Tất cả các route con của admin
+    page: AdminTab, // AdminTab sẽ quản lý các tab và nội dung
+    isPrivate: true,
+  },
 
   {
     path: "/cart",
@@ -340,6 +351,14 @@ export const routes = [
     isShowHeader: true,
     isShowFooter: true,
   },
+
+  {
+    path: "/admin-tab",
+    page: AdminTab,
+    // isShowHeader: true,
+    // isShowFooter: true,
+    isPrivate: true,
+  },
   {
     path: "/admin/news",
     page: NewsPageAdmin,
@@ -375,6 +394,13 @@ export const routes = [
     isShowFooter: true,
     isPrivate: true,
   },
+  // {
+  //   path: "/admin/dashboard",
+  //   page: AdminDashboard,
+  //   // isShowHeader: true,
+  //   // isShowFooter: true,
+  //   isPrivate: true,
+  // },
   {
     path: "*",
     page: NotFoundPage,
@@ -426,7 +452,7 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/admin/list-quiz",
+    path: "/admin/quiz-list",
     page: ListQuizPage,
     isShowHeader: true,
   },

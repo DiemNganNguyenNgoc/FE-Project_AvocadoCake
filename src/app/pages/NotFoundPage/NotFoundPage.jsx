@@ -27,7 +27,7 @@ const NotFoundPage = () => {
       <SideMenuComponent></SideMenuComponent>
       <OTPComponent></OTPComponent>
       <SizeComponent></SizeComponent> */}
-      <ModalComponent></ModalComponent>
+      {/* <ModalComponent></ModalComponent> */}
     </div>
   );
 };
