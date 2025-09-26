@@ -24,6 +24,21 @@ const RecentOrders = () => {
     fetchRecentOrders();
   }, []);
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/LogoAvocado.png";
+    if (typeof imagePath === "string" && imagePath.startsWith("http"))
+      return imagePath;
+    // Handle new API response format
+    const path = Array.isArray(imagePath) ? imagePath[0] : imagePath;
+    if (!path) return "/LogoAvocado.png";
+
+    // Clean up path and create Cloudinary URL
+    const cleanPath = String(path).replace(/\\/g, "/").replace(/^\/+/, "");
+    if (cleanPath.includes("res.cloudinary.com")) return cleanPath;
+
+    return `https://res.cloudinary.com/dlyl41lgq/image/upload/${cleanPath}`;
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Delivered":
@@ -64,12 +79,14 @@ const RecentOrders = () => {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
-            RECENT ORDERS
+          <h3 className="text-[2rem] font-semibold text-gray-900 leading-tight">
+            Recent Orders
           </h3>
-          <p className="text-sm text-gray-500">Products</p>
+          <p className="text-[1.6rem] text-gray-600">
+            Danh sách đơn hàng gần đây
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -105,10 +122,10 @@ const RecentOrders = () => {
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Products
+                  Code
                 </th>
                 <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Category
+                  Customer
                 </th>
                 <th className="text-left py-3 px-4 font-medium text-gray-700">
                   Price
@@ -125,26 +142,13 @@ const RecentOrders = () => {
                   className="border-b border-gray-100 hover:bg-gray-50"
                 >
                   <td className="py-4 px-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={order.product.image}
-                        alt={order.product.name}
-                        className="w-10 h-10 rounded-lg object-cover"
-                        // onError={(e) => {
-                        //   e.target.src = "/assets/images/fallback.png"; // Use a local fallback image
-                        // }}
-                      />
-                      <div>
-                        <p className="font-medium text-gray-900">
-                          {order.product.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {order.product.variants}
-                        </p>
-                      </div>
-                    </div>
+                    <span className="text-blue-600 font-medium">
+                      {order.orderCode || "N/A"}
+                    </span>
                   </td>
-                  <td className="py-4 px-4 text-gray-700">{order.category}</td>
+                  <td className="py-4 px-4 text-gray-700">
+                    {order.customerName}
+                  </td>
                   <td className="py-4 px-4 font-medium text-gray-900">
                     {order.price}
                   </td>

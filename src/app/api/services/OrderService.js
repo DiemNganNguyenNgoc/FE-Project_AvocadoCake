@@ -311,3 +311,107 @@ export const applyCoinsToOrder = async (orderId, coinsToUse, access_token) => {
     }
   }
 };
+
+// Lấy top đơn hàng mới nhất
+export const getRecentOrders = async (access_token, limit = 5) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/recent-orders?limit=${limit}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi lấy đơn hàng mới nhất.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy top sản phẩm bán chạy nhất
+export const getBestSellingProducts = async (access_token, limit = 10) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/best-selling-products?limit=${limit}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi lấy sản phẩm bán chạy.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần này (admin)
+export const getWeeklyNewOrders = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/weekly-new-orders`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần trước (admin)
+export const getPreviousWeekNewOrders = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/previous-week-new-orders`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};

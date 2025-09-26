@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Chart from "react-apexcharts";
+import { DashboardService } from "../services/dashboardService";
 
 const OverallRevenue = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("Monthly");
@@ -18,22 +20,81 @@ const OverallRevenue = () => {
     "Jul",
     "Aug",
   ];
-  const revenueData = [
-    3200, 3780, 2900, 4200, 3800, 4500, 4100, 4800, 5200, 4900, 5500, 5800,
-  ];
-  const pipelineData = [
-    2800, 3200, 2600, 3800, 3400, 4000, 3600, 4200, 4600, 4300, 4800, 5100,
-  ];
+  const [monthlyRevenue, setMonthlyRevenue] = useState([]);
+  const [monthlyItems, setMonthlyItems] = useState([]);
 
-  const maxValue = Math.max(...revenueData, ...pipelineData);
-  const minValue = Math.min(...revenueData, ...pipelineData);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await DashboardService.getDashboardData();
+        setMonthlyRevenue(data.revenueByMonth || []);
+        setMonthlyItems(data.productsSoldByMonth || []);
+      } catch (e) {
+        setMonthlyRevenue([]);
+        setMonthlyItems([]);
+      }
+    };
+    load();
+  }, []);
+
+  const revenueData = useMemo(() => monthlyRevenue, [monthlyRevenue]);
+  const pipelineData = useMemo(() => monthlyItems, [monthlyItems]);
+
+  const options = {
+    legend: { show: false, position: "top", horizontalAlign: "left" },
+    colors: ["#3b82f6", "#10b981"],
+    chart: {
+      fontFamily: "Inter, sans-serif",
+      height: 310,
+      type: "line",
+      toolbar: { show: false },
+    },
+    stroke: { curve: "straight", width: [2, 2] },
+    fill: { type: "gradient", gradient: { opacityFrom: 0.55, opacityTo: 0 } },
+    markers: {
+      size: 0,
+      strokeColors: "#fff",
+      strokeWidth: 2,
+      hover: { size: 6 },
+    },
+    grid: {
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: true } },
+    },
+    dataLabels: { enabled: false },
+    tooltip: { enabled: true },
+    xaxis: {
+      type: "category",
+      categories: months,
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+      tooltip: { enabled: false },
+      labels: { style: { colors: "#6B7280" } },
+    },
+    yaxis: {
+      labels: { style: { fontSize: "12px", colors: ["#6B7280"] } },
+      title: { text: "", style: { fontSize: "0px" } },
+    },
+  };
+
+  const series = [
+    { name: "Revenue", data: revenueData },
+    { name: "Products", data: pipelineData },
+  ];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-1">$35.8K</h3>
-          <p className="text-sm text-gray-500">Overall Revenue</p>
+          <h3 className="text-[2rem] font-bold text-gray-900 leading-tight">
+            {(
+              revenueData.reduce((s, v) => s + (v || 0), 0) || 0
+            ).toLocaleString()}{" "}
+            VND
+          </h3>
+          <p className="text-[1.6rem] text-gray-600">
+            Tổng doanh thu theo tháng
+          </p>
         </div>
 
         <div className="relative">
@@ -50,93 +111,20 @@ const OverallRevenue = () => {
         </div>
       </div>
 
-      <div className="h-64 relative">
-        <svg width="100%" height="100%" className="absolute inset-0">
-          {/* Grid lines */}
-          {[0, 1, 2, 3, 4].map((i) => (
-            <line
-              key={i}
-              x1="0"
-              y1={((i + 1) / 5) * 100 + "%"}
-              x2="100%"
-              y2={((i + 1) / 5) * 100 + "%"}
-              stroke="#e5e7eb"
-              strokeWidth="1"
-            />
-          ))}
-
-          {/* Revenue line */}
-          <polyline
-            points={revenueData
-              .map(
-                (value, index) =>
-                  `${(index / (revenueData.length - 1)) * 100},${
-                    100 - ((value - minValue) / (maxValue - minValue)) * 80
-                  }`
-              )
-              .join(" ")}
-            fill="none"
-            stroke="#3b82f6"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-
-          {/* Pipeline line */}
-          <polyline
-            points={pipelineData
-              .map(
-                (value, index) =>
-                  `${(index / (pipelineData.length - 1)) * 100},${
-                    100 - ((value - minValue) / (maxValue - minValue)) * 80
-                  }`
-              )
-              .join(" ")}
-            fill="none"
-            stroke="#10b981"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-
-          {/* Data points */}
-          {revenueData.map((value, index) => (
-            <circle
-              key={`revenue-${index}`}
-              cx={`${(index / (revenueData.length - 1)) * 100}%`}
-              cy={`${100 - ((value - minValue) / (maxValue - minValue)) * 80}%`}
-              r="4"
-              fill="#3b82f6"
-            />
-          ))}
-
-          {pipelineData.map((value, index) => (
-            <circle
-              key={`pipeline-${index}`}
-              cx={`${(index / (pipelineData.length - 1)) * 100}%`}
-              cy={`${100 - ((value - minValue) / (maxValue - minValue)) * 80}%`}
-              r="4"
-              fill="#10b981"
-            />
-          ))}
-        </svg>
-
-        {/* Month labels */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-500">
-          {months.map((month, index) => (
-            <span key={index}>{month}</span>
-          ))}
+      <div className="max-w-full overflow-x-auto custom-scrollbar">
+        <div className="min-w-[1000px] xl:min-w-full">
+          <Chart options={options} series={series} type="area" height={310} />
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-6 mt-4">
+      <div className="flex items-center justify-center gap-6 mt-3">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-          <span className="text-sm text-gray-600">Revenue</span>
+          <span className="text-[1.6rem] text-gray-600">Revenue</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          <span className="text-sm text-gray-600">Pipeline</span>
+          <span className="text-[1.6rem] text-gray-600">Products</span>
         </div>
       </div>
     </div>

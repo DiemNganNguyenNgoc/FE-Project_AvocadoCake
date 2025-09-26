@@ -15,13 +15,13 @@ const VisitorsAnalytics = () => {
   const colors = ["#3b82f6", "#f97316", "#10b981", "#eab308"];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
-            Website Visitors Analytics
+          <h3 className="text-[2rem] font-semibold text-gray-900 leading-tight">
+            Website Visitors
           </h3>
-          <p className="text-sm text-gray-500">your website visitors data</p>
+          <p className="text-[1.6rem] text-gray-600">Phân bổ theo thiết bị</p>
         </div>
 
         <div className="relative">
@@ -38,9 +38,9 @@ const VisitorsAnalytics = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-center mb-6">
+      <div className="flex items-center justify-center mb-4">
         <div className="relative">
-          <svg width="200" height="200" className="transform -rotate-90">
+          <svg width="220" height="220" className="transform -rotate-90">
             {/* Desktop */}
             <circle
               cx="100"
@@ -87,15 +87,15 @@ const VisitorsAnalytics = () => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-[2rem] font-bold text-gray-900 leading-none">
               {visitorsData.total}
             </span>
-            <span className="text-sm text-gray-500">Visitors</span>
+            <span className="text-[1.6rem] text-gray-600">Visitors</span>
           </div>
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-blue-500"></div>

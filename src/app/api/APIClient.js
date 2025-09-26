@@ -9,7 +9,7 @@ const defaultHeaders = {
 const getAuthorizationHeader = () => {
   // Lấy mã JWT từ localStorage
   const jwtToken = localStorage.getItem("accessToken");
-  return jwtToken ? { Token: `Bearer ${jwtToken}` } : {};
+  return jwtToken ? { token: `Bearer ${jwtToken}` } : {};
 };
 
 const api = {

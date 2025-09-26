@@ -23,6 +23,36 @@ const TopProducts = () => {
     fetchTopProducts();
   }, []);
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+
+    const raw = Array.isArray(imagePath) ? imagePath[0] : imagePath;
+    if (!raw) return "";
+
+    const cleaned = String(raw).replace(/\\/g, "/").replace(/^\/+/, "");
+
+    // Nếu đã là full URL (http/https) hoặc đã chứa domain Cloudinary thì dùng luôn
+    if (
+      /^https?:\/\//i.test(cleaned) ||
+      cleaned.includes("res.cloudinary.com")
+    ) {
+      return cleaned;
+    }
+
+    // Nếu path đã bao gồm prefix 'image/upload/...'
+    if (cleaned.startsWith("image/upload/")) {
+      return `https://res.cloudinary.com/dlyl41lgq/${cleaned}`;
+    }
+
+    // Nếu path đã bắt đầu bằng version (v12345/..), gắn ngay sau image/upload/
+    if (/^v\d+\//.test(cleaned)) {
+      return `https://res.cloudinary.com/dlyl41lgq/image/upload/${cleaned}`;
+    }
+
+    // Mặc định: coi như là đường dẫn thư mục (ví dụ: products/xxx.jpg)
+    return `https://res.cloudinary.com/dlyl41lgq/image/upload/${cleaned}`;
+  };
+
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
@@ -48,9 +78,11 @@ const TopProducts = () => {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">TOP</h3>
-        <p className="text-sm text-gray-500">Sản phẩm hàng đầu</p>
+      <div className="mb-4">
+        <h3 className="text-[2rem] font-semibold text-gray-900 leading-tight">
+          Top Products
+        </h3>
+        <p className="text-[1.6rem] text-gray-600">Sản phẩm bán chạy</p>
       </div>
 
       {products.length === 0 ? (
@@ -58,7 +90,7 @@ const TopProducts = () => {
           Không có dữ liệu sản phẩm
         </div>
       ) : (
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-4 overflow-x-auto pb-2">
           {products.map((product) => (
             <div
               key={product.id}
@@ -79,13 +111,12 @@ const TopProducts = () => {
               {/* Product image */}
               <div className="flex justify-center mb-3">
                 <img
-                  src={product.image}
+                  src={getImageUrl(product.image)}
                   alt={product.name}
                   className="w-20 h-20 rounded-lg object-cover"
-                  // onError={(e) => {
-                  //   e.target.src =
-                  //     "https://via.placeholder.com/120x120/fbbf24/ffffff?text=🍰";
-                  // }}
+                  onError={(e) => {
+                    e.currentTarget.src = "/LogoAvocado.png";
+                  }}
                 />
               </div>
 
@@ -106,12 +137,23 @@ const TopProducts = () => {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-center gap-1">
+                <div className="flex items-center justify-center gap-1 mb-1">
                   <span className="text-yellow-500">★</span>
                   <span className="text-sm text-gray-700">
                     {product.rating.toFixed(1)}
                   </span>
                 </div>
+
+                {/* Sales info from new API */}
+                {product.totalSold && (
+                  <div className="text-xs text-gray-600 space-y-1">
+                    <div>Đã bán: {product.totalSold}</div>
+                    <div>
+                      Doanh thu: {(product.totalRevenue || 0).toLocaleString()}{" "}
+                      VND
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
