@@ -85,7 +85,7 @@ const AdminProductContent = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <Breadcrumb currentPage="Sản phẩm" />
 
@@ -128,23 +128,23 @@ const AdminProductContent = ({ onNavigate }) => {
         )}
 
         {/* Search and Filters */}
-        <div className="bg-white shadow rounded-lg mb-6">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="bg-white shadow rounded-2xl mb-8">
+          <div className="px-8 py-8">
+            <div className="w-full flex flex-col sm:flex-row items-start justify-between gap-8">
+              <div className="flex-1 w-full max-w-md">
+                <label className="block text-base font-semibold text-gray-700 mb-3">
                   Tìm kiếm
                 </label>
                 <SearchBar />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex-1 w-full max-w-2xl">
+                <label className="block text-base font-semibold text-gray-700 mb-3">
                   Bộ lọc & Hành động
                 </label>
                 <FilterBar />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="flex-1 w-full max-w-md">
+                <label className="block text-base font-semibold text-gray-700 mb-3">
                   Chế độ xem
                 </label>
                 <ViewModeToggle />

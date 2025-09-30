@@ -137,7 +137,7 @@ const AdminDashboard = () => {
 
           {/* Analytics Charts */}
           <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <VisitorsAnalytics />
+            {/* <VisitorsAnalytics /> */}
             <RevenueAnalytics />
           </div>
         </div>

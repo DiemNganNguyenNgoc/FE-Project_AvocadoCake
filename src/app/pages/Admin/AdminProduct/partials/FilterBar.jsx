@@ -51,14 +51,15 @@ const FilterBar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center space-x-4">
+    <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-6">
         {/* Category Filter */}
-        <div className="relative">
+        <div className="relative min-w-[120px]">
           <select
             value={filterCategory}
             onChange={handleCategoryFilterChange}
-            className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            className="appearance-none bg-white border border-gray-300 rounded-full px-5 py-3 pr-12 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
             <option value="all">Tất cả loại</option>
             {categories.map((category) => (
@@ -67,50 +68,50 @@ const FilterBar = () => {
               </option>
             ))}
           </select>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-            <ChevronDown className="h-4 w-4 text-gray-400" />
-          </div>
+          {/* <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            <ChevronDown className="h-5 w-5 text-gray-400" />
+          </div> */}
         </div>
 
         {/* Items per page */}
-        <div className="relative">
+        <div className="relative min-w-[120px]">
           <select
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
-            className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            className="appearance-none bg-white border border-gray-300 rounded-full px-5 py-3 pr-12 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
+            <option value={10}>10 / trang</option>
+            <option value={25}>25 / trang</option>
+            <option value={50}>50 / trang</option>
+            <option value={100}>100 / trang</option>
           </select>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-            <ChevronDown className="h-4 w-4 text-gray-400" />
-          </div>
+          {/* <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            <ChevronDown className="h-5 w-5 text-gray-400" />
+          </div> */}
         </div>
 
         {/* Selected count */}
         {selectedProducts.length > 0 && (
-          <div className="text-sm text-gray-600">
+          <div className="text-base text-gray-700 font-medium ml-2">
             Đã chọn {selectedProducts.length} sản phẩm
           </div>
         )}
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-3">
         {selectedProducts.length > 0 && (
           <button
             onClick={handleDeleteSelected}
-            className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="inline-flex items-center px-5 py-3 bg-rose-600 text-white text-base font-semibold rounded-full shadow hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-1 transition-all"
           >
-            <Trash2 className="w-4 h-4 mr-2" />
+            <Trash2 className="w-5 h-5 mr-2" />
             Xóa đã chọn
           </button>
         )}
         <button
           onClick={clearSelection}
-          className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          className="px-5 py-3 bg-gray-100 text-gray-700 text-base font-semibold rounded-full shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1 transition-all"
         >
           Bỏ chọn
         </button>

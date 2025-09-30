@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getDetaillsCategory } from "../../../../api/services/CategoryService";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_URL_BACKEND || "http://localhost:3001/api";
@@ -220,6 +221,18 @@ class ProductService {
       throw new Error(
         error.response?.data?.message || "Failed to toggle product status"
       );
+    }
+  }
+
+  static async fetchCategoryById(id) {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      const response = await getDetaillsCategory(id, accessToken);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching category:", error);
+      throw error;
     }
   }
 }
