@@ -1,15 +1,13 @@
 import { Package, ShoppingCart, TrendingUp, Users } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import MonthlyTarget from "./partials/MonthlyTarget";
+import { useEffect, useState } from "react";
+import AdvancedTopProductsChart from "./partials/AdvancedTopProductsChart";
 import OverallRevenue from "./partials/OverallRevenue";
 import RecentOrders from "./partials/RecentOrders";
 import RevenueAnalytics from "./partials/RevenueAnalytics";
 import StatCard from "./partials/StatCard";
 import TopProducts from "./partials/TopProducts";
-import VisitorsAnalytics from "./partials/VisitorsAnalytics";
+import TopProductsChart from "./partials/TopProductsChart";
 import { DashboardService } from "./services/dashboardService";
-import BusinessOverview from "./partials/BusinessOverview";
-import CustomerProfile from "./partials/CustomerProfile";
 
 const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -136,10 +134,10 @@ const AdminDashboard = () => {
           </div> */}
 
           {/* Analytics Charts */}
-          <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* <VisitorsAnalytics /> */}
+          {/* <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <VisitorsAnalytics />
             <RevenueAnalytics />
-          </div>
+          </div> */}
         </div>
 
         {/* Overall Revenue */}
@@ -151,6 +149,8 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 gap-4">
           <RecentOrders />
           <TopProducts />
+          <TopProductsChart />
+          <AdvancedTopProductsChart />
         </div>
       </div>
     </div>
