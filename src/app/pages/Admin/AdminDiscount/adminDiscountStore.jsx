@@ -9,7 +9,9 @@ import React, {
 import {
   getAllDiscount,
   deleteDiscount,
-} from "../../../api/services/DiscountService";
+  createDiscount,
+  updateDiscount,
+} from "./services/DiscountService";
 
 const AdminDiscountContext = createContext(null);
 
@@ -45,6 +47,44 @@ export const AdminDiscountProvider = ({ children }) => {
     setDiscounts((prev) => prev.filter((d) => d._id !== id));
   }, []);
 
+  const addDiscount = useCallback(
+    async (newDiscount) => {
+      const accessToken = localStorage.getItem("access_token");
+      try {
+        const response = await createDiscount(newDiscount, accessToken);
+        if (response) {
+          setDiscounts((prev) => [...prev, response]);
+        }
+      } catch (err) {
+        setError("Thêm khuyến mãi thất bại.");
+        throw err;
+      }
+    },
+    [setDiscounts]
+  );
+
+  const updateDiscountById = useCallback(
+    async (id, updatedDiscount) => {
+      const accessToken = localStorage.getItem("access_token");
+      try {
+        const response = await updateDiscount(id, accessToken, updatedDiscount);
+        if (response) {
+          setDiscounts((prev) =>
+            prev.map((discount) =>
+              discount._id === id
+                ? { ...discount, ...updatedDiscount }
+                : discount
+            )
+          );
+        }
+      } catch (err) {
+        setError("Cập nhật khuyến mãi thất bại.");
+        throw err;
+      }
+    },
+    [setDiscounts]
+  );
+
   const value = useMemo(
     () => ({
       discounts,
@@ -52,8 +92,18 @@ export const AdminDiscountProvider = ({ children }) => {
       error,
       refreshDiscounts,
       removeDiscountById,
+      addDiscount,
+      updateDiscountById,
     }),
-    [discounts, isLoading, error, refreshDiscounts, removeDiscountById]
+    [
+      discounts,
+      isLoading,
+      error,
+      refreshDiscounts,
+      removeDiscountById,
+      addDiscount,
+      updateDiscountById,
+    ]
   );
 
   return (
