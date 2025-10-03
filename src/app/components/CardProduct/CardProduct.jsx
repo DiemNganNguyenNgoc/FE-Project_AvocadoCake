@@ -122,7 +122,7 @@ CardProduct.propTypes = {
   id: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   img: PropTypes.string.isRequired,
-  size: PropTypes.string,
+  size: PropTypes.number,
   title: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   discount: PropTypes.number,
@@ -133,7 +133,7 @@ CardProduct.propTypes = {
 };
 
 CardProduct.defaultProps = {
-  size: "M",
+  size: 10,
   discount: 0,
   averageRating: 5.0,
   totalRatings: 0,

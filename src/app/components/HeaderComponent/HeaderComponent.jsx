@@ -168,21 +168,33 @@ const HeaderComponent = () => {
           <div className={styles.navbar}>
             <div className="container-fluid">
               {/* nav top */}
-              <div className="row">
-                <div className="col">
-                  <a className="navbar-brand" href="/">
-                    <img src={img} alt="Avocado" className="navbar__img" />
+              <div className="row align-items-center">
+                {/* Logo */}
+                <div className="col-6 col-md-2">
+                  <a
+                    className="navbar-brand d-flex align-items-center"
+                    href="/"
+                  >
+                    <img
+                      src={img}
+                      alt="Avocado"
+                      className={`${styles.navbar__img} img-fluid`}
+                    />
                   </a>
                 </div>
-                <div className={`col ${styles.navbar__search__form}`}>
+
+                {/* Search */}
+                <div
+                  className={`col-12 col-md-6 mt-2 mt-md-0 ${styles.navbar__search__form}`}
+                >
                   <SearchBoxComponent
                     onSearch={handleSearch}
                     onButtonClick={(query) => handleSearch(query)}
                   />
-                  {/* <VoiceComponent onVoiceSearch={handleVoiceSearch} /> */}
                 </div>
 
-                <div className={`col ${styles.nav__cart}`}>
+                {/* Cart + Coins + User */}
+                <div className="col-6 col-md-4 d-flex justify-content-end align-items-center gap-3 mt-2 mt-md-0">
                   {user?.isAdmin === false && (
                     <div className={styles.cart__icon__wrapper}>
                       <CartIconComponent onClick={handleClickCart} />
@@ -193,72 +205,41 @@ const HeaderComponent = () => {
                       )}
                     </div>
                   )}
-                </div>
-                {/* Thêm cột mới cho Xu */}
-                <div
-                  className="col d-flex align-items-center justify-content-center"
-                  style={{ minWidth: "120px" }}
-                >
+
                   {user?.isAdmin === false && (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        padding: "5px 10px",
-                        // background: "#f8f9fa",
-                        borderRadius: "20px",
-                        // border: "1px solid #dee2e6",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.6rem" }}>🪙</span>
-                      <span
-                        style={{
-                          fontSize: "1.6rem",
-                          fontWeight: "bold",
-                          color: "#3a060e",
-                        }}
-                      >
+                    <div className={styles.coins__wrapper}>
+                      <span className="fs-5">🪙</span>
+                      <span className={styles.coins__text}>
                         {isLoadingCoins ? "..." : user.coins.toLocaleString()}
                       </span>
                     </div>
                   )}
-                </div>
-                <div className={`col text-end ${styles.btn__container}`}>
+
                   <Loading isLoading={showLoading} />
                   {!showLoading && user?.isLoggedIn ? (
-                    <div className="d-flex align-items-center gap-3">
-                      {/* Hiển thị số xu */}
-                      {/* ĐÃ DI CHUYỂN PHẦN NÀY RA NGOÀI */}
-                      <OverlayTrigger
-                        trigger="click"
-                        placement="bottom"
-                        show={showPopover}
-                        onToggle={(nextShow) => setShowPopover(nextShow)}
-                        overlay={popover}
-                        rootClose
-                      >
-                        <div className={styles.user__icon}>
-                          {userImage ? (
-                            <img
-                              src={userImage}
-                              alt="avatar"
-                              style={{
-                                width: "30px",
-                                height: "30px",
-                                borderRadius: "50%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          ) : (
-                            <UserIconComponent />
-                          )}
-                          <span style={{ color: "var(--brown100)" }}>
-                            {user.userName || user.userEmail || "User"}
-                          </span>
-                        </div>
-                      </OverlayTrigger>
-                    </div>
+                    <OverlayTrigger
+                      trigger="click"
+                      placement="bottom"
+                      show={showPopover}
+                      onToggle={(nextShow) => setShowPopover(nextShow)}
+                      overlay={popover}
+                      rootClose
+                    >
+                      <div className={styles.user__icon}>
+                        {userImage ? (
+                          <img
+                            src={userImage}
+                            alt="avatar"
+                            className={styles.user__avatar}
+                          />
+                        ) : (
+                          <UserIconComponent />
+                        )}
+                        <span className={styles.user__name}>
+                          {user.userName || user.userEmail || "User"}
+                        </span>
+                      </div>
+                    </OverlayTrigger>
                   ) : (
                     <div className="d-flex gap-2">
                       <Link to="/signup" className={styles.btn__signup}>
@@ -275,9 +256,10 @@ const HeaderComponent = () => {
               </div>
 
               {/* nav bottom */}
-              <div className={`row ${styles.nav__bot}`}>
-                <div className={styles.nav__content}>
-                  {/* nav admin */}
+              <div className={`row mt-3 ${styles.nav__bot}`}>
+                <div
+                  className={`${styles.nav__content} d-flex flex-wrap justify-content-center gap-3`}
+                >
                   {user?.isAdmin ? (
                     <>
                       <ButtonNoBGComponent to="/admin/">
@@ -300,7 +282,6 @@ const HeaderComponent = () => {
                       </ButtonNoBGComponent>
                     </>
                   ) : (
-                    // nav user
                     <>
                       <ButtonNoBGComponent to="/">
                         Trang chủ
@@ -317,9 +298,6 @@ const HeaderComponent = () => {
                       <ButtonNoBGComponent to="/contact">
                         Liên hệ
                       </ButtonNoBGComponent>
-                      {/* <ButtonNoBGComponent to="/create-cake">
-                        Sáng tạo
-                      </ButtonNoBGComponent> */}
                       <ButtonNoBGComponent to="/quizz">
                         Gợi ý
                       </ButtonNoBGComponent>
@@ -334,7 +312,6 @@ const HeaderComponent = () => {
           </div>
         </div>
       </div>
-      {/* Thêm div giả để tạo khoảng trống cho header */}
       <div className={styles.headerPlaceholder}></div>
     </>
   );
