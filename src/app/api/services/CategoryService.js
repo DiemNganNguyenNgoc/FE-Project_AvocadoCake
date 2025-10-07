@@ -13,13 +13,19 @@ export const axiosJWT = axios.create();
 export const createCategory = async (data, access_token) => {
   console.log("DATA", data);
   try {
+    // Transform data to match backend expectations
+    const transformedData = {
+      categoryCode: data.categoryCode,
+      categoryName: data.categoryName,
+      isActive: data.status === "Active", // Convert status to isActive boolean
+    };
+
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL_BACKEND}/category/create-category`,
-      data,
+      transformedData, // Send JSON directly
       {
         headers: {
-          //"Content-Type": "application/json",
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json", // Use JSON instead of multipart
           token: `Bearer ${access_token}`,
         },
       }
@@ -29,7 +35,6 @@ export const createCategory = async (data, access_token) => {
     if (error.response) {
       console.log("err", error);
       throw {
-        // status: error.response.data?.status || "ERR",
         message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
     } else {
@@ -86,16 +91,21 @@ export const getAllCategory = async () => {
 
 export const updateCategory = async (id, access_token, data) => {
   try {
-    for (let pair of data.entries()) {
-      console.log("form", `${pair[0]}: ${pair[1]}`);
-    }
+    // Transform data to match backend expectations
+    const transformedData = {
+      categoryCode: data.categoryCode,
+      categoryName: data.categoryName,
+      isActive: data.status === "Active", // Convert status to isActive boolean
+    };
+
+    console.log("Update data:", transformedData);
+
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL_BACKEND}/category/update-category/${id}`,
-      data,
-
+      transformedData, // Send JSON directly
       {
         headers: {
-          // "Content-Type": "multipart/form-data" ,
+          "Content-Type": "application/json", // Use JSON instead of multipart
           token: `Bearer ${access_token}`,
         },
       }
@@ -104,11 +114,10 @@ export const updateCategory = async (id, access_token, data) => {
   } catch (error) {
     if (error.response) {
       throw {
-        // Discount: error.response.data?.Discount || "ERR",
         message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
     } else {
-      throw { Discount: 500, message: "Không thể kết nối đến máy chủ." };
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
     }
   }
 };
@@ -116,7 +125,7 @@ export const updateCategory = async (id, access_token, data) => {
 export const deleteCategory = async (id, access_token) => {
   try {
     const res = await axios.delete(
-      `${process.env.REACT_APP_API_URL_BACKEND}/discount/delete-category/${id}`, // Sử dụng ID của khuyến mãi
+      `${process.env.REACT_APP_API_URL_BACKEND}/category/delete-category/${id}`, // Fixed: category instead of discount
       {
         headers: {
           token: `Bearer ${access_token}`,
