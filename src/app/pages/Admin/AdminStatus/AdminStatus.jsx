@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllStatus } from "../../../redux/slides/statusSlide";
+import {
+  setAllStatus,
+  setSelectedStatus,
+  clearSelectedStatus,
+} from "../../../redux/slides/statusSlide";
 import {
   getAllStatus,
   deleteStatus,
@@ -9,20 +13,33 @@ import SearchBar from "./partials/SearchBar";
 import StatusTable from "./partials/StatusTable";
 import AddStatus from "./usecases/AddStatus";
 import UpdateStatus from "./usecases/UpdateStatus";
+import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
 
 const AdminStatus = ({ onNavigate }) => {
   const dispatch = useDispatch();
-  const { allStatus } = useSelector((state) => state.status);
+  const { allStatus, selectedStatus } = useSelector((state) => state.status);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentView, setCurrentView] = useState("main");
-  const [selectedStatus, setSelectedStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // Fetch danh sách status khi component mount
   useEffect(() => {
-    fetchStatuses();
-  }, []);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const access_token = localStorage.getItem("access_token");
+        const response = await getAllStatus(access_token);
+        dispatch(setAllStatus(response.data || []));
+      } catch (error) {
+        console.error("Error fetching statuses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   const fetchStatuses = async () => {
     try {
@@ -43,9 +60,9 @@ const AdminStatus = ({ onNavigate }) => {
 
   const handleNavigate = (view, status = null) => {
     if (view === "add") {
-      setSelectedStatus(null);
+      dispatch(clearSelectedStatus());
     } else if (view === "update" && status) {
-      setSelectedStatus(status);
+      dispatch(setSelectedStatus(status));
     }
     setCurrentView(view);
     if (onNavigate) {
@@ -55,7 +72,7 @@ const AdminStatus = ({ onNavigate }) => {
 
   const handleBack = () => {
     setCurrentView("main");
-    setSelectedStatus(null);
+    dispatch(clearSelectedStatus());
     if (onNavigate) {
       onNavigate("main");
     }
@@ -68,7 +85,7 @@ const AdminStatus = ({ onNavigate }) => {
 
   const handleStatusDeleted = async (statusId) => {
     try {
-      const access_token = localStorage.getItem("token");
+      const access_token = localStorage.getItem("access_token");
       await deleteStatus(statusId, access_token);
       alert("Xóa trạng thái thành công!");
       fetchStatuses(); // Refresh danh sách sau khi delete
@@ -92,13 +109,7 @@ const AdminStatus = ({ onNavigate }) => {
   }
 
   if (currentView === "update" && selectedStatus) {
-    return (
-      <UpdateStatus
-        status={selectedStatus}
-        onBack={handleBack}
-        onSuccess={handleStatusUpdated}
-      />
-    );
+    return <UpdateStatus onBack={handleBack} onSuccess={handleStatusUpdated} />;
   }
 
   // Main view - Status list
@@ -106,21 +117,24 @@ const AdminStatus = ({ onNavigate }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header với nút Create */}
       <div className="text-white p-6">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="w-full mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-green-500">
             Quản lý Trạng thái
           </h1>
-          <button
+
+          <AdminButtonComponent
             onClick={() => handleNavigate("add")}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            label="Create"
+            variant="success"
+            size="large"
           >
             Create
-          </button>
+          </AdminButtonComponent>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="w-full mx-auto px-6 py-8">
         {/* Search bar */}
         <div className="mb-6">
           <SearchBar

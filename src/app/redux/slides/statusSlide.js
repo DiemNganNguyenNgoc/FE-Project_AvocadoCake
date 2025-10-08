@@ -9,6 +9,7 @@ const initialState = {
   // isAdmin: false,
   allStatus: [], // Danh sách tất cả các status
   detailStatus: {}, // Chi tiết một status cụ thể
+  selectedStatus: null, // Status được chọn để edit
 };
 
 export const statusSlice = createSlice({
@@ -43,11 +44,23 @@ export const statusSlice = createSlice({
     setDetailStatus: (state, action) => {
       state.detailStatus = action.payload;
     }, // Lưu chi tiết một status từ API
+    setSelectedStatus: (state, action) => {
+      state.selectedStatus = action.payload; // Lưu status được chọn để edit
+    },
+    clearSelectedStatus: (state) => {
+      state.selectedStatus = null; // Xóa status được chọn
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateStatus, resetStatus, setAllStatus, setDetailStatus } =
-  statusSlice.actions;
+export const {
+  updateStatus,
+  resetStatus,
+  setAllStatus,
+  setDetailStatus,
+  setSelectedStatus,
+  clearSelectedStatus,
+} = statusSlice.actions;
 
 export default statusSlice.reducer;
