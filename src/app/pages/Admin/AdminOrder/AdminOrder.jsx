@@ -151,7 +151,7 @@ const AdminOrder = ({ onNavigate }) => {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-gray-800 rounded-lg p-4 mb-6">
+      <div className="rounded-lg p-4 mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
           <div className="flex-1">
             <FilterBar />
