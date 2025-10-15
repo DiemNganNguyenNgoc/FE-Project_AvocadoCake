@@ -5,7 +5,9 @@ import * as OrderService from "../../../api/services/OrderService";
 import * as ProductService from "../../../api/services/productServices";
 import * as CategoryService from "../../../api/services/CategoryService";
 import * as StatusService from "../../../api/services/StatusService";
-import styles from "./HomeAdminPage.module.css";
+import StatCard from "../../../components/AdminLayout/StatCard";
+import ChartCard from "../../../components/AdminLayout/ChartCard";
+import { Users, ShoppingCart, Package, TrendingUp, Coins } from "lucide-react";
 
 // Import chart.js components
 import {
@@ -287,53 +289,90 @@ const HomeAdminPage = () => {
     ],
   };
 
+  // Stats data for StatCard components
+  const statsData = [
+    {
+      title: "Tổng người dùng",
+      value: totalUsers.toLocaleString(),
+      icon: <Users className="w-6 h-6 text-white" />,
+      color: "bg-blue-500",
+      hideProgress: true,
+    },
+    {
+      title: "Sản phẩm đã bán",
+      value: totalProductsSold.toLocaleString(),
+      icon: <Package className="w-6 h-6 text-white" />,
+      color: "bg-green-500",
+      hideProgress: true,
+    },
+    {
+      title: "Tổng đơn hàng",
+      value: totalOrders.toLocaleString(),
+      icon: <ShoppingCart className="w-6 h-6 text-white" />,
+      color: "bg-purple-500",
+      hideProgress: true,
+    },
+    {
+      title: "Tổng doanh thu",
+      value: `${totalRevenue.toLocaleString()} VND`,
+      icon: <TrendingUp className="w-6 h-6 text-white" />,
+      color: "bg-emerald-500",
+      hideProgress: true,
+    },
+    {
+      title: "Tổng xu đã dùng",
+      value: totalCoinsUsed.toLocaleString(),
+      icon: <Coins className="w-6 h-6 text-white" />,
+      color: "bg-orange-500",
+      hideProgress: true,
+    },
+  ];
+
   return (
-    <div className="container-xl">
-      <h2 style={{ color: "#3a060e" }}>Thống kê tổng quan</h2>
-      <div className={styles.cardContainer}>
-        <div className={styles.statCard}>
-          <h3>Người dùng</h3>
-          <p>{totalUsers}</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Sản phẩm đã bán</h3>
-          <p>{totalProductsSold}</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Đơn hàng</h3>
-          <p>{totalOrders}</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Tổng doanh thu</h3>
-          <p>{totalRevenue.toLocaleString()} VND</p>
-        </div>
-        <div className={styles.statCard}>
-          <h3>Tổng xu đã dùng</h3>
-          <p>{totalCoinsUsed.toLocaleString()}</p>
-        </div>
+    <div className="space-y-6">
+      {/* Page Title */}
+      <div>
+        <h1 className="text-2xl font-bold text-dark dark:text-white">
+          Thống kê tổng quan
+        </h1>
+        <p className="text-dark-4 dark:text-dark-6 mt-1">
+          Tổng quan về hoạt động kinh doanh của cửa hàng
+        </p>
       </div>
-      <div className={styles.chartContainer}>
-        <div className={styles.chartBox}>
-          <h4>Doanh thu và sản phẩm bán theo tháng</h4>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {statsData.map((stat, index) => (
+          <StatCard key={index} {...stat} />
+        ))}
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ChartCard title="Doanh thu và sản phẩm bán theo tháng">
           <Bar data={comboChartData} options={comboChartOptions} />
-        </div>
-        <div className={styles.chartBox}>
-          <h4>Tỷ lệ sản phẩm bán theo loại</h4>
+        </ChartCard>
+
+        <ChartCard title="Tỷ lệ sản phẩm bán theo loại">
           <Pie data={pieData} />
-        </div>
-        <div className={styles.chartBox}>
-          <h4>Top 5 sản phẩm bán chạy</h4>
+        </ChartCard>
+
+        <ChartCard title="Top 5 sản phẩm bán chạy">
           <Bar data={topProductsChartData} options={{ indexAxis: "y" }} />
-        </div>
-        <div className={styles.chartBox}>
-          <h4>Tăng trưởng người dùng</h4>
+        </ChartCard>
+
+        <ChartCard title="Tăng trưởng người dùng">
           <Line data={userLineChartData} />
-        </div>
-        <div className={styles.chartBox}>
-          <h4>Phân bổ trạng thái đơn hàng</h4>
-          <Doughnut data={doughnutChartData} />
-        </div>
+        </ChartCard>
       </div>
+
+      {/* Full Width Chart */}
+      <ChartCard
+        title="Phân bổ trạng thái đơn hàng"
+        className="col-span-1 lg:col-span-2"
+      >
+        <Doughnut data={doughnutChartData} />
+      </ChartCard>
     </div>
   );
 };

@@ -24,59 +24,52 @@ const AdminButtonComponent = ({
     shadow-sm hover:shadow-md
   `;
 
-  // Variant styles - Proximity và Similarity
+  // Variant styles - Theo design system AvocadoCake
   const variantStyles = {
     primary: `
-      bg-gradient-to-r from-blue-500 to-blue-600
-      text-white border border-blue-600
-      hover:from-blue-600 hover:to-blue-700
-      focus:ring-blue-500
-      shadow-blue-500/25 hover:shadow-blue-500/40
+      bg-avocado-green-100 text-avocado-brown-100 border border-avocado-green-100
+      hover:bg-avocado-green-80 hover:border-avocado-green-80
+      focus:ring-avocado-green-30
+      shadow-sm hover:shadow-md
     `,
     secondary: `
-      bg-gradient-to-r from-gray-100 to-gray-200
-      text-gray-700 border border-gray-300
-      hover:from-gray-200 hover:to-gray-300
-      focus:ring-gray-500
-      shadow-gray-500/25 hover:shadow-gray-500/40
+      bg-transparent text-avocado-green-100 border-2 border-avocado-green-100
+      hover:bg-avocado-green-10 hover:border-avocado-green-100
+      focus:ring-avocado-green-30
     `,
     success: `
-      bg-gradient-to-r from-green-500 to-green-600
-      text-white border border-green-600
-      hover:from-green-600 hover:to-green-700
-      focus:ring-green-500
-      shadow-green-500/25 hover:shadow-green-500/40
+      bg-avocado-green-100 text-avocado-brown-100 border border-avocado-green-100
+      hover:bg-avocado-green-80 hover:border-avocado-green-80
+      focus:ring-avocado-green-30
+      shadow-sm hover:shadow-md
     `,
     warning: `
-      bg-gradient-to-r from-yellow-500 to-yellow-600
-      text-white border border-yellow-600
-      hover:from-yellow-600 hover:to-yellow-700
-      focus:ring-yellow-500
-      shadow-yellow-500/25 hover:shadow-yellow-500/40
+      bg-yellow-500 text-white border border-yellow-500
+      hover:bg-yellow-600 hover:border-yellow-600
+      focus:ring-yellow-300
+      shadow-sm hover:shadow-md
     `,
     danger: `
-      bg-gradient-to-r from-red-500 to-red-600
-      text-white border border-red-600
-      hover:from-red-600 hover:to-red-700
-      focus:ring-red-500
-      shadow-red-500/25 hover:shadow-red-500/40
+      bg-red-500 text-white border border-red-500
+      hover:bg-red-600 hover:border-red-600
+      focus:ring-red-300
+      shadow-sm hover:shadow-md
     `,
     info: `
-      bg-gradient-to-r from-cyan-500 to-cyan-600
-      text-white border border-cyan-600
-      hover:from-cyan-600 hover:to-cyan-700
-      focus:ring-cyan-500
-      shadow-cyan-500/25 hover:shadow-cyan-500/40
+      bg-blue-500 text-white border border-blue-500
+      hover:bg-blue-600 hover:border-blue-600
+      focus:ring-blue-300
+      shadow-sm hover:shadow-md
     `,
     outline: `
-      bg-transparent text-gray-700 border-2 border-gray-300
-      hover:bg-gray-50 hover:border-gray-400
-      focus:ring-gray-500
+      bg-transparent text-avocado-brown-100 border-2 border-avocado-brown-30
+      hover:bg-avocado-green-10 hover:border-avocado-green-100
+      focus:ring-avocado-green-30
     `,
     ghost: `
-      bg-transparent text-gray-700 border border-transparent
-      hover:bg-gray-100 hover:text-gray-900
-      focus:ring-gray-500
+      bg-transparent text-avocado-brown-100 border border-transparent
+      hover:bg-avocado-green-10 hover:text-avocado-brown-100
+      focus:ring-avocado-green-30
     `,
   };
 

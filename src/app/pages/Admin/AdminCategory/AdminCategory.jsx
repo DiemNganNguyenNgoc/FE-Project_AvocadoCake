@@ -6,6 +6,14 @@ import Breadcrumb from "./partials/Breadcrumb";
 import StatsCards from "./partials/StatsCards";
 import { CategoryService } from "./services/CategoryService";
 
+// Import AdminComponents theo design system
+import AdminCardComponent from "../../../components/AdminComponents/AdminCardComponent";
+import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
+import SearchBarComponent from "../../../components/AdminComponents/SearchBarComponent";
+import FilterbarComponent from "../../../components/AdminComponents/FilterbarComponent";
+import AdminStatsCardComponent from "../../../components/AdminComponents/AdminStatsCardComponent";
+import AdminTableComponent from "../../../components/AdminComponents/AdminTableComponent";
+
 const AdminCategory = ({ onNavigate }) => {
   const navigate = useNavigate();
 
@@ -226,50 +234,70 @@ const AdminCategory = ({ onNavigate }) => {
   } = getPaginatedCategories();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-avocado-green-10">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white shadow-sm border-b border-avocado-brown-30">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <div className="py-3 border-b border-gray-100">
+          <div className="py-3 border-b border-avocado-brown-30">
             <Breadcrumb />
           </div>
 
           <div className="flex items-center justify-between h-16">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-avocado-brown-100">
                 Quản Lý Danh Mục
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-avocado-brown-50 mt-1">
                 Quản lý các danh mục sản phẩm trong hệ thống
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <button
+              <AdminButtonComponent
                 onClick={handleRefresh}
                 disabled={loading}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="outline"
+                size="medium"
+                icon={
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                }
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </button>
-              <button
+                Làm mới
+              </AdminButtonComponent>
+              <AdminButtonComponent
                 onClick={handleCreateCategory}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                variant="primary"
+                size="medium"
+                icon={
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                }
               >
-                Create
-              </button>
+                Tạo mới
+              </AdminButtonComponent>
             </div>
           </div>
         </div>
@@ -279,7 +307,10 @@ const AdminCategory = ({ onNavigate }) => {
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error Display */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <AdminCardComponent
+            variant="outlined"
+            className="mb-6 border-red-300 bg-red-50"
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <svg
@@ -316,28 +347,116 @@ const AdminCategory = ({ onNavigate }) => {
                 </svg>
               </button>
             </div>
-          </div>
+          </AdminCardComponent>
         )}
 
         {/* Stats Cards */}
-        <StatsCards categories={categories} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <AdminStatsCardComponent
+            title="Tổng danh mục"
+            value={categories.length}
+            subtitle="Tất cả danh mục"
+            variant="success"
+            icon={
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+              </svg>
+            }
+          />
+          <AdminStatsCardComponent
+            title="Đã chọn"
+            value={selectedCategories.length}
+            subtitle="Danh mục được chọn"
+            variant="info"
+            icon={
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            }
+          />
+          <AdminStatsCardComponent
+            title="Trang hiện tại"
+            value={currentPage}
+            subtitle={`Trang ${currentPage} / ${totalPages}`}
+            variant="default"
+            icon={
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            }
+          />
+          <AdminStatsCardComponent
+            title="Tổng mục"
+            value={totalItems}
+            subtitle="Tất cả mục"
+            variant="warning"
+            icon={
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                />
+              </svg>
+            }
+          />
+        </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6">
+        <AdminCardComponent className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
             <div className="flex-1 max-w-md">
-              <SearchBar
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
+              <SearchBarComponent
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Tìm kiếm danh mục..."
+                variant="default"
+                size="md"
               />
             </div>
             <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-avocado-brown-100">
                 Hiển thị {categories.length} danh mục
               </span>
             </div>
           </div>
-        </div>
+        </AdminCardComponent>
 
         {/* Category Table */}
         <CategoryTable {...storeProps} />

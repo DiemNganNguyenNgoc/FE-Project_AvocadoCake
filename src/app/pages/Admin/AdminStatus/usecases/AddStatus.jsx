@@ -70,7 +70,7 @@ const AddStatus = ({ onBack, onSuccess }) => {
     <>
       {/* Overlay - Gestalt: Figure/Ground Principle */}
       <div
-        className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300"
+        className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 transition-all duration-300"
         onClick={handleOverlayClick}
       >
         {/* Modal Container - Gestalt: Closure & Proximity - UPDATED SIZE */}

@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 /**
  * FilterbarComponent - Reusable filter bar component with Catalyst UI design
- * 
+ *
  * @param {Object} props
  * @param {Array} props.filters - Array of filter configurations
  * @param {Object} props.pagination - Pagination configuration { itemsPerPage, onChange }
@@ -21,35 +21,39 @@ const FilterbarComponent = ({
   variant = "default",
   className = "",
 }) => {
-  // Variant styles
+  // Variant styles - Theo design system AvocadoCake
   const variantStyles = {
     default: {
-      select: "rounded-md",
-      button: "rounded-md",
-      deleteButton: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-      clearButton: "bg-gray-200 hover:bg-gray-300 text-gray-700",
+      select: "rounded-lg",
+      button: "rounded-lg",
+      deleteButton: "bg-red-500 hover:bg-red-600 focus:ring-red-300",
+      clearButton:
+        "bg-avocado-green-10 hover:bg-avocado-green-30 text-avocado-brown-100",
     },
     rounded: {
       select: "rounded-full",
       button: "rounded-full shadow",
-      deleteButton: "bg-rose-600 hover:bg-rose-700 focus:ring-rose-500",
-      clearButton: "bg-gray-100 hover:bg-gray-200 text-gray-700",
+      deleteButton: "bg-red-500 hover:bg-red-600 focus:ring-red-300",
+      clearButton:
+        "bg-avocado-green-10 hover:bg-avocado-green-30 text-avocado-brown-100",
     },
     modern: {
       select: "rounded-lg shadow-sm",
       button: "rounded-lg shadow-sm",
-      deleteButton: "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:ring-red-500",
-      clearButton: "bg-white border border-gray-300 hover:bg-gray-50 text-gray-700",
+      deleteButton:
+        "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 focus:ring-red-300",
+      clearButton:
+        "bg-white border border-avocado-brown-30 hover:bg-avocado-green-10 text-avocado-brown-100",
     },
   };
 
   const styles = variantStyles[variant] || variantStyles.default;
 
-  // Base select styles
+  // Base select styles - Theo design system AvocadoCake
   const selectBaseStyles = clsx(
-    "appearance-none bg-white border border-gray-300",
-    "px-4 py-2.5 pr-10 text-sm font-medium",
-    "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+    "appearance-none bg-white border border-avocado-brown-30",
+    "px-4 py-2.5 pr-10 text-sm font-medium text-avocado-brown-100",
+    "focus:outline-none focus:ring-2 focus:ring-avocado-green-30 focus:border-avocado-green-100",
     "transition-all duration-150",
     "disabled:opacity-50 disabled:cursor-not-allowed"
   );
@@ -103,7 +107,11 @@ const FilterbarComponent = ({
         {/* Selection count */}
         {selection && selection.count > 0 && (
           <div className="text-sm text-gray-700 font-medium px-2">
-            Đã chọn <span className="text-blue-600 font-semibold">{selection.count}</span> {itemLabel}
+            Đã chọn{" "}
+            <span className="text-blue-600 font-semibold">
+              {selection.count}
+            </span>{" "}
+            {itemLabel}
           </div>
         )}
       </div>

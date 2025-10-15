@@ -133,32 +133,36 @@ const SearchBarComponent = ({
     },
   };
 
-  // Variant configurations
+  // Variant configurations - Theo design system AvocadoCake (Optimized shadows)
   const variantConfig = {
     default: {
       container:
-        "bg-white border-2 border-gray-200 shadow-lg hover:border-gray-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20",
-      input: "bg-transparent text-gray-700 placeholder:text-gray-400",
-      suggestions: "bg-white border border-gray-200 shadow-xl",
+        "bg-white border-2 border-avocado-brown-30 shadow-sm hover:border-avocado-brown-50 focus-within:border-avocado-green-100 focus-within:ring-2 focus-within:ring-avocado-green-30",
+      input:
+        "bg-transparent text-avocado-brown-100 placeholder:text-avocado-brown-50",
+      suggestions: "bg-white border border-avocado-brown-30 shadow-md",
     },
     minimal: {
       container:
-        "bg-gray-50 border border-gray-200 hover:bg-white hover:border-gray-300 focus-within:bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-400/30",
-      input: "bg-transparent text-gray-700 placeholder:text-gray-500",
-      suggestions: "bg-white border border-gray-200 shadow-lg",
+        "bg-avocado-green-10 border border-avocado-brown-30 hover:bg-white hover:border-avocado-brown-50 focus-within:bg-white focus-within:border-avocado-green-100 focus-within:ring-2 focus-within:ring-avocado-green-30",
+      input:
+        "bg-transparent text-avocado-brown-100 placeholder:text-avocado-brown-50",
+      suggestions: "bg-white border border-avocado-brown-30 shadow-sm",
     },
     glass: {
       container:
-        "bg-white/80 backdrop-blur-md border border-white/20 shadow-xl hover:bg-white/90 focus-within:bg-white/95 focus-within:border-blue-400/50 focus-within:ring-4 focus-within:ring-blue-500/20",
-      input: "bg-transparent text-gray-800 placeholder:text-gray-500",
+        "bg-white/80 backdrop-blur-md border border-avocado-brown-30/50 shadow-md hover:bg-white/90 focus-within:bg-white/95 focus-within:border-avocado-green-100/50 focus-within:ring-2 focus-within:ring-avocado-green-30",
+      input:
+        "bg-transparent text-avocado-brown-100 placeholder:text-avocado-brown-50",
       suggestions:
-        "bg-white/95 backdrop-blur-md border border-white/30 shadow-2xl",
+        "bg-white/95 backdrop-blur-md border border-avocado-brown-30/50 shadow-lg",
     },
     solid: {
       container:
-        "bg-gradient-to-r from-blue-500 to-indigo-600 border-2 border-transparent shadow-lg hover:shadow-xl focus-within:shadow-2xl focus-within:from-blue-600 focus-within:to-indigo-700",
-      input: "bg-transparent text-white placeholder:text-blue-100",
-      suggestions: "bg-white border border-gray-200 shadow-xl",
+        "bg-gradient-to-r from-avocado-green-100 to-avocado-green-80 border-2 border-transparent shadow-sm hover:shadow-md focus-within:shadow-md focus-within:from-avocado-green-80 focus-within:to-avocado-green-100",
+      input:
+        "bg-transparent text-avocado-brown-100 placeholder:text-avocado-brown-50",
+      suggestions: "bg-white border border-avocado-brown-30 shadow-md",
     },
   };
 
@@ -411,7 +415,7 @@ const SearchBarComponent = ({
         <div
           className={`
             absolute top-full right-0 mt-2 z-50
-            bg-white border border-gray-200 shadow-xl
+            bg-white border border-gray-200 shadow-md
             rounded-2xl p-4 min-w-[250px]
             animate-fade-in
           `}

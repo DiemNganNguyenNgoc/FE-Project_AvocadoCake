@@ -53,7 +53,7 @@ const ViewUserDetail = ({ onBack }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8">
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-[70] p-4 md:p-8">
       <div className="w-full max-w-7xl bg-white rounded-[28px] shadow-2xl ring-1 ring-slate-900/10 overflow-hidden max-h-[94vh] overflow-y-auto">
         {/* Sticky Header */}
         <div className="sticky top-0 z-10 bg-white/85 backdrop-blur-md border-b border-slate-200">

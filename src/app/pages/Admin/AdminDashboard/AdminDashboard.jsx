@@ -4,7 +4,7 @@ import AdvancedTopProductsChart from "./partials/AdvancedTopProductsChart";
 import OverallRevenue from "./partials/OverallRevenue";
 import RecentOrders from "./partials/RecentOrders";
 import RevenueAnalytics from "./partials/RevenueAnalytics";
-import StatCard from "./partials/StatCard";
+import StatCard from "../../../components/AdminLayout/StatCard";
 import TopProducts from "./partials/TopProducts";
 import TopProductsChart from "./partials/TopProductsChart";
 import { DashboardService } from "./services/dashboardService";
@@ -43,115 +43,111 @@ const AdminDashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // Dữ liệu thống kê từ API
+  // Dữ liệu thống kê từ API - Tuần này
   const statsData = [
     {
-      title: "New Orders This week",
+      title: "Đơn hàng mới tuần này",
       value: (dashboardData.newOrders || 0).toLocaleString(),
       change: Number((dashboardData.newOrdersChangePct || 0).toFixed(2)),
-      icon: <ShoppingCart className="w-6 h-6 text-white" />,
-      color: "bg-green-500",
+      icon: <ShoppingCart className="h-6 w-6 text-white" />,
+      color: "bg-green",
       progress: Math.round(dashboardData.newOrdersProgress || 0),
-      subtitle: `Prev: ${(dashboardData.newOrdersPrev || 0).toLocaleString()}`,
+      subtitle: `Tuần trước: ${(dashboardData.newOrdersPrev || 0).toLocaleString()}`,
     },
     {
-      title: "New Customers This week",
+      title: "Khách hàng mới tuần này",
       value: (dashboardData.newCustomers || 0).toLocaleString(),
       change: Number((dashboardData.newCustomersChangePct || 0).toFixed(2)),
-      icon: <Users className="w-6 h-6 text-white" />,
-      color: "bg-blue-500",
+      icon: <Users className="h-6 w-6 text-white" />,
+      color: "bg-blue",
       progress: Math.round(dashboardData.newCustomersProgress || 0),
-      subtitle: `Prev: ${(
-        dashboardData.newCustomersPrev || 0
-      ).toLocaleString()}`,
+      subtitle: `Tuần trước: ${(dashboardData.newCustomersPrev || 0).toLocaleString()}`,
     },
     {
-      title: "New Products This week",
+      title: "Sản phẩm mới tuần này",
       value: (dashboardData.newProducts || 0).toLocaleString(),
       change: Number((dashboardData.newProductsChangePct || 0).toFixed(2)),
-      icon: <Package className="w-6 h-6 text-white" />,
+      icon: <Package className="h-6 w-6 text-white" />,
       progress: Math.round(dashboardData.newProductsProgress || 0),
-      color: "bg-orange-500",
-      subtitle: `Prev: ${(
-        dashboardData.newProductsPrev || 0
-      ).toLocaleString()}`,
+      color: "bg-orange-light",
+      subtitle: `Tuần trước: ${(dashboardData.newProductsPrev || 0).toLocaleString()}`,
     },
   ];
 
-  // Thêm thống kê tổng quan
+  // Thống kê tổng quan
   const overviewStats = [
     {
       title: "Tổng người dùng",
       value: (dashboardData.totalUsers || 0).toLocaleString(),
-      icon: <Users className="w-6 h-6 text-white" />,
-      color: "bg-purple-500",
+      icon: <Users className="h-6 w-6 text-white" />,
+      color: "bg-primary",
     },
     {
       title: "Tổng đơn hàng",
       value: (dashboardData.totalOrders || 0).toLocaleString(),
-      icon: <ShoppingCart className="w-6 h-6 text-white" />,
-      color: "bg-indigo-500",
+      icon: <ShoppingCart className="h-6 w-6 text-white" />,
+      color: "bg-blue",
     },
     {
       title: "Sản phẩm đã bán",
       value: (dashboardData.totalProductsSold || 0).toLocaleString(),
-      icon: <Package className="w-6 h-6 text-white" />,
-      color: "bg-pink-500",
+      icon: <Package className="h-6 w-6 text-white" />,
+      color: "bg-orange-light",
     },
     {
       title: "Tổng doanh thu",
-      value: `${(dashboardData.totalRevenue || 0).toLocaleString()} VND`,
-      icon: <TrendingUp className="w-6 h-6 text-white" />,
-      color: "bg-emerald-500",
+      value: `${(dashboardData.totalRevenue || 0).toLocaleString()} ₫`,
+      icon: <TrendingUp className="h-6 w-6 text-white" />,
+      color: "bg-green",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="w-full mx-auto">
-        {/* Page Title */}
-        <h1 className="text-[2rem] font-semibold text-gray-900 mb-4">
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-heading-4 font-bold text-dark dark:text-white">
           Bảng điều khiển
         </h1>
-        {/* Stats Cards Row - Tuần này */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
-          {statsData.map((stat, index) => (
-            <StatCard key={index} {...stat} />
-          ))}
-        </div>
+        <p className="mt-2 text-body-sm text-dark-6 dark:text-dark-6">
+          Tổng quan về hoạt động kinh doanh tuần này
+        </p>
+      </div>
 
-        {/* Overview Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-          {overviewStats.map((stat, index) => (
-            <StatCard key={index} {...stat} hideProgress />
-          ))}
-        </div>
+      {/* Weekly Stats - Grid 3 columns */}
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:gap-7.5">
+        {statsData.map((stat, index) => (
+          <StatCard key={index} {...stat} />
+        ))}
+      </div>
 
-        {/* Monthly Target */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
-          {/* <div className="lg:col-span-1">
-            <MonthlyTarget />
-          </div> */}
+      {/* Overview Stats - Grid 4 columns */}
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        {overviewStats.map((stat, index) => (
+          <StatCard key={index} {...stat} hideProgress />
+        ))}
+      </div>
 
-          {/* Analytics Charts */}
-          {/* <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <VisitorsAnalytics />
-            <RevenueAnalytics />
-          </div> */}
-        </div>
+      {/* Charts Section - Full width */}
+      <div className="grid gap-4 sm:gap-6 2xl:gap-7.5">
+        <OverallRevenue />
+      </div>
 
-        {/* Overall Revenue */}
-        <div className="mb-6">
-          <OverallRevenue />
-        </div>
+      <div className="grid gap-4 sm:gap-6 2xl:gap-7.5">
+        <RecentOrders />
+      </div>
 
-        {/* Recent Orders and Top Products */}
-        <div className="grid grid-cols-1 gap-4">
-          <RecentOrders />
-          <TopProducts />
-          <TopProductsChart />
-          <AdvancedTopProductsChart />
-        </div>
+      {/* Additional Analytics */}
+      <div className="grid gap-4 sm:gap-6 2xl:gap-7.5">
+        <TopProducts />
+      </div>
+
+      <div className="grid gap-4 sm:gap-6 2xl:gap-7.5">
+        <TopProductsChart />
+      </div>
+
+      <div className="grid gap-4 sm:gap-6 2xl:gap-7.5">
+        <AdvancedTopProductsChart />
       </div>
     </div>
   );

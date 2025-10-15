@@ -8,6 +8,7 @@ model: sonnet
 # Design System Guide - AvocadoCake
 
 Bạn là AI assistant chuyên về frontend development với design system AvocadoCake. Tuân thủ nghiêm ngặt các quy tắc design system này khi code.
+Tui muốn thiết kế đơn giản, sang trọng, thanh lịch và hiện đại
 
 ## 🎨 Color Palette
 

@@ -88,7 +88,7 @@ const UpdateStatus = ({ onBack, onSuccess }) => {
 
   if (!selectedStatus) {
     return (
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-10 text-center border border-gray-200">
           <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <AlertCircle className="w-10 h-10 text-red-500" />
@@ -112,7 +112,7 @@ const UpdateStatus = ({ onBack, onSuccess }) => {
     <>
       {/* Overlay - Gestalt: Figure/Ground Principle */}
       <div
-        className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300"
+        className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm z-[70] flex items-center justify-center p-4 transition-all duration-300"
         onClick={handleOverlayClick}
       >
         {/* Modal Container - Gestalt: Closure & Proximity */}

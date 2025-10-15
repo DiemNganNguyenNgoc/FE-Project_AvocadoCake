@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { ChevronDown, Filter, Eye } from "lucide-react";
+import { Filter, Eye } from "lucide-react";
 import { DashboardService } from "../services/dashboardService";
+import { cn } from "../../../../../utils/cn";
 
 const RecentOrders = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
@@ -24,52 +25,35 @@ const RecentOrders = () => {
     fetchRecentOrders();
   }, []);
 
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return "/LogoAvocado.png";
-    if (typeof imagePath === "string" && imagePath.startsWith("http"))
-      return imagePath;
-    // Handle new API response format
-    const path = Array.isArray(imagePath) ? imagePath[0] : imagePath;
-    if (!path) return "/LogoAvocado.png";
-
-    // Clean up path and create Cloudinary URL
-    const cleanPath = String(path).replace(/\\/g, "/").replace(/^\/+/, "");
-    if (cleanPath.includes("res.cloudinary.com")) return cleanPath;
-
-    return `https://res.cloudinary.com/dlyl41lgq/image/upload/${cleanPath}`;
-  };
-
   const getStatusColor = (status) => {
-    switch (status) {
-      case "Delivered":
-      case "Đã giao hàng":
-        return "bg-green-100 text-green-800";
-      case "Processing":
-      case "Đang xử lý":
-        return "bg-yellow-100 text-yellow-800";
-      case "Cancelled":
-      case "Đã hủy":
-        return "bg-red-100 text-red-800";
-      case "Pending":
-      case "Chờ xử lý":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
+    const statusMap = {
+      Delivered: "bg-green-light-7 text-green-dark",
+      "Đã giao hàng": "bg-green-light-7 text-green-dark",
+      Processing: "bg-yellow-light-4 text-yellow-dark",
+      "Đang xử lý": "bg-yellow-light-4 text-yellow-dark",
+      Cancelled: "bg-red-light-6 text-red-dark",
+      "Đã hủy": "bg-red-light-6 text-red-dark",
+      Pending: "bg-blue-light-5 text-blue-dark",
+      "Chờ xử lý": "bg-blue-light-5 text-blue-dark",
+    };
+    return statusMap[status] || "bg-gray-2 text-dark-4";
   };
 
   const filteredOrders = useMemo(() => {
-    return orders.filter((order) => order.status !== "cancelled");
-  }, [orders]);
+    if (selectedFilter === "All") return orders;
+    return orders.filter((order) =>
+      order.status.toLowerCase().includes(selectedFilter.toLowerCase())
+    );
+  }, [orders, selectedFilter]);
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+      <div className="rounded-[10px] bg-white p-6 shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+          <div className="mb-4 h-6 w-1/3 rounded bg-gray-2"></div>
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded"></div>
+              <div key={i} className="h-16 rounded bg-gray-2"></div>
             ))}
           </div>
         </div>
@@ -78,85 +62,90 @@ const RecentOrders = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-[2rem] font-semibold text-gray-900 leading-tight">
-            Recent Orders
-          </h3>
-          <p className="text-[1.6rem] text-gray-600">
-            Danh sách đơn hàng gần đây
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <select
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-              className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option>All</option>
-              <option>Delivered</option>
-              <option>Processing</option>
-              <option>Cancelled</option>
-              <option>Pending</option>
-            </select>
-            <Filter className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+    <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
+      {/* Header */}
+      <div className="border-b border-stroke px-4 py-4 dark:border-dark-3 sm:px-6 xl:px-7.5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="font-medium text-dark dark:text-white text-body-2xlg">
+              Đơn hàng gần đây
+            </h2>
+            <p className="mt-1 text-body-sm text-dark-6 dark:text-dark-6">
+              Danh sách đơn hàng mới nhất
+            </p>
           </div>
 
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-            <Eye className="w-4 h-4" />
-            See all
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <select
+                value={selectedFilter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+                className="appearance-none rounded-md border border-stroke bg-white px-4 py-2 pr-10 text-sm font-medium text-dark outline-none transition-colors hover:border-primary focus:border-primary dark:border-dark-3 dark:bg-gray-dark dark:text-white"
+              >
+                <option value="All">Tất cả</option>
+                <option value="Delivered">Đã giao</option>
+                <option value="Processing">Đang xử lý</option>
+                <option value="Cancelled">Đã hủy</option>
+                <option value="Pending">Chờ xử lý</option>
+              </select>
+              <Filter className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-4" />
+            </div>
+
+            <button className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-blue-light-5">
+              <Eye className="h-4 w-4" />
+              Xem tất cả
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Table */}
+      <div className="overflow-x-auto p-4 sm:p-6 xl:p-7.5">
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="py-8 text-center text-dark-6 dark:text-dark-6">
             Không có đơn hàng nào
           </div>
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Code
+              <tr className="border-b border-stroke dark:border-dark-3">
+                <th className="px-4 py-3 text-left text-sm font-semibold text-dark dark:text-white">
+                  Mã đơn hàng
                 </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Customer
+                <th className="px-4 py-3 text-left text-sm font-semibold text-dark dark:text-white">
+                  Khách hàng
                 </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Price
+                <th className="px-4 py-3 text-left text-sm font-semibold text-dark dark:text-white">
+                  Giá trị
                 </th>
-                <th className="text-left py-3 px-4 font-medium text-gray-700">
-                  Status
+                <th className="px-4 py-3 text-left text-sm font-semibold text-dark dark:text-white">
+                  Trạng thái
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-stroke dark:divide-dark-3">
               {filteredOrders.map((order) => (
                 <tr
                   key={order.id}
-                  className="border-b border-gray-100 hover:bg-gray-50"
+                  className="transition-colors hover:bg-gray-1 dark:hover:bg-dark-2"
                 >
-                  <td className="py-4 px-4">
-                    <span className="text-blue-600 font-medium">
+                  <td className="px-4 py-4">
+                    <span className="font-medium text-primary">
                       {order.orderCode || "N/A"}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-gray-700">
+                  <td className="px-4 py-4 text-dark-4 dark:text-dark-6">
                     {order.customerName}
                   </td>
-                  <td className="py-4 px-4 font-medium text-gray-900">
+                  <td className="px-4 py-4 font-medium text-dark dark:text-white">
                     {order.price}
                   </td>
-                  <td className="py-4 px-4">
+                  <td className="px-4 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                        order.status
-                      )}`}
+                      className={cn(
+                        "inline-flex rounded-full px-3 py-1 text-xs font-medium",
+                        getStatusColor(order.status)
+                      )}
                     >
                       {order.status}
                     </span>
