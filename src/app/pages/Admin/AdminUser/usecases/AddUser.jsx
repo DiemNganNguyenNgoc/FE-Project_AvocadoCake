@@ -1,16 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { X, User, Mail, Phone, MapPin, Lock, Shield } from "lucide-react";
-import { useAdminUserStore } from "../adminUserStore";
-import UserService from "../services/UserService";
-import {
-  UserValidationSchema,
-  UserValidator,
-  UserDataTransformer,
-} from "../schemas/UserSchema";
 
 const AddUser = ({ onBack }) => {
-  const { setUsers, setLoading, setError, setShowAddModal } =
-    useAdminUserStore();
   const [formData, setFormData] = useState({
     familyName: "",
     userName: "",
@@ -32,7 +23,6 @@ const AddUser = ({ onBack }) => {
       [name]: value,
     }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -41,67 +31,15 @@ const AddUser = ({ onBack }) => {
     }
   };
 
-  const validateForm = () => {
-    const { isValid, errors: validationErrors } = UserValidator.validateForm(
-      formData,
-      UserValidationSchema.create
-    );
-
-    // Check password match
-    const passwordMatchError = UserValidator.validatePasswordMatch(
-      formData.userPassword,
-      formData.userConfirmPassword
-    );
-
-    if (passwordMatchError) {
-      validationErrors.userConfirmPassword = passwordMatchError;
-      isValid = false;
-    }
-
-    setErrors(validationErrors);
-    return isValid;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
     setIsSubmitting(true);
-    try {
-      setLoading(true);
-      const userData = UserDataTransformer.fromFormData(formData);
-      await UserService.createUser(userData);
 
-      // Refresh users list
-      const users = await UserService.getAllUsers();
-      setUsers(users.data || users);
-
-      // Reset form
-      setFormData({
-        familyName: "",
-        userName: "",
-        userPhone: "",
-        userEmail: "",
-        userPassword: "",
-        userConfirmPassword: "",
-        userAddress: "",
-        userImage: "",
-        isAdmin: "false",
-      });
-      setErrors({});
-
-      // Close modal
-      setShowAddModal(false);
-      setError(null);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    setTimeout(() => {
+      console.log("Form submitted:", formData);
       setIsSubmitting(false);
-    }
+      onBack?.();
+    }, 1000);
   };
 
   const handleCancel = () => {
@@ -117,213 +55,311 @@ const AddUser = ({ onBack }) => {
       isAdmin: "false",
     });
     setErrors({});
-    setShowAddModal(false);
+    onBack?.();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Create-user</h2>
-          <div className="flex space-x-2">
+        <div className="relative px-8 py-8 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Tạo người dùng mới
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Vui lòng điền đầy đủ thông tin bên dưới
+              </p>
+            </div>
+
             <button
               onClick={handleCancel}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-all"
             >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-            >
-              {isSubmitting ? "Saving..." : "Save"}
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Family Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Họ
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="familyName"
-                value={formData.familyName}
-                onChange={handleInputChange}
-                placeholder="Nguyễn"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.familyName ? "border-red-300" : "border-gray-300"
-                }`}
-              />
-            </div>
-            {errors.familyName && (
-              <p className="mt-1 text-sm text-red-600">{errors.familyName}</p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit} className="p-8 space-y-8">
+          {/* Personal Information */}
+          <fieldset className="space-y-5">
+            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+              Thông tin cá nhân
+            </legend>
 
-          {/* User Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tên
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="userName"
-                value={formData.userName}
-                onChange={handleInputChange}
-                placeholder="Văn A"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userName ? "border-red-300" : "border-gray-300"
-                }`}
-              />
-            </div>
-            {errors.userName && (
-              <p className="mt-1 text-sm text-red-600">{errors.userName}</p>
-            )}
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Family Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Họ <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="familyName"
+                  value={formData.familyName}
+                  onChange={handleInputChange}
+                  placeholder="Nguyễn"
+                  className={`w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                    errors.familyName ? "border-red-300 bg-red-50" : ""
+                  }`}
+                />
+                {errors.familyName && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.familyName}
+                  </p>
+                )}
+              </div>
 
-          {/* Phone */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Số điện thoại
-            </label>
-            <div className="relative">
-              <input
-                type="tel"
-                name="userPhone"
-                value={formData.userPhone}
-                onChange={handleInputChange}
-                placeholder="0123456789"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userPhone ? "border-red-300" : "border-gray-300"
-                }`}
-              />
+              {/* User Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tên <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="userName"
+                  value={formData.userName}
+                  onChange={handleInputChange}
+                  placeholder="Văn A"
+                  className={`w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                    errors.userName ? "border-red-300 bg-red-50" : ""
+                  }`}
+                />
+                {errors.userName && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.userName}
+                  </p>
+                )}
+              </div>
             </div>
-            {errors.userPhone && (
-              <p className="mt-1 text-sm text-red-600">{errors.userPhone}</p>
-            )}
-          </div>
+          </fieldset>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <div className="relative">
-              <input
-                type="email"
-                name="userEmail"
-                value={formData.userEmail}
-                onChange={handleInputChange}
-                placeholder="abc123@gmail.com"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userEmail ? "border-red-300" : "border-gray-300"
-                }`}
-              />
-            </div>
-            {errors.userEmail && (
-              <p className="mt-1 text-sm text-red-600">{errors.userEmail}</p>
-            )}
-          </div>
+          {/* Contact Information */}
+          <fieldset className="space-y-5">
+            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+              Thông tin liên hệ
+            </legend>
 
-          {/* Role */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Vai trò
-            </label>
-            <div className="relative">
-              <select
-                name="isAdmin"
-                value={formData.isAdmin}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.isAdmin ? "border-red-300" : "border-gray-300"
-                }`}
-              >
-                <option value="false">User</option>
-                <option value="true">Admin</option>
-              </select>
-            </div>
-            {errors.isAdmin && (
-              <p className="mt-1 text-sm text-red-600">{errors.isAdmin}</p>
-            )}
-          </div>
+            <div className="space-y-5">
+              {/* Phone */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Số điện thoại <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Phone className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="tel"
+                    name="userPhone"
+                    value={formData.userPhone}
+                    onChange={handleInputChange}
+                    placeholder="0123456789"
+                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                      errors.userPhone ? "border-red-300 bg-red-50" : ""
+                    }`}
+                  />
+                </div>
+                {errors.userPhone && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.userPhone}
+                  </p>
+                )}
+              </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mật khẩu
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                name="userPassword"
-                value={formData.userPassword}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userPassword ? "border-red-300" : "border-gray-300"
-                }`}
-              />
-            </div>
-            {errors.userPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.userPassword}</p>
-            )}
-          </div>
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    name="userEmail"
+                    value={formData.userEmail}
+                    onChange={handleInputChange}
+                    placeholder="abc123@gmail.com"
+                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                      errors.userEmail ? "border-red-300 bg-red-50" : ""
+                    }`}
+                  />
+                </div>
+                {errors.userEmail && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.userEmail}
+                  </p>
+                )}
+              </div>
 
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Xác nhận mật khẩu
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                name="userConfirmPassword"
-                value={formData.userConfirmPassword}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userConfirmPassword
-                    ? "border-red-300"
-                    : "border-gray-300"
-                }`}
-              />
+              {/* Address */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Địa chỉ
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <MapPin className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    name="userAddress"
+                    value={formData.userAddress}
+                    onChange={handleInputChange}
+                    placeholder="123 Đường ABC, Phường 1, Quận 1"
+                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                      errors.userAddress ? "border-red-300 bg-red-50" : ""
+                    }`}
+                  />
+                </div>
+                {errors.userAddress && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.userAddress}
+                  </p>
+                )}
+              </div>
             </div>
-            {errors.userConfirmPassword && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.userConfirmPassword}
-              </p>
-            )}
-          </div>
+          </fieldset>
 
-          {/* Address */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Địa chỉ
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="userAddress"
-                value={formData.userAddress}
-                onChange={handleInputChange}
-                placeholder="1/1 khu phố 8"
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 ${
-                  errors.userAddress ? "border-red-300" : "border-gray-300"
-                }`}
-              />
+          {/* Security Information */}
+          <fieldset className="space-y-5">
+            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+              Bảo mật & Phân quyền
+            </legend>
+
+            <div className="space-y-5">
+              {/* Role */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Vai trò <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Shield className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <select
+                    name="isAdmin"
+                    value={formData.isAdmin}
+                    onChange={handleInputChange}
+                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-gray-900 transition-all appearance-none cursor-pointer ${
+                      errors.isAdmin ? "border-red-300 bg-red-50" : ""
+                    }`}
+                  >
+                    <option value="false">Người dùng</option>
+                    <option value="true">Quản trị viên</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {errors.isAdmin && (
+                  <p className="mt-1.5 text-xs text-red-500">
+                    {errors.isAdmin}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Password */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Mật khẩu <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input
+                      type="password"
+                      name="userPassword"
+                      value={formData.userPassword}
+                      onChange={handleInputChange}
+                      placeholder="••••••••"
+                      className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                        errors.userPassword ? "border-red-300 bg-red-50" : ""
+                      }`}
+                    />
+                  </div>
+                  {errors.userPassword && (
+                    <p className="mt-1.5 text-xs text-red-500">
+                      {errors.userPassword}
+                    </p>
+                  )}
+                </div>
+
+                {/* Confirm Password */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Xác nhận mật khẩu <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="w-4 h-4 text-gray-400" />
+                    </div>
+                    <input
+                      type="password"
+                      name="userConfirmPassword"
+                      value={formData.userConfirmPassword}
+                      onChange={handleInputChange}
+                      placeholder="••••••••"
+                      className={`w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-gray-900 transition-all ${
+                        errors.userConfirmPassword
+                          ? "border-red-300 bg-red-50"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                  {errors.userConfirmPassword && (
+                    <p className="mt-1.5 text-xs text-red-500">
+                      {errors.userConfirmPassword}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
-            {errors.userAddress && (
-              <p className="mt-1 text-sm text-red-600">{errors.userAddress}</p>
-            )}
+          </fieldset>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200 transition-all"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Đang lưu...</span>
+                </span>
+              ) : (
+                "Lưu thông tin"
+              )}
+            </button>
           </div>
         </form>
       </div>

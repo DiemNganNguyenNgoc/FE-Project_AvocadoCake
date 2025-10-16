@@ -55,19 +55,19 @@ const TopProducts = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+      <div className="rounded-[10px] bg-white p-6 shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
+          <div className="mb-6 h-6 w-1/4 rounded bg-gray-2 dark:bg-dark-3"></div>
           <div className="flex gap-4 overflow-x-auto pb-4">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-48 bg-gray-50 rounded-xl p-4"
+                className="w-48 flex-shrink-0 rounded-[10px] bg-gray-1 p-4 dark:bg-dark-2"
               >
-                <div className="h-20 bg-gray-200 rounded-lg mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded"></div>
+                <div className="mb-3 h-20 rounded-lg bg-gray-2 dark:bg-dark-3"></div>
+                <div className="mb-2 h-4 rounded bg-gray-2 dark:bg-dark-3"></div>
+                <div className="mb-2 h-3 rounded bg-gray-2 dark:bg-dark-3"></div>
+                <div className="h-3 rounded bg-gray-2 dark:bg-dark-3"></div>
               </div>
             ))}
           </div>
@@ -77,88 +77,94 @@ const TopProducts = () => {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <div className="mb-4">
-        <h3 className="text-[2rem] font-semibold text-gray-900 leading-tight">
-          Top Products
-        </h3>
-        <p className="text-[1.6rem] text-gray-600">Sản phẩm bán chạy</p>
+    <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
+      {/* Header */}
+      <div className="border-b border-stroke px-4 py-4 dark:border-dark-3 sm:px-6 xl:px-7.5">
+        <h2 className="font-medium text-dark dark:text-white text-body-2xlg">
+          Sản phẩm bán chạy
+        </h2>
+        <p className="mt-1 text-body-sm text-dark-6 dark:text-dark-6">
+          Top sản phẩm có doanh số cao nhất
+        </p>
       </div>
 
-      {products.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          Không có dữ liệu sản phẩm
-        </div>
-      ) : (
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="flex-shrink-0 w-48 bg-gray-50 rounded-xl p-4 relative"
-            >
-              {/* Discount badge */}
-              {product.discount !== "0%" && (
-                <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                  {product.discount}
-                </div>
-              )}
-
-              {/* Heart icon */}
-              <button className="absolute top-2 right-2 text-red-500 hover:text-red-600">
-                <Heart className="w-5 h-5" />
-              </button>
-
-              {/* Product image */}
-              <div className="flex justify-center mb-3">
-                <img
-                  src={getImageUrl(product.image)}
-                  alt={product.name}
-                  className="w-20 h-20 rounded-lg object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = "/LogoAvocado.png";
-                  }}
-                />
-              </div>
-
-              {/* Product info */}
-              <div className="text-center">
-                <h4 className="font-medium text-gray-900 text-sm mb-2">
-                  {product.name}
-                </h4>
-
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  {product.discount !== "0%" && (
-                    <span className="text-xs text-gray-500 line-through">
-                      {product.originalPrice}
-                    </span>
-                  )}
-                  <span className="text-sm font-semibold text-gray-900">
-                    {product.currentPrice}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  <span className="text-yellow-500">★</span>
-                  <span className="text-sm text-gray-700">
-                    {product.rating.toFixed(1)}
-                  </span>
-                </div>
-
-                {/* Sales info from new API */}
-                {product.totalSold && (
-                  <div className="text-xs text-gray-600 space-y-1">
-                    <div>Đã bán: {product.totalSold}</div>
-                    <div>
-                      Doanh thu: {(product.totalRevenue || 0).toLocaleString()}{" "}
-                      VND
-                    </div>
+      {/* Content */}
+      <div className="p-4 sm:p-6 xl:p-7.5">
+        {products.length === 0 ? (
+          <div className="py-8 text-center text-dark-6 dark:text-dark-6">
+            Không có dữ liệu sản phẩm
+          </div>
+        ) : (
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="relative flex-shrink-0 w-48 rounded-[10px] bg-gray-1 p-4 shadow-card transition-all hover:shadow-card-2 dark:bg-dark-2"
+              >
+                {/* Discount badge */}
+                {product.discount !== "0%" && (
+                  <div className="absolute left-2 top-2 rounded bg-red px-2 py-1 text-xs font-bold text-white">
+                    {product.discount}
                   </div>
                 )}
+
+                {/* Heart icon */}
+                <button className="absolute right-2 top-2 text-red transition-colors hover:text-red-dark">
+                  <Heart className="h-5 w-5" />
+                </button>
+
+                {/* Product image */}
+                <div className="mb-3 flex justify-center">
+                  <img
+                    src={getImageUrl(product.image)}
+                    alt={product.name}
+                    className="h-20 w-20 rounded-lg object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "/LogoAvocado.png";
+                    }}
+                  />
+                </div>
+
+                {/* Product info */}
+                <div className="text-center">
+                  <h4 className="mb-2 text-sm font-medium text-dark dark:text-white">
+                    {product.name}
+                  </h4>
+
+                  <div className="mb-2 flex items-center justify-center gap-2">
+                    {product.discount !== "0%" && (
+                      <span className="text-xs text-dark-5 line-through dark:text-dark-5">
+                        {product.originalPrice}
+                      </span>
+                    )}
+                    <span className="text-sm font-semibold text-dark dark:text-white">
+                      {product.currentPrice}
+                    </span>
+                  </div>
+
+                  <div className="mb-1 flex items-center justify-center gap-1">
+                    <span className="text-yellow-dark">★</span>
+                    <span className="text-sm text-dark-4 dark:text-dark-6">
+                      {product.rating.toFixed(1)}
+                    </span>
+                  </div>
+
+                  {/* Sales info from new API */}
+                  {product.totalSold && (
+                    <div className="space-y-1 text-body-xs text-dark-5 dark:text-dark-5">
+                      <div>Đã bán: {product.totalSold}</div>
+                      <div>
+                        Doanh thu:{" "}
+                        {(product.totalRevenue || 0).toLocaleString()} ₫
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

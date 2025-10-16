@@ -4,8 +4,15 @@ export class Category {
     this.categoryCode = data.categoryCode || "";
     this.categoryName = data.categoryName || "";
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
-    this.status = data.status || "Active";
+    // Convert isActive from MongoDB to status for frontend
+    this.status =
+      data.isActive !== undefined
+        ? data.isActive
+          ? "Active"
+          : "Inactive"
+        : data.status || "Active";
     this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
+    this.isActive = data.isActive !== undefined ? data.isActive : true;
   }
 
   static fromApiResponse(apiData) {
@@ -16,7 +23,7 @@ export class Category {
     return {
       categoryCode: this.categoryCode,
       categoryName: this.categoryName,
-      status: this.status,
+      isActive: this.status === "Active", // Convert status back to isActive for API
     };
   }
 

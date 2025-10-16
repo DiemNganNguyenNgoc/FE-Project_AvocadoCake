@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import ButtonSideMenuAdmin from "../../../components/ButtonSideMenuAdmin/ButtonSideMenuAdmin";
+import AdminLayout from "../../../components/AdminLayout/AdminLayout";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -14,9 +14,7 @@ import {
   Gamepad2,
   LogOut,
 } from "lucide-react";
-import logo from "../../../assets/img/AVOCADO.svg";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
-import HeaderAdmin from "../AdminDashboard/partials/HeaderAdmin";
 import AdminCategory from "../AdminCategory/AdminCategory";
 import AddCategory from "../AdminCategory/usecases/AddCategory";
 import UpdateCategory from "../AdminCategory/usecases/UpdateCategory";
@@ -41,6 +39,8 @@ import SEOSettings from "../AdminSetting/usecases/SEOSettings";
 import ThemeSettings from "../AdminSetting/usecases/ThemeSettings";
 import NotificationSettings from "../AdminSetting/usecases/NotificationSettings";
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
+import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
+import AdminDemo from "../AdminDemo/AdminDemo";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -95,8 +95,15 @@ const moduleConfigs = {
 
 const navItems = [
   {
-    id: "dashboard",
+    id: "home",
     text: "Dashboard",
+    icon: <LayoutDashboard />,
+    path: "/admin/",
+    component: HomeAdminPage,
+  },
+  {
+    id: "dashboard",
+    text: "Analytics",
     icon: <LayoutDashboard />,
     path: "/admin/dashboard",
     component: AdminDashboard,
@@ -170,6 +177,13 @@ const navItems = [
     icon: <Settings />,
     path: "/admin/settings",
     component: AdminSetting,
+  },
+  {
+    id: "demo",
+    text: "UI Demo",
+    icon: <Settings />,
+    path: "/admin/demo",
+    component: AdminDemo,
   },
   {
     id: "logout",
@@ -277,35 +291,7 @@ const AdminTab = () => {
     );
   };
 
-  return (
-    <div className="flex h-screen">
-      {/* Side Menu */}
-      <div className="w-[250px] bg-white shadow-md p-4 flex flex-col flex-shrink-0 h-full">
-        <div className="flex justify-center mb-6">
-          <img src={logo} alt="Avocado Logo" className="h-20 w-auto" />
-        </div>
-        <div className="space-y-2 flex-1 overflow-y-auto">
-          {navItems.map((item) => (
-            <ButtonSideMenuAdmin
-              key={item.id}
-              icon={item.icon}
-              text={item.text}
-              isActive={
-                location.pathname === item.path && currentView === "main"
-              }
-              onClick={() => handleTabClick(item.path)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <HeaderAdmin />
-        <div className="flex-1 overflow-auto">{renderCurrentView()}</div>
-      </div>
-    </div>
-  );
+  return <AdminLayout>{renderCurrentView()}</AdminLayout>;
 };
 
 export default AdminTab;

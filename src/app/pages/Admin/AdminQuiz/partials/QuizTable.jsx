@@ -175,12 +175,12 @@ const QuizTable = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+    <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="w-full">
+          <thead className="bg-gray-50 dark:bg-dark-2">
             <tr>
-              <th className="px-6 py-3 text-left">
+              <th className="px-8 py-4 text-left">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -188,146 +188,146 @@ const QuizTable = () => {
                     if (input) input.indeterminate = someSelected;
                   }}
                   onChange={handleSelectAll}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-2 focus:ring-primary"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center space-x-1">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <div className="flex items-center gap-2">
                   <span>No</span>
                 </div>
               </th>
               <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("question")}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <span>Câu hỏi</span>
                   {getSortIcon("question")}
                 </div>
               </th>
               <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("type")}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <span>Loại</span>
                   {getSortIcon("type")}
                 </div>
               </th>
               <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("order")}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <span>Thứ tự</span>
                   {getSortIcon("order")}
                 </div>
               </th>
               <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("isActive")}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <span>Trạng thái</span>
                   {getSortIcon("isActive")}
                 </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Lựa chọn
               </th>
               <th
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("createdAt")}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center gap-2">
                   <span>Ngày tạo</span>
                   {getSortIcon("createdAt")}
                 </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Hành động
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
             {quizzes.map((quiz, index) => {
               const isSelected = selectedQuizzes.includes(quiz._id);
 
               return (
                 <tr
                   key={quiz._id}
-                  className={`hover:bg-gray-50 ${
-                    isSelected ? "bg-blue-50" : ""
+                  className={`hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors ${
+                    isSelected ? "bg-blue-light-5 dark:bg-dark-2" : ""
                   }`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-8 py-5 whitespace-nowrap">
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => handleSelectQuiz(quiz._id)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary"
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white font-medium">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 max-w-xs">
+                  <td className="px-8 py-5 text-base text-gray-900 dark:text-white max-w-xs">
                     <div className="truncate" title={quiz.question}>
                       {quiz.question}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-8 py-5 whitespace-nowrap">
                     {getTypeBadge(quiz.type)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
                     {quiz.order}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-8 py-5 whitespace-nowrap">
                     {getStatusBadge(quiz.isActive)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
                     {quiz.options.length} lựa chọn
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-500 dark:text-gray-400">
                     {formatDate(quiz.createdAt)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <div className="flex gap-3">
                       <button
                         onClick={() => handleViewQuiz(quiz)}
-                        className="text-green-600 hover:text-green-900 p-1 rounded"
+                        className="text-green hover:text-green-dark hover:bg-green-light-7 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Xem chi tiết"
                       >
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleEditQuiz(quiz)}
-                        className="text-blue-600 hover:text-blue-900 p-1 rounded"
+                        className="text-primary hover:text-primary/80 hover:bg-blue-light-5 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Chỉnh sửa"
                       >
-                        <Edit className="w-4 h-4" />
+                        <Edit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleToggleStatus(quiz)}
-                        className={`p-1 rounded ${
+                        className={`p-2.5 rounded-xl transition-all ${
                           quiz.isActive
-                            ? "text-orange-600 hover:text-orange-900"
-                            : "text-green-600 hover:text-green-900"
+                            ? "text-yellow hover:text-yellow-dark hover:bg-yellow-light-4 dark:hover:bg-dark-3"
+                            : "text-green hover:text-green-dark hover:bg-green-light-7 dark:hover:bg-dark-3"
                         }`}
                         title={quiz.isActive ? "Ẩn quiz" : "Hiện quiz"}
                       >
                         {quiz.isActive ? (
-                          <EyeOff className="w-4 h-4" />
+                          <EyeOff className="w-5 h-5" />
                         ) : (
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-5 h-5" />
                         )}
                       </button>
                       <button
                         onClick={() => handleDeleteQuiz(quiz)}
-                        className="text-red-600 hover:text-red-900 p-1 rounded"
+                        className="text-red hover:text-red-dark hover:bg-red-light-6 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Xóa"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </td>
