@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -31,12 +31,38 @@ const CategoryTable = ({
 }) => {
   const navigate = useNavigate();
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+  const checkboxRef = useRef(null); // ⭐ Ref cho checkbox select all
 
   const {
     categories: paginatedCategories,
     totalPages,
     totalItems,
   } = getPaginatedCategories();
+
+  // ⭐ Xử lý trạng thái checkbox select all
+  const isAllSelected =
+    selectedCategories.length === categories.length && categories.length > 0;
+  const isSomeSelected =
+    selectedCategories.length > 0 &&
+    selectedCategories.length < categories.length;
+
+  // ⭐ Set indeterminate state cho checkbox
+  useEffect(() => {
+    if (checkboxRef.current) {
+      checkboxRef.current.indeterminate = isSomeSelected;
+    }
+  }, [isSomeSelected]);
+
+  // ⭐ Xử lý click checkbox select all
+  const handleSelectAllClick = () => {
+    if (isAllSelected) {
+      // Nếu đang chọn tất cả → bỏ chọn tất cả
+      clearSelection();
+    } else {
+      // Nếu chưa chọn tất cả hoặc chọn một phần → chọn tất cả
+      selectAllCategories();
+    }
+  };
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -77,7 +103,6 @@ const CategoryTable = ({
 
   const handleEdit = (category) => {
     if (onNavigate) {
-      // Store category data in localStorage or context for UpdateCategory
       localStorage.setItem(
         "editCategoryData",
         JSON.stringify({
@@ -167,7 +192,9 @@ const CategoryTable = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
+    <div className="bg-white dark:bg-gray-dark rounded-2xl border border-stroke dark:border-stroke-dark shadow-card-2 overflow-hidden">
+      {/* ⭐ Thêm overflow-hidden và rounded-2xl */}
+
       {/* Table Header - Search, Filter, Export */}
       <div className="px-8 py-6 border-b border-stroke dark:border-stroke-dark">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -258,14 +285,20 @@ const CategoryTable = ({
           <thead className="bg-gray-50 dark:bg-dark-2">
             <tr>
               <th className="px-8 py-4 text-left">
+                {/* ⭐ Checkbox Select All với indeterminate state */}
                 <input
+                  ref={checkboxRef}
                   type="checkbox"
-                  checked={
-                    selectedCategories.length === categories.length &&
-                    categories.length > 0
+                  checked={isAllSelected}
+                  onChange={handleSelectAllClick}
+                  className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-2 focus:ring-primary cursor-pointer"
+                  title={
+                    isAllSelected
+                      ? "Bỏ chọn tất cả"
+                      : isSomeSelected
+                      ? "Chọn tất cả"
+                      : "Chọn tất cả"
                   }
-                  onChange={selectAllCategories}
-                  className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-2 focus:ring-primary"
                 />
               </th>
               <th
@@ -349,11 +382,11 @@ const CategoryTable = ({
                     type="checkbox"
                     checked={selectedCategories.includes(category._id)}
                     onChange={() => toggleCategorySelection(category._id)}
-                    className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary"
+                    className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary cursor-pointer"
                   />
                 </td>
                 <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white font-medium">
-                  {(currentPage - 1) * 10 + index + 1}
+                  {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
                 <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
                   {category.categoryCode}

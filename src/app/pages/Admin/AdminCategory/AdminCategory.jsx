@@ -236,7 +236,7 @@ const AdminCategory = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-avocado-green-10">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-avocado-brown-30">
+      <div className=" border-b border-avocado-brown-30">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="py-3 border-b border-avocado-brown-30">

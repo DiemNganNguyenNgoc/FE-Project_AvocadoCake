@@ -114,7 +114,7 @@ const AdminStatus = ({ onNavigate }) => {
 
   // Main view - Status list
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header với nút Create */}
       <div className="text-white p-6">
         <div className="w-full mx-auto flex justify-between items-center">
@@ -127,6 +127,7 @@ const AdminStatus = ({ onNavigate }) => {
             label="Create"
             variant="success"
             size="large"
+            className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
           >
             Create
           </AdminButtonComponent>
@@ -135,14 +136,14 @@ const AdminStatus = ({ onNavigate }) => {
 
       {/* Main content */}
       <div className="w-full mx-auto px-6 py-8">
-        {/* Search bar */}
+        {/* Search bar
         <div className="mb-6">
           <SearchBar
             searchTerm={searchTerm}
             onSearchChange={handleSearchChange}
             placeholder="Tìm kiếm theo mã hoặc tên trạng thái..."
           />
-        </div>
+        </div> */}
 
         {/* Status table */}
         <StatusTable
