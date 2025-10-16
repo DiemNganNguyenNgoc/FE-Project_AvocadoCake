@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import AdvancedTopProductsChart from "./partials/AdvancedTopProductsChart";
 import OverallRevenue from "./partials/OverallRevenue";
 import RecentOrders from "./partials/RecentOrders";
-import RevenueAnalytics from "./partials/RevenueAnalytics";
 import StatCard from "../../../components/AdminLayout/StatCard";
 import TopProducts from "./partials/TopProducts";
 import TopProductsChart from "./partials/TopProductsChart";
@@ -52,7 +51,9 @@ const AdminDashboard = () => {
       icon: <ShoppingCart className="h-6 w-6 text-white" />,
       color: "bg-green",
       progress: Math.round(dashboardData.newOrdersProgress || 0),
-      subtitle: `Tuần trước: ${(dashboardData.newOrdersPrev || 0).toLocaleString()}`,
+      subtitle: `Tuần trước: ${(
+        dashboardData.newOrdersPrev || 0
+      ).toLocaleString()}`,
     },
     {
       title: "Khách hàng mới tuần này",
@@ -61,7 +62,9 @@ const AdminDashboard = () => {
       icon: <Users className="h-6 w-6 text-white" />,
       color: "bg-blue",
       progress: Math.round(dashboardData.newCustomersProgress || 0),
-      subtitle: `Tuần trước: ${(dashboardData.newCustomersPrev || 0).toLocaleString()}`,
+      subtitle: `Tuần trước: ${(
+        dashboardData.newCustomersPrev || 0
+      ).toLocaleString()}`,
     },
     {
       title: "Sản phẩm mới tuần này",
@@ -70,7 +73,9 @@ const AdminDashboard = () => {
       icon: <Package className="h-6 w-6 text-white" />,
       progress: Math.round(dashboardData.newProductsProgress || 0),
       color: "bg-orange-light",
-      subtitle: `Tuần trước: ${(dashboardData.newProductsPrev || 0).toLocaleString()}`,
+      subtitle: `Tuần trước: ${(
+        dashboardData.newProductsPrev || 0
+      ).toLocaleString()}`,
     },
   ];
 

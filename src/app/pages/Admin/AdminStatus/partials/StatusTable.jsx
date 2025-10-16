@@ -44,22 +44,6 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
     });
   }, [statuses, sortConfig]);
 
-  const getStatusBadge = (statusCode) => {
-    // Logic để xác định status badge dựa trên statusCode
-    if (statusCode === "CANCEL") {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          Cancel
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-        Active
-      </span>
-    );
-  };
-
   const formatDate = (dateString) => {
     if (!dateString) return "05/01/2025"; // Default date for demo
     const date = new Date(dateString);
@@ -107,32 +91,32 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+        <table className="w-full">
+          <thead className="bg-gray-50 dark:bg-dark-2">
             <tr>
-              <SortableHeader sortKey="id" className="w-20 rounded-tl-2xl">
+              <SortableHeader sortKey="id" className="w-20">
                 No
               </SortableHeader>
               <SortableHeader sortKey="statusCode">Code</SortableHeader>
               <SortableHeader sortKey="statusName">Name</SortableHeader>
               <SortableHeader sortKey="createdAt">Created at</SortableHeader>
               {/* <SortableHeader sortKey="status">Status</SortableHeader> */}
-              <th className="px-8 py-5 text-left text-sm font-semibold text-gray-700 uppercase tracking-wide w-40 rounded-tr-2xl">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-40">
                 Action
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
             {sortedStatuses.length === 0 ? (
               <tr>
                 <td
                   colSpan="5"
-                  className="px-8 py-12 text-center text-gray-500"
+                  className="px-8 py-12 text-center text-gray-500 dark:text-gray-400"
                 >
-                  <div className="flex flex-col items-center space-y-3">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-16 h-16 bg-gray-1 dark:bg-dark-2 rounded-full flex items-center justify-center">
                       <svg
                         className="w-8 h-8 text-gray-400"
                         fill="none"
@@ -147,10 +131,10 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                         />
                       </svg>
                     </div>
-                    <p className="text-lg font-medium text-gray-500">
+                    <p className="text-lg font-medium text-gray-500 dark:text-gray-400">
                       Không có dữ liệu trạng thái
                     </p>
-                    <p className="text-base text-gray-400">
+                    <p className="text-base text-gray-400 dark:text-gray-500">
                       Hãy thêm trạng thái mới để bắt đầu
                     </p>
                   </div>
@@ -160,25 +144,21 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
               sortedStatuses.map((status, index) => (
                 <tr
                   key={status._id || index}
-                  className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 group"
+                  className="hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors"
                 >
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-semibold text-gray-900">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-black-600 font-bold group-hover:bg-blue-200 transition-colors duration-200">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full text-dark dark:text-white font-bold">
                       {index + 1}
                     </div>
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-bold text-gray-900">
-                    <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      {status.statusCode || "N/A"}
-                    </span>
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-primary">
+                    {status.statusCode || "N/A"}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-bold text-gray-800">
-                    <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      {status.statusName || "N/A"}
-                    </span>
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-gray-900 dark:text-white">
+                    {status.statusName || "N/A"}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base text-gray-600 font-medium">
-                    <div className="flex items-center space-x-2">
+                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-500 dark:text-gray-400 font-medium">
+                    <div className="flex items-center gap-2">
                       <svg
                         className="w-5 h-5 text-gray-400"
                         fill="none"
@@ -195,17 +175,17 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                       <span>{formatDate(status.createdAt)}</span>
                     </div>
                   </td>
-                  {/* <td className="px-8 py-6 whitespace-nowrap">
+                  {/* <td className="px-8 py-5 whitespace-nowrap">
                     {getStatusBadge(status.statusCode)}
                   </td> */}
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-medium">
-                    <div className="flex space-x-3">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <div className="flex gap-3">
                       <button
                         onClick={() => onEdit(status)}
-                        className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-100 to-emerald-100 text-green-600 rounded-xl hover:from-green-200 hover:to-emerald-200 hover:scale-110 transition-all duration-200 shadow-sm hover:shadow-md group"
+                        className="inline-flex items-center justify-center w-11 h-11 bg-green-light-7 dark:bg-dark-3 text-green hover:text-green-dark rounded-xl hover:scale-105 transition-all"
                         title="Chỉnh sửa"
                       >
-                        <Edit className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                        <Edit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => {
@@ -217,10 +197,10 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                             onDelete(status._id);
                           }
                         }}
-                        className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-red-100 to-pink-100 text-red-600 rounded-xl hover:from-red-200 hover:to-pink-200 hover:scale-110 transition-all duration-200 shadow-sm hover:shadow-md group"
+                        className="inline-flex items-center justify-center w-11 h-11 bg-red-light-6 dark:bg-dark-3 text-red hover:text-red-dark rounded-xl hover:scale-105 transition-all"
                         title="Xóa"
                       >
-                        <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </td>

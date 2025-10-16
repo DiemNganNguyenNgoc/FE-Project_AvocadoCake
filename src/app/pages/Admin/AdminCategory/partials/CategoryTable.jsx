@@ -123,24 +123,24 @@ const CategoryTable = ({
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-      {/* Table Header with Bulk Actions */}
+    <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
+      {/* Bulk Actions Header */}
       {selectedCategories.length > 0 && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-10 py-6 border-b border-blue-100">
+        <div className="px-8 py-6 border-b border-stroke dark:border-stroke-dark bg-blue-light-5 dark:bg-dark-2">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-medium text-blue-700">
+            <span className="text-lg font-medium text-dark dark:text-white">
               {selectedCategories.length} danh mục được chọn
             </span>
-            <div className="flex space-x-4">
+            <div className="flex gap-4">
               <button
                 onClick={clearSelection}
-                className="px-6 py-3 text-base font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                className="px-5 py-3 text-base font-medium text-primary hover:text-primary/80 transition-colors"
               >
                 Bỏ chọn
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-6 py-3 text-base font-medium bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="px-5 py-3 text-base font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
               >
                 Xóa đã chọn
               </button>
@@ -151,10 +151,10 @@ const CategoryTable = ({
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+        <table className="w-full">
+          <thead className="bg-gray-50 dark:bg-dark-2">
             <tr>
-              <th className="px-10 py-6 text-left">
+              <th className="px-8 py-4 text-left">
                 <input
                   type="checkbox"
                   checked={
@@ -162,113 +162,113 @@ const CategoryTable = ({
                     categories.length > 0
                   }
                   onChange={selectAllCategories}
-                  className="w-6 h-6 rounded-lg border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200"
+                  className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-2 focus:ring-primary"
                 />
               </th>
               <th
-                className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide cursor-pointer hover:bg-gray-200/50 transition-colors duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("_id")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>No</span>
                   {sortBy === "_id" && (
-                    <span className="text-blue-500 text-lg">
+                    <span className="text-primary">
                       {sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}
                 </div>
               </th>
               <th
-                className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide cursor-pointer hover:bg-gray-200/50 transition-colors duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("categoryCode")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Code</span>
                   {sortBy === "categoryCode" && (
-                    <span className="text-blue-500 text-lg">
+                    <span className="text-primary">
                       {sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}
                 </div>
               </th>
               <th
-                className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide cursor-pointer hover:bg-gray-200/50 transition-colors duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("categoryName")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Name</span>
                   {sortBy === "categoryName" && (
-                    <span className="text-blue-500 text-lg">
+                    <span className="text-primary">
                       {sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}
                 </div>
               </th>
               <th
-                className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide cursor-pointer hover:bg-gray-200/50 transition-colors duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("createdAt")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Created at</span>
                   {sortBy === "createdAt" && (
-                    <span className="text-blue-500 text-lg">
+                    <span className="text-primary">
                       {sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}
                 </div>
               </th>
               <th
-                className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide cursor-pointer hover:bg-gray-200/50 transition-colors duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("status")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Status</span>
                   {sortBy === "status" && (
-                    <span className="text-blue-500 text-lg">
+                    <span className="text-primary">
                       {sortOrder === "asc" ? "↑" : "↓"}
                     </span>
                   )}
                 </div>
               </th>
-              <th className="px-10 py-6 text-left text-base font-semibold text-gray-700 uppercase tracking-wide">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Action
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
             {paginatedCategories.map((category, index) => (
               <tr
                 key={category._id}
-                className="hover:bg-gray-50 transition-colors duration-200"
+                className="hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors"
               >
-                <td className="px-8 py-6 whitespace-nowrap">
+                <td className="px-8 py-5 whitespace-nowrap">
                   <input
                     type="checkbox"
                     checked={selectedCategories.includes(category._id)}
                     onChange={() => toggleCategorySelection(category._id)}
-                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary"
                   />
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap text-lg text-gray-900 font-medium">
+                <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white font-medium">
                   {(currentPage - 1) * 10 + index + 1}
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap text-lg font-semibold text-gray-900">
+                <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
                   {category.categoryCode}
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap text-lg text-gray-900">
+                <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
                   {category.categoryName}
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap text-lg text-gray-500">
+                <td className="px-8 py-5 whitespace-nowrap text-base text-gray-500 dark:text-gray-400">
                   {formatDate(category.createdAt)}
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap">
+                <td className="px-8 py-5 whitespace-nowrap">
                   {getStatusBadge(category.status)}
                 </td>
-                <td className="px-8 py-6 whitespace-nowrap text-lg font-medium">
-                  <div className="flex space-x-3">
+                <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => handleEdit(category)}
-                      className="text-green-600 hover:text-green-900 border border-green-600 rounded-lg p-2 hover:bg-green-50 transition-all duration-200"
+                      className="text-green hover:text-green-dark border border-green rounded-xl p-2.5 hover:bg-green-light-7 transition-all"
                       title="Chỉnh sửa"
                     >
                       <svg
@@ -287,7 +287,7 @@ const CategoryTable = ({
                     </button>
                     <button
                       onClick={() => handleDelete(category._id)}
-                      className="text-red-600 hover:text-red-900 border border-red-600 rounded-lg p-2 hover:bg-red-50 transition-all duration-200"
+                      className="text-red hover:text-red-dark border border-red rounded-xl p-2.5 hover:bg-red-light-6 transition-all"
                       title="Xóa"
                     >
                       <svg
@@ -314,42 +314,43 @@ const CategoryTable = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="bg-white px-8 py-5 border-t border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="text-base text-gray-700">
+        <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div className="text-base text-gray-700 dark:text-gray-300">
               Hiển thị {(currentPage - 1) * 10 + 1} đến{" "}
               {Math.min(currentPage * 10, totalItems)} trong tổng số{" "}
               {totalItems} danh mục
             </div>
-            <div className="flex space-x-3">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-4 py-2 text-base border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                className="px-4 py-2 text-base rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Trước
               </button>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 text-base border rounded-lg transition-all duration-200 ${
-                      currentPage === page
-                        ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
+              {Array.from(
+                { length: Math.min(5, totalPages) },
+                (_, i) => i + 1
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-4 py-2 text-base rounded-xl transition-colors ${
+                    currentPage === page
+                      ? "bg-primary text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
 
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 text-base border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                className="px-4 py-2 text-base rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Sau
               </button>

@@ -5,7 +5,6 @@ import {
   Edit,
   Trash2,
   Eye,
-  EyeOff,
   Package,
 } from "lucide-react";
 import { useAdminProductStore } from "../AdminProductContext";
@@ -103,21 +102,6 @@ const ProductTable = () => {
       }
     }
   };
-
-  const handleToggleStatus = async (product) => {
-    try {
-      setLoading(true);
-      await ProductService.toggleProductStatus(product._id, !product.isActive);
-      const updatedProduct = { ...product, isActive: !product.isActive };
-      setCurrentProduct(updatedProduct);
-      setError(null);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("vi-VN");
@@ -135,18 +119,6 @@ const ProductTable = () => {
     return category ? category.categoryName : "Không xác định";
   };
 
-  const getStatusBadge = (isActive) => {
-    return isActive ? (
-      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700 shadow-sm">
-        Hoạt động
-      </span>
-    ) : (
-      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-rose-100 text-rose-700 shadow-sm">
-        Ẩn
-      </span>
-    );
-  };
-
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "";
     if (imagePath.startsWith("http")) return imagePath;
@@ -158,15 +130,15 @@ const ProductTable = () => {
 
   if (products.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+      <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
         <div className="text-center py-16">
-          <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center shadow-inner">
+          <div className="w-20 h-20 mx-auto mb-6 bg-gray-1 dark:bg-dark-2 rounded-xl flex items-center justify-center">
             <Package className="w-10 h-10 text-gray-400" />
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-3">
+          <h3 className="text-xl font-semibold text-dark dark:text-white mb-3">
             Không có sản phẩm
           </h3>
-          <p className="text-base text-gray-500 max-w-sm mx-auto leading-relaxed">
+          <p className="text-base text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
             Chưa có sản phẩm nào được tìm thấy. Hãy thử điều chỉnh bộ lọc của
             bạn.
           </p>
@@ -176,12 +148,12 @@ const ProductTable = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+        <table className="w-full">
+          <thead className="bg-gray-50 dark:bg-dark-2">
             <tr>
-              <th className="px-8 py-5 text-left">
+              <th className="px-8 py-4 text-left">
                 <input
                   type="checkbox"
                   checked={allSelected}
@@ -189,105 +161,103 @@ const ProductTable = () => {
                     if (input) input.indeterminate = someSelected;
                   }}
                   onChange={handleSelectAll}
-                  className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded-md transition-all duration-200"
+                  className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-2 focus:ring-primary"
                 />
               </th>
-              <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center space-x-2">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <div className="flex items-center gap-2">
                   <span>STT</span>
                 </div>
               </th>
-              <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center space-x-2">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <div className="flex items-center gap-2">
                   <span>Hình ảnh</span>
                 </div>
               </th>
               <th
-                className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("productName")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Tên sản phẩm</span>
                   {getSortIcon("productName")}
                 </div>
               </th>
               <th
-                className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("productPrice")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Giá bán</span>
                   {getSortIcon("productPrice")}
                 </div>
               </th>
               <th
-                className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("productCategory")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Danh mục</span>
                   {getSortIcon("productCategory")}
                 </div>
               </th>
-              <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
-                <div className="flex items-center space-x-2">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <div className="flex items-center gap-2">
                   <span>Kích thước</span>
                 </div>
               </th>
               {/* <th
-                className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("isActive")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Trạng thái</span>
                   {getSortIcon("isActive")}
                 </div>
               </th> */}
               <th
-                className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg"
+                className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("createdAt")}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span>Ngày tạo</span>
                   {getSortIcon("createdAt")}
                 </div>
               </th>
-              <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">
+              <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Thao tác
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-50">
+          <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
             {products.map((product, index) => {
               const isSelected = selectedProducts.includes(product._id);
 
               return (
                 <tr
                   key={product._id}
-                  className={`hover:bg-gradient-to-r hover:from-gray-50 hover:to-indigo-50 transition-all duration-200 ${
-                    isSelected
-                      ? "bg-gradient-to-r from-indigo-50 to-blue-50 shadow-inner"
-                      : ""
+                  className={`hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors ${
+                    isSelected ? "bg-blue-light-5 dark:bg-dark-2" : ""
                   }`}
                 >
-                  <td className="px-8 py-6 whitespace-nowrap">
+                  <td className="px-8 py-5 whitespace-nowrap">
                     <input
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => handleSelectProduct(product._id)}
-                      className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded-md transition-all duration-200"
+                      className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary"
                     />
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-semibold text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
                     {index + 1}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm">
+                  <td className="px-8 py-5 whitespace-nowrap">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-1 dark:bg-dark-2">
                       {product.productImage ? (
                         <img
                           src={getImageUrl(product.productImage)}
                           alt={product.productName}
-                          className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
+                          className="w-full h-full object-cover transition-transform hover:scale-105"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
@@ -296,50 +266,50 @@ const ProductTable = () => {
                       )}
                     </div>
                   </td>
-                  <td className="px-8 py-6 text-base font-semibold text-gray-900 max-w-xs">
+                  <td className="px-8 py-5 text-base font-semibold text-gray-900 dark:text-white max-w-xs">
                     <div className="truncate" title={product.productName}>
                       {product.productName}
                     </div>
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-bold text-gray-900">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-gray-900 dark:text-white">
                     {formatPrice(product.productPrice)}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-medium text-gray-700">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-700 dark:text-gray-300">
                     {getCategoryName(product.productCategory)}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-medium text-gray-700">
-                    <span className="px-3 py-1 bg-gray-100 rounded-lg text-sm font-semibold">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-700 dark:text-gray-300">
+                    <span className="px-3 py-1 bg-gray-1 dark:bg-dark-2 rounded-lg text-sm font-semibold text-dark dark:text-white">
                       {product.productSize}
                     </span>
                   </td>
-                  {/* <td className="px-8 py-6 whitespace-nowrap">
+                  {/* <td className="px-8 py-5 whitespace-nowrap">
                     {getStatusBadge(product.isActive)}
                   </td> */}
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-medium text-gray-700">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-500 dark:text-gray-400">
                     {formatDate(product.createdAt)}
                   </td>
-                  <td className="px-8 py-6 whitespace-nowrap text-base font-medium">
-                    <div className="flex space-x-3">
+                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <div className="flex gap-3">
                       <button
                         onClick={() => handleViewProduct(product)}
-                        className="text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 p-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="text-green hover:text-green-dark hover:bg-green-light-7 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Xem chi tiết"
                       >
                         <Eye className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleEditProduct(product)}
-                        className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 p-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="text-primary hover:text-primary/80 hover:bg-blue-light-5 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Chỉnh sửa"
                       >
                         <Edit className="w-5 h-5" />
                       </button>
                       {/* <button
                         onClick={() => handleToggleStatus(product)}
-                        className={`p-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md ${
+                        className={`p-2.5 rounded-xl transition-all ${
                           product.isActive
-                            ? "text-amber-600 hover:text-amber-800 hover:bg-amber-50"
-                            : "text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50"
+                            ? "text-yellow hover:text-yellow-dark hover:bg-yellow-light-4"
+                            : "text-green hover:text-green-dark hover:bg-green-light-7"
                         }`}
                         title={
                           product.isActive ? "Ẩn sản phẩm" : "Hiện sản phẩm"
@@ -353,7 +323,7 @@ const ProductTable = () => {
                       </button> */}
                       <button
                         onClick={() => handleDeleteProduct(product)}
-                        className="text-rose-600 hover:text-rose-800 hover:bg-rose-50 p-2.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="text-red hover:text-red-dark hover:bg-red-light-6 dark:hover:bg-dark-3 p-2.5 rounded-xl transition-all"
                         title="Xóa"
                       >
                         <Trash2 className="w-5 h-5" />

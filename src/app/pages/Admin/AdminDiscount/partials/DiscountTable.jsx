@@ -6,7 +6,6 @@ const DiscountTable = ({ onEdit }) => {
   const { discounts, isLoading, error, removeDiscountById, refreshDiscounts } =
     useAdminDiscount();
   const [viewDiscountId, setViewDiscountId] = useState(null);
-  const [editDiscountId, setEditDiscountId] = useState(null);
 
   const handleView = (discountId) => {
     setViewDiscountId(discountId);
@@ -14,14 +13,6 @@ const DiscountTable = ({ onEdit }) => {
 
   const handleCloseView = () => {
     setViewDiscountId(null);
-  };
-
-  const handleEditModal = (discountId) => {
-    setEditDiscountId(discountId);
-  };
-
-  const handleCloseEdit = () => {
-    setEditDiscountId(null);
   };
 
   const handleEdit = (discount) => {
@@ -132,59 +123,59 @@ const DiscountTable = ({ onEdit }) => {
           </div>
         )}
 
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-dark-2">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     STT
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Mã khuyến mãi
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Tên khuyến mãi
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Giá trị
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Sản phẩm áp dụng
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Ngày bắt đầu
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Ngày kết thúc
                   </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  <th className="px-8 py-4 text-center text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Thao tác
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-100">
+              <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
                 {discounts?.length ? (
                   discounts.map((discount, idx) => (
                     <tr
                       key={discount._id}
-                      className="hover:bg-gray-50 transition"
+                      className="hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors"
                     >
-                      <td className="px-6 py-4 text-base text-gray-700">
+                      <td className="px-8 py-5 text-base text-gray-700 dark:text-gray-300 font-medium">
                         {idx + 1}
                       </td>
-                      <td className="px-6 py-4 text-base font-medium text-gray-900">
+                      <td className="px-8 py-5 text-base font-semibold text-primary">
                         {discount.discountCode}
                       </td>
-                      <td className="px-6 py-4 text-base text-gray-800">
+                      <td className="px-8 py-5 text-base text-gray-900 dark:text-white">
                         {discount.discountName}
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                      <td className="px-8 py-5">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-light-7 text-green-dark">
                           {discount.discountValue}%
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-base text-gray-700 max-w-xs truncate">
+                      <td className="px-8 py-5 text-base text-gray-700 dark:text-gray-300 max-w-xs truncate">
                         {Array.isArray(discount.discountProduct) &&
                         discount.discountProduct.length > 0
                           ? discount.discountProduct
@@ -192,24 +183,24 @@ const DiscountTable = ({ onEdit }) => {
                               .join(", ")
                           : "Không có sản phẩm"}
                       </td>
-                      <td className="px-6 py-4 text-base text-gray-600">
+                      <td className="px-8 py-5 text-base text-gray-500 dark:text-gray-400">
                         {formatDate(discount.discountStartDate)}
                       </td>
-                      <td className="px-6 py-4 text-base text-gray-600">
+                      <td className="px-8 py-5 text-base text-gray-500 dark:text-gray-400">
                         {formatDate(discount.discountEndDate)}
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex gap-2 justify-center">
-                          <div className="flex items-center justify-center space-x-2">
+                      <td className="px-8 py-5">
+                        <div className="flex gap-3 justify-center">
+                          <div className="flex items-center justify-center gap-3">
                             {/* Eye button - View details */}{" "}
                             <button
                               onClick={() => handleView(discount._id)}
-                              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2.5 text-blue hover:text-blue-dark hover:bg-blue-light-5 dark:hover:bg-dark-3 rounded-xl transition-all"
                               title="Xem chi tiết"
                             >
                               {" "}
                               <svg
-                                className="w-4 h-4"
+                                className="w-5 h-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -232,12 +223,12 @@ const DiscountTable = ({ onEdit }) => {
                             {/* Edit button */}{" "}
                             <button
                               onClick={() => handleEdit(discount)}
-                              className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-colors"
+                              className="p-2.5 text-green hover:text-green-dark hover:bg-green-light-7 dark:hover:bg-dark-3 rounded-xl transition-all"
                               title="Chỉnh sửa"
                             >
                               {" "}
                               <svg
-                                className="w-4 h-4"
+                                className="w-5 h-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -254,12 +245,12 @@ const DiscountTable = ({ onEdit }) => {
                             {/* Delete button */}{" "}
                             <button
                               onClick={() => handleDelete(discount._id)}
-                              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2.5 text-red hover:text-red-dark hover:bg-red-light-6 dark:hover:bg-dark-3 rounded-xl transition-all"
                               title="Xóa"
                             >
                               {" "}
                               <svg
-                                className="w-4 h-4"
+                                className="w-5 h-5"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -280,13 +271,13 @@ const DiscountTable = ({ onEdit }) => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="px-6 py-16 text-center">
+                    <td colSpan="8" className="px-8 py-16 text-center">
                       <div className="flex flex-col items-center">
                         {/* giữ nguyên icon */}
-                        <p className="text-gray-600 text-lg font-medium">
+                        <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
                           Chưa có khuyến mãi nào
                         </p>
-                        <p className="text-gray-400 text-base mt-1">
+                        <p className="text-gray-400 dark:text-gray-500 text-base mt-1">
                           Hãy thêm khuyến mãi mới để bắt đầu
                         </p>
                       </div>
@@ -299,7 +290,7 @@ const DiscountTable = ({ onEdit }) => {
         </div>
 
         {discounts?.length > 0 && (
-          <div className="flex items-center justify-between mt-6 text-sm text-gray-600">
+          <div className="flex items-center justify-between mt-6 text-base text-gray-600 dark:text-gray-400">
             <div>
               Hiển thị <span className="font-medium">{discounts.length}</span>{" "}
               khuyến mãi
