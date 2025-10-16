@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom"; // Thêm import này
 import { X } from "lucide-react";
 
 const Modal = ({
@@ -44,8 +45,11 @@ const Modal = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[60] overflow-y-auto">
+  //  Tạo modal content
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] overflow-y-auto">
+      {/* ⭐ Tăng z-index lên z-[9999] */}
+
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
@@ -54,7 +58,10 @@ const Modal = ({
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-6">
-        <div className={`relative w-full ${sizes[size]} ${className}`}>
+        <div
+          className={`relative w-full ${sizes[size]} ${className}`}
+          onClick={(e) => e.stopPropagation()} // ⭐ Prevent close when clicking inside modal
+        >
           <div className="bg-white dark:bg-gray-dark rounded-xl shadow-xl border border-stroke dark:border-stroke-dark">
             {/* Header */}
             {title && (
@@ -80,6 +87,9 @@ const Modal = ({
       </div>
     </div>
   );
+
+  // Render modal ra ngoài DOM tree, vào document.body
+  return createPortal(modalContent, document.body);
 };
 
 export default Modal;

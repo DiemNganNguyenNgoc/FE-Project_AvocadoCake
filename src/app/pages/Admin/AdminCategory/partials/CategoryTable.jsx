@@ -1,5 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Search,
+  Filter,
+  Download,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 const CategoryTable = ({
   categories,
@@ -17,14 +24,56 @@ const CategoryTable = ({
   getPaginatedCategories,
   handleSort,
   onNavigate,
+  searchTerm = "",
+  onSearch,
+  itemsPerPage = 10,
+  onItemsPerPageChange,
 }) => {
   const navigate = useNavigate();
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
   const {
     categories: paginatedCategories,
     totalPages,
     totalItems,
   } = getPaginatedCategories();
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setLocalSearchTerm(value);
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+
+  const handleExport = () => {
+    // Export to CSV
+    const headers = ["No", "Code", "Name", "Created At", "Status"];
+    const csvData = paginatedCategories.map((cat, index) => [
+      (currentPage - 1) * itemsPerPage + index + 1,
+      cat.categoryCode,
+      cat.categoryName,
+      formatDate(cat.createdAt),
+      cat.status,
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...csvData.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `categories_${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("vi-VN");
+  };
 
   const handleEdit = (category) => {
     if (onNavigate) {
@@ -78,11 +127,6 @@ const CategoryTable = ({
     }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("vi-VN");
-  };
-
   const getStatusBadge = (status) => {
     const statusConfig = {
       Active: {
@@ -124,6 +168,65 @@ const CategoryTable = ({
 
   return (
     <div className="bg-white dark:bg-gray-dark rounded-xl border border-stroke dark:border-stroke-dark shadow-card-2">
+      {/* Table Header - Search, Filter, Export */}
+      <div className="px-8 py-6 border-b border-stroke dark:border-stroke-dark">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div className="flex items-center gap-6">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm danh mục..."
+                value={localSearchTerm}
+                onChange={handleSearchChange}
+                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+              />
+            </div>
+
+            {/* Filter Button */}
+            <button
+              onClick={() => {}}
+              className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+            >
+              <Filter className="w-5 h-5" />
+              Filter
+            </button>
+          </div>
+
+          <div className="flex items-center gap-6">
+            {/* Export Button */}
+            <button
+              onClick={handleExport}
+              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+            >
+              <Download className="w-5 h-5" />
+              Export
+            </button>
+
+            {/* Items per page */}
+            <div className="flex items-center gap-3">
+              <span className="text-base text-gray-600 dark:text-gray-400">
+                Show:
+              </span>
+              <select
+                value={itemsPerPage}
+                onChange={(e) =>
+                  onItemsPerPageChange &&
+                  onItemsPerPageChange(parseInt(e.target.value))
+                }
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Bulk Actions Header */}
       {selectedCategories.length > 0 && (
         <div className="px-8 py-6 border-b border-stroke dark:border-stroke-dark bg-blue-light-5 dark:bg-dark-2">
@@ -317,42 +420,44 @@ const CategoryTable = ({
         <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div className="text-base text-gray-700 dark:text-gray-300">
-              Hiển thị {(currentPage - 1) * 10 + 1} đến{" "}
-              {Math.min(currentPage * 10, totalItems)} trong tổng số{" "}
+              Hiển thị {(currentPage - 1) * itemsPerPage + 1} đến{" "}
+              {Math.min(currentPage * itemsPerPage, totalItems)} trong tổng số{" "}
               {totalItems} danh mục
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-4 py-2 text-base rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-3 rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Trước
+                <ChevronLeft className="w-5 h-5" />
               </button>
 
-              {Array.from(
-                { length: Math.min(5, totalPages) },
-                (_, i) => i + 1
-              ).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-4 py-2 text-base rounded-xl transition-colors ${
-                    currentPage === page
-                      ? "bg-primary text-white"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              <div className="flex items-center gap-2">
+                {Array.from(
+                  { length: Math.min(5, totalPages) },
+                  (_, i) => i + 1
+                ).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-4 py-2 text-base rounded-xl transition-colors ${
+                      currentPage === page
+                        ? "bg-primary text-white"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
 
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 text-base rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-3 rounded-xl border border-stroke dark:border-stroke-dark hover:bg-gray-50 dark:hover:bg-dark-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Sau
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
           </div>

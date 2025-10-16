@@ -11,7 +11,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const AdminHeader = ({ onToggleSidebar }) => {
+const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,6 +56,13 @@ const AdminHeader = ({ onToggleSidebar }) => {
     window.location.href = "/login";
   };
 
+  // Đóng menu khi nhận signal từ AdminLayout
+  useEffect(() => {
+    if (forceCloseMenus > 0) {
+      setShowUserMenu(false);
+    }
+  }, [forceCloseMenus]);
+
   // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -76,7 +83,9 @@ const AdminHeader = ({ onToggleSidebar }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-10 flex items-center justify-between border-b border-stroke bg-white px-6 py-6 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-8 2xl:px-12">
+    <header className="sticky top-0 z-[1] flex items-center justify-between border-b border-stroke bg-white px-6 py-6 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-8 2xl:px-12">
+      {/* ⭐ ĐỔI TỪ z-[5] THÀNH z-[1] */}
+
       {/* Mobile Menu Button */}
       <button
         onClick={onToggleSidebar}
@@ -166,8 +175,10 @@ const AdminHeader = ({ onToggleSidebar }) => {
             {showUserMenu && (
               <div
                 ref={userMenuRef}
-                className="absolute right-0 top-full mt-3 w-72 bg-white rounded-xl shadow-lg border border-stroke dark:bg-dark-2 dark:border-stroke-dark z-[55]"
+                className="absolute right-0 top-full mt-3 w-72 bg-white rounded-xl shadow-lg border border-stroke dark:bg-dark-2 dark:border-stroke-dark z-[2]"
               >
+                {/* ⭐ THÊM z-[2] VÀO ĐÂY để dropdown menu cao hơn header nhưng thấp hơn modal */}
+
                 <div className="p-6">
                   {/* User Info */}
                   <div className="flex items-center gap-4 mb-6 pb-6 border-b border-stroke dark:border-stroke-dark">

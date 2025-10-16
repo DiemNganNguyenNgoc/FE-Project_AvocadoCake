@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CategoryTable from "./partials/CategoryTable";
-import SearchBar from "./partials/SearchBar";
 import Breadcrumb from "./partials/Breadcrumb";
-import StatsCards from "./partials/StatsCards";
 import { CategoryService } from "./services/CategoryService";
 
 // Import AdminComponents theo design system
 import AdminCardComponent from "../../../components/AdminComponents/AdminCardComponent";
 import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
-import SearchBarComponent from "../../../components/AdminComponents/SearchBarComponent";
-import FilterbarComponent from "../../../components/AdminComponents/FilterbarComponent";
 import AdminStatsCardComponent from "../../../components/AdminComponents/AdminStatsCardComponent";
-import AdminTableComponent from "../../../components/AdminComponents/AdminTableComponent";
 
 const AdminCategory = ({ onNavigate }) => {
   const navigate = useNavigate();
@@ -26,7 +21,7 @@ const AdminCategory = ({ onNavigate }) => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -206,6 +201,11 @@ const AdminCategory = ({ onNavigate }) => {
     setError(null);
   };
 
+  const handleItemsPerPageChange = (value) => {
+    setItemsPerPage(value);
+    setCurrentPage(1);
+  };
+
   // Pass all necessary props to child components
   const storeProps = {
     categories,
@@ -225,13 +225,13 @@ const AdminCategory = ({ onNavigate }) => {
     handleSort,
     clearError,
     onNavigate, // Pass onNavigate to CategoryTable
+    searchTerm,
+    onSearch: handleSearchChange,
+    itemsPerPage,
+    onItemsPerPageChange: handleItemsPerPageChange,
   };
 
-  const {
-    categories: paginatedCategories,
-    totalPages,
-    totalItems,
-  } = getPaginatedCategories();
+  const { totalPages, totalItems } = getPaginatedCategories();
 
   return (
     <div className="min-h-screen bg-avocado-green-10">
@@ -437,26 +437,6 @@ const AdminCategory = ({ onNavigate }) => {
             }
           />
         </div>
-
-        {/* Search and Filters */}
-        <AdminCardComponent className="mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="flex-1 max-w-md">
-              <SearchBarComponent
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder="Tìm kiếm danh mục..."
-                variant="default"
-                size="md"
-              />
-            </div>
-            <div className="flex items-center space-x-3">
-              <span className="text-sm text-avocado-brown-100">
-                Hiển thị {categories.length} danh mục
-              </span>
-            </div>
-          </div>
-        </AdminCardComponent>
 
         {/* Category Table */}
         <CategoryTable {...storeProps} />
