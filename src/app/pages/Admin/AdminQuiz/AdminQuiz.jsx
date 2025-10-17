@@ -3,10 +3,7 @@ import { Plus, AlertCircle } from "lucide-react";
 import { QuizProvider, useQuizStore } from "./adminQuizStore";
 import QuizService from "./services/QuizService";
 import Breadcrumb from "./partials/Breadcrumb";
-import SearchBar from "./partials/SearchBar";
-import FilterBar from "./partials/FilterBar";
 import QuizTable from "./partials/QuizTable";
-import Pagination from "./partials/Pagination";
 import AddQuiz from "./usecases/AddQuiz";
 import UpdateQuiz from "./usecases/UpdateQuiz";
 import ViewQuiz from "./partials/ViewQuiz";
@@ -30,6 +27,7 @@ const AdminQuizContent = ({ onNavigate }) => {
   // Fetch quizzes on component mount
   useEffect(() => {
     fetchQuizzes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchQuizzes = async () => {
@@ -67,7 +65,7 @@ const AdminQuizContent = ({ onNavigate }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <Breadcrumb currentPage="Quiz" />
@@ -110,34 +108,11 @@ const AdminQuizContent = ({ onNavigate }) => {
           </div>
         )}
 
-        {/* Search and Filters */}
-        <div className="bg-white shadow rounded-lg mb-6">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tìm kiếm
-                </label>
-                <SearchBar />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bộ lọc & Hành động
-                </label>
-                <FilterBar />
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Quiz Table */}
-        <div className="bg-white shadow rounded-lg">
-          <QuizTable />
-          <Pagination />
-        </div>
+        <QuizTable />
 
         {/* Modals */}
-        {showAddModal && <AddQuiz onBack={handleCloseModals} />}
+        <AddQuiz isOpen={showAddModal} onBack={handleCloseModals} />
 
         {showEditModal && <UpdateQuiz onBack={handleCloseModals} />}
 
