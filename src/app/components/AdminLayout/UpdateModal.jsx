@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 
-const Modal = ({
+const UpdateModal = ({
   isOpen,
   onClose,
   title,
@@ -9,7 +9,7 @@ const Modal = ({
   children,
   size = "md",
   icon,
-  iconColor = "blue",
+  iconColor = "emerald",
   actions,
   showCloseButton = true,
   closeOnBackdrop = true,
@@ -26,15 +26,15 @@ const Modal = ({
   };
 
   const iconColors = {
-    blue: "from-blue-500 to-blue-600",
+    emerald: "from-emerald-500 to-green-600",
     green: "from-green-500 to-green-600",
-    red: "from-red-500 to-red-600",
-    yellow: "from-yellow-500 to-yellow-600",
-    purple: "from-purple-500 to-purple-600",
-    indigo: "from-indigo-500 to-indigo-600",
+    teal: "from-teal-500 to-teal-600",
+    cyan: "from-cyan-500 to-cyan-600",
+    lime: "from-lime-500 to-lime-600",
+    blue: "from-blue-500 to-blue-600",
   };
 
-  // Default icon if none provided
+  // Default icon if none provided (Edit icon)
   const defaultIcon = (
     <svg
       className="w-6 h-6 text-white"
@@ -46,7 +46,7 @@ const Modal = ({
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
       />
     </svg>
   );
@@ -94,8 +94,8 @@ const Modal = ({
         className={`relative bg-white rounded-3xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden transform transition-all duration-300 scale-100 ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-100">
+        {/* Modal Header - Emerald/Green Gradient */}
+        <div className="bg-gradient-to-r from-emerald-50 to-green-50 px-8 py-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {/* Icon */}
@@ -156,4 +156,4 @@ const Modal = ({
   return createPortal(modalContent, document.body);
 };
 
-export default Modal;
+export default UpdateModal;

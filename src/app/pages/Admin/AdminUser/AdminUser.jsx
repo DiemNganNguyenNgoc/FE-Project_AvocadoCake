@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import { Plus, Users } from "lucide-react";
+import { Plus } from "lucide-react";
 import { AdminUserProvider, useAdminUserStore } from "./adminUserStore";
 import UserService from "./services/UserService";
 import Breadcrumb from "./partials/Breadcrumb";
-import SearchBar from "./partials/SearchBar";
-import FilterBar from "./partials/FilterBar";
 import UserTable from "./partials/UserTable";
 import AddUser from "./usecases/AddUser";
 import UpdateUser from "./usecases/UpdateUser";
@@ -12,7 +10,6 @@ import ViewUserDetail from "./usecases/ViewUserDetail";
 
 const AdminUserContent = ({ onNavigate }) => {
   const {
-    users,
     loading,
     error,
     showAddModal,
@@ -83,24 +80,6 @@ const AdminUserContent = ({ onNavigate }) => {
           </button>
         </div>
       </div>
-
-      {/* Search and Filter */}
-      <div className="mb-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <SearchBar />
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center text-sm text-gray-600">
-              <Users className="w-4 h-4 mr-2" />
-              <span>{users.length} người dùng</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter Bar */}
-      <FilterBar />
 
       {/* Error Message */}
       {error && (

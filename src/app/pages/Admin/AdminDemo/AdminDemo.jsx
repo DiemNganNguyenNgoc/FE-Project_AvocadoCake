@@ -17,6 +17,8 @@ import {
   Filter,
 } from "lucide-react";
 import { Bar, Pie } from "react-chartjs-2";
+import UpdateModalExample from "../../../components/AdminLayout/UpdateModalExample";
+import UpdateModal from "../../../components/AdminLayout/UpdateModal";
 
 const AdminDemo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -301,6 +303,10 @@ const AdminDemo = () => {
           </div>
         </div>
       </Modal>
+
+      {/* update modal */}
+
+      <UpdateModalExample />
     </div>
   );
 };
