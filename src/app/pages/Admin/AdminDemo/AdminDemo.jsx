@@ -6,6 +6,7 @@ import {
   Button,
   Modal,
   Input,
+  Checkbox,
 } from "../../../components/AdminLayout";
 import {
   Plus,
@@ -307,6 +308,7 @@ const AdminDemo = () => {
       {/* update modal */}
 
       <UpdateModalExample />
+      <Checkbox label="I agree to the terms and conditions" />
     </div>
   );
 };
