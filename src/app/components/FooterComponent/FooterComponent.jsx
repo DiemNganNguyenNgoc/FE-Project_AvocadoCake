@@ -13,7 +13,7 @@ const FooterComponent = () => {
             {/* logo */}
             <div className="col footer__logo">
               <a href="/">
-                <img className="logo__image" src={img1} />
+                <img className="logo__image" alt="AVOCADO logo" src={img1} />
               </a>
             </div>
 

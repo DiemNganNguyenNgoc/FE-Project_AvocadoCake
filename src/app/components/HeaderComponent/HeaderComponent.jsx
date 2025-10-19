@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./HeaderComponent.module.css";
 import img from "../../assets/img/AVOCADO.png";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import SearchBoxComponent from "../SearchBoxComponent/SearchBoxComponent";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import ButtonNoBGComponent from "../ButtonNoBGComponent/ButtonNoBGComponent";
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { Popover, OverlayTrigger, Button } from "react-bootstrap";
@@ -19,8 +19,10 @@ import VoiceComponent from "../VoiceComponent/VoiceComponent";
 const HeaderComponent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const [showLoading, setShowLoading] = useState(false);
+  const [activePath, setActivePath] = useState(location.pathname);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
   const [showPopover, setShowPopover] = useState(false);
@@ -95,7 +97,6 @@ const HeaderComponent = () => {
     setShowLoading(false);
   }, [user?.userName, user?.userImage]);
 
-  // Lấy thông tin xu khi user đăng nhập
   useEffect(() => {
     if (user?.id && access_token) {
       fetchUserCoins();
@@ -283,25 +284,46 @@ const HeaderComponent = () => {
                     </>
                   ) : (
                     <>
-                      <ButtonNoBGComponent to="/">
+                      <ButtonNoBGComponent
+                        to="/"
+                        isActive={activePath.startsWith("/")}
+                      >
                         Trang chủ
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/products">
+                      <ButtonNoBGComponent
+                        to="/products"
+                        isActive={activePath.startsWith("/products")}
+                      >
                         Sản phẩm
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/news">
+                      <ButtonNoBGComponent
+                        to="/news"
+                        isActive={activePath.startsWith("/news")}
+                      >
                         Tin tức
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/introduce">
+                      <ButtonNoBGComponent
+                        to="/introduce"
+                        isActive={activePath === "/introduce"}
+                      >
                         Giới thiệu
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/contact">
+                      <ButtonNoBGComponent
+                        to="/contact"
+                        isActive={activePath === "/contact"}
+                      >
                         Liên hệ
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/quizz">
+                      <ButtonNoBGComponent
+                        to="/quizz"
+                        isActive={activePath === "/quizz"}
+                      >
                         Gợi ý
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/minigame">
+                      <ButtonNoBGComponent
+                        to="/minigame"
+                        isActive={activePath === "/minigame"}
+                      >
                         Game
                       </ButtonNoBGComponent>
                     </>

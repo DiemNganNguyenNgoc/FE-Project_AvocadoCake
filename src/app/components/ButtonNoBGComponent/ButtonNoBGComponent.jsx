@@ -4,13 +4,13 @@ import styles from "./ButtonNoBGComponent.module.css";
 
 const ButtonNoBGComponent = ({ to, children, className = "", ...props }) => {
   const location = useLocation();
-  const isActive = location.pathname === to;
+  const active = location.pathname === to; // ✅ đổi tên tránh trùng
 
   return (
     <Link
       to={to}
       className={`${styles.btn__noBG__component} ${
-        isActive ? styles.active : ""
+        active ? styles.active : ""
       } ${className}`}
       {...props}
     >
