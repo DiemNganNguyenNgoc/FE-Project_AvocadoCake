@@ -24,7 +24,6 @@ function App() {
   const dispatch = useDispatch();
   const [showLoading, setShowLoading] = useState(false);
   const user = useSelector((state) => state.user);
-  
 
   useEffect(() => {
     WebFont.load({

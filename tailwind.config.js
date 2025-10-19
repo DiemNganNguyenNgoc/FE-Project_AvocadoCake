@@ -5,7 +5,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Poppins"', "sans-serif"],
+        sans: ['"Outfit"', "sans-serif"],
+        outfit: ['"Outfit"', "sans-serif"],
+        // poppins: ['"Poppins"', "sans-serif"], // Disabled temporarily
       },
       screens: {
         "2xsm": "375px",
