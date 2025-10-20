@@ -25,7 +25,6 @@
 }
 
 .product_area {
-  width: 1200px;
   flex-shrink: 0;
   border-radius: 20px;
   background: var(--White, #fff);
@@ -35,12 +34,12 @@
 }
 
 .Btnarea {
-  width: 1200px;
-  height: 224px;
   flex-shrink: 0;
   border-radius: 0px 0px 15px 15px;
-  background: var(--button-color, #b1e321);
-  margin-top: 5px;
+  border-top: var(--brown100) 1px solid;
+  height: fit-content;
+  background-color: rgb(210, 239, 214);
+  padding: 0 20px;
 }
 
 .Buy_btn {
@@ -61,10 +60,10 @@
 
 .Buy_more {
   border: none;
-  background-color: #b1e321;
   color: #3a060e;
   margin-left: 37px;
   margin-top: 40px;
+  font-style: italic;
 }
 
 .Btnholder {

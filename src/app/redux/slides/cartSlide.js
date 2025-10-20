@@ -1,83 +1,7 @@
-// import { createSlice } from "@reduxjs/toolkit";
-
-// // Hàm lưu trạng thái vào localStorage
-// const saveToLocalStorage = (state) => {
-//   localStorage.setItem("cart", JSON.stringify(state));
-// };
-
-// // Hàm lấy trạng thái từ localStorage
-// const loadFromLocalStorage = () => {
-//   try {
-//     const cart = localStorage.getItem("cart");
-//     return cart ? JSON.parse(cart) : { products: [] };
-//   } catch (error) {
-//     console.error("Error loading cart from localStorage:", error);
-//     return { products: [] };
-//   }
-// };
-
-// // Tải trạng thái từ localStorage làm initialState
-// const initialState = loadFromLocalStorage();
-
-// const cartSlice = createSlice({
-//   name: "cart",
-//   initialState,
-//   reducers: {
-//     addToCart: (state, action) => {
-//       // console.log("Action payload:", action.payload);
-//       const existingProduct = state.products.find(
-//         (product) => product.id === action.payload.id
-//       );
-
-//       if (existingProduct) {
-//         // Nếu sản phẩm đã tồn tại, tăng số lượng
-//         existingProduct.quantity += action.payload.quantity || 1;
-//       } else {
-//         // Nếu sản phẩm chưa tồn tại, thêm vào giỏ với số lượng ban đầu
-//         state.products.push({
-//           // ...action.payload,
-//           // quantity: action.payload.quantity || 1,
-//           id: action.payload.id, // Lưu id
-//           img: action.payload.img,
-//           title: action.payload.title,
-//           price: action.payload.price,
-//           quantity: action.payload.quantity || 1,
-//         });
-//       }
-
-//       saveToLocalStorage(state);
-//     },
-//     updateQuantity: (state, action) => {
-//       const { id, quantity } = action.payload;
-//       const product = state.products.find((product) => product.id === id);
-
-//       if (product && quantity > 0) {
-//         product.quantity = quantity;
-//       }
-
-//       saveToLocalStorage(state); // Lưu trạng thái sau khi cập nhật số lượng
-//     },
-
-//     removeFromCart: (state, action) => {
-//       state.products = state.products.filter(
-//         (product) => product.id !== action.payload.id
-//       );
-//       saveToLocalStorage(state);
-//     },
-//     clearCart: (state) => {
-//       state.products = [];
-//       saveToLocalStorage(state); // Lưu trạng thái sau khi xóa toàn bộ giỏ hàng
-//     },
-//   },
-// });
-
-// export const { addToCart, removeFromCart, clearCart, updateQuantity } =
-//   cartSlice.actions;
-// export default cartSlice.reducer;
 
 import { createSlice } from "@reduxjs/toolkit";
 
-// Hàm lưu trạng thái vào localStorage
+// Save status to localStorage
 const saveToLocalStorage = (state) => {
   try {
     localStorage.setItem("cart", JSON.stringify(state));
@@ -86,7 +10,7 @@ const saveToLocalStorage = (state) => {
   }
 };
 
-// Hàm lấy trạng thái từ localStorage
+// Get status from localStorage
 const loadFromLocalStorage = () => {
   try {
     const cart = localStorage.getItem("cart");
@@ -97,7 +21,7 @@ const loadFromLocalStorage = () => {
   }
 };
 
-// Tải trạng thái từ localStorage làm initialState
+// Load status from localStorage to create initialState
 const initialState = loadFromLocalStorage();
 
 const cartSlice = createSlice({
@@ -111,16 +35,16 @@ const cartSlice = createSlice({
       );
 
       if (existingProduct) {
-        // Nếu sản phẩm đã tồn tại, tăng số lượng
+        // If product exists, increase quantity
         existingProduct.quantity += quantity;
       } else {
-        // Nếu sản phẩm chưa tồn tại, thêm vào giỏ với số lượng ban đầu
+        // If product is new, add to cart with selected quantity
         state.products.push({
           id,
           img,
           title,
           price,
-          size, // Lưu trường size
+          size,
           quantity,
         });
       }
@@ -135,7 +59,7 @@ const cartSlice = createSlice({
         product.quantity = quantity;
       }
 
-      saveToLocalStorage(state); // Lưu trạng thái sau khi cập nhật số lượng
+      saveToLocalStorage(state); 
     },
     removeFromCart: (state, action) => {
       state.products = state.products.filter(
@@ -145,7 +69,7 @@ const cartSlice = createSlice({
     },
     clearCart: (state) => {
       state.products = [];
-      saveToLocalStorage(state); // Lưu trạng thái sau khi xóa toàn bộ giỏ hàng
+      saveToLocalStorage(state);
     },
   },
 });

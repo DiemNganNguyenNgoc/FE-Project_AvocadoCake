@@ -1,49 +1,50 @@
+/* ===========================
+   Header base styles
+=========================== */
 .bg-white {
-  width: 100%;
-  background-color: var(--white);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+
+  width: 100%;
+  background-color: var(--white);
   z-index: 1020;
 }
-
-/* .sticky-top {
-  position: sticky !important;
-  top: 0;
-  z-index: 1020;
-  width: 100%;
-} */
 
 .bg-shadow {
   box-shadow: 0px 0px 4px 0px var(--shadow);
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 0 0 0;
-  width: 100%;
-}
-
 /* Div giả để tạo khoảng trống cho header */
 .headerPlaceholder {
-  height: 190px; /* Chiều cao bằng với header */
+  height: 190px; /* bằng với chiều cao header */
   width: 100%;
 }
 
-/* Xóa padding-top của body vì không cần thiết nữa */
+/* Reset padding-top body */
 :global(body) {
   padding-top: 0;
 }
 
-/* nav top */
-img {
+/* ===========================
+   Navbar layout
+=========================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 0 0 0;
+}
+
+/* Logo */
+.navbar img {
   width: 148px;
   height: auto;
   border-radius: 5px;
 }
 
+/* Search box */
 .navbar__search__form {
   display: flex;
   justify-content: center;
@@ -51,6 +52,7 @@ img {
   gap: 8px;
 }
 
+/* User + buttons */
 .btn__container {
   display: flex;
   gap: 8px;
@@ -61,59 +63,43 @@ img {
 
 .btn__signup {
   display: flex;
-  width: max-content;
-  height: var(--button-height);
-  padding: 8px 8px;
   justify-content: center;
   align-items: center;
+
+  width: max-content;
+  height: var(--button-height);
+  padding: 8px;
+
   background: var(--white);
   color: var(--brown100);
-  border: none;
   font-size: 1.6rem;
-  transition-duration: 0.25s;
-  cursor: pointer;
+
+  border: none;
   text-decoration: none;
+  cursor: pointer;
+
+  transition: color 0.25s ease-in-out;
 }
 
 .btn__signup:hover {
   color: var(--green100);
 }
 
+/* ===========================
+   Cart
+=========================== */
 .nav__cart {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: 0 20px 0; */
   padding: 8px;
   color: var(--brown100);
-  transition: 0.25s;
+  transition: color 0.25s ease-in-out;
 }
 
 .nav__cart:hover {
   color: var(--green100);
   cursor: pointer;
-}
-
-/* nav bot */
-
-.nav__bot {
-  margin: 5px;
-}
-
-.nav__content {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-  margin: 15px 0 0;
-}
-
-.user__icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--white);
-  gap: 10px;
 }
 
 .cart__icon__wrapper {
@@ -125,14 +111,108 @@ img {
   position: absolute;
   top: -8px;
   right: -8px;
+
+  min-width: 20px;
+  padding: 6px;
+
   background-color: var(--green100);
   color: var(--brown100);
   font-size: 1rem;
   font-weight: bold;
   border-radius: 50%;
-  padding: 6px 6px;
-  min-width: 20px;
   text-align: center;
   line-height: 1;
-  /* transition: 0.3s; */
+}
+
+/* ===========================
+   Navbar bottom (menu links)
+=========================== */
+.nav__bot {
+  margin: 5px;
+}
+
+.nav__content {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  margin: 15px 0 0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ===========================
+   User
+=========================== */
+.user__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  background-color: var(--white);
+}
+
+.user__icon img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+/* Mobile (<= 576px) */
+@media (max-width: 576px) {
+  .headerPlaceholder {
+    height: 140px; /* giảm chiều cao header */
+  }
+
+  .navbar img {
+    width: 110px;
+  }
+
+  .navbar__search__form {
+    margin-top: 10px;
+  }
+
+  .btn__signup {
+    font-size: 1.4rem;
+    padding: 6px;
+  }
+
+  .user__icon span {
+    display: none; /* ẩn tên user, chỉ hiện avatar */
+  }
+
+  .nav__content {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* Tablet (<= 768px) */
+@media (max-width: 768px) {
+  .headerPlaceholder {
+    height: 160px;
+  }
+
+  .navbar img {
+    width: 130px;
+  }
+
+  .nav__content {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Desktop (>= 992px) */
+@media (min-width: 992px) {
+  .nav__content {
+    flex-direction: row;
+    gap: 15px;
+  }
 }

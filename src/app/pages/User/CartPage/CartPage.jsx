@@ -114,34 +114,37 @@ const CartPage = () => {
   };
 
   return (
-    <div className="container-xl cart-container">
-      <div className="titleHolderCart">
+    <div className="container mx-auto p-4">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
         <button
-          className="back_btn"
           onClick={() => handleNavigate("/products")}
+          className="p-2 rounded-full hover:bg-gray-100"
         >
           <BackIconComponent />
         </button>
-        <h1 className="titleCart">GIỎ HÀNG</h1>
+        <h1 className="text-2xl font-bold text-gray-800">GIỎ HÀNG</h1>
       </div>
 
-      <div className="product_area">
-        <table>
-          <thead>
-            <tr className="HeaderHolder">
-              <th>
+      {/* Table Wrapper */}
+      <div className="overflow-x-auto bg-white shadow rounded-lg">
+        <table className="min-w-full text-2xl text-gray-700 pb-20">
+          <thead className="bg-gray-100 text-2xl uppercase">
+            <tr>
+              <th className="p-3 text-center">
                 <CheckboxComponent
                   isChecked={selectedProducts.length === products.length}
                   onChange={toggleSelectAll}
                 />
               </th>
-              <th className="ProductInforHear">Thông tin sản phẩm</th>
-              <th className="PriceHeader">Đơn giá</th>
-              <th className="QuantityHeader">Số lượng</th>
-              <th className="MoneyHeader">Thành tiền</th>
-              <th></th>
+              <th className="p-3 text-left hidden sm:table-cell">Sản phẩm</th>
+              <th className="p-3 text-left hidden md:table-cell">Đơn giá</th>
+              <th className="p-3 text-left hidden md:table-cell">Số lượng</th>
+              <th className="p-3 text-left hidden md:table-cell">Thành tiền</th>
+              <th className="p-3"></th>
             </tr>
           </thead>
+
           <tbody>
             {products.map((product) => {
               const discountedPrice = getDiscountedPrice(
@@ -149,38 +152,46 @@ const CartPage = () => {
                 product.price
               );
               return (
-                <tr key={product.id} className="LineProduct">
-                  <td>
+                <tr
+                  key={product.id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="p-3 text-center align-middle">
                     <CheckboxComponent
                       isChecked={isSelected(product.id)}
                       onChange={() => toggleSelectRow(product.id)}
                     />
                   </td>
-                  <td className="ProductInfor">
+                  <td className="p-3">
                     <ProductInfor
                       image={product.img}
                       name={product.title}
                       size={product.size ? `${product.size} cm` : ""}
                     />
+                    {/* Mobile layout info */}
+                    <div className="sm:hidden mt-2 text-gray-500 text-xl">
+                      <p>Giá: {discountedPrice.toLocaleString()} VND</p>
+                      <p>Số lượng: {product.quantity}</p>
+                      <p>
+                        Thành tiền:{" "}
+                        {(discountedPrice * product.quantity).toLocaleString()}{" "}
+                        VND
+                      </p>
+                    </div>
                   </td>
-                  <td className="PriceProduct">
-                    <p className="Price">
-                      {discountedPrice.toLocaleString()} VND
-                    </p>
+                  <td className="p-3 hidden md:table-cell">
+                    {discountedPrice.toLocaleString()} VND
                   </td>
-                  <td className="QuantityBtn">
+                  <td className="p-3 hidden md:table-cell">
                     <QuantityBtn
                       initialQuantity={product.quantity}
                       productId={product.id}
                     />
                   </td>
-                  <td className="Money">
-                    <p className="MoneyProduct">
-                      {(discountedPrice * product.quantity).toLocaleString()}{" "}
-                      VND
-                    </p>
+                  <td className="p-3 hidden md:table-cell">
+                    {(discountedPrice * product.quantity).toLocaleString()} VND
                   </td>
-                  <td className="DeleteBtn">
+                  <td className="p-3 text-center">
                     <DeleteBtn
                       onClick={() => handleRemoveProduct(product.id)}
                     />
@@ -190,27 +201,31 @@ const CartPage = () => {
             })}
           </tbody>
         </table>
+      </div>
 
-        <div className="Btnarea">
-          <div className="total-holder">
-            <p className="tong">Tổng tiền:</p>
-            <p className="total">{totalAmount.toLocaleString()} VND</p>
-          </div>
-          <div className="Btnholder">
-            <button
-              className="Buy_more"
-              onClick={() => handleNavigate("/products")}
-            >
-              Mua thêm
-            </button>
-            <ButtonComponent
-              className="Buy_btn"
-              onClick={handleBuyNow}
-              disabled={selectedProducts.length === 0}
-            >
-              Mua ngay
-            </ButtonComponent>
-          </div>
+      {/* Bottom Summary */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6 p-4 rounded-lg Btnarea">
+        <div className="text-2xl font-semibold">
+          <span className="mr-2 text-gray-700">Tổng tiền:</span>
+          <span className="text-red-600">
+            {totalAmount.toLocaleString()} VND
+          </span>
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            onClick={() => handleNavigate("/products")}
+            className="px-4 py-2 border rounded-full italic hover:underline"
+          >
+            Mua thêm
+          </button>
+          <ButtonComponent
+            className="px-5 py-2 disabled:opacity-8 disabled:hover:cursor-not-allowed "
+            onClick={handleBuyNow}
+            disabled={selectedProducts.length === 0}
+          >
+            Mua ngay
+          </ButtonComponent>
         </div>
       </div>
     </div>
