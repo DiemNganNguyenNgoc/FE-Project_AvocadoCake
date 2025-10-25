@@ -13,6 +13,7 @@ import {
   Settings,
   Gamepad2,
   LogOut,
+  Cake,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -41,6 +42,7 @@ import NotificationSettings from "../AdminSetting/usecases/NotificationSettings"
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
+import AdminRecipe from "../AdminRecipe";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -163,6 +165,13 @@ const navItems = [
     icon: <Bot />,
     path: "/admin/strategies",
     component: () => <div>Strategies Content</div>,
+  },
+  {
+    id: "recipes",
+    text: "Recipes",
+    icon: <Cake />,
+    path: "/admin/recipes",
+    component: AdminRecipe,
   },
   {
     id: "quiz",

@@ -18,6 +18,7 @@ import {
   Newspaper,
   ArrowLeft,
   ChevronUp,
+  Cake,
 } from "lucide-react";
 
 const AdminSidebar = ({ isOpen, onToggle }) => {
@@ -76,6 +77,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           title: "Discounts",
           icon: Tag,
           url: "/admin/discount",
+        },
+        {
+          title: "Recipe",
+          icon: Cake,
+          url: "/admin/recipes",
         },
         {
           title: "Quiz",

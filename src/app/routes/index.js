@@ -59,6 +59,7 @@ import AdminTab from "../pages/Admin/AdminTab/AdminTab.jsx";
 import AddCategory from "../pages/Admin/AdminCategory/usecases/AddCategory.jsx";
 import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory.jsx";
 import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
+import AdminRecipe from "../pages/Admin/AdminRecipe/AdminRecipe.jsx";
 
 export const routes = [
   {
