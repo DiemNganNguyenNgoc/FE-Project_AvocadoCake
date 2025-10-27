@@ -1,77 +1,64 @@
-import React, { useEffect, useRef, useState } from "react";
-import cakeBase from "../../../assets/img/white.png"; // Ảnh nền trong suốt
+import React, { useState } from "react";
+import { cakes, toppings } from "../../../data/cakeOptions";
+import CakeSelector from "../../../components/CakeSelector/CakeSelector";
+import ToppingToolbar from "../../../components/ToppingToolbar/ToppingToolbar";
+import CakeStage from "../../../components/CakeStage/CakeStage";
 
-export default function CakeDesigner() {
-  const canvasRef = useRef(null);
-  const [color, setColor] = useState("#ffffff"); // Mặc định màu trắng
-  const cakeImgRef = useRef(null);
+function DesignCakePage() {
+  const [selectedCake, setSelectedCake] = useState(cakes[0]);
+  const [toppingList, setToppingList] = useState([]);
+  const [selectedToppingId, setSelectedToppingId] = useState(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const cakeImg = new Image();
-    cakeImg.src = cakeBase;
-    cakeImg.onload = () => {
-      cakeImgRef.current = cakeImg;
-      drawCake(ctx, cakeImg, color);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (cakeImgRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      drawCake(ctx, cakeImgRef.current, color);
-    }
-  }, [color]);
-
-const drawCake = (ctx, cakeImg, fillColor) => {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  
-  // Vẽ nền
-  ctx.drawImage(cakeImg, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  
-  // Lấy pixel và đổi màu
-  const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-  const data = imageData.data;
-  const rgb = hexToRgb(fillColor);
-
-  for (let i = 0; i < data.length; i += 4) {
-    if (data[i + 3] > 0) { // pixel có alpha > 0
-      data[i] = rgb.r;
-      data[i + 1] = rgb.g;
-      data[i + 2] = rgb.b;
-    }
-  }
-  ctx.putImageData(imageData, 0, 0);
-};
-
-const hexToRgb = (hex) => {
-  const bigint = parseInt(hex.slice(1), 16);
-  return {
-    r: (bigint >> 16) & 255,
-    g: (bigint >> 8) & 255,
-    b: bigint & 255
+  const handleAddTopping = (topping) => {
+    setToppingList([
+      ...toppingList,
+      {
+        ...topping,
+        x: 180 + Math.random() * 40,
+        y: 180 + Math.random() * 40,
+        rotation: 0,
+        scaleX: 0.2,
+        scaleY: 0.2,
+      },
+    ]);
   };
-};
-
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h2>Tô màu bánh kem</h2>
-      <input
-        type="color"
-        value={color}
-        onChange={(e) => setColor(e.target.value)}
-        style={{ marginBottom: "10px", cursor: "pointer" }}
-      />
-      <br />
-      <canvas
-        ref={canvasRef}
-        width={400}
-        height={400}
-        style={{ border: "1px solid #ccc", background: "transparent" }}
-      />
+    <div className="min-h-screen p-8 flex flex-col items-center gap-8">
+      <h1 className="text-4xl font-bold text-amber-950">
+        THIẾT KẾ BÁNH CỦA BẠN
+      </h1>
+      <div className="flex flex-wrap gap-8 justify-center">
+        <CakeStage
+          selectedCake={selectedCake}
+          toppings={toppingList}
+          setToppings={setToppingList}
+          selectedToppingId={selectedToppingId}
+          setSelectedToppingId={setSelectedToppingId}
+        />
+        <div className="flex flex-col gap-6 max-w-md">
+          <CakeSelector
+            cakes={cakes}
+            selectedCake={selectedCake}
+            onSelect={setSelectedCake}
+          />
+          <ToppingToolbar toppings={toppings} onAdd={handleAddTopping} />
+          {selectedToppingId && (
+            <button
+              onClick={() =>
+                setToppingList(
+                  toppingList.filter((t) => t.id !== selectedToppingId)
+                )
+              }
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            >
+              🗑️ Xóa topping
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
+
+export default DesignCakePage;
