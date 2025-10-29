@@ -297,6 +297,12 @@ const HeaderComponent = () => {
                         Sản phẩm
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
+                        to="/design-cake"
+                        isActive={activePath.startsWith("/design-cake")}
+                      >
+                        Thiết kế bánh
+                      </ButtonNoBGComponent>
+                      <ButtonNoBGComponent
                         to="/news"
                         isActive={activePath.startsWith("/news")}
                       >
