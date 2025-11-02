@@ -62,34 +62,28 @@ const AdminRecipe = () => {
   const tabs = [
     {
       id: "smart-generate",
-      label: "🚀 Smart Generate",
-      description:
-        "Tự động tạo công thức với AI - Zero user input, auto-detect trends & events",
+      label: "Smart Generate",
       component: SmartGenerate,
       badge: "NEW",
     },
     {
       id: "generate-ingredient",
       label: "Từ Nguyên liệu",
-      description: "Tạo công thức từ danh sách nguyên liệu có sẵn",
       component: GenerateFromIngredient,
     },
     {
       id: "generate-trend",
       label: "Từ Xu hướng",
-      description: "Tạo công thức dựa trên xu hướng thị trường",
       component: GenerateFromTrend,
     },
     {
       id: "analytics",
       label: "Phân tích",
-      description: "Phân tích thị trường và dự báo xu hướng",
       component: RecipeAnalytics,
     },
     {
       id: "history",
       label: "Lịch sử",
-      description: "Xem lại các công thức đã tạo",
       component: RecipeHistory,
     },
   ];
@@ -98,22 +92,22 @@ const AdminRecipe = () => {
   const ActiveComponent = activeTabConfig.component;
 
   return (
-    <div className="p-9">
+    <div className="p-12">
       {/* Page Header - Minimal & Elegant */}
-      <div className="mb-9">
+      <div className="mb-12">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <h1 className="text-5xl font-semibold text-avocado-brown-100 mb-3">
+            <h1 className="text-6xl font-semibold text-avocado-brown-100 mb-4">
               AI Recipe Generator
             </h1>
-            <p className="text-2xl text-avocado-brown-50 font-light">
+            <p className="text-3xl text-avocado-brown-50 font-light">
               Công cụ tạo công thức bánh thông minh
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <button
-              className={`flex items-center gap-3 px-7 py-4 rounded-xl font-medium transition-all text-2xl ${
+              className={`flex items-center gap-4 px-9 py-5 rounded-2xl font-medium transition-all text-3xl ${
                 healthStatus?.status === "healthy"
                   ? "bg-avocado-green-10 text-avocado-green-100 hover:bg-avocado-green-30 border-2 border-avocado-green-50"
                   : healthStatus?.status === "error"
@@ -124,7 +118,7 @@ const AdminRecipe = () => {
               title="Kiểm tra kết nối backend"
             >
               <div
-                className={`w-4 h-4 rounded-full ${
+                className={`w-5 h-5 rounded-full ${
                   healthStatus?.status === "healthy"
                     ? "bg-avocado-green-100"
                     : healthStatus?.status === "error"
@@ -145,14 +139,14 @@ const AdminRecipe = () => {
       </div>
 
       {/* Tab Navigation - Clean & Modern */}
-      <div className="bg-white border border-avocado-brown-30 rounded-2xl mb-9 overflow-hidden">
+      <div className="bg-white border-2 border-avocado-brown-30 rounded-2xl mb-10 overflow-hidden shadow-sm">
         <div className="flex overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`relative flex-1 px-9 py-6 text-2xl font-medium transition-all whitespace-nowrap ${
+              className={`relative flex-1 px-10 py-7 text-3xl font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
-                  ? "bg-avocado-green-100 text-white"
+                  ? "bg-avocado-green-100 text-avocado-brown-100 shadow-inner"
                   : "text-avocado-brown-100 hover:bg-avocado-green-10"
               }`}
               onClick={() => setActiveTab(tab.id)}
@@ -160,7 +154,7 @@ const AdminRecipe = () => {
             >
               {tab.label}
               {tab.badge && (
-                <span className="absolute -top-2 -right-2 px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+                <span className="absolute -top-2 -right-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm font-bold rounded-full shadow-lg animate-pulse">
                   {tab.badge}
                 </span>
               )}
@@ -169,56 +163,47 @@ const AdminRecipe = () => {
         </div>
       </div>
 
-      {/* Tab Description - Soft & Elegant */}
-      <div className="mb-9">
-        <div className="p-7 bg-avocado-green-10 border border-avocado-green-30 rounded-2xl">
-          <p className="text-2xl text-avocado-brown-100 font-light">
-            {activeTabConfig.description}
-          </p>
-        </div>
-      </div>
-
       {/* Active Component */}
-      <div className="bg-white rounded-2xl shadow-sm border border-avocado-brown-30 p-9">
+      <div className="bg-white rounded-2xl shadow-sm border border-avocado-brown-30 p-12">
         <ActiveComponent />
       </div>
 
       {/* Health Check Modal */}
       {showHealthCheck && healthStatus?.status === "error" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-8">
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setShowHealthCheck(false)}
           />
-          <div className="relative bg-white rounded-2xl shadow-xl max-w-2xl w-full">
-            <div className="flex items-center justify-between p-9 border-b border-avocado-brown-30">
-              <h3 className="text-3xl font-semibold text-avocado-brown-100">
+          <div className="relative bg-white rounded-3xl shadow-xl max-w-3xl w-full">
+            <div className="flex items-center justify-between p-12 border-b border-avocado-brown-30">
+              <h3 className="text-4xl font-semibold text-avocado-brown-100">
                 Lỗi kết nối Backend
               </h3>
               <button
-                className="text-avocado-brown-50 hover:text-avocado-brown-100 text-3xl"
+                className="text-avocado-brown-50 hover:text-avocado-brown-100 text-4xl"
                 onClick={() => setShowHealthCheck(false)}
               >
                 ✕
               </button>
             </div>
 
-            <div className="p-9">
-              <p className="text-2xl text-red-600 mb-6">
+            <div className="p-12">
+              <p className="text-3xl text-red-600 mb-8">
                 {healthStatus.message}
               </p>
 
-              <div className="bg-grey9 rounded-2xl p-7">
-                <h4 className="font-medium text-2xl text-avocado-brown-100 mb-5">
+              <div className="bg-grey9 rounded-2xl p-9">
+                <h4 className="font-medium text-3xl text-avocado-brown-100 mb-6">
                   Hướng dẫn khắc phục:
                 </h4>
-                <ol className="list-decimal list-inside space-y-3 text-2xl text-avocado-brown-100">
+                <ol className="list-decimal list-inside space-y-4 text-2xl text-avocado-brown-100">
                   <li>
                     Kiểm tra backend server có đang chạy không (RCM_RECIPE_2)
                   </li>
                   <li>
                     Xác nhận URL backend:{" "}
-                    <code className="bg-grey px-2 py-1 rounded-lg">
+                    <code className="bg-grey px-3 py-2 rounded-lg">
                       http://localhost:8000
                     </code>
                   </li>
@@ -228,15 +213,15 @@ const AdminRecipe = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-4 p-9 border-t border-avocado-brown-30">
+            <div className="flex items-center justify-end gap-5 p-12 border-t border-avocado-brown-30">
               <button
-                className="px-8 py-4 text-2xl font-medium text-avocado-brown-100 bg-grey9 hover:bg-grey5 rounded-xl transition-colors"
+                className="px-10 py-5 text-3xl font-medium text-avocado-brown-100 bg-grey9 hover:bg-grey5 rounded-2xl transition-colors"
                 onClick={() => setShowHealthCheck(false)}
               >
                 Đóng
               </button>
               <button
-                className="px-8 py-4 text-2xl font-medium text-white bg-avocado-green-100 hover:bg-avocado-green-80 rounded-xl transition-colors"
+                className="px-10 py-5 text-3xl font-medium text-avocado-brown-100 bg-avocado-green-100 hover:bg-avocado-green-80 rounded-2xl transition-colors"
                 onClick={() => {
                   setShowHealthCheck(false);
                   performHealthCheck();

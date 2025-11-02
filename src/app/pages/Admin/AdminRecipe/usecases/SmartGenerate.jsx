@@ -157,69 +157,62 @@ const SmartGenerate = () => {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Header with Gradient */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 rounded-3xl p-8 text-white">
+      <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 rounded-3xl p-10 text-white">
         <div className="absolute inset-0 bg-black/10" />
         <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl flex items-center justify-center">
-              <Zap className="w-8 h-8" />
+          <div className="flex items-center gap-5 mb-6">
+            <div className="w-20 h-20 bg-white/20 backdrop-blur-lg rounded-2xl flex items-center justify-center">
+              <Zap className="w-10 h-10" />
             </div>
             <div className="flex-1">
-              <h2 className="text-4xl font-bold mb-2">Smart Auto-Generate</h2>
-              <p className="text-white/90 text-lg">
-                🎯 Zero User Input - AI tự động phát hiện trends & tạo recipe
-                tối ưu
+              <h2 className="text-5xl font-bold mb-3">Smart Auto-Generate</h2>
+              <p className="text-white/90 text-3xl">
+                AI tự động tạo recipe tối ưu
               </p>
             </div>
           </div>
 
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-5 h-5" />
-                <span className="font-semibold">Auto-Detect Events</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Calendar className="w-6 h-6" />
+                <span className="font-semibold text-2xl">Auto Events</span>
               </div>
-              <p className="text-sm text-white/80">
-                Tự động nhận diện lễ hội, sự kiện đặc biệt
-              </p>
+              <p className="text-xl text-white/80">Tự động nhận diện sự kiện</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5" />
-                <span className="font-semibold">ML-Powered Trends</span>
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <TrendingUp className="w-6 h-6" />
+                <span className="font-semibold text-2xl">ML Trends</span>
               </div>
-              <p className="text-sm text-white/80">
-                Dự đoán xu hướng bằng Machine Learning
-              </p>
+              <p className="text-xl text-white/80">Dự đoán xu hướng</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="w-5 h-5" />
-                <span className="font-semibold">Viral Scoring</span>
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Award className="w-6 h-6" />
+                <span className="font-semibold text-2xl">Viral Score</span>
               </div>
-              <p className="text-sm text-white/80">
-                Đánh giá khả năng viral trên social media
-              </p>
+              <p className="text-xl text-white/80">Đánh giá viral potential</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Left Sidebar - Controls */}
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Context Preview Card */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-6 border-2 border-blue-200 dark:border-blue-800">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <Target className="w-6 h-6 text-blue-600" />
-                Context Preview
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-8 border-2 border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <Target className="w-7 h-7 text-blue-600" />
+                Context
               </h3>
               <Button
                 variant="outline"
@@ -228,31 +221,31 @@ const SmartGenerate = () => {
                 disabled={loadingPreview}
               >
                 <RefreshCcw
-                  className={`w-4 h-4 ${loadingPreview ? "animate-spin" : ""}`}
+                  className={`w-5 h-5 ${loadingPreview ? "animate-spin" : ""}`}
                 />
               </Button>
             </div>
 
             {loadingPreview ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              <div className="flex items-center justify-center py-10">
+                <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
               </div>
             ) : contextPreview ? (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {/* Events */}
                 {contextPreview.events && contextPreview.events.length > 0 && (
-                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-4">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      📅 Sự kiện:
+                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-6">
+                    <p className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      <Calendar className="w-5 h-5" />
+                      Sự kiện
                     </p>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {contextPreview.events.map((event, idx) => (
                         <div
                           key={idx}
-                          className="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2"
+                          className="text-xl text-gray-600 dark:text-gray-400 flex items-start gap-2"
                         >
-                          <ChevronRight className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-500" />
+                          <ChevronRight className="w-5 h-5 flex-shrink-0 mt-0.5 text-blue-500" />
                           <span>{event}</span>
                         </div>
                       ))}
@@ -262,16 +255,16 @@ const SmartGenerate = () => {
 
                 {/* Trends */}
                 {contextPreview.trends && contextPreview.trends.length > 0 && (
-                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-4">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4" />
-                      🔥 Xu hướng:
+                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-6">
+                    <p className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5" />
+                      Xu hướng
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {contextPreview.trends.slice(0, 8).map((trend, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-medium rounded-full"
+                          className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-lg font-medium rounded-full"
                         >
                           {trend}
                         </span>
@@ -282,51 +275,51 @@ const SmartGenerate = () => {
 
                 {/* Demand Forecast */}
                 {contextPreview.demand_forecast && (
-                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-4">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                      <Award className="w-4 h-4" />
-                      📊 Dự báo nhu cầu:
+                  <div className="bg-white/80 dark:bg-dark-3/80 backdrop-blur-sm rounded-xl p-6">
+                    <p className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      <Award className="w-5 h-5" />
+                      Dự báo
                     </p>
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-3xl font-bold text-blue-600">
                       {contextPreview.demand_forecast.level || "Medium"}
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">
                       Score: {contextPreview.demand_forecast.score || "N/A"}
                     </p>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-gray-600 dark:text-gray-400 text-sm text-center py-4">
-                No context data
+              <p className="text-gray-600 dark:text-gray-400 text-2xl text-center py-6">
+                No data
               </p>
             )}
           </div>
 
           {/* Settings */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Days Ahead */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                <Clock className="w-4 h-4 inline mr-2" />
-                Thời điểm dự đoán
+              <label className="block text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                <Clock className="w-5 h-5 inline mr-2" />
+                Thời điểm
               </label>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {daysAheadOptions.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => handleChange("daysAhead", option.value)}
                     disabled={loading || loadingPreview}
-                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all ${
+                    className={`w-full text-left px-6 py-5 rounded-2xl border-2 transition-all ${
                       formData.daysAhead === option.value
                         ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                         : "border-gray-200 dark:border-stroke-dark bg-white dark:bg-dark-3 hover:border-purple-300"
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
-                    <div className="font-semibold text-gray-900 dark:text-white">
+                    <div className="font-semibold text-2xl text-gray-900 dark:text-white">
                       {option.label}
                     </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                    <div className="text-xl text-gray-600 dark:text-gray-400 mt-2">
                       {option.description}
                     </div>
                   </button>
@@ -336,9 +329,9 @@ const SmartGenerate = () => {
 
             {/* Target Segment */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                <Users className="w-4 h-4 inline mr-2" />
-                Đối tượng khách hàng
+              <label className="block text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                <Users className="w-5 h-5 inline mr-2" />
+                Khách hàng
               </label>
               <Select
                 value={formData.targetSegment}
@@ -350,7 +343,7 @@ const SmartGenerate = () => {
                 disabled={loading}
               />
               {selectedSegment && (
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 ml-1">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mt-3 ml-1">
                   {selectedSegment.description}
                 </p>
               )}
@@ -358,7 +351,7 @@ const SmartGenerate = () => {
 
             {/* Language */}
             <Select
-              label="🌐 Ngôn ngữ"
+              label="Ngôn ngữ"
               value={formData.language}
               onChange={(e) => handleChange("language", e.target.value)}
               options={languageOptions}
@@ -370,17 +363,17 @@ const SmartGenerate = () => {
               variant="primary"
               onClick={handleSmartGenerate}
               disabled={loading}
-              className="w-full !py-4 !text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="w-full !py-6 !text-3xl font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  AI đang phân tích...
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                  Đang phân tích...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5" />
-                  🚀 Smart Generate
+                  <Sparkles className="w-6 h-6" />
+                  Smart Generate
                 </>
               )}
             </Button>
@@ -390,81 +383,77 @@ const SmartGenerate = () => {
         {/* Right Content - Result */}
         <div className="lg:col-span-2">
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-full min-h-[600px] space-y-6">
+            <div className="flex flex-col items-center justify-center h-full min-h-[600px] space-y-8">
               <div className="relative">
-                <div className="w-24 h-24 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+                <div className="w-28 h-28 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-purple-600" />
+                  <Sparkles className="w-10 h-10 text-purple-600" />
                 </div>
               </div>
-              <div className="text-center space-y-2">
-                <p className="text-gray-900 dark:text-white text-2xl font-bold">
-                  🤖 AI đang phân tích...
+              <div className="text-center space-y-3">
+                <p className="text-gray-900 dark:text-white text-4xl font-bold">
+                  AI đang phân tích...
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  • Phát hiện events & trends
+                <p className="text-gray-600 dark:text-gray-400 text-2xl">
+                  Phát hiện events & trends
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  • Dự đoán nhu cầu thị trường
+                <p className="text-gray-600 dark:text-gray-400 text-2xl">
+                  Dự đoán nhu cầu
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  • Tạo recipe tối ưu
-                </p>
-                <p className="text-gray-500 dark:text-gray-500 text-sm mt-4">
-                  Vui lòng đợi trong giây lát...
+                <p className="text-gray-600 dark:text-gray-400 text-2xl">
+                  Tạo recipe tối ưu
                 </p>
               </div>
             </div>
           ) : currentRecipe ? (
             <RecipeDisplay recipe={currentRecipe} />
           ) : (
-            <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-center space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-3 dark:to-dark-4 rounded-3xl p-12">
+            <div className="flex flex-col items-center justify-center h-full min-h-[600px] text-center space-y-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-3 dark:to-dark-4 rounded-3xl p-14">
               <div className="relative">
                 <div className="text-9xl">🎯</div>
                 <div className="absolute -top-4 -right-4">
-                  <Sparkles className="w-12 h-12 text-purple-500 animate-pulse" />
+                  <Sparkles className="w-14 h-14 text-purple-500 animate-pulse" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Ready to Generate
+              <div className="space-y-4">
+                <h3 className="text-5xl font-bold text-gray-900 dark:text-white">
+                  Ready
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 max-w-md text-lg">
-                  Chọn thời điểm và đối tượng khách hàng, sau đó nhấn{" "}
-                  <strong className="text-purple-600">"Smart Generate"</strong>{" "}
-                  để AI tự động tạo recipe phù hợp
+                <p className="text-gray-600 dark:text-gray-400 max-w-md text-3xl">
+                  Chọn thời điểm và khách hàng, sau đó nhấn{" "}
+                  <strong className="text-purple-600">Smart Generate</strong>
                 </p>
               </div>
 
               {/* Benefits */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 max-w-2xl">
-                <div className="bg-white dark:bg-dark-3 rounded-xl p-4 text-left">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Zap className="w-5 h-5 text-purple-600" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 max-w-2xl">
+                <div className="bg-white dark:bg-dark-3 rounded-xl p-6 text-left">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                      <h4 className="font-semibold text-2xl text-gray-900 dark:text-white mb-2">
                         Zero Input
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Không cần nhập gì, AI tự động phân tích
+                      <p className="text-xl text-gray-600 dark:text-gray-400">
+                        AI tự động phân tích
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-dark-3 rounded-xl p-4 text-left">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <TrendingUp className="w-5 h-5 text-pink-600" />
+                <div className="bg-white dark:bg-dark-3 rounded-xl p-6 text-left">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="w-6 h-6 text-pink-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
+                      <h4 className="font-semibold text-2xl text-gray-900 dark:text-white mb-2">
                         Smart Context
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Tự động detect events, trends, demand
+                      <p className="text-xl text-gray-600 dark:text-gray-400">
+                        Auto detect trends
                       </p>
                     </div>
                   </div>

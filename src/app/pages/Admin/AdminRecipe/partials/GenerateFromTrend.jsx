@@ -77,29 +77,29 @@ const GenerateFromTrend = () => {
   };
 
   return (
-    <div className="space-y-9">
+    <div className="space-y-10">
       {!showResult ? (
         <>
-          <div className="mb-9">
-            <h2 className="text-4xl font-semibold text-avocado-brown-100 mb-4">
+          <div className="mb-10">
+            <h2 className="text-5xl font-semibold text-avocado-brown-100 mb-5">
               Tạo Công Thức Từ Xu Hướng
             </h2>
-            <p className="text-2xl text-avocado-brown-50 font-light">
-              Tạo công thức dựa trên xu hướng thị trường và phân khúc khách hàng
+            <p className="text-3xl text-avocado-brown-50 font-light">
+              Tạo công thức dựa trên xu hướng thị trường
             </p>
           </div>
 
           {trendingNow && (
-            <div className="bg-gradient-to-r from-orange-50 to-red-50 p-9 rounded-2xl border-2 border-orange-200">
-              <h3 className="text-3xl font-medium text-avocado-brown-100 mb-6">
+            <div className="bg-gradient-to-r from-orange-50 to-red-50 p-10 rounded-2xl border-2 border-orange-200">
+              <h3 className="text-4xl font-medium text-avocado-brown-100 mb-7">
                 Trending Now
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4">
                 {trendingNow.top_trends?.slice(0, 10).map((trend, index) => (
                   <button
                     key={index}
                     onClick={() => applyTrend(trend.keyword || trend)}
-                    className="px-7 py-4 bg-white hover:bg-orange-50 border-2 border-orange-300 rounded-full text-2xl font-medium text-avocado-brown-100 transition-all hover:border-orange-500"
+                    className="px-9 py-5 bg-white hover:bg-orange-50 border-2 border-orange-300 rounded-full text-3xl font-medium text-avocado-brown-100 transition-all hover:border-orange-500"
                   >
                     {trend.keyword || trend}
                   </button>
@@ -108,7 +108,7 @@ const GenerateFromTrend = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-9">
             <Input
               label="Xu hướng *"
               name="trend"
@@ -142,7 +142,7 @@ const GenerateFromTrend = () => {
               options={LANGUAGES}
             />
 
-            <div className="flex gap-5">
+            <div className="flex gap-6">
               <Button
                 type="button"
                 onClick={handleReset}
@@ -165,7 +165,7 @@ const GenerateFromTrend = () => {
           </form>
         </>
       ) : (
-        <div className="space-y-9">
+        <div className="space-y-10">
           <Button
             onClick={() => setShowResult(false)}
             variant="ghost"
