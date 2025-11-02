@@ -302,12 +302,12 @@ const HeaderComponent = () => {
                       >
                         Thiết kế
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent
+                      {/* <ButtonNoBGComponent
                         to="/create-cake"
                         isActive={activePath.startsWith("/create-cake")}
                       >
                         Thiết kế 2
-                      </ButtonNoBGComponent>
+                      </ButtonNoBGComponent> */}
                       <ButtonNoBGComponent
                         to="/news"
                         isActive={activePath.startsWith("/news")}
