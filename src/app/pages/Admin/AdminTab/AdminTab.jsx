@@ -14,6 +14,7 @@ import {
   Gamepad2,
   LogOut,
   Cake,
+  Sparkles,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -43,6 +44,7 @@ import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
 import AdminRecipe from "../AdminRecipe";
+import AdminStratergy from "../AdminStratergy";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -172,6 +174,13 @@ const navItems = [
     icon: <Cake />,
     path: "/admin/recipes",
     component: AdminRecipe,
+  },
+  {
+    id: "stratergy",
+    text: "AI Strategy",
+    icon: <Sparkles />,
+    path: "/admin/stratergy",
+    component: AdminStratergy,
   },
   {
     id: "quiz",

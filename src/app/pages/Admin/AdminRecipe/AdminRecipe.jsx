@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAdminRecipeStore from "./adminRecipeStore";
+import SmartGenerate from "./usecases/SmartGenerate";
 import GenerateFromIngredient from "./usecases/GenerateFromIngredient";
 import GenerateFromTrend from "./partials/GenerateFromTrend";
 import RecipeAnalytics from "./partials/RecipeAnalytics";
 import RecipeHistory from "./partials/RecipeHistory";
-import Button from "../../../components/AdminLayout/Button";
 
 /**
  * AdminRecipe - Main component for AI Recipe Generation
@@ -60,6 +60,14 @@ const AdminRecipe = () => {
   };
 
   const tabs = [
+    {
+      id: "smart-generate",
+      label: "🚀 Smart Generate",
+      description:
+        "Tự động tạo công thức với AI - Zero user input, auto-detect trends & events",
+      component: SmartGenerate,
+      badge: "NEW",
+    },
     {
       id: "generate-ingredient",
       label: "Từ Nguyên liệu",
@@ -142,7 +150,7 @@ const AdminRecipe = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`flex-1 px-9 py-6 text-2xl font-medium transition-all whitespace-nowrap ${
+              className={`relative flex-1 px-9 py-6 text-2xl font-medium transition-all whitespace-nowrap ${
                 activeTab === tab.id
                   ? "bg-avocado-green-100 text-white"
                   : "text-avocado-brown-100 hover:bg-avocado-green-10"
@@ -151,6 +159,11 @@ const AdminRecipe = () => {
               title={tab.description}
             >
               {tab.label}
+              {tab.badge && (
+                <span className="absolute -top-2 -right-2 px-3 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+                  {tab.badge}
+                </span>
+              )}
             </button>
           ))}
         </div>

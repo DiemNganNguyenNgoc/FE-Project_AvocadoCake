@@ -295,7 +295,7 @@ const HeaderComponent = () => {
                       <ButtonNoBGComponent to="/admin/introduce">
                         Liên hệ
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/admin/store-info">
+                      <ButtonNoBGComponent to="/admin/dashboard">
                         Quản lí
                       </ButtonNoBGComponent>
                     </>

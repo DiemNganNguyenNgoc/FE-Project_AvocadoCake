@@ -12,6 +12,10 @@ import {
   Award,
   Target,
   Sparkles,
+  Megaphone,
+  Hash,
+  Zap,
+  Calendar,
 } from "lucide-react";
 
 /**
@@ -33,7 +37,13 @@ const RecipeDisplay = ({ recipe }) => {
     );
   }
 
-  const { recipe: recipeData, analytics } = recipe;
+  const {
+    recipe: recipeData,
+    analytics,
+    marketing,
+    context,
+    next_events,
+  } = recipe;
 
   /**
    * Get score color
@@ -328,6 +338,224 @@ const RecipeDisplay = ({ recipe }) => {
           bởi AI
         </p>
       </div>
+
+      {/* Marketing Strategy (NEW - for Smart Generate) */}
+      {marketing && Object.keys(marketing).length > 0 && (
+        <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Megaphone className="w-6 h-6 text-orange-600" />
+            Chiến lược Marketing
+          </h3>
+
+          <div className="space-y-4">
+            {/* Hashtags */}
+            {marketing.hashtags && marketing.hashtags.length > 0 && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                  <Hash className="w-4 h-4" />
+                  Hashtags đề xuất:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {marketing.hashtags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-medium rounded-full"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Post Caption */}
+            {marketing.post_caption && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  📱 Caption đề xuất:
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {marketing.post_caption}
+                </p>
+              </div>
+            )}
+
+            {/* Target Platforms */}
+            {marketing.target_platforms &&
+              marketing.target_platforms.length > 0 && (
+                <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    🎯 Nền tảng đề xuất:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {marketing.target_platforms.map((platform, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-gray-100 dark:bg-dark-4 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg"
+                      >
+                        {platform}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            {/* Viral Potential */}
+            {analytics?.viral_potential && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  Tiềm năng viral:
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-3 bg-gray-200 dark:bg-dark-4 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full transition-all"
+                      style={{
+                        width: `${analytics.viral_potential.score || 0}%`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-lg font-bold text-orange-600">
+                    {analytics.viral_potential.score || 0}
+                  </span>
+                </div>
+                {analytics.viral_potential.level && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    Mức độ: <strong>{analytics.viral_potential.level}</strong>
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Context Info (NEW - for Smart Generate) */}
+      {context && Object.keys(context).length > 0 && (
+        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Target className="w-6 h-6 text-indigo-600" />
+            Context Phân tích
+          </h3>
+
+          <div className="space-y-3">
+            {/* Detected Events */}
+            {context.detected_events && context.detected_events.length > 0 && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  📅 Sự kiện phát hiện:
+                </p>
+                <ul className="space-y-1">
+                  {context.detected_events.map((event, idx) => (
+                    <li
+                      key={idx}
+                      className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2"
+                    >
+                      <CheckCircle className="w-4 h-4 text-indigo-500 flex-shrink-0 mt-0.5" />
+                      {event}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Active Trends */}
+            {context.active_trends && context.active_trends.length > 0 && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  🔥 Xu hướng đang hot:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {context.active_trends.map((trend, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-sm font-medium rounded-full"
+                    >
+                      {trend}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Demand Level */}
+            {context.demand_forecast && (
+              <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  📊 Dự báo nhu cầu:
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl font-bold text-indigo-600">
+                    {context.demand_forecast.level || "N/A"}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Score: {context.demand_forecast.score || "N/A"}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Next Events (NEW - for Smart Generate) */}
+      {next_events && next_events.length > 0 && (
+        <div className="bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Calendar className="w-6 h-6 text-green-600" />
+            Sự kiện sắp tới
+          </h3>
+
+          <div className="space-y-3">
+            {next_events.map((event, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-dark-3 rounded-lg p-4 border-l-4 border-green-500"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">
+                      {event.event_name || "N/A"}
+                    </h4>
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        {event.event_date || "N/A"}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {event.days_until} ngày nữa
+                      </span>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          event.impact_level === "high"
+                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                            : event.impact_level === "medium"
+                            ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                        }`}
+                      >
+                        Impact: {event.impact_level || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                  {event.suggested_theme && (
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                        Theme đề xuất:
+                      </p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {event.suggested_theme}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -110,15 +110,16 @@ const AddProduct = ({ onBack }) => {
       setLoading(true);
       setError(null);
 
-      // Prepare form data
-      const submitData = new FormData();
-      submitData.append("productName", formData.productName);
-      submitData.append("productPrice", formData.productPrice);
-      submitData.append("productCategory", formData.productCategory);
-      submitData.append("productSize", formData.productSize);
-      submitData.append("productDescription", formData.productDescription);
-      submitData.append("isActive", formData.isActive);
-      submitData.append("productImage", imageFile);
+      // Prepare product data object (let ProductService handle FormData creation)
+      const submitData = {
+        productName: formData.productName,
+        productPrice: formData.productPrice,
+        productCategory: formData.productCategory,
+        productSize: formData.productSize,
+        productDescription: formData.productDescription,
+        isActive: formData.isActive,
+        productImage: imageFile, // Pass the File object directly
+      };
 
       // Create product
       const response = await ProductService.createProduct(submitData);

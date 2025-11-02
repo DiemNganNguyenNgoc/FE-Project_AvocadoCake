@@ -19,6 +19,7 @@ const useAdminRecipeStore = () => {
   const [forecastData, setForecastData] = useState(null);
   const [activeTab, setActiveTab] = useState("generate-ingredient");
   const [selectedSegment, setSelectedSegment] = useState("gen_z");
+  const [contextPreview, setContextPreview] = useState(null);
 
   // ==================== LOAD HISTORY ====================
   const loadHistory = useCallback(() => {
@@ -337,6 +338,55 @@ const useAdminRecipeStore = () => {
     }
   }, [formatErrorMessage]);
 
+  // ==================== SMART AUTO-GENERATE (NEW) ====================
+
+  const getContextPreview = useCallback(
+    async (params = {}) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const result = await recipeAPIService.getContextPreview(params);
+        setContextPreview(result);
+        return result;
+      } catch (err) {
+        const formattedError = formatErrorMessage(err);
+        setError(formattedError);
+        throw new Error(formattedError);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formatErrorMessage]
+  );
+
+  const smartGenerate = useCallback(
+    async (data) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const result = await recipeAPIService.smartGenerate(data);
+        setCurrentRecipe(result);
+
+        addToHistory({
+          type: "smart-generate",
+          data: data,
+          result: result,
+        });
+
+        return result;
+      } catch (err) {
+        const formattedError = formatErrorMessage(err);
+        setError(formattedError);
+        throw new Error(formattedError);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [addToHistory, formatErrorMessage]
+  );
+
   // ==================== RETURN ====================
   return {
     // State
@@ -351,6 +401,7 @@ const useAdminRecipeStore = () => {
     forecastData,
     activeTab,
     selectedSegment,
+    contextPreview,
 
     // Setters
     setLoading,
@@ -377,6 +428,10 @@ const useAdminRecipeStore = () => {
     fetchSegmentRecommendations,
     trainModels,
     checkHealth,
+
+    // Smart Auto-Generate (NEW)
+    getContextPreview,
+    smartGenerate,
   };
 };
 

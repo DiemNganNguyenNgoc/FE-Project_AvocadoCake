@@ -672,7 +672,7 @@ const AddDiscount = ({ onSubmit }) => {
           </div>
 
           {/* Help Text */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-200">
+          {/* <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-200">
             <div className="flex items-start">
               <svg
                 className="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0"
@@ -696,7 +696,7 @@ const AddDiscount = ({ onSubmit }) => {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </form>
     </div>

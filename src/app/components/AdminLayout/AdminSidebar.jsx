@@ -19,6 +19,8 @@ import {
   ArrowLeft,
   ChevronUp,
   Cake,
+  Sparkles,
+  LogOut,
 } from "lucide-react";
 
 const AdminSidebar = ({ isOpen, onToggle }) => {
@@ -88,6 +90,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           icon: HelpCircle,
           url: "/admin/quiz",
         },
+        {
+          title: "AI Strategy",
+          icon: Sparkles,
+          url: "/admin/stratergy",
+        },
       ],
     },
     {
@@ -107,6 +114,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           title: "UI Demo",
           icon: Settings,
           url: "/admin/demo",
+        },
+        {
+          title: "Back to home",
+          icon: LogOut,
+          url: "/",
         },
       ],
     },

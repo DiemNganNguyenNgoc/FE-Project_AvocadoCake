@@ -4,7 +4,8 @@
  */
 
 const RECIPE_API_BASE_URL =
-  process.env.REACT_APP_RECIPE_API_URL || "http://localhost:8000/api/v1/";
+  process.env.REACT_APP_RECIPE_API_URL ||
+  "https://rcm-recipe-3.onrender.com/api/v1/";
 
 class RecipeAPIService {
   constructor() {
@@ -379,6 +380,119 @@ class RecipeAPIService {
     });
   }
 
+  // ==================== SMART AUTO-GENERATE (NEW) ====================
+
+  /**
+   * Preview context for smart generation
+   * GET /api/v1/smart/context-preview
+   * @param {Object} params - { days_ahead: number }
+   */
+  async getContextPreview(params = {}) {
+    const queryParams = new URLSearchParams();
+    if (params.days_ahead !== undefined)
+      queryParams.append("days_ahead", params.days_ahead);
+
+    const query = queryParams.toString();
+    const endpoint = `smart/context-preview${query ? `?${query}` : ""}`;
+
+    return this.handleRequest(endpoint);
+  }
+
+  /**
+   * Smart Generate Recipe - Auto-generate with zero user input
+   * POST /api/v1/smart/generate
+   * @param {Object} data - { language: string, target_segment: string, days_ahead: number }
+   */
+  async smartGenerate(data) {
+    const response = await this.handleRequest("smart/generate", {
+      method: "POST",
+      body: {
+        language: data.language || "vi",
+        target_segment: data.target_segment || "gen_z",
+        days_ahead: data.days_ahead !== undefined ? data.days_ahead : 0,
+      },
+    });
+
+    // Transform response - backend trả về cấu trúc khác
+    // Response format: { recipe: {...}, context_analysis: {...}, marketing_strategy: {...}, trend_insights: {...}, ... }
+    if (response && response.recipe) {
+      const recipeData = response.recipe;
+
+      return {
+        recipe: {
+          name: recipeData.title,
+          description: recipeData.description,
+          prep_time: recipeData.prep_time,
+          cook_time: recipeData.cook_time,
+          servings: recipeData.servings,
+          difficulty: recipeData.difficulty,
+          ingredients: Array.isArray(recipeData.ingredients)
+            ? recipeData.ingredients
+                .map((ing) => {
+                  if (typeof ing === "string") return ing;
+                  // Backend trả về object với name, quantity, unit, category
+                  if (ing.name) {
+                    const parts = [];
+                    if (ing.quantity) parts.push(ing.quantity);
+                    if (ing.unit) parts.push(ing.unit);
+                    if (ing.name) parts.push(ing.name);
+                    return parts.join(" ");
+                  }
+                  return "";
+                })
+                .filter((ing) => ing.trim() !== "")
+            : [],
+          instructions: Array.isArray(recipeData.instructions)
+            ? recipeData.instructions
+                .map((inst) => {
+                  if (typeof inst === "string") return inst;
+                  if (inst.step) return inst.step;
+                  if (inst.instruction) return inst.instruction;
+                  return "";
+                })
+                .filter((inst) => inst.trim() !== "")
+            : [],
+          tips: recipeData.tips || [],
+          tags: recipeData.tags || [],
+          estimated_cost: recipeData.estimated_cost,
+        },
+        analytics: {
+          trend_score: response.trend_insights?.trend_score || 0,
+          popularity_score:
+            response.trend_insights?.ml_predictions?.popularity_score || 0,
+          health_score: 0, // Backend không trả về field này
+          innovation_score: 0, // Backend không trả về field này
+          overall_score:
+            response.trend_insights?.ml_predictions?.overall_trend_strength ||
+            0,
+          recommendation: response.recommendation_reason || "",
+          viral_potential: {
+            score: response.trend_insights?.viral_potential_score || 0,
+            level:
+              response.trend_insights?.viral_potential_score >= 0.7
+                ? "High"
+                : response.trend_insights?.viral_potential_score >= 0.5
+                ? "Medium"
+                : "Low",
+          },
+        },
+        marketing: response.marketing_strategy || {},
+        context: response.context_analysis || {},
+        next_events: response.next_events || [],
+        metadata: {
+          id: recipeData.id,
+          language: recipeData.language,
+          user_segment: recipeData.user_segment,
+          trend_context: recipeData.trend_context,
+          created_at: recipeData.created_at,
+          generation_mode: "smart_auto",
+        },
+      };
+    }
+
+    return response;
+  }
+
   // ==================== HEALTH & STATUS ====================
 
   /**
@@ -397,6 +511,16 @@ class RecipeAPIService {
    */
   async getApiInfo() {
     return this.handleRequest("", {
+      baseURL: this.rootURL,
+    });
+  }
+
+  /**
+   * Ping endpoint (keep-alive)
+   * GET /ping (không có /api/v1 prefix)
+   */
+  async ping() {
+    return this.handleRequest("ping", {
       baseURL: this.rootURL,
     });
   }
