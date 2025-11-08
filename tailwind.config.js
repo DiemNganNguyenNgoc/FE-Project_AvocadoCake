@@ -21,6 +21,20 @@ module.exports = {
         primary: "#5750F1",
         stroke: "#E6EBF1",
         "stroke-dark": "#27303E",
+        // AvocadoCake Design System Colors
+        "avocado-green": {
+          100: "#b1e321",
+          80: "#b2e321cc",
+          50: "#b3e42150",
+          30: "#b1e3214d",
+          10: "#b2e3211d",
+        },
+        "avocado-brown": {
+          100: "#3a060e",
+          50: "#3a060580",
+          30: "#3a060e4d",
+          10: "#3a060e1a",
+        },
         dark: {
           DEFAULT: "#111928",
           2: "#1F2A37",

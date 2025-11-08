@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import {
+  History,
+  Trash2,
+  ArrowLeft,
+  ChefHat,
+  TrendingUp,
+  Sparkles,
+} from "lucide-react";
 import useAdminRecipeStore from "../adminRecipeStore";
-import RecipeDisplay from "../components/RecipeDisplay";
-import "./RecipeHistory.css";
+import RecipeDisplay from "../partials/RecipeDisplay";
 
 /**
  * RecipeHistory Component
@@ -21,13 +28,13 @@ const RecipeHistory = () => {
   const getTypeIcon = (type) => {
     switch (type) {
       case "from-ingredients":
-        return "🥄";
+        return <ChefHat className="w-4 h-4" />;
       case "from-trend":
-        return "🔥";
+        return <TrendingUp className="w-4 h-4" />;
       case "smart-recipe":
-        return "🤖";
+        return <Sparkles className="w-4 h-4" />;
       default:
-        return "📝";
+        return <ChefHat className="w-4 h-4" />;
     }
   };
 
@@ -94,60 +101,82 @@ const RecipeHistory = () => {
       : recipeHistory.filter((recipe) => recipe.type === filterType);
 
   return (
-    <div className="recipe-history">
+    <div className="space-y-6">
       {!selectedRecipe ? (
         <>
           {/* Header */}
-          <div className="history-header">
+          <div className="flex items-center justify-between">
             <div>
-              <h2 className="history-title">📚 Lịch Sử Công Thức</h2>
-              <p className="history-subtitle">
+              <div className="flex items-center gap-2 mb-2">
+                <History className="w-6 h-6 text-avocado-green-100" />
+                <h2 className="text-2xl font-bold text-avocado-brown-100">
+                  Lịch Sử Công Thức
+                </h2>
+              </div>
+              <p className="text-base text-gray-600">
                 Tổng cộng: <strong>{recipeHistory.length}</strong> công thức
               </p>
             </div>
             {recipeHistory.length > 0 && (
-              <button onClick={handleClearAll} className="btn-clear-all">
-                🗑️ Xóa tất cả
+              <button
+                onClick={handleClearAll}
+                className="flex items-center gap-2 px-4 py-2 text-base bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Xóa tất cả
               </button>
             )}
           </div>
 
           {/* Filter */}
           {recipeHistory.length > 0 && (
-            <div className="history-filter">
-              <label className="filter-label">Lọc theo loại:</label>
-              <div className="filter-buttons">
+            <div className="bg-white rounded-2xl border border-avocado-brown-30 p-4">
+              <label className="block text-base font-medium text-avocado-brown-100 mb-3">
+                Lọc theo loại:
+              </label>
+              <div className="flex flex-wrap gap-2">
                 <button
-                  className={`filter-btn ${
-                    filterType === "all" ? "active" : ""
+                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                    filterType === "all"
+                      ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
+                      : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
                   }`}
                   onClick={() => setFilterType("all")}
                 >
                   Tất cả ({recipeHistory.length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterType === "from-ingredients" ? "active" : ""
+                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                    filterType === "from-ingredients"
+                      ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
+                      : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
                   }`}
                   onClick={() => setFilterType("from-ingredients")}
                 >
-                  🥄 Từ Nguyên Liệu
+                  <ChefHat className="w-4 h-4" />
+                  Từ Nguyên Liệu
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterType === "from-trend" ? "active" : ""
+                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                    filterType === "from-trend"
+                      ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
+                      : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
                   }`}
                   onClick={() => setFilterType("from-trend")}
                 >
-                  🔥 Từ Xu Hướng
+                  <TrendingUp className="w-4 h-4" />
+                  Từ Xu Hướng
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterType === "smart-recipe" ? "active" : ""
+                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                    filterType === "smart-recipe"
+                      ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
+                      : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
                   }`}
                   onClick={() => setFilterType("smart-recipe")}
                 >
-                  🤖 Thông Minh
+                  <Sparkles className="w-4 h-4" />
+                  Thông Minh
                 </button>
               </div>
             </div>
@@ -155,78 +184,93 @@ const RecipeHistory = () => {
 
           {/* History List */}
           {filteredHistory.length === 0 ? (
-            <div className="history-empty">
-              <div className="empty-icon">📭</div>
-              <h3>Chưa có lịch sử</h3>
-              <p>Các công thức bạn tạo sẽ được lưu tại đây</p>
+            <div className="bg-avocado-green-10 rounded-2xl border border-avocado-brown-30 p-12 text-center">
+              <History className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-avocado-brown-100 mb-2">
+                Chưa có lịch sử
+              </h3>
+              <p className="text-base text-gray-600">
+                Các công thức bạn tạo sẽ được lưu tại đây
+              </p>
             </div>
           ) : (
-            <div className="history-grid">
+            <div className="grid md:grid-cols-2 gap-4">
               {filteredHistory.map((recipe) => (
-                <div key={recipe.id} className="history-card">
-                  <div className="card-header">
-                    <span className="type-badge">
-                      {getTypeIcon(recipe.type)} {getTypeLabel(recipe.type)}
+                <div
+                  key={recipe.id}
+                  onClick={() => setSelectedRecipe(recipe)}
+                  className="bg-white rounded-2xl border border-avocado-brown-30 hover:border-avocado-green-100 hover:shadow-lg transition-all p-4 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="flex items-center gap-2 px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-sm rounded-2xl">
+                      {getTypeIcon(recipe.type)}
+                      {getTypeLabel(recipe.type)}
                     </span>
                     <button
-                      onClick={() => handleDelete(recipe.id)}
-                      className="btn-delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(recipe.id);
+                      }}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-2xl transition-colors"
                       title="Xóa"
                     >
-                      🗑️
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
 
-                  <div className="card-body">
-                    <h3 className="recipe-name">
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-semibold text-avocado-brown-100">
                       {recipe.result?.recipe?.title ||
                         recipe.result?.title ||
                         "Công thức"}
                     </h3>
-                    <p className="recipe-description">
+                    <p className="text-base text-gray-600 line-clamp-2">
                       {recipe.result?.recipe?.description ||
                         recipe.result?.description ||
                         ""}
                     </p>
 
                     {/* Input Info */}
-                    <div className="input-info">
+                    <div className="space-y-2 text-sm">
                       {recipe.data?.ingredients && (
-                        <div className="info-item">
-                          <span className="info-label">Nguyên liệu:</span>
-                          <span className="info-value">
-                            {recipe.data.ingredients.substring(0, 50)}...
+                        <div className="flex gap-2">
+                          <span className="font-medium text-avocado-brown-100">
+                            Nguyên liệu:
+                          </span>
+                          <span className="text-gray-600 line-clamp-1">
+                            {recipe.data.ingredients}
                           </span>
                         </div>
                       )}
                       {recipe.data?.trend && (
-                        <div className="info-item">
-                          <span className="info-label">Xu hướng:</span>
-                          <span className="info-value">
+                        <div className="flex gap-2">
+                          <span className="font-medium text-avocado-brown-100">
+                            Xu hướng:
+                          </span>
+                          <span className="text-gray-600">
                             {recipe.data.trend}
                           </span>
                         </div>
                       )}
                       {recipe.data?.user_segment && (
-                        <div className="info-item">
-                          <span className="info-label">Segment:</span>
-                          <span className="info-value">
+                        <div className="flex gap-2">
+                          <span className="font-medium text-avocado-brown-100">
+                            Segment:
+                          </span>
+                          <span className="text-gray-600">
                             {recipe.data.user_segment}
                           </span>
                         </div>
                       )}
                     </div>
 
-                    <div className="card-footer">
-                      <span className="timestamp">
-                        🕐 {formatDate(recipe.timestamp)}
+                    <div className="flex items-center justify-between pt-3 border-t border-avocado-brown-30">
+                      <span className="text-sm text-gray-500">
+                        {formatDate(recipe.timestamp)}
                       </span>
-                      <button
-                        onClick={() => setSelectedRecipe(recipe)}
-                        className="btn-view"
-                      >
-                        👁️ Xem chi tiết
-                      </button>
+                      <span className="text-sm text-avocado-green-100 font-medium">
+                        Nhấn để xem chi tiết →
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -235,12 +279,13 @@ const RecipeHistory = () => {
           )}
         </>
       ) : (
-        <div className="recipe-detail-view">
+        <div className="space-y-4">
           <button
             onClick={() => setSelectedRecipe(null)}
-            className="btn-back-history"
+            className="flex items-center gap-2 px-4 py-2 text-base bg-avocado-green-10 text-avocado-brown-100 rounded-lg hover:bg-avocado-green-30 transition-colors"
           >
-            ← Quay lại lịch sử
+            <ArrowLeft className="w-4 h-4" />
+            Quay lại lịch sử
           </button>
 
           <RecipeDisplay recipe={selectedRecipe.result} />

@@ -61,9 +61,71 @@ const HealthCheckTab = ({
             <h3 className="text-xl font-semibold text-avocado-brown-100 mb-4">
               Trạng thái hệ thống
             </h3>
-            <pre className="text-sm text-avocado-brown-50 bg-avocado-green-10 rounded-lg p-4 overflow-x-auto border border-avocado-brown-30">
-              {JSON.stringify(healthStatus, null, 2)}
-            </pre>
+            <div className="space-y-3">
+              {Object.entries(healthStatus).map(([key, value]) => {
+                // Render value based on type
+                const renderValue = () => {
+                  // Array - render as bullet list
+                  if (Array.isArray(value)) {
+                    return (
+                      <ul className="space-y-1 mt-2 list-none">
+                        {value.map((item, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-center gap-2 text-sm text-avocado-brown-100"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-avocado-green-100"></span>
+                            {String(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    );
+                  }
+
+                  // Nested object
+                  if (typeof value === "object" && value !== null) {
+                    return (
+                      <div className="space-y-1 mt-2">
+                        {Object.entries(value).map(([k, v]) => (
+                          <div
+                            key={k}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <span className="text-avocado-brown-50 capitalize">
+                              {k.replace(/_/g, " ")}:
+                            </span>
+                            <span className="text-avocado-brown-100 font-medium">
+                              {String(v)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+
+                  // Primitive value
+                  return (
+                    <span className="text-sm text-avocado-brown-100 font-medium">
+                      {String(value)}
+                    </span>
+                  );
+                };
+
+                return (
+                  <div
+                    key={key}
+                    className="bg-avocado-green-10 rounded-lg px-4 py-3 border border-avocado-brown-30"
+                  >
+                    <div className="flex flex-col gap-1">
+                      <span className="text-sm font-semibold text-avocado-brown-100 capitalize">
+                        {key.replace(/_/g, " ")}
+                      </span>
+                      <div className="ml-2">{renderValue()}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ) : (
           <div className="p-12 text-center">

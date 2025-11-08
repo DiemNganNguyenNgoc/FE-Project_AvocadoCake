@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Button from "../../../../components/AdminLayout/Button";
-import Select from "../../../../components/AdminLayout/Select";
-import Textarea from "../../../../components/AdminLayout/Textarea";
 import useAdminRecipeStore from "../adminRecipeStore";
 import RecipeDisplay from "../partials/RecipeDisplay";
-import { LANGUAGES } from "../services/RecipeService";
 
 /**
- * GenerateFromIngredient Component
- * Redesigned minimal & elegant
+ * GenerateFromIngredient - Tạo công thức từ nguyên liệu
+ * Redesigned: Simple, Clean, User-friendly (AvocadoCake design system)
  */
 const GenerateFromIngredient = () => {
   const { generateFromIngredients, loading, currentRecipe } =
@@ -18,52 +14,17 @@ const GenerateFromIngredient = () => {
   const [formData, setFormData] = useState({
     ingredients: "",
     language: "vi",
-    use_t5: false, // Tắt T5 mặc định vì Gemini đang rate limit
   });
 
   const [showResult, setShowResult] = useState(false);
 
-  /**
-   * Handle input change
-   */
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  // Language options
+  const LANGUAGES = [
+    { value: "vi", label: "Tiếng Việt" },
+    { value: "en", label: "English" },
+  ];
 
-  /**
-   * Handle form submit
-   */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.ingredients.trim()) {
-      toast.warning("Vui lòng nhập nguyên liệu!");
-      return;
-    }
-
-    try {
-      toast.info("Đang tạo công thức...");
-      await generateFromIngredients(formData);
-      setShowResult(true);
-      toast.success("Tạo công thức thành công!");
-    } catch (error) {
-      toast.error(`Lỗi: ${error.message}`);
-    }
-  };
-
-  const handleReset = () => {
-    setFormData({
-      ingredients: "",
-      language: "vi",
-      use_t5: false,
-    });
-    setShowResult(false);
-  };
-
+  // Quick templates
   const ingredientTemplates = [
     {
       name: "Bánh Chocolate",
@@ -85,6 +46,36 @@ const GenerateFromIngredient = () => {
     },
   ];
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.ingredients.trim()) {
+      toast.warning("Vui lòng nhập nguyên liệu!");
+      return;
+    }
+
+    try {
+      await generateFromIngredients(formData);
+      setShowResult(true);
+      toast.success("Tạo công thức thành công!");
+    } catch (error) {
+      toast.error(`Lỗi: ${error.message}`);
+    }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      ingredients: "",
+      language: "vi",
+    });
+    setShowResult(false);
+  };
+
   const applyTemplate = (template) => {
     setFormData((prev) => ({
       ...prev,
@@ -94,36 +85,36 @@ const GenerateFromIngredient = () => {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {!showResult ? (
         <>
-          {/* Header - Minimal */}
-          <div className="mb-10">
-            <h2 className="text-5xl font-semibold text-avocado-brown-100 mb-5">
+          {/* Header */}
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold text-avocado-brown-100 mb-2">
               Tạo Công Thức Từ Nguyên Liệu
             </h2>
-            <p className="text-3xl text-avocado-brown-50 font-light">
+            <p className="text-base text-avocado-brown-50">
               Nhập danh sách nguyên liệu, AI sẽ tạo công thức hoàn chỉnh
             </p>
           </div>
 
-          {/* Quick Templates - Elegant Cards */}
-          <div className="space-y-6">
-            <h3 className="text-4xl font-medium text-avocado-brown-100">
-              Templates
+          {/* Quick Templates */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-avocado-brown-100">
+              Templates nhanh
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {ingredientTemplates.map((template, index) => (
                 <button
                   key={index}
-                  className="text-left p-9 border-2 border-avocado-brown-30 rounded-2xl hover:border-avocado-green-100 hover:bg-avocado-green-10 transition-all"
+                  className="text-left p-4 border-2 border-avocado-brown-30 rounded-lg hover:border-avocado-green-100 hover:bg-avocado-green-10 transition-all"
                   onClick={() => applyTemplate(template)}
                   type="button"
                 >
-                  <div className="font-medium text-3xl text-avocado-brown-100 mb-4">
+                  <div className="font-medium text-base text-avocado-brown-100 mb-1">
                     {template.name}
                   </div>
-                  <div className="text-2xl text-avocado-brown-50 line-clamp-2">
+                  <div className="text-sm text-avocado-brown-50 line-clamp-1">
                     {template.ingredients}
                   </div>
                 </button>
@@ -131,83 +122,74 @@ const GenerateFromIngredient = () => {
             </div>
           </div>
 
-          {/* Form - Clean & Modern */}
-          <form onSubmit={handleSubmit} className="space-y-9">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Ingredients Input */}
-            <Textarea
-              label="Nguyên liệu *"
-              name="ingredients"
-              value={formData.ingredients}
-              onChange={handleChange}
-              placeholder="Ví dụ: bột mì, đường, trứng, bơ, chocolate, sữa tươi..."
-              rows={6}
-              helperText="Ngăn cách các nguyên liệu bằng dấu phẩy (,)"
-              required
-            />
+            <div>
+              <label className="block text-base font-medium text-avocado-brown-100 mb-2">
+                Nguyên liệu <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="ingredients"
+                value={formData.ingredients}
+                onChange={handleChange}
+                placeholder="Ví dụ: bột mì, đường, trứng, bơ, chocolate, sữa tươi..."
+                rows={4}
+                className="w-full px-4 py-3 border-2 border-avocado-brown-30 rounded-lg text-avocado-brown-100 placeholder-avocado-brown-50 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+                required
+              />
+              <p className="text-sm text-avocado-brown-50 mt-1">
+                Ngăn cách các nguyên liệu bằng dấu phẩy (,)
+              </p>
+            </div>
 
             {/* Language Selection */}
-            <Select
-              label="Ngôn ngữ"
-              name="language"
-              value={formData.language}
-              onChange={handleChange}
-              options={LANGUAGES}
-            />
-
-            {/* T5 Model Toggle */}
-            <div className="flex items-start gap-6 p-9 bg-yellow-50 border-2 border-yellow-200 rounded-2xl">
-              <input
-                type="checkbox"
-                id="use_t5"
-                name="use_t5"
-                checked={formData.use_t5}
-                onChange={handleChange}
-                className="mt-2 w-8 h-8 text-avocado-green-100 border-avocado-brown-30 rounded-lg focus:ring-avocado-green-100"
-              />
-              <label htmlFor="use_t5" className="flex-1 cursor-pointer">
-                <div className="font-medium text-3xl text-avocado-brown-100 mb-3">
-                  Sử dụng T5 Model
-                </div>
-                <div className="text-2xl text-avocado-brown-50">
-                  <strong>Tạm thời TẮT</strong> - Gemini đang rate limit
-                </div>
+            <div>
+              <label className="block text-base font-medium text-avocado-brown-100 mb-2">
+                Ngôn ngữ
               </label>
+              <select
+                name="language"
+                value={formData.language}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border-2 border-avocado-brown-30 rounded-lg text-avocado-brown-100 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+              >
+                {LANGUAGES.map((lang) => (
+                  <option key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-6">
-              <Button
+            <div className="flex gap-3">
+              <button
                 type="button"
                 onClick={handleReset}
-                variant="outline"
-                size="lg"
                 disabled={loading}
+                className="px-6 py-3 border-2 border-avocado-brown-30 text-avocado-brown-100 bg-white rounded-lg font-medium hover:bg-avocado-brown-10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Làm mới
-              </Button>
-              <Button
+              </button>
+              <button
                 type="submit"
-                variant="primary"
-                size="lg"
-                loading={loading}
-                className="flex-1"
+                disabled={loading}
+                className="flex-1 px-6 py-3 bg-avocado-green-100 text-avocado-brown-100 rounded-lg font-medium hover:bg-avocado-green-80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
               >
                 {loading ? "Đang tạo..." : "Tạo Công Thức"}
-              </Button>
+              </button>
             </div>
           </form>
         </>
       ) : (
-        <div className="space-y-10">
-          <div className="pb-8 border-b border-avocado-brown-30">
-            <Button
-              onClick={() => setShowResult(false)}
-              variant="ghost"
-              size="lg"
-            >
-              ← Tạo công thức mới
-            </Button>
-          </div>
+        <div className="space-y-4">
+          <button
+            onClick={() => setShowResult(false)}
+            className="text-base text-avocado-brown-100 hover:text-avocado-green-100 font-medium"
+          >
+            ← Tạo công thức mới
+          </button>
 
           <RecipeDisplay recipe={currentRecipe} />
         </div>

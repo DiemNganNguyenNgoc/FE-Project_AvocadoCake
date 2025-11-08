@@ -8,6 +8,7 @@ import {
   Zap,
   HeartPulse,
   Info,
+  Brain,
 } from "lucide-react";
 
 import Breadcrumb from "./partials/Breadcrumb";
@@ -31,32 +32,32 @@ import {
 const TABS = [
   {
     key: "event-promotions",
-    label: "AI Event Promotions",
+    label: "Khuyến mãi theo sự kiện",
     icon: <Sparkles className="w-5 h-5" />,
   },
   {
     key: "analyze-products",
-    label: "Analyze Products",
+    label: "Phân tích sản phẩm",
     icon: <BarChart2 className="w-5 h-5" />,
   },
   {
     key: "discover-combos",
-    label: "Combo Discovery",
+    label: "Khám phá Combo",
     icon: <Layers className="w-5 h-5" />,
   },
   {
     key: "upcoming-events",
-    label: "Upcoming Events",
+    label: "Sự kiện sắp tới",
     icon: <Calendar className="w-5 h-5" />,
   },
   {
     key: "smart-promotion",
-    label: "Smart Promotion",
+    label: "Khuyến mãi thông minh",
     icon: <Zap className="w-5 h-5" />,
   },
   {
     key: "health",
-    label: "Health Check",
+    label: "Kiểm tra hệ thống",
     icon: <HeartPulse className="w-5 h-5" />,
   },
 ];
@@ -181,58 +182,80 @@ const AdminStratergy = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-grey9">
+      {/* Container với max-width */}
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb */}
         <Breadcrumb />
+
+        {/* Header - Đơn giản, sang trọng */}
         <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-avocado-green-100 rounded-lg flex items-center justify-center shadow-lg">
-              <Sparkles className="w-8 h-8 text-avocado-brown-100" />
+          <div className="flex items-center gap-6 mb-6">
+            <div className="w-20 h-20 bg-avocado-green-100 rounded-lg flex items-center justify-center shadow-lg">
+              <Brain className="w-10 h-10 text-white" />
             </div>
-            <div>
-              <h1 className="text-4xl font-bold text-avocado-brown-100">
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold text-avocado-brown-100 mb-2">
                 AI Strategy Assistant
               </h1>
-              <p className="text-xl text-avocado-brown-50 mt-1">
-                Khuyến nghị khuyến mãi thông minh từ AI
+              <p className="text-base text-avocado-brown-50">
+                Khuyến nghị khuyến mãi thông minh từ AI - Tối ưu hóa doanh thu
+                và giữ chân khách hàng
               </p>
             </div>
           </div>
-          <div className="bg-avocado-green-10 border-2 border-avocado-green-30 rounded-lg px-6 py-4">
-            <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-avocado-green-100 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-base font-semibold text-avocado-brown-100">
+
+          {/* Info Banner - Thanh lịch */}
+          {/* <div className="bg-white rounded-lg border border-avocado-brown-30 shadow-sm p-5">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-avocado-green-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Info className="w-5 h-5 text-avocado-green-100" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-avocado-brown-100 mb-1">
                   Powered by RCM_PRICE AI Engine
-                </p>
-                <p className="text-sm text-avocado-brown-50 mt-1">
-                  Sử dụng Thompson Sampling + Gemini AI để tối ưu hóa doanh thu
-                  và giữ chân khách hàng
+                </h3>
+                <p className="text-base text-avocado-brown-50 leading-relaxed">
+                  Sử dụng Thompson Sampling + Gemini AI để phân tích dữ liệu và
+                  đưa ra khuyến nghị khuyến mãi tối ưu cho từng sự kiện và sản
+                  phẩm.
                 </p>
               </div>
             </div>
+          </div> */}
+        </div>
+
+        {/* Tabs - Clean & Minimalist */}
+        <div className="mb-8">
+          <div className="bg-white rounded-lg border border-avocado-brown-30 shadow-sm p-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+              {TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg font-medium text-base transition-all ${
+                    activeTab === tab.key
+                      ? "bg-avocado-green-100 text-white shadow-md"
+                      : "bg-white text-avocado-brown-50 hover:bg-avocado-green-10 hover:text-avocado-brown-100"
+                  }`}
+                >
+                  {tab.icon}
+                  <span className="text-sm text-center leading-tight">
+                    {tab.label}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="mb-8 overflow-x-auto">
-          <div className="flex gap-2 min-w-max">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-lg font-semibold text-base transition-all border-2 ${
-                  activeTab === tab.key
-                    ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100 shadow-md"
-                    : "bg-white text-avocado-brown-50 border-avocado-brown-30 hover:bg-avocado-green-10 hover:border-avocado-green-30"
-                }`}
-              >
-                {tab.icon}
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
+
+        {/* Content Area */}
+        <div className="bg-white rounded-lg border border-avocado-brown-30 shadow-sm p-6 lg:p-8">
+          {renderTabPanel()}
         </div>
-        <div>{renderTabPanel()}</div>
       </div>
+
+      {/* Modal */}
       <SavedDataModal
         isOpen={showSavedModal}
         onClose={() => setShowSavedModal(false)}

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import { USER_SEGMENTS, LANGUAGES } from "../services/RecipeService";
-import RecipeDisplay from "../components/RecipeDisplay";
-import "./GenerateFromTrend.css";
+import RecipeDisplay from "../partials/RecipeDisplay";
 
 /**
  * GenerateFromTrend Component

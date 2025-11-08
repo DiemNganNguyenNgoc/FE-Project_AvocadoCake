@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { BarChart3, TrendingUp, Target, Loader2 } from "lucide-react";
 import useAdminRecipeStore from "../adminRecipeStore";
 import { USER_SEGMENTS } from "../services/RecipeService";
-import "./RecipeAnalytics.css";
 
 /**
  * RecipeAnalytics Component
@@ -70,46 +70,59 @@ const RecipeAnalytics = () => {
   };
 
   return (
-    <div className="recipe-analytics">
-      <div className="analytics-tabs">
+    <div className="space-y-6">
+      {/* Tabs */}
+      <div className="flex gap-2 bg-white rounded-lg border border-avocado-brown-30 p-2">
         <button
-          className={`analytics-tab ${
-            activeAnalyticsTab === "forecast" ? "active" : ""
+          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+            activeAnalyticsTab === "forecast"
+              ? "bg-avocado-green-100 text-white"
+              : "text-gray-700 hover:bg-avocado-green-10"
           }`}
           onClick={() => setActiveAnalyticsTab("forecast")}
         >
-          📈 Dự báo
+          <TrendingUp className="w-4 h-4" />
+          Dự báo
         </button>
         <button
-          className={`analytics-tab ${
-            activeAnalyticsTab === "market" ? "active" : ""
+          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+            activeAnalyticsTab === "market"
+              ? "bg-avocado-green-100 text-white"
+              : "text-gray-700 hover:bg-avocado-green-10"
           }`}
           onClick={() => setActiveAnalyticsTab("market")}
         >
-          💼 Thị trường
+          <BarChart3 className="w-4 h-4" />
+          Thị trường
         </button>
         <button
-          className={`analytics-tab ${
-            activeAnalyticsTab === "segment" ? "active" : ""
+          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+            activeAnalyticsTab === "segment"
+              ? "bg-avocado-green-100 text-white"
+              : "text-gray-700 hover:bg-avocado-green-10"
           }`}
           onClick={() => setActiveAnalyticsTab("segment")}
         >
-          🎯 Gợi ý Segment
+          <Target className="w-4 h-4" />
+          Gợi ý Segment
         </button>
       </div>
 
-      <div className="analytics-content">
+      <div className="space-y-6">
         {/* Common Controls */}
-        <div className="analytics-controls">
-          <div className="control-group">
-            <label htmlFor="segment-select" className="control-label">
+        <div className="bg-white rounded-lg border border-avocado-brown-30 p-4 space-y-4">
+          <div>
+            <label
+              htmlFor="segment-select"
+              className="block text-base font-medium text-avocado-brown-100 mb-2"
+            >
               Phân khúc khách hàng:
             </label>
             <select
               id="segment-select"
               value={selectedSegment}
               onChange={(e) => setSelectedSegment(e.target.value)}
-              className="control-select"
+              className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
             >
               {USER_SEGMENTS.map((segment) => (
                 <option key={segment.value} value={segment.value}>
@@ -120,8 +133,11 @@ const RecipeAnalytics = () => {
           </div>
 
           {activeAnalyticsTab === "forecast" && (
-            <div className="control-group">
-              <label htmlFor="horizon-days" className="control-label">
+            <div>
+              <label
+                htmlFor="horizon-days"
+                className="block text-base font-medium text-avocado-brown-100 mb-2"
+              >
                 Dự báo (ngày):
               </label>
               <input
@@ -131,7 +147,7 @@ const RecipeAnalytics = () => {
                 onChange={(e) => setHorizonDays(Number(e.target.value))}
                 min="7"
                 max="90"
-                className="control-input"
+                className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
               />
             </div>
           )}
@@ -139,49 +155,74 @@ const RecipeAnalytics = () => {
 
         {/* Tab Content */}
         {activeAnalyticsTab === "forecast" && (
-          <div className="tab-panel">
+          <div className="space-y-4">
             <button
               onClick={handleForecast}
               disabled={loading}
-              className="btn-analyze"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? "⏳ Đang xử lý..." : "🚀 Dự báo & Tạo Công Thức"}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Đang xử lý...
+                </>
+              ) : (
+                "Dự báo & Tạo Công Thức"
+              )}
             </button>
 
             {forecastData && (
-              <div className="forecast-results">
-                <div className="result-card">
-                  <h3>📅 Khung thời gian</h3>
-                  <p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Khung thời gian
+                  </h3>
+                  <p className="text-base text-gray-700">
                     {forecastData.forecast_window?.start} →{" "}
                     {forecastData.forecast_window?.end}
                   </p>
                 </div>
 
-                <div className="result-card">
-                  <h3>🔥 Sự kiện Hot</h3>
-                  <div className="events-tags">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Sự kiện Hot
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
                     {forecastData.top_forecasted_events?.map((event, i) => (
-                      <span key={i} className="event-tag">
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-sm rounded-lg"
+                      >
                         {event}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="result-card">
-                  <h3>🍰 Công thức đề xuất</h3>
-                  {forecastData.recommended_recipes?.map((rec, i) => (
-                    <div key={i} className="recipe-recommendation">
-                      <div className="rec-header">
-                        <strong>{rec.event}</strong>
-                        <span className="viral-badge">
-                          🚀 {Math.round(rec.viral_potential * 100)}%
-                        </span>
+                <div className="md:col-span-2 bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Công thức đề xuất
+                  </h3>
+                  <div className="space-y-3">
+                    {forecastData.recommended_recipes?.map((rec, i) => (
+                      <div
+                        key={i}
+                        className="border border-avocado-brown-30 rounded-lg p-3"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <strong className="text-base text-avocado-brown-100">
+                            {rec.event}
+                          </strong>
+                          <span className="px-3 py-1 bg-avocado-green-100 text-white text-sm rounded-lg">
+                            {Math.round(rec.viral_potential * 100)}%
+                          </span>
+                        </div>
+                        <p className="text-base text-gray-700">
+                          {rec.recipe?.title}
+                        </p>
                       </div>
-                      <p className="rec-title">{rec.recipe?.title}</p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -189,20 +230,29 @@ const RecipeAnalytics = () => {
         )}
 
         {activeAnalyticsTab === "market" && (
-          <div className="tab-panel">
+          <div className="space-y-4">
             <button
               onClick={handleMarketInsights}
               disabled={loading}
-              className="btn-analyze"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? "⏳ Đang phân tích..." : "💼 Phân tích Thị trường"}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Đang phân tích...
+                </>
+              ) : (
+                "Phân tích Thị trường"
+              )}
             </button>
 
             {marketInsights && (
-              <div className="market-results">
-                <div className="result-card">
-                  <h3>📊 Phân tích Segment</h3>
-                  <p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Phân tích Segment
+                  </h3>
+                  <p className="text-base text-gray-700">
                     Tiềm năng:{" "}
                     <strong>
                       {marketInsights.data?.segment_analysis?.size_estimate}
@@ -210,9 +260,11 @@ const RecipeAnalytics = () => {
                   </p>
                 </div>
 
-                <div className="result-card">
-                  <h3>🎯 Điểm Cơ Hội</h3>
-                  <div className="opportunity-score">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Điểm Cơ Hội
+                  </h3>
+                  <div className="text-3xl font-bold text-avocado-green-100">
                     {Math.round(
                       (marketInsights.data?.opportunity_score || 0) * 100
                     )}
@@ -220,12 +272,20 @@ const RecipeAnalytics = () => {
                   </div>
                 </div>
 
-                <div className="result-card">
-                  <h3>💡 Chiến lược đề xuất</h3>
-                  <ul className="strategy-list">
+                <div className="md:col-span-2 bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Chiến lược đề xuất
+                  </h3>
+                  <ul className="space-y-2">
                     {marketInsights.data?.recommended_strategies?.map(
                       (strategy, i) => (
-                        <li key={i}>{strategy}</li>
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-base text-gray-700"
+                        >
+                          <span className="text-avocado-green-100 mt-1">•</span>
+                          {strategy}
+                        </li>
                       )
                     )}
                   </ul>
@@ -236,25 +296,32 @@ const RecipeAnalytics = () => {
         )}
 
         {activeAnalyticsTab === "segment" && (
-          <div className="tab-panel">
+          <div className="space-y-4">
             <button
               onClick={handleSegmentRecommendations}
               disabled={loading}
-              className="btn-analyze"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? "⏳ Đang tải..." : "🎯 Xem Gợi ý"}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Đang tải...
+                </>
+              ) : (
+                "Xem Gợi ý"
+              )}
             </button>
 
             {segmentRecommendations && (
-              <div className="segment-results">
-                <div className="result-card">
-                  <h3>👥 Profile Segment</h3>
-                  <p>
-                    <strong>
-                      {segmentRecommendations.data?.segment_profile?.name}
-                    </strong>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Profile Segment
+                  </h3>
+                  <p className="text-base font-medium text-gray-900 mb-2">
+                    {segmentRecommendations.data?.segment_profile?.name}
                   </p>
-                  <p>
+                  <p className="text-base text-gray-700">
                     Tiềm năng thị trường:{" "}
                     {Math.round(
                       (segmentRecommendations.data?.segment_profile
@@ -264,23 +331,39 @@ const RecipeAnalytics = () => {
                   </p>
                 </div>
 
-                <div className="result-card">
-                  <h3>🍰 Sản phẩm đề xuất</h3>
-                  <ul className="product-list">
+                <div className="bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Sản phẩm đề xuất
+                  </h3>
+                  <ul className="space-y-2">
                     {segmentRecommendations.data?.recommended_products?.map(
                       (product, i) => (
-                        <li key={i}>{product}</li>
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-base text-gray-700"
+                        >
+                          <span className="text-avocado-green-100 mt-1">•</span>
+                          {product}
+                        </li>
                       )
                     )}
                   </ul>
                 </div>
 
-                <div className="result-card">
-                  <h3>📢 Marketing Tips</h3>
-                  <ul className="tips-list">
+                <div className="md:col-span-2 bg-white rounded-lg border border-avocado-brown-30 p-4">
+                  <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
+                    Marketing Tips
+                  </h3>
+                  <ul className="space-y-2">
                     {segmentRecommendations.data?.marketing_tips?.map(
                       (tip, i) => (
-                        <li key={i}>{tip}</li>
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-base text-gray-700"
+                        >
+                          <span className="text-avocado-green-100 mt-1">•</span>
+                          {tip}
+                        </li>
                       )
                     )}
                   </ul>

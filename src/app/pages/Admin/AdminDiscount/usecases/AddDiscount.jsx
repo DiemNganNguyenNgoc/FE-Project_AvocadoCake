@@ -31,6 +31,45 @@ const AddDiscount = ({ onSubmit }) => {
     fetchProducts();
   }, []);
 
+  // Load AI promotion data from sessionStorage
+  useEffect(() => {
+    const aiDraft = sessionStorage.getItem("ai_promotion_draft");
+    if (aiDraft) {
+      try {
+        const data = JSON.parse(aiDraft);
+
+        // Pre-fill form with AI data
+        setFormData((prev) => ({
+          ...prev,
+          discountName: data.eventName || "",
+          discountStartDate: data.startDate || "",
+          discountEndDate: data.endDate || "",
+          // Set first product's discount as default value
+          discountValue: data.products?.[0]?.discountPercent || "",
+        }));
+
+        // If products have IDs, pre-select them
+        if (data.products && Array.isArray(data.products)) {
+          const productIds = data.products
+            .map((p) => p.id || p.product_id)
+            .filter(Boolean);
+
+          if (productIds.length > 0) {
+            setFormData((prev) => ({
+              ...prev,
+              discountProduct: productIds,
+            }));
+          }
+        }
+
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem("ai_promotion_draft");
+      } catch (error) {
+        console.error("Error loading AI promotion data:", error);
+      }
+    }
+  }, []);
+
   // Cleanup preview image URL when component unmounts
   useEffect(() => {
     return () => {
