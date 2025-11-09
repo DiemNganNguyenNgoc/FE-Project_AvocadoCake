@@ -297,15 +297,21 @@ const SmartGenerate = () => {
 
             {/* Target Segment */}
             <div>
-              <label className="block text-base font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
-                <Users className="w-4 h-4" />
+              <label className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3">
+                <Users className="w-5 h-5" />
                 Khách hàng
               </label>
               <select
                 value={formData.targetSegment}
                 onChange={(e) => handleChange("targetSegment", e.target.value)}
                 disabled={loading}
-                className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25rem",
+                }}
               >
                 {segmentOptions.map((seg) => (
                   <option key={seg.value} value={seg.value}>
@@ -314,22 +320,29 @@ const SmartGenerate = () => {
                 ))}
               </select>
               {selectedSegment && (
-                <p className="text-sm text-gray-600 mt-2">
-                  {selectedSegment.description}
+                <p className="text-base text-avocado-brown-50 mt-2">
+                  💡 {selectedSegment.description}
                 </p>
               )}
             </div>
 
             {/* Language */}
             <div>
-              <label className="block text-base font-medium text-avocado-brown-100 mb-2">
+              <label className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3">
+                <span className="text-2xl">🌐</span>
                 Ngôn ngữ
               </label>
               <select
                 value={formData.language}
                 onChange={(e) => handleChange("language", e.target.value)}
                 disabled={loading}
-                className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25rem",
+                }}
               >
                 {languageOptions.map((lang) => (
                   <option key={lang.value} value={lang.value}>
@@ -343,11 +356,11 @@ const SmartGenerate = () => {
             <button
               onClick={handleSmartGenerate}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 px-6 py-2 text-base font-semibold bg-avocado-green-100 text-avocado-brown-100 rounded-2xl hover:bg-avocado-green-80 hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" />
                   Đang phân tích...
                 </>
               ) : (

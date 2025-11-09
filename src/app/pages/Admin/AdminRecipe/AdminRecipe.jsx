@@ -14,6 +14,7 @@ import GenerateFromIngredient from "./usecases/GenerateFromIngredient";
 import GenerateFromTrend from "./usecases/GenerateFromTrend";
 import RecipeAnalytics from "./usecases/RecipeAnalytics";
 import RecipeHistory from "./usecases/RecipeHistory";
+import "./AdminRecipe.css";
 
 /**
  * AdminRecipe - Main component for AI Recipe Generation

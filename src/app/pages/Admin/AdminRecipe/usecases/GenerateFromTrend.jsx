@@ -227,11 +227,14 @@ const GenerateFromTrend = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="recipe-form">
             {/* Trend Input */}
-            <div className="form-group">
-              <label htmlFor="trend" className="form-label">
-                <span className="label-icon">🔥</span>
+            <div className="mb-6">
+              <label
+                htmlFor="trend"
+                className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
+              >
+                <span className="text-2xl">🔥</span>
                 Xu hướng / Trend Keywords
-                <span className="required">*</span>
+                <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -240,27 +243,36 @@ const GenerateFromTrend = () => {
                 value={formData.trend}
                 onChange={handleChange}
                 placeholder="Ví dụ: Matcha, Minimalist, Labubu, Viral TikTok..."
-                className="form-input"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder:text-avocado-brown-50 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
                 required
               />
-              <p className="form-hint">
+              <p className="mt-2 text-base text-avocado-brown-50 flex items-center gap-2">
                 💡 Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
               </p>
             </div>
 
             {/* User Segment */}
-            <div className="form-group">
-              <label htmlFor="user_segment" className="form-label">
-                <span className="label-icon">🎯</span>
+            <div className="mb-6">
+              <label
+                htmlFor="user_segment"
+                className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
+              >
+                <span className="text-2xl">🎯</span>
                 Phân khúc khách hàng
-                <span className="required">*</span>
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="user_segment"
                 name="user_segment"
                 value={formData.user_segment}
                 onChange={handleChange}
-                className="form-select"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25rem",
+                }}
                 required
               >
                 {USER_SEGMENTS.map((segment) => (
@@ -272,9 +284,12 @@ const GenerateFromTrend = () => {
             </div>
 
             {/* Occasion */}
-            <div className="form-group">
-              <label htmlFor="occasion" className="form-label">
-                <span className="label-icon">🎉</span>
+            <div className="mb-6">
+              <label
+                htmlFor="occasion"
+                className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
+              >
+                <span className="text-2xl">🎉</span>
                 Dịp đặc biệt (Tùy chọn)
               </label>
               <select
@@ -282,7 +297,13 @@ const GenerateFromTrend = () => {
                 name="occasion"
                 value={formData.occasion}
                 onChange={handleChange}
-                className="form-select"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25rem",
+                }}
               >
                 {occasions.map((occ) => (
                   <option key={occ.value} value={occ.value}>
@@ -293,9 +314,12 @@ const GenerateFromTrend = () => {
             </div>
 
             {/* Language */}
-            <div className="form-group">
-              <label htmlFor="language" className="form-label">
-                <span className="label-icon">🌐</span>
+            <div className="mb-6">
+              <label
+                htmlFor="language"
+                className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
+              >
+                <span className="text-2xl">🌐</span>
                 Ngôn ngữ
               </label>
               <select
@@ -303,7 +327,13 @@ const GenerateFromTrend = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="form-select"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 1rem center",
+                  backgroundSize: "1.25rem",
+                }}
               >
                 {LANGUAGES.map((lang) => (
                   <option key={lang.value} value={lang.value}>

@@ -10,8 +10,11 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { useAdminLanguage } from "../../contexts/AdminLanguageContext";
+import LanguageSelector from "../../pages/Admin/AdminDashboard/partials/LanguageSelector";
 
 const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
+  const { t } = useAdminLanguage();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,7 +113,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
           <form onSubmit={handleSearch}>
             <input
               type="search"
-              placeholder="Search"
+              placeholder={t("search")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex w-full items-center gap-4 rounded-full border bg-gray-2 py-4 pl-[60px] pr-6 outline-none transition-colors focus-visible:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-dark-6 dark:focus-visible:border-primary text-base"
@@ -118,6 +121,9 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
             <Search className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6" />
           </form>
         </div>
+
+        {/* Language Selector */}
+        <LanguageSelector />
 
         {/* Theme Toggle */}
         <button
@@ -210,7 +216,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                       className="w-full flex items-center gap-4 px-4 py-3 text-left text-dark-5 hover:bg-gray-50 rounded-xl transition-colors duration-200 dark:hover:bg-dark-3 dark:text-dark-6 text-base"
                     >
                       <Settings className="h-5 w-5" />
-                      <span>Account Settings</span>
+                      <span>{t("accountSettings")}</span>
                     </button>
 
                     <button
@@ -218,7 +224,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                       className="w-full flex items-center gap-4 px-4 py-3 text-left text-red-500 hover:bg-red-50 rounded-xl transition-colors duration-200 dark:hover:bg-red-900/20 text-base"
                     >
                       <LogOut className="h-5 w-5" />
-                      <span>Log Out</span>
+                      <span>{t("logout")}</span>
                     </button>
                   </div>
                 </div>

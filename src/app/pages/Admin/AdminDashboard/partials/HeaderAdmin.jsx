@@ -8,8 +8,11 @@ import {
   User,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useAdminLanguage } from "../../../../contexts/AdminLanguageContext";
+import LanguageSelector from "./LanguageSelector";
 
 const HeaderAdmin = () => {
+  const { t } = useAdminLanguage();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -82,7 +85,7 @@ const HeaderAdmin = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-8 h-8" />
               <input
                 type="text"
-                placeholder="Search or type command"
+                placeholder={t("search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full min-w-[400px] h-[44px] pl-12 pr-4 bg-white rounded-[8px] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent "
@@ -93,6 +96,9 @@ const HeaderAdmin = () => {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
+          {/* Language Selector */}
+          <LanguageSelector />
+
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
@@ -150,7 +156,7 @@ const HeaderAdmin = () => {
                       className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-700 hover:bg-gray-50 rounded-[15px] transition-colors duration-200"
                     >
                       <Settings className="w-5 h-5 text-gray-500" />
-                      <span>Account Settings</span>
+                      <span>{t("accountSettings")}</span>
                     </button>
 
                     <button
@@ -158,7 +164,7 @@ const HeaderAdmin = () => {
                       className="w-full flex items-center gap-3 px-3 py-2 text-left text-red-600 hover:bg-red-50 rounded-[15px] transition-colors duration-200"
                     >
                       <LogOut className="w-5 h-5 text-red-500" />
-                      <span>Log Out</span>
+                      <span>{t("logout")}</span>
                     </button>
                   </div>
                 </div>

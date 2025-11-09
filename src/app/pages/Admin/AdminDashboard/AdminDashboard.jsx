@@ -7,8 +7,10 @@ import StatCard from "../../../components/AdminLayout/StatCard";
 import TopProducts from "./partials/TopProducts";
 import TopProductsChart from "./partials/TopProductsChart";
 import { DashboardService } from "./services/dashboardService";
+import { useAdminLanguage } from "../../../contexts/AdminLanguageContext";
 
 const AdminDashboard = () => {
+  const { t } = useAdminLanguage();
   const [dashboardData, setDashboardData] = useState({
     newOrders: 0,
     newCustomers: 0,
@@ -45,35 +47,35 @@ const AdminDashboard = () => {
   // Dữ liệu thống kê từ API - Tuần này
   const statsData = [
     {
-      title: "Đơn hàng mới tuần này",
+      title: t("newOrdersThisWeek"),
       value: (dashboardData.newOrders || 0).toLocaleString(),
       change: Number((dashboardData.newOrdersChangePct || 0).toFixed(2)),
       icon: <ShoppingCart className="h-6 w-6 text-white" />,
       color: "bg-green",
       progress: Math.round(dashboardData.newOrdersProgress || 0),
-      subtitle: `Tuần trước: ${(
+      subtitle: `${t("lastWeek")}: ${(
         dashboardData.newOrdersPrev || 0
       ).toLocaleString()}`,
     },
     {
-      title: "Khách hàng mới tuần này",
+      title: t("newCustomersThisWeek"),
       value: (dashboardData.newCustomers || 0).toLocaleString(),
       change: Number((dashboardData.newCustomersChangePct || 0).toFixed(2)),
       icon: <Users className="h-6 w-6 text-white" />,
       color: "bg-blue",
       progress: Math.round(dashboardData.newCustomersProgress || 0),
-      subtitle: `Tuần trước: ${(
+      subtitle: `${t("lastWeek")}: ${(
         dashboardData.newCustomersPrev || 0
       ).toLocaleString()}`,
     },
     {
-      title: "Sản phẩm mới tuần này",
+      title: t("newProductsThisWeek"),
       value: (dashboardData.newProducts || 0).toLocaleString(),
       change: Number((dashboardData.newProductsChangePct || 0).toFixed(2)),
       icon: <Package className="h-6 w-6 text-white" />,
       progress: Math.round(dashboardData.newProductsProgress || 0),
       color: "bg-orange-light",
-      subtitle: `Tuần trước: ${(
+      subtitle: `${t("lastWeek")}: ${(
         dashboardData.newProductsPrev || 0
       ).toLocaleString()}`,
     },
@@ -82,25 +84,25 @@ const AdminDashboard = () => {
   // Thống kê tổng quan
   const overviewStats = [
     {
-      title: "Tổng người dùng",
+      title: t("totalUsers"),
       value: (dashboardData.totalUsers || 0).toLocaleString(),
       icon: <Users className="h-6 w-6 text-white" />,
       color: "bg-primary",
     },
     {
-      title: "Tổng đơn hàng",
+      title: t("totalOrders"),
       value: (dashboardData.totalOrders || 0).toLocaleString(),
       icon: <ShoppingCart className="h-6 w-6 text-white" />,
       color: "bg-blue",
     },
     {
-      title: "Sản phẩm đã bán",
+      title: t("productsSold"),
       value: (dashboardData.totalProductsSold || 0).toLocaleString(),
       icon: <Package className="h-6 w-6 text-white" />,
       color: "bg-orange-light",
     },
     {
-      title: "Tổng doanh thu",
+      title: t("totalRevenue"),
       value: `${(dashboardData.totalRevenue || 0).toLocaleString()} ₫`,
       icon: <TrendingUp className="h-6 w-6 text-white" />,
       color: "bg-green",
@@ -112,10 +114,10 @@ const AdminDashboard = () => {
       {/* Page Header */}
       <div>
         <h1 className="text-heading-4 font-bold text-dark dark:text-white">
-          Bảng điều khiển
+          {t("dashboardTitle")}
         </h1>
         <p className="mt-2 text-body-sm text-dark-6 dark:text-dark-6">
-          Tổng quan về hoạt động kinh doanh tuần này
+          {t("dashboardSubtitle")}
         </p>
       </div>
 

@@ -22,8 +22,10 @@ import {
   Sparkles,
   LogOut,
 } from "lucide-react";
+import { useAdminLanguage } from "../../contexts/AdminLanguageContext";
 
 const AdminSidebar = ({ isOpen, onToggle }) => {
+  const { t } = useAdminLanguage();
   const location = useLocation();
   const [expandedItems, setExpandedItems] = useState([]);
 
@@ -33,90 +35,90 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
 
   const navData = [
     {
-      label: "MAIN",
+      label: t("main"),
       items: [
         {
-          title: "Dashboard",
+          title: t("dashboard"),
           icon: Home,
           url: "/admin/dashboard ",
         },
         // {
-        //   title: "Analytics",
+        //   title: t('analytics'),
         //   icon: BarChart3,
         //   url: "/admin/dashboard",
         // },
       ],
     },
     {
-      label: "MANAGEMENT",
+      label: t("management"),
       items: [
         {
-          title: "Products",
+          title: t("products"),
           icon: Package,
           url: "/admin/product",
         },
         {
-          title: "Orders",
+          title: t("orders"),
           icon: ShoppingCart,
           url: "/admin/orders",
         },
         {
-          title: "Users",
+          title: t("users"),
           icon: Users,
           url: "/admin/users",
         },
         {
-          title: "Categories",
+          title: t("categories"),
           icon: Tag,
           url: "/admin/category",
         },
         {
-          title: "Status",
+          title: t("status"),
           icon: CheckSquare,
           url: "/admin/status",
         },
         {
-          title: "Discounts",
+          title: t("discounts"),
           icon: Tag,
           url: "/admin/discount",
         },
         {
-          title: "Recipe",
+          title: t("recipe"),
           icon: Cake,
           url: "/admin/recipes",
         },
         {
-          title: "Quiz",
+          title: t("quiz"),
           icon: HelpCircle,
           url: "/admin/quiz",
         },
         {
-          title: "AI Strategy",
+          title: t("aiStrategy"),
           icon: Sparkles,
           url: "/admin/stratergy",
         },
       ],
     },
     {
-      label: "SYSTEM",
+      label: t("system"),
       items: [
         {
-          title: "Language",
+          title: t("language"),
           icon: Globe,
           url: "/admin/language",
         },
         {
-          title: "Settings",
+          title: t("settings"),
           icon: Settings,
           url: "/admin/settings",
         },
         {
-          title: "UI Demo",
+          title: t("uiDemo"),
           icon: Settings,
           url: "/admin/demo",
         },
         {
-          title: "Back to home",
+          title: t("backToHome"),
           icon: LogOut,
           url: "/",
         },
