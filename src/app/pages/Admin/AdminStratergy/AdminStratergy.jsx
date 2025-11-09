@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Sparkles,
   BarChart2,
@@ -7,7 +6,6 @@ import {
   Calendar,
   Zap,
   HeartPulse,
-  Info,
   Brain,
 } from "lucide-react";
 
@@ -19,6 +17,7 @@ import UpcomingEventsTab from "./partials/UpcomingEventsTab";
 import SmartPromotionTab from "./partials/SmartPromotionTab";
 import HealthCheckTab from "./partials/HealthCheckTab";
 import SavedDataModal from "./partials/SavedDataModal";
+import AddDiscountModal from "./partials/AddDiscountModal";
 
 import {
   useEventPromotions,
@@ -63,11 +62,14 @@ const TABS = [
 ];
 
 const AdminStratergy = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("event-promotions");
   const [showSavedModal, setShowSavedModal] = useState(false);
   const [savedData, setSavedData] = useState(null);
   const [savedTitle, setSavedTitle] = useState("");
+
+  // Modal thêm khuyến mãi
+  const [showAddDiscountModal, setShowAddDiscountModal] = useState(false);
+  const [selectedPromotion, setSelectedPromotion] = useState(null);
 
   const eventPromotions = useEventPromotions();
   const analyzeProducts = useAnalyzeProducts();
@@ -97,10 +99,9 @@ const AdminStratergy = () => {
       products: promotion.products || promotion.target_products,
       description: promotion.description,
     };
-    sessionStorage.setItem("ai_promotion_draft", JSON.stringify(discountData));
-    navigate("/admin/discount", {
-      state: { fromAI: true, promotionData: discountData },
-    });
+
+    setSelectedPromotion(discountData);
+    setShowAddDiscountModal(true);
   };
 
   const renderTabPanel = () => {
@@ -255,12 +256,21 @@ const AdminStratergy = () => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       <SavedDataModal
         isOpen={showSavedModal}
         onClose={() => setShowSavedModal(false)}
         title={savedTitle}
         data={savedData}
+      />
+
+      <AddDiscountModal
+        isOpen={showAddDiscountModal}
+        onClose={() => {
+          setShowAddDiscountModal(false);
+          setSelectedPromotion(null);
+        }}
+        promotionData={selectedPromotion}
       />
     </div>
   );
