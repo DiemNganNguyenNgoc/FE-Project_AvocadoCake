@@ -80,7 +80,12 @@ const NewsPage = () => {
       {/* Header section */}
       <div className="productadmin__top">
         <ChatbotComponent />
+      </div>
+      <div className="text-center mb-12">
         <h1 className="productadmin__title">TIN TỨC</h1>
+        <h3 className="text-xl mt-4 text-gray-700">
+          Cập nhật những tin tức mới nhất từ Avocado Bakery
+        </h3>
       </div>
 
       {/* News grid */}

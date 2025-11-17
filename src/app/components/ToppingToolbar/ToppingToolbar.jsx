@@ -9,6 +9,13 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
     if (topping) onAdd(topping);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdd();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <label className="font-semibold text-amber-950">🍒 Chọn topping:</label>
@@ -16,6 +23,7 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
         <select
           value={selectedTopping}
           onChange={(e) => setSelectedTopping(e.target.value)}
+          onKeyDown={handleKeyPress}
           className="border rounded-lg p-2 bg-white shadow-sm flex-1 focus:outline-none focus:ring-2 focus:ring-pink-400"
         >
           <option value="">-- Chọn topping --</option>

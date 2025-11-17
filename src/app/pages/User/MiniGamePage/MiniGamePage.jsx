@@ -293,7 +293,13 @@ const MiniGamePage = () => {
   return (
     <div className="container-xl">
       <ChatbotComponent />
-      <h2 className={styles.title}>Minigame Giải Mã Ô Chữ</h2>
+      <div className="text-center mb-12">
+        <h1 className="productadmin__title">MINIGAME GIẢI MÃ Ô CHỮ</h1>
+        <h3 className="text-xl mt-4 text-gray-700">
+          Tham gia trò chơi hàng ngày để nhận những phần quà hấp dẫn từ Avocado
+          Bakery
+        </h3>
+      </div>
 
       {/* Hiển thị số xu */}
       {isLoggedIn && (
