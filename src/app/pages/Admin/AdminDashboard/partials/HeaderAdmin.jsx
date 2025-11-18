@@ -8,7 +8,7 @@ import {
   User,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useAdminLanguage } from "../../../../contexts/AdminLanguageContext";
+import { useAdminLanguage } from "../../../../context/AdminLanguageContext";
 import LanguageSelector from "./LanguageSelector";
 
 const HeaderAdmin = () => {

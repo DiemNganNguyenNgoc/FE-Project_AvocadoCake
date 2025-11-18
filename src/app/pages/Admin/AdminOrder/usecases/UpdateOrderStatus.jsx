@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, CheckCircle, Truck, Package, XCircle } from "lucide-react";
-import { useAdminOrderStore } from "../adminOrderStore";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Truck,
+  Package,
+  XCircle,
+  Clock,
+} from "lucide-react";
 import * as StatusService from "../../../../api/services/StatusService";
+import Button from "../../../../components/AdminLayout/Button";
 
-const UpdateOrderStatus = ({ onBack }) => {
-  const { selectedOrders, updateMultipleOrderStatuses, clearSelection } =
-    useAdminOrderStore();
+const UpdateOrderStatus = ({
+  onBack,
+  selectedOrders = [],
+  orders = [],
+  updateMultipleOrderStatuses,
+  clearSelection,
+}) => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [statusOptions, setStatusOptions] = useState([]);
+  const [currentStatusIndex, setCurrentStatusIndex] = useState(-1);
 
   // Fetch statuses from database
   const fetchStatuses = async () => {
@@ -20,37 +32,21 @@ const UpdateOrderStatus = ({ onBack }) => {
       const statusData = response.data || response;
 
       if (Array.isArray(statusData)) {
-        const options = statusData.map((status) => {
-          // Map status names to appropriate icons
-          let icon = CheckCircle;
-          let color = "text-green-600";
+        setStatusOptions(statusData);
 
-          const statusName = status.statusName?.toLowerCase();
-          if (statusName?.includes("hủy") || statusName?.includes("cancel")) {
-            icon = XCircle;
-            color = "text-red-600";
-          } else if (
-            statusName?.includes("giao") ||
-            statusName?.includes("deliver")
-          ) {
-            icon = Truck;
-            color = "text-yellow-600";
-          } else if (
-            statusName?.includes("làm") ||
-            statusName?.includes("process")
-          ) {
-            icon = Package;
-            color = "text-blue-600";
+        // Get current status of selected orders
+        if (selectedOrders.length > 0) {
+          const selectedOrdersData = orders.filter((order) =>
+            selectedOrders.includes(order._id)
+          );
+          if (selectedOrdersData.length > 0) {
+            const currentStatus = selectedOrdersData[0].status;
+            const index = statusData.findIndex(
+              (status) => status._id === currentStatus?._id
+            );
+            setCurrentStatusIndex(index);
           }
-
-          return {
-            id: status._id,
-            name: status.statusName,
-            icon,
-            color,
-          };
-        });
-        setStatusOptions(options);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch statuses:", error);
@@ -63,6 +59,12 @@ const UpdateOrderStatus = ({ onBack }) => {
   useEffect(() => {
     fetchStatuses();
   }, []);
+
+  const getSelectedOrdersData = () => {
+    if (!orders || !Array.isArray(orders)) return [];
+    if (!selectedOrders || !Array.isArray(selectedOrders)) return [];
+    return orders.filter((order) => selectedOrders.includes(order._id));
+  };
 
   const handleStatusUpdate = async () => {
     if (!selectedStatus) {
@@ -89,126 +91,278 @@ const UpdateOrderStatus = ({ onBack }) => {
   };
 
   const handleBack = () => {
-    clearSelection();
+    if (clearSelection && typeof clearSelection === "function") {
+      clearSelection();
+    }
     onBack();
   };
 
+  const selectedOrdersData = getSelectedOrdersData();
+
+  // If no orders selected, show message
+  if (selectedOrders.length === 0) {
+    return (
+      <div className="w-full mx-auto p-6">
+        <div className="bg-white dark:bg-gray-dark rounded-2xl shadow-card-2 border border-stroke dark:border-stroke-dark p-12 text-center">
+          <Package className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+          <h2 className="text-heading-6 font-bold text-gray-900 dark:text-white mb-2">
+            Chưa có đơn hàng nào được chọn
+          </h2>
+          <p className="text-body-sm text-gray-600 dark:text-gray-400 mb-6">
+            Vui lòng quay lại và chọn ít nhất một đơn hàng để cập nhật trạng
+            thái
+          </p>
+          <Button onClick={handleBack} variant="primary" size="md">
+            Quay lại danh sách đơn hàng
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-6">
-        <button
-          onClick={handleBack}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Quay lại
-        </button>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Cập nhật trạng thái đơn hàng
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Đã chọn {selectedOrders.length} đơn hàng để cập nhật
-        </p>
+    <div className="w-full mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleBack}
+            className="p-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-dark-2 transition-all"
+          >
+            <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+          </button>
+          <div>
+            <h1 className="text-heading-5 font-bold text-gray-900 dark:text-white">
+              Cập nhật trạng thái đơn hàng
+            </h1>
+            <p className="text-body-sm text-gray-600 dark:text-gray-400 mt-1">
+              Đã chọn{" "}
+              <span className="font-semibold text-primary">
+                {selectedOrders.length}
+              </span>{" "}
+              đơn hàng để cập nhật
+            </p>
+          </div>
+        </div>
       </div>
 
       {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-red-600">{error}</p>
+        <div className="p-5 bg-red-light-6 dark:bg-dark-2 border-l-4 border-red rounded-xl">
+          <p className="text-red-dark dark:text-red-light font-medium">
+            {error}
+          </p>
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-sm border p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Trạng thái hiện tại
-        </h2>
-
-        <div className="flex items-center justify-between mb-8">
-          {statusOptions.map((status, index) => {
-            const IconComponent = status.icon;
-            const isActive = selectedStatus === status.id;
-
-            return (
-              <div key={status.id} className="flex flex-col items-center">
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                    isActive ? "bg-green-100" : "bg-gray-100"
-                  }`}
-                >
-                  <IconComponent
-                    className={`w-6 h-6 ${
-                      isActive ? "text-green-600" : "text-gray-400"
-                    }`}
-                  />
-                </div>
-                <span
-                  className={`text-sm font-medium ${
-                    isActive ? "text-gray-900" : "text-gray-500"
-                  }`}
-                >
-                  {status.name}
-                </span>
-                {index < statusOptions.length - 1 && (
-                  <div className="absolute left-1/2 transform -translate-x-1/2 mt-6 w-16 h-0.5 bg-gray-200" />
-                )}
-              </div>
-            );
-          })}
+      {/* Progress Line Section */}
+      <div className="bg-white dark:bg-gray-dark rounded-2xl shadow-card-2 border border-stroke dark:border-stroke-dark p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-heading-6 font-bold text-gray-900 dark:text-white">
+            Trạng thái đơn hàng
+          </h2>
+          <div className="text-body-sm text-gray-600 dark:text-gray-400">
+            Click vào trạng thái để chọn
+          </div>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Chọn trạng thái mới
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {statusOptions.map((status) => {
-                const IconComponent = status.icon;
-                const isSelected = selectedStatus === status.id;
+        {/* Progress Line */}
+        {statusOptions.length > 0 && currentStatusIndex >= 0 && (
+          <div className="mb-12">
+            <div className="relative">
+              {/* Background Line */}
+              <div className="absolute top-6 left-0 right-0 h-1 bg-gray-200 dark:bg-dark-3 rounded-full" />
 
-                return (
-                  <button
-                    key={status.id}
-                    onClick={() => setSelectedStatus(status.id)}
-                    className={`p-4 border rounded-lg text-left transition-colors duration-150 ${
-                      isSelected
-                        ? "border-green-500 bg-green-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center">
-                      <IconComponent
-                        className={`w-5 h-5 mr-3 ${
-                          isSelected ? "text-green-600" : "text-gray-400"
+              {/* Progress Line */}
+              <div
+                className="absolute top-6 left-0 h-1 bg-avocado-green-100 rounded-full transition-all duration-500"
+                style={{
+                  width: `${
+                    (currentStatusIndex / (statusOptions.length - 1)) * 100
+                  }%`,
+                }}
+              />
+
+              {/* Status Points */}
+              <div className="relative flex justify-between">
+                {statusOptions.map((status, index) => {
+                  const isCompleted = index < currentStatusIndex;
+                  const isCurrent = index === currentStatusIndex;
+                  const isSelected = selectedStatus === status._id;
+
+                  return (
+                    <div
+                      key={status._id}
+                      className="flex flex-col items-center"
+                      style={{ flex: 1 }}
+                    >
+                      {/* Circle */}
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          isCurrent
+                            ? "bg-avocado-green-100 ring-4 ring-avocado-green-30 cursor-not-allowed opacity-70"
+                            : isSelected
+                            ? "bg-primary ring-4 ring-primary/30 scale-110 cursor-pointer"
+                            : isCompleted
+                            ? "bg-avocado-green-100 cursor-pointer hover:ring-2 hover:ring-avocado-green-50"
+                            : "bg-gray-200 dark:bg-dark-3 hover:bg-gray-300 dark:hover:bg-dark-4 cursor-pointer"
                         }`}
-                      />
-                      <span
-                        className={`font-medium ${
-                          isSelected ? "text-green-900" : "text-gray-700"
+                        onClick={() => {
+                          if (!isCurrent) {
+                            setSelectedStatus(status._id);
+                          }
+                        }}
+                      >
+                        {isCurrent && !isSelected && (
+                          <Truck className="w-6 h-6 text-avocado-brown-100" />
+                        )}
+                        {isCompleted && !isCurrent && !isSelected && (
+                          <CheckCircle2 className="w-6 h-6 text-avocado-brown-100" />
+                        )}
+                        {isSelected && (
+                          <CheckCircle2 className="w-6 h-6 text-white" />
+                        )}
+                        {!isCompleted && !isCurrent && !isSelected && (
+                          <div className="w-3 h-3 rounded-full bg-gray-400 dark:bg-dark-5" />
+                        )}
+                      </div>
+
+                      {/* Label */}
+                      <p
+                        className={`mt-3 text-center text-body-sm font-medium transition-colors ${
+                          isSelected
+                            ? "text-primary"
+                            : isCurrent
+                            ? "text-avocado-green-100"
+                            : isCompleted
+                            ? "text-gray-900 dark:text-white"
+                            : "text-gray-500 dark:text-gray-400"
                         }`}
                       >
-                        {status.name}
-                      </span>
+                        {status.statusName}
+                      </p>
                     </div>
-                  </button>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
+        )}
+      </div>
 
-          <div className="flex justify-end space-x-3 pt-6">
-            <button
-              onClick={handleBack}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      {/* Selected Orders List */}
+      <div className="bg-white dark:bg-gray-dark rounded-2xl shadow-card-2 border border-stroke dark:border-stroke-dark p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-heading-6 font-bold text-gray-900 dark:text-white">
+            Danh sách đơn hàng được chọn
+          </h3>
+          <div className="px-4 py-2 bg-blue-light-5 dark:bg-dark-3 text-primary font-semibold rounded-xl text-body-sm">
+            {selectedOrdersData.length} đơn hàng
+          </div>
+        </div>
+
+        {/* Table Header */}
+        <div className="flex items-center justify-between px-4 py-3 mb-2 border-b-2 border-stroke dark:border-stroke-dark">
+          <div className="flex items-center gap-4 min-w-[200px]">
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              STT
+            </span>
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Mã đơn hàng
+            </span>
+          </div>
+          <div className="min-w-[180px]">
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Ngày tạo
+            </span>
+          </div>
+          <div className="min-w-[140px] text-center">
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Trạng thái
+            </span>
+          </div>
+          <div className="min-w-[140px] text-right">
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Tổng tiền
+            </span>
+          </div>
+        </div>
+
+        {/* List View */}
+        <div className="space-y-3">
+          {selectedOrdersData.map((order, index) => (
+            <div
+              key={order._id}
+              className="group flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-2 rounded-xl border border-stroke dark:border-stroke-dark hover:bg-avocado-green-10 hover:border-avocado-green-50 transition-all duration-200"
             >
+              {/* Left: Order Number + Index */}
+              <div className="flex items-center gap-4 min-w-[200px]">
+                <div className="w-8 h-8 rounded-full bg-avocado-green-30 dark:bg-avocado-green-80 flex items-center justify-center">
+                  <span className="text-sm font-bold text-avocado-brown-100">
+                    {index + 1}
+                  </span>
+                </div>
+                <span className="font-semibold text-gray-900 dark:text-white text-base">
+                  {order.orderCode}
+                </span>
+              </div>
+
+              {/* Middle: Date */}
+              <div className="flex items-center gap-2 text-body-sm text-gray-600 dark:text-gray-400 min-w-[180px]">
+                <Clock className="w-4 h-4" />
+                <span>{order.formatDate(order.createdAt)}</span>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center min-w-[140px] justify-center">
+                <span
+                  className={`inline-flex px-3 py-1.5 text-xs font-medium rounded-full ${order.getStatusColor()}`}
+                >
+                  {order.status?.statusName}
+                </span>
+              </div>
+
+              {/* Right: Price */}
+              <div className="flex items-center justify-end min-w-[140px]">
+                <span className="font-bold text-gray-900 dark:text-white text-base">
+                  {order.formatPrice(order.finalPrice)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="bg-white dark:bg-gray-dark rounded-2xl shadow-card-2 border border-stroke dark:border-stroke-dark p-6">
+        <div className="flex items-center justify-between">
+          <div className="text-body-sm text-gray-600 dark:text-gray-400">
+            {selectedStatus ? (
+              <span>
+                Sẽ cập nhật sang:{" "}
+                <span className="font-semibold text-primary">
+                  {
+                    statusOptions.find((s) => s._id === selectedStatus)
+                      ?.statusName
+                  }
+                </span>
+              </span>
+            ) : (
+              <span>Vui lòng chọn trạng thái mới</span>
+            )}
+          </div>
+          <div className="flex items-center gap-4">
+            <Button onClick={handleBack} variant="outline" size="md">
               Hủy
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleStatusUpdate}
               disabled={loading || !selectedStatus}
-              className="px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              loading={loading}
+              variant="primary"
+              size="md"
             >
-              {loading ? "Đang cập nhật..." : "Cập nhật trạng thái"}
-            </button>
+              Xác nhận cập nhật
+            </Button>
           </div>
         </div>
       </div>

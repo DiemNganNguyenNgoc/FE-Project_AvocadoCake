@@ -10,7 +10,7 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
-import { useAdminLanguage } from "../../contexts/AdminLanguageContext";
+import { useAdminLanguage } from "../../context/AdminLanguageContext";
 import LanguageSelector from "../../pages/Admin/AdminDashboard/partials/LanguageSelector";
 
 const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {

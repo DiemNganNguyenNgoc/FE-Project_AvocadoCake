@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Globe, Check } from "lucide-react";
-import { useAdminLanguage } from "../../../../contexts/AdminLanguageContext";
+import { useAdminLanguage } from "../../../../context/AdminLanguageContext";
 
 const LanguageSelector = () => {
   const { language, changeLanguage, t } = useAdminLanguage();

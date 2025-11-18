@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import recipeAPIService from "../services/RecipeService";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import GenerateImage from "../partials/GenerateImage";
 import useAdminRecipeStore from "../adminRecipeStore";
 
 /**
@@ -31,6 +32,7 @@ const SmartGenerate = () => {
   });
   const [contextPreview, setContextPreview] = useState(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
 
   const languageOptions = [
     { value: "vi", label: "Tiếng Việt" },
@@ -97,6 +99,7 @@ const SmartGenerate = () => {
   const handleSmartGenerate = async () => {
     setLoading(true);
     setCurrentRecipe(null);
+    setGeneratedImage(null); // Reset image when generating new recipe
 
     try {
       const result = await smartGenerate({
@@ -116,6 +119,11 @@ const SmartGenerate = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImageGenerated = (imageData) => {
+    setGeneratedImage(imageData);
+    console.log("Image generated:", imageData);
   };
 
   const selectedSegment = segmentOptions.find(
@@ -374,7 +382,7 @@ const SmartGenerate = () => {
         </div>
 
         {/* Right Content - Result */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           {loading ? (
             <div className="flex flex-col items-center justify-center bg-avocado-green-10 rounded-lg border border-avocado-brown-30 p-12 min-h-[400px]">
               <Loader2 className="w-12 h-12 text-avocado-green-100 animate-spin mb-4" />
@@ -388,7 +396,15 @@ const SmartGenerate = () => {
               </div>
             </div>
           ) : currentRecipe ? (
-            <RecipeDisplay recipe={currentRecipe} />
+            <>
+              <RecipeDisplay recipe={currentRecipe} />
+
+              {/* Generate Image Section */}
+              <GenerateImage
+                recipe={currentRecipe.recipe}
+                onImageGenerated={handleImageGenerated}
+              />
+            </>
           ) : (
             <div className="flex flex-col items-center justify-center bg-white rounded-lg border border-avocado-brown-30 p-12 min-h-[400px] text-center">
               <Target className="w-16 h-16 text-avocado-green-100 mb-4" />

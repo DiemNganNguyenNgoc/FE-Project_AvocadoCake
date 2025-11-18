@@ -7,7 +7,7 @@ import StatCard from "../../../components/AdminLayout/StatCard";
 import TopProducts from "./partials/TopProducts";
 import TopProductsChart from "./partials/TopProductsChart";
 import { DashboardService } from "./services/dashboardService";
-import { useAdminLanguage } from "../../../contexts/AdminLanguageContext";
+import { useAdminLanguage } from "../../../context/AdminLanguageContext";
 
 const AdminDashboard = () => {
   const { t } = useAdminLanguage();

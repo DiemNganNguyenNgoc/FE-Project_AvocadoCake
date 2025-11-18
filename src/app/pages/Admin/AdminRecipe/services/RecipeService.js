@@ -383,6 +383,32 @@ class RecipeAPIService {
   // ==================== SMART AUTO-GENERATE (NEW) ====================
 
   /**
+   * Generate image from recipe description using Pollinations AI
+   * POST /api/v1/smart/generate-image
+   * @param {Object} data - { recipe_data: object, recipe_title: string, recipe_description: string, image_prompt: string }
+   */
+  async generateImage(data) {
+    const response = await this.handleRequest("smart/generate-image", {
+      method: "POST",
+      body: data,
+    });
+
+    console.log("🔍 Raw API Response:", response);
+
+    // Response format: { success: boolean, image_data: string, image_url: string, provider: string, ... }
+    // Ensure all fields are present
+    return {
+      success: response.success || false,
+      image_data: response.image_data || null,
+      image_url: response.image_url || null,
+      provider: response.provider || null,
+      prompt_used: response.prompt_used || response.image_prompt_used || null,
+      message: response.message || null,
+      error: response.error || null,
+    };
+  }
+
+  /**
    * Preview context for smart generation
    * GET /api/v1/smart/context-preview
    * @param {Object} params - { days_ahead: number }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
-import { AdminLanguageProvider } from "../../contexts/AdminLanguageContext";
+import { AdminLanguageProvider } from "../../context/AdminLanguageContext";
 
 const AdminLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

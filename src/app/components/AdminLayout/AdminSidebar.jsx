@@ -22,7 +22,7 @@ import {
   Sparkles,
   LogOut,
 } from "lucide-react";
-import { useAdminLanguage } from "../../contexts/AdminLanguageContext";
+import { useAdminLanguage } from "../../context/AdminLanguageContext";
 
 const AdminSidebar = ({ isOpen, onToggle }) => {
   const { t } = useAdminLanguage();
