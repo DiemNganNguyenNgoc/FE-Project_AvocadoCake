@@ -150,7 +150,6 @@ const OrderInformationPage = () => {
     }
   };
 
-
   const [shippingAddress, setShippingAddress] = useState({
     familyName: "",
     userName: "",
@@ -189,7 +188,6 @@ const OrderInformationPage = () => {
     () => totalItemPrice + shippingPrice,
     [totalItemPrice, shippingPrice]
   );
-
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -314,15 +312,16 @@ const OrderInformationPage = () => {
         </div>
       </div>
       <div className="product_area">
-        <table>
-          <thead>
-            <tr className="HeaderHolder">
-              <th className="ProductInforHear">Thông tin sản phẩm</th>
-              <th className="PriceHeader">Đơn giá</th>
-              <th className="QuantityHeader">Số lượng</th>
-              <th className="MoneyHeader">Thành tiền</th>
+        <table className="min-w-full text-2xl text-gray-700">
+          <thead className="bg-gray-100 uppercase text-2xl">
+            <tr>
+              <th className="p-3 text-left">Thông tin sản phẩm</th>
+              <th className="p-3 text-left hidden md:table-cell">Đơn giá</th>
+              <th className="p-3 text-left hidden md:table-cell">Số lượng</th>
+              <th className="p-3 text-left hidden md:table-cell">Thành tiền</th>
             </tr>
           </thead>
+
           <tbody>
             {selectedProducts.map((product) => {
               const discount = getDiscountValue(product.id);
@@ -331,27 +330,38 @@ const OrderInformationPage = () => {
               const lineTotal = finalUnit * product.quantity;
 
               return (
-                <tr key={product.id} className="LineProduct">
-                  <td className="ProductInfor">
+                <tr
+                  key={product.id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="p-3 align-top">
                     <ProductInfor
                       image={product.img}
                       name={product.title}
                       size={product.size || "Không có size"}
                     />
+
+                    {/* Mobile layout info */}
+                    <div className="sm:hidden mt-2 text-gray-500 text-xl">
+                      <p>Giá: {finalUnit.toLocaleString()} VND</p>
+                      <p>Số lượng: {product.quantity}</p>
+                      <p>Thành tiền: {lineTotal.toLocaleString()} VND</p>
+                    </div>
                   </td>
 
-                  {/* Đơn giá sau giảm */}
-                  <td className="PriceProduct">
+                  {/* Đơn giá */}
+                  <td className="p-3 hidden md:table-cell">
                     {finalUnit.toLocaleString()} VND
                   </td>
 
-                  <td className="QuantityBtn">x {product.quantity}</td>
+                  {/* Số lượng */}
+                  <td className="p-3 hidden md:table-cell">
+                    x {product.quantity}
+                  </td>
 
-                  {/* Thành tiền sau giảm */}
-                  <td className="Money">
-                    <p className="MoneyProduct">
-                      {lineTotal.toLocaleString()} VND
-                    </p>
+                  {/* Thành tiền */}
+                  <td className="p-3 hidden md:table-cell font-semibold">
+                    {lineTotal.toLocaleString()} VND
                   </td>
                 </tr>
               );
@@ -359,32 +369,18 @@ const OrderInformationPage = () => {
           </tbody>
 
           <tfoot>
-            {/* --- phí vận chuyển --- */}
-            <tr className="LineProduct">
-              <td>Phí vận chuyển:</td>
-              <td style={{ fontWeight: "bold", fontSize: "2rem" }}>
+            <tr className="border-t">
+              <td className="p-3 text-left font-semibold">Phí vận chuyển:</td>
+              <td colSpan="3" className="p-3 text-right font-bold text-2xl">
                 {shippingPrice.toLocaleString()} VND
               </td>
             </tr>
 
-            {/* --- gợi ý đăng nhập để free ship --- */}
-
-            {/* --- tổng tiền --- */}
-            <tr
-              className="total-price d-flex align-items-center justify-content-between"
-              style={{ padding: "20px" }}
-            >
-              <td
-                colSpan="3"
-                className="text-end"
-                style={{ fontWeight: "bold", fontSize: "2rem" }}
-              >
+            <tr className="border-t bg-gray-50">
+              <td colSpan="3" className="p-3 text-right font-bold text-2xl">
                 Tổng tiền:
               </td>
-              <td
-                className="text-end"
-                style={{ fontWeight: "bold", fontSize: "2rem" }}
-              >
+              <td className="p-3 text-right font-bold text-2xl">
                 {totalPrice.toLocaleString()} VND
               </td>
             </tr>
@@ -570,7 +566,7 @@ const OrderInformationPage = () => {
                 rows="5"
                 cols="50"
                 placeholder="Nhập ghi chú đơn hàng....."
-                className="inputNote"
+                className="inputNote p-4"
                 value={orderNote}
                 onChange={handleOrderNoteChange}
               ></textarea>

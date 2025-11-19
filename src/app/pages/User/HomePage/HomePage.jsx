@@ -1,158 +1,59 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import SliderComponent from "../../../components/SliderComponent/SliderComponent";
 import CardProduct from "../../../components/CardProduct/CardProduct";
 import ButtonNoBGComponent from "../../../components/ButtonNoBGComponent/ButtonNoBGComponent";
 import LinesEllipsis from "react-lines-ellipsis";
 import CardNews from "../../../components/CardNews/CardNews";
-import news from "../../../assets/img/news.jpg";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
-import { useNavigate } from "react-router-dom";
+import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
+import news from "../../../assets/img/news.jpg";
+import img12 from "../../../assets/img/hero_2.jpg";
 import { getAllDiscount } from "../../../api/services/DiscountService";
 import { getAllNews } from "../../../api/services/NewsService";
-import img12 from "../../../assets/img/hero_2.jpg";
-import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
 import { getAllCategory } from "../../../api/services/CategoryService";
 import {
   getAllProduct,
   getProductsByCategory,
 } from "../../../api/services/productServices";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 const text =
   "Là một hệ thống đội ngũ nhân viên và lãnh đạo chuyên nghiệp, gồm CBCNV và những người thợ đã có kinh nghiệm lâu năm trong các công ty đầu ngành. Mô hình vận hành hoạt động công ty được bố trí theo chiều ngang, làm gia tăng sự thuận tiện trong việc vận hành cỗ máy kinh doanh và gia tăng sự phối hợp thống nhất giữa các bộ phận trong công ty.";
 
 const HomePage = () => {
-  const [promoProducts, setPromoProducts] = useState([]);
+  //Hooks
   const [promos, setPromos] = useState([]);
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
-  const [arrImgs, setArrImg] = useState([]); // State lưu trữ mảng hình ảnh
-  const [products, setProducts] = useState([]); // State lưu danh sách sản phẩm
-  const [currentCategory, setCurrentCategory] = useState(null); // State lưu category hiện tại
-  const [selectedPromo, setSelectedPromo] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0); // Trang hiện tại
+  const [arrImgs, setArrImg] = useState([]); // promo images
+  const [products, setProducts] = useState([]); // product list
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
   const [bestSeller, setBestSeller] = useState([]);
+  const [newsList, setNewsList] = useState([]);
+
   const navigate = useNavigate();
+
+  /**
+   * Handle Click
+   * @param  path
+   */
   const handleClick = (path) => {
     navigate(path);
   };
-  const [newsList, setNewsList] = useState([]);
 
-  useEffect(() => {
-    AOS.init({
-      duration: 2000, // thời gian chạy hiệu ứng (ms)
-      once: false, // chỉ animate 1 lần khi scroll tới
-    });
-  }, []);
-
-  // Fetch danh sách khuyến mãi
-  useEffect(() => {
-    const fetchDiscounts = async () => {
-      try {
-        const discounts = await getAllDiscount();
-        console.log("ALL DISCOUNTS: ", discounts.data);
-        if (Array.isArray(discounts.data)) {
-          setPromos(discounts.data); // Lưu danh sách khuyến mãi
-          const images = Array.isArray(discounts.data)
-            ? discounts.data
-                .map((discount) => discount?.discountImage)
-                .filter(Boolean)
-            : [];
-          console.log("I<MAD: ", images);
-          setArrImg(images);
-        } else {
-          setError("Dữ liệu trả về không hợp lệ.");
-        }
-      } catch (err) {
-        setError(err.message || "Không thể tải danh sách khuyến mãi.");
-      }
-    };
-
-    fetchDiscounts();
-  }, []);
-
-  // Ví dụ, thay vì dùng promos trong handleSliderImageClick, bạn có thể:
+  /** Handle click on slider image */
   const handleSliderImageClick = () => {
     navigate("/products", { state: { showPromo: true } });
   };
 
-  //Lấy danh sách tin tức:
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await getAllNews();
-
-        if (Array.isArray(response.data)) {
-          setNewsList(response.data.slice(0, 4)); // Chỉ lấy 3 tin tức đầu
-        } else {
-          setError("Dữ liệu trả về không hợp lệ.");
-        }
-      } catch (err) {
-        setError(err.message || "Không thể tải danh sách tin tức.");
-      }
-    };
-    fetchNews();
-  }, []);
-
-  //Xem chi tiet
-  const handleDetailNews = (newsId) => {
-    const selectedNews = newsList.find((item) => item._id === newsId);
-
-    if (selectedNews) {
-      const { newsImage, newsTitle, newsContent } = selectedNews;
-      navigate("/news-detail", {
-        state: { newsImage, newsTitle, newsContent },
-      });
-    } else {
-      alert("News not found!");
-    }
-  };
-
-  // Lay danh sach category
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getAllCategory();
-
-        setCategories(response.data); // Lưu danh sách category vào state
-
-        // Lấy category đầu tiên và fetch sản phẩm tương ứng
-        if (response.data.length > 0) {
-          const firstCategoryId = response.data[0]._id;
-          setCurrentCategory(firstCategoryId); // Lưu category đầu tiên
-          fetchProducts(0, 9, firstCategoryId); // Fetch sản phẩm của category đầu tiên
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  // Fetch danh sách sản phẩm khi component được mount
-  const fetchProducts = async (page = 0, limit = 9, categoryId = null) => {
-    try {
-      const response = await getProductsByCategory(categoryId);
-
-      // setCurrentPage(page); // Cập nhật trang hiện tại
-      // setTotalPages(Math.ceil(data.data.lenght / limit)); // Tính tổng số trang
-
-      if (Array.isArray(response.data)) {
-        setProducts(response.data.slice(0, 4));
-      } else {
-        console.error("Products data is not in expected format");
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  // Khi nhấn vào sản phẩm
+  /** Handle view product detail */
   const handleDetailProduct = (productId) => {
     const selectedProduct =
-    products.find((p) => p._id === productId) ||
-    bestSeller.find((p) => p._id === productId);
+      products.find((p) => p._id === productId) ||
+      bestSeller.find((p) => p._id === productId);
 
     if (selectedProduct) {
       const {
@@ -163,6 +64,7 @@ const HomePage = () => {
         productDescription,
         productPrice,
       } = selectedProduct;
+
       navigate("/view-product-detail", {
         state: {
           productId,
@@ -179,35 +81,42 @@ const HomePage = () => {
     }
   };
 
-  //Click categoryName:
+  /** Handle click on category */
   const handleCategoryClick = (categoryId) => {
-    setCurrentCategory(categoryId); // Lưu categoryId để lọc sản phẩm
-    setCurrentPage(0); // Reset trang về 0 khi chuyển qua category mới
+    setCurrentCategory(categoryId);
+    setCurrentPage(0);
     fetchProducts(0, 9, categoryId);
   };
 
-  useEffect(() => {
-    const fetchBestSellers = async () => {
-      const allProduct = await getAllProduct(); // <- chờ fetch hoàn tất
-      //console.log("Top 4 sản phẩm đánh giá cao nhất:", allProduct);
+  /** Handle view news detail */
+  const handleDetailNews = (newsId) => {
+    const selectedNews = newsList.find((item) => item._id === newsId);
 
-      //console.log("Top 4 sản phẩm đánh giá cao nhất:", allProduct);
-      if (!Array.isArray(allProduct.data) || allProduct.data.length === 0)
-        return;
-      console.log("ALL: ", allProduct.data);
-      const top4 = allProduct.data
-        .sort((a, b) => (b.totalRating || 0) - (a.totalRating || 0))
-        .slice(0, 4);
+    if (selectedNews) {
+      const { newsImage, newsTitle, newsContent } = selectedNews;
+      navigate("/news-detail", {
+        state: { newsImage, newsTitle, newsContent },
+      });
+    } else {
+      alert("News not found!");
+    }
+  };
 
-      console.log("Top 4 sản phẩm đánh giá cao nhất:", top4);
-      setBestSeller(top4); // <- cập nhật state
-      console.log("BEST SELLER: ", bestSeller)
-    };
+  /** Fetch products by category */
+  const fetchProducts = async (page = 0, limit = 9, categoryId = null) => {
+    try {
+      const response = await getProductsByCategory(categoryId);
+      if (Array.isArray(response.data)) {
+        setProducts(response.data.slice(0, 4));
+      } else {
+        console.error("Products data is not in expected format");
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
-    fetchBestSellers();
-  }, []);
-
-  const promoProductList = selectedPromo.discountProduct || [];
+  /** Find discount applied to a product */
   const findPromoApplied = (productId) => {
     if (!Array.isArray(promos) || promos.length === 0) return 0;
 
@@ -221,26 +130,94 @@ const HomePage = () => {
       const isProductIncluded = discount.discountProduct?.some(
         (pro) => pro._id === productId
       );
+
       return isInTimeRange && isProductIncluded;
     });
 
-    // Lấy phần trăm giảm nếu có
-    const discountPercent = appliedDiscount?.discountValue || 0;
-
-    return discountPercent;
+    return appliedDiscount?.discountValue || 0;
   };
 
+  useEffect(() => {
+    AOS.init({
+      duration: 2000,
+      once: false,
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchDiscounts = async () => {
+      try {
+        const discounts = await getAllDiscount();
+        if (Array.isArray(discounts.data)) {
+          setPromos(discounts.data);
+          const images = discounts.data
+            .map((discount) => discount?.discountImage)
+            .filter(Boolean);
+          setArrImg(images);
+        } else {
+          setError("Invalid discount data.");
+        }
+      } catch (err) {
+        setError(err.message || "Unable to load discounts.");
+      }
+    };
+    fetchDiscounts();
+  }, []);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await getAllNews();
+        if (Array.isArray(response.data)) {
+          setNewsList(response.data.slice(0, 4));
+        } else {
+          setError("Invalid news data.");
+        }
+      } catch (err) {
+        setError(err.message || "Unable to load news.");
+      }
+    };
+    fetchNews();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAllCategory();
+        setCategories(response.data);
+
+        if (response.data.length > 0) {
+          const firstCategoryId = response.data[0]._id;
+          setCurrentCategory(firstCategoryId);
+          fetchProducts(0, 9, firstCategoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      const allProduct = await getAllProduct();
+      if (!Array.isArray(allProduct.data) || allProduct.data.length === 0)
+        return;
+
+      const top4 = allProduct.data
+        .sort((a, b) => (b.totalRating || 0) - (a.totalRating || 0))
+        .slice(0, 4);
+
+      setBestSeller(top4);
+    };
+    fetchBestSellers();
+  }, []);
+
   return (
-    <div>
-      {/* Banner quànrg cáo */}
-      <div>
-        <SliderComponent
-          arrImg={arrImgs}
-          onImageClick={handleSliderImageClick}
-        />
-      </div>
+    <div className=" mx-auto mt-4">
+      <SliderComponent arrImg={arrImgs} onImageClick={handleSliderImageClick} />
+
       <div
-        data-aos="fade-up"
         style={{
           marginTop: 100,
           paddingTop: 50,
@@ -288,38 +265,7 @@ const HomePage = () => {
             </defs>
           </svg>
         </div>
-
-        {/* 1 slide  */}
-        {/* <Row
-          style={{
-            maxWidth: 1000,
-            margin: 'auto'
-          }}>
-          <Col >
-            <CardProduct type={"secondary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col >
-            <CardProduct type={"secondary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col >
-            <CardProduct type={"secondary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col>
-            <CardProduct type={"secondary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-        </Row> */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4,1fr)",
-            marginLeft: "137px",
-            marginRight: "137px",
-            gap: "18px",
-          }}
-          data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-anchor-placement="center-bottom"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 mx-[137px] gap-[18px] mb-6">
           {bestSeller.map((product) => (
             <CardProduct
               key={product._id}
@@ -338,15 +284,12 @@ const HomePage = () => {
 
         <ButtonComponent
           onClick={() => handleClick("/products")}
-          style={{
-            margin: "auto",
-          }}
+          className="m-auto hover:bg-green-800  "
         >
           Xem thêm{" "}
         </ButtonComponent>
       </div>
 
-      {/* Sản phẩm */}
       <div style={{ width: "100%", marginTop: 50 }}>
         <h1
           style={{
@@ -388,39 +331,7 @@ const HomePage = () => {
             </ButtonNoBGComponent>
           ))}
         </div>
-        {/* 1 tab */}
-        {/* <Row
-          style={{
-            maxWidth: 1000,
-            margin: 'auto'
-            
-          }}>
-          <Col style={{ marginTop: "10px" }}>
-            <CardProduct type={"primary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col style={{ marginTop: "10px" }}>
-            <CardProduct type={"primary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col style={{ marginTop: "10px" }}>
-            <CardProduct type={"primary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-          <Col style={{ marginTop: "10px" }}>
-            <CardProduct type={"primary"} img={image1} title={"Chocolate Sweet Cream"} price={"250.000 VND"} />
-          </Col>
-        </Row> */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4,1fr)",
-            marginLeft: "137px",
-            marginRight: "137px",
-            gap: "18px",
-            paddingBottom: 50,
-          }}
-          data-aos="fade-up"
-          data-aos-duration="2000"
-          data-aos-anchor-placement="center-bottom"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 ml-[137px] mr-[137px] gap-[18px] pb-[50px]">
           {products.map((product) => (
             <CardProduct
               key={product._id}
@@ -451,39 +362,15 @@ const HomePage = () => {
           </ButtonComponent>
         </div>
       </div>
-
-      {/* Cau chuyen avocado */}
-      <div>
-        <h1
-          style={{
-            color: "#3A060E",
-            textAlign: "center",
-            marginTop: "50px",
-            fontSize: "4rem",
-            paddingBottom: 10,
-            fontWeight: 700,
-          }}
-        >
-          {" "}
+      <div className="flex flex-col">
+        <h1 className="text-[#3A060E] text-center mt-[50px] text-5xl pb-[10px] font-bold">
           CÂU CHUYỆN AVOCADO
         </h1>
-        <h3
-          style={{
-            color: "#3A060E",
-            textAlign: "center",
-            fontSize: "16px ",
-            paddingBottom: 25,
-          }}
-        >
+        <h3 className="text-[#3A060E] text-center text-[16px] pb-[25px]">
           Avocado tự hào là tiệm bánh Việt chất lượng được xây dựng từ tình yêu
           dành trọn cho khách hàng
         </h3>
-        <div
-          style={{
-            display: "flex",
-            marginRight: "137px",
-          }}
-        >
+        <div className="flex flex-col md:flex-row">
           <div
             style={{
               position: "absolute",
@@ -508,18 +395,7 @@ const HomePage = () => {
             }}
           ></img>
 
-          <div
-            style={{
-              maxWidth: "56rem",
-              maxHeight: "30rem",
-              borderRadius: 15,
-              background: "#b1e3214d",
-              marginLeft: "10rem",
-              flexShrink: 0,
-
-              marginTop: "45px",
-            }}
-          >
+          <div className="max-w-[59rem] max-h-[40rem] rounded-[15px] bg-[#b1e3214d] ml-[10rem] flex-shrink-0 mt-[45px]">
             <h3
               style={{
                 color: "#3A060E",
@@ -527,7 +403,6 @@ const HomePage = () => {
                 marginTop: "80px",
                 fontSize: "1.8rem",
                 fontWeight: 700,
-                marginTop: 45,
                 paddingBottom: 25,
               }}
             >
@@ -536,7 +411,7 @@ const HomePage = () => {
             </h3>
             <LinesEllipsis
               text={text}
-              maxLine="4" // Số dòng tối đa
+              maxLine="5"
               ellipsis="..."
               trimRight
               basedOn="words"
@@ -596,20 +471,19 @@ const HomePage = () => {
         </h3>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4,1fr)",
-            marginLeft: "137px",
-            marginRight: "137px",
-            gap: "25px",
-            paddingBottom: 25,
-          }}
+          className="
+    grid 
+    grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
+    gap-6 
+    px-6 md:px-12 lg:px-[137px] 
+    pb-6
+  "
           data-aos="fade-up"
           data-aos-duration="2000"
         >
           {newsList.map((newsItem, index) => (
             <CardNews
-              key={index}
+              key={`${index}-${newsItem.id}`}
               id={newsItem._id}
               img={newsItem.newsImage || news}
               title={newsItem.newsTitle}
@@ -618,6 +492,7 @@ const HomePage = () => {
             />
           ))}
         </div>
+
         <div
           style={{
             marginBottom: 50,

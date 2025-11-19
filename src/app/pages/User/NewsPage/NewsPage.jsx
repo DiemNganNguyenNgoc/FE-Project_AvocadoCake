@@ -1,153 +1,140 @@
-import CardNews from '../../../components/CardNews/CardNews'
-import news from '../../../assets/img/news.jpg'
-import './NewsPage.css'
-import ChatbotComponent from '../../../components/ChatbotComponent/ChatbotComponent'
-import { React, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CardNews from "../../../components/CardNews/CardNews";
+import ChatbotComponent from "../../../components/ChatbotComponent/ChatbotComponent";
+import { getAllNews } from "../../../api/services/NewsService";
+import "./NewsPage.css";
 
 const NewsPage = () => {
-   const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState(0); // Trang hiện tại
-    const [totalPages, setTotalPages] = useState(0);   // Tổng số trang
-  
-    const [news, setnews] = useState([]); // State lưu danh sách sản phẩm
-    // const [categories, setCategories] = useState([]); // State lưu danh sách category
-    // const [showModal, setShowModal] = useState(false);
-    const [selectedNews, setSelectedNews] = useState(null); // Lưu ID sản phẩm cần xóa
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [newsList, setNewsList] = useState([]); // ✅ danh sách tin
+  const [currentPage, setCurrentPage] = useState(0); // ✅ trang hiện tại
+  const [totalPages, setTotalPages] = useState(0); // ✅ tổng số trang
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  
-    //Phan trang
-    const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-      const pages = Array.from({ length: totalPages }, (_, index) => index);
-  
-      return (
-        <div>
-          {pages.map((page) => (
-            <button className="pageNumber"
-              key={page}
-              onClick={() => onPageChange(page)}
-              style={{ fontWeight: currentPage === page ? "bold" : "normal" }}
-            >
-              {page + 1}
-            </button>
-          ))}
-        </div>
-      );
-    };
-  
-    // Fetch danh sách sản phẩm khi component được mount
-    const fetchnews = async (page = 0, limit = 15) => {
+  const pageSize = 4; // ✅ số tin trên mỗi trang
+
+  // Pagination Component
+  const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    const pages = Array.from({ length: totalPages }, (_, i) => i);
+
+    return (
+      <div className="pagination">
+        {pages.map((page) => (
+          <button
+            key={page}
+            className={`pageNumber ${currentPage === page ? "active" : ""}`}
+            onClick={() => onPageChange(page)}
+          >
+            {page + 1}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  // Fetch news
+  useEffect(() => {
+    const fetchNews = async () => {
       try {
-  
-        const response = await fetch(`http://localhost:3001/api/news/get-all-news?page=${page}&limit=${limit}`, {
-          method: "GET", // Phương thức GET để lấy danh sách category
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch newss");
-        }
-  
-        const data = await response.json(); // Chuyển đổi dữ liệu từ JSON
-        console.log("news:", data.data);
-        setCurrentPage(page);  // Cập nhật trang hiện tại
-        setTotalPages(Math.ceil(data.total / limit));  // Tính tổng số trang
-  
-        // Kiểm tra và gán mảng categories từ data.data
-        if (Array.isArray(data.data)) {
-          setnews(data.data); // Lưu danh sách category vào state
-        } else {
-          console.error("news data is not in expected format");
-        }
-      } catch (error) {
-        console.error("Error fetching newss:", error);
-      }
-    };
-  
-  //Lay danh sach news
-    useEffect(() => {
-      fetchnews();
-    }, []);
+        setLoading(true);
+        const response = await getAllNews();
+        const allNews = response?.data || [];
 
-//Xem chi tiet
-    const handleDetail = (newsId) => {
-      console.log("ID NEWS", newsId)
-      const selectedNews = news.find((news) => news._id === newsId);
-  
-      if (selectedNews) {
-        const {  newsImage, newsTitle, newsContent } = selectedNews;
-        navigate("/news-detail", {
-          state: { newsImage, newsTitle, newsContent },
-        });
-      } else {
-        alert("News not found!");
+        if (!Array.isArray(allNews)) {
+          setError("Invalid news data.");
+          return;
+        }
+
+        setTotalPages(Math.ceil(allNews.length / pageSize));
+        const start = currentPage * pageSize;
+        const end = start + pageSize;
+        setNewsList(allNews.slice(start, end));
+      } catch (err) {
+        setError(err.message || "Unable to load news.");
+      } finally {
+        setLoading(false);
       }
     };
-  
+
+    fetchNews();
+  }, [currentPage]);
+
+  // Xem chi tiết tin
+  const handleDetail = (newsId) => {
+    const selected = newsList.find((item) => item._id === newsId);
+
+    if (selected) {
+      const { newsImage, newsTitle, newsContent } = selected;
+      navigate("/news-detail", {
+        state: { newsImage, newsTitle, newsContent },
+      });
+    } else {
+      alert("News not found!");
+    }
+  };
 
   return (
-    <div>
+    <div className="pb-3">
+      {/* Header section */}
       <div className="productadmin__top">
-         <ChatbotComponent />
-        <h1 className="productadmin__title">TIN TỨC</h1>
+        <ChatbotComponent />
       </div>
-      <div className='container-xl'
-        style={{
-          display: 'flex'
-        }}>
-        <div className='news-grid'>
+      <div className="text-center mb-12">
+        <h1 className="productadmin__title">TIN TỨC</h1>
+        <h3 className="text-xl mt-4 text-gray-700">
+          Cập nhật những tin tức mới nhất từ Avocado Bakery
+        </h3>
+      </div>
 
-          {news.length > 0 ? (
-            news.map((news) => {
-              const imageUrl = news.newsImage.startsWith("http")
-                ? news.newsImage
-                : `https://res.cloudinary.com/dlyl41lgq/image/upload/v2/${news.newsImage.replace("\\", "/")}`;
+      {/* News grid */}
+      <div className="container-xl" style={{ display: "flex" }}>
+        <div className="news-grid">
+          {loading ? (
+            <p>Đang tải tin tức...</p>
+          ) : error ? (
+            <p className="text-danger">{error}</p>
+          ) : newsList.length > 0 ? (
+            newsList.map((item) => {
+              const imageUrl = item.newsImage?.startsWith("http")
+                ? item.newsImage
+                : `https://res.cloudinary.com/dlyl41lgq/image/upload/v2/${item.newsImage?.replace(
+                    "\\",
+                    "/"
+                  )}`;
 
-              //console.log("news image URL:", imageUrl);  // Debug URL ảnh
               return (
-
-                <div key={news._id} className="news-grid-item">
-                  
+                <div key={item._id} className="news-grid-item">
                   <CardNews
-                    // Dùng _id làm key cho mỗi sản phẩm
                     className="col productadmin__item"
-                    // type={"primary"}
-                    img={imageUrl} // Sử dụng URL ảnh đã xử lý
-                    title={news.newsTitle} // Hiển thị tên sản phẩm
-                    detail={news.newsContent}
-                    id={news._id}
-                    onClick={handleDetail}
+                    img={imageUrl}
+                    title={item.newsTitle}
+                    detail={item.newsContent}
+                    id={item._id}
+                    onClick={() => handleDetail(item._id)}
                   />
-                
                 </div>
               );
             })
-
           ) : (
             <p>Không có tin tức nào</p>
           )}
-
-
-
         </div>
       </div>
 
-      {/* <div style={{display:'inline-flex', marginTop:50, marginLeft:120}}>
-       <DropdownComponent placeholder='Danh mục bài viết'
-       className='CustomDropDown'
-       ></DropdownComponent>
-      </div> */}
+      {/* Pagination */}
       <div className="PageNumberHolder">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => fetchnews(page, 15)}
-        />
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NewsPage
+export default NewsPage;

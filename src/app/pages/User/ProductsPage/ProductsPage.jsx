@@ -1,6 +1,6 @@
 import "./ProductsPage.css";
 import { useTranslation } from "react-i18next";
-import  i18n from "../../../../lib/i18n/config"
+import i18n from "../../../../lib/i18n/config";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CardProduct from "../../../components/CardProduct/CardProduct";
@@ -17,22 +17,22 @@ const PAGE_SIZE = 12;
 const PROMO_PER_PAGE = 1;
 
 const ProductsPage = () => {
-
   //Hook
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   //State
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [promoGroups, setPromoGroups] = useState([]);
-  const [currentCategoryName, setCurrentCategoryName] =
-  useState(t("product_page.all_products"));
+  const [currentCategoryName, setCurrentCategoryName] = useState(
+    t("product_page.all_products")
+  );
   const [currentPage, setCurrentPage] = useState(0);
   const [promoPage, setPromoPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(null);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const showPromo = location.state?.showPromo || false;
@@ -195,7 +195,14 @@ const ProductsPage = () => {
   // Render products list
   const renderProductsList = () => {
     if (currentCategory === 1) {
-      if (!promoGroups.length) return <p>{t("product_page.unavailable", {data:t("product_page.discount").toLowerCase()})}</p>;
+      if (!promoGroups.length)
+        return (
+          <p>
+            {t("product_page.unavailable", {
+              data: t("product_page.discount").toLowerCase(),
+            })}
+          </p>
+        );
 
       return promoGroups
         .slice(promoPage * PROMO_PER_PAGE, (promoPage + 1) * PROMO_PER_PAGE)
@@ -225,7 +232,14 @@ const ProductsPage = () => {
           </div>
         ));
     } else {
-      if (!products.length) return <p>{t("product_page.unavailable", {data:t("product").toLowerCase()})}</p>;
+      if (!products.length)
+        return (
+          <p>
+            {t("product_page.unavailable", {
+              data: t("product").toLowerCase(),
+            })}
+          </p>
+        );
 
       return products.map((p) => (
         <CardProduct
@@ -262,14 +276,16 @@ const ProductsPage = () => {
   );
 
   useEffect(() => {
-  console.log("RESOURCES pages (vi):", i18n.getResourceBundle("vi", "pages"));
-}, []);
+    console.log("RESOURCES pages (vi):", i18n.getResourceBundle("vi", "pages"));
+  }, []);
   return (
     <div className="container-xl product-container">
       <ChatbotComponent />
       <div className="product">
         <div className="product__top">
-          <h1 className="product__title">{t("product_page.title")}</h1>
+          <h1 className="product__title">
+            {t("product_page.title").toUpperCase()}
+          </h1>
           <p className="product__current-category">{currentCategoryName}</p>
         </div>
 
