@@ -1,10 +1,8 @@
 import React from "react";
-import { TrendingUp, TrendingDown } from "lucide-react";
-import { cn } from "../../../utils/cn";
 
 /**
  * StatCard - Modern statistics card component
- * Inspired by NextJS admin dashboard with AvocadoCake design system
+ * Redesigned with Gestalt principles and avocado theme
  */
 const StatCard = ({
   title,
@@ -12,79 +10,94 @@ const StatCard = ({
   change,
   icon,
   color = "bg-primary",
-  progress,
   subtitle,
-  hideProgress = false,
 }) => {
-  const isPositiveChange = change >= 0;
-  const isDecreasing = change < 0;
+  const hasChange = typeof change === "number" && !Number.isNaN(change);
+  const isPositive = hasChange && change >= 0;
+
+  // Get icon color based on card color prop
+  const getIconColor = () => {
+    if (color?.includes("blue")) return "text-blue-500";
+    if (color?.includes("green")) return "text-green-500";
+    if (color?.includes("purple")) return "text-purple-500";
+    if (color?.includes("orange")) return "text-orange-500";
+    if (color?.includes("red")) return "text-red-500";
+    if (color?.includes("primary")) return "text-primary";
+    return "text-gray-500";
+  };
 
   return (
-    <div className="rounded-[10px] bg-white p-6 shadow-1 dark:bg-gray-dark dark:shadow-card">
-      {/* Icon Section */}
-      <div className={cn("rounded-lg p-3 inline-flex", color)}>{icon}</div>
+    <div className="group relative bg-white dark:bg-gray-dark rounded-2xl border border-gray-100 dark:border-stroke-dark p-8 min-h-[180px] flex flex-col justify-between transition-all duration-300 hover:bg-avocado-green-10 hover:border-avocado-green-50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] shadow-[0_2px_15px_rgba(0,0,0,0.08)]">
+      {/* Icon and Change Badge Row */}
+      <div className="flex items-start justify-between mb-4">
+        {/* Large Icon without background */}
+        <div className="text-5xl transform transition-transform duration-300 group-hover:scale-110">
+          <div className={getIconColor()}>
+            {React.cloneElement(icon, {
+              className: `w-14 h-14 ${getIconColor()}`,
+              strokeWidth: 1.5,
+            })}
+          </div>
+        </div>
 
-      {/* Stats Section */}
-      <div className="mt-6 flex items-end justify-between">
-        <dl className="flex-1">
-          <dt className="mb-1.5 text-heading-6 font-bold text-dark dark:text-white">
-            {value}
-          </dt>
-          <dd className="text-sm font-medium text-dark-6 dark:text-dark-6">
-            {title}
-          </dd>
-          {subtitle && (
-            <dd className="mt-1 text-body-xs text-dark-5 dark:text-dark-5">
-              {subtitle}
-            </dd>
-          )}
-        </dl>
-
-        {/* Change Indicator */}
-        {!hideProgress && change !== undefined && (
-          <dl
-            className={cn(
-              "text-sm font-medium",
-              isDecreasing ? "text-red" : "text-green"
-            )}
+        {/* Change Indicator Badge */}
+        {hasChange && (
+          <div
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full ${
+              isPositive
+                ? "bg-green-50 dark:bg-green-900/20"
+                : "bg-red-50 dark:bg-red-900/20"
+            }`}
           >
-            <dt className="flex items-center gap-1.5">
-              {Math.abs(change)}%
-              {isDecreasing ? (
-                <TrendingDown className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <TrendingUp className="h-4 w-4" aria-hidden="true" />
-              )}
-            </dt>
-            <dd className="sr-only">
-              {title} {isDecreasing ? "Giảm" : "Tăng"} {Math.abs(change)}%
-            </dd>
-          </dl>
+            <span
+              className={`text-sm font-bold ${
+                isPositive
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {isPositive ? "+" : ""}
+              {change}%
+            </span>
+            <span
+              className={`text-base ${
+                isPositive
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {isPositive ? "↗" : "↘"}
+            </span>
+          </div>
         )}
       </div>
 
-      {/* Progress Bar */}
-      {!hideProgress && progress !== undefined && (
-        <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-body-sm font-medium text-dark-6 dark:text-dark-6">
-              Tiến độ
+      {/* Content Section */}
+      <div className="mt-auto">
+        {/* Title */}
+        <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+          {title}
+        </h3>
+
+        {/* Value and Subtitle */}
+        <div className="flex items-baseline gap-2">
+          <p className="text-4xl font-bold text-gray-900 dark:text-white">
+            {value}
+          </p>
+          {subtitle && (
+            <span className="text-base text-gray-500 dark:text-gray-400">
+              {subtitle}
             </span>
-            <span className="text-body-sm font-medium text-dark dark:text-white">
-              {progress}%
-            </span>
-          </div>
-          <div className="h-2.5 w-full rounded-full bg-gray-2 dark:bg-dark-3">
-            <div
-              className={cn(
-                "h-2.5 rounded-full transition-all duration-300",
-                isPositiveChange ? "bg-green" : "bg-red"
-              )}
-              style={{ width: `${Math.min(progress, 100)}%` }}
-            />
-          </div>
+          )}
         </div>
-      )}
+      </div>
+
+      {/* Bottom indicator text */}
+      {/* {hasChange && (
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">
+          so với kỳ trước
+        </p>
+      )} */}
     </div>
   );
 };
