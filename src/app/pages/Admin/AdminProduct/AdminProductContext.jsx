@@ -47,6 +47,7 @@ const ActionTypes = {
   UPDATE_PRODUCT: "UPDATE_PRODUCT",
   DELETE_PRODUCT: "DELETE_PRODUCT",
   DELETE_MULTIPLE_PRODUCTS: "DELETE_MULTIPLE_PRODUCTS",
+  TOGGLE_PRODUCT_VISIBILITY: "TOGGLE_PRODUCT_VISIBILITY",
   RESET: "RESET",
 };
 
@@ -164,6 +165,16 @@ const adminProductReducer = (state, action) => {
         ),
         selectedProducts: state.selectedProducts.filter(
           (id) => !action.payload.includes(id)
+        ),
+      };
+
+    case ActionTypes.TOGGLE_PRODUCT_VISIBILITY:
+      return {
+        ...state,
+        products: state.products.map((product) =>
+          product._id === action.payload.id
+            ? { ...product, isHidden: action.payload.isHidden }
+            : product
         ),
       };
 
@@ -322,6 +333,11 @@ export const AdminProductProvider = ({ children }) => {
       dispatch({
         type: ActionTypes.DELETE_MULTIPLE_PRODUCTS,
         payload: productIds,
+      }),
+    toggleProductVisibility: (id, isHidden) =>
+      dispatch({
+        type: ActionTypes.TOGGLE_PRODUCT_VISIBILITY,
+        payload: { id, isHidden },
       }),
     reset: () => dispatch({ type: ActionTypes.RESET }),
   };

@@ -85,6 +85,17 @@ const translations = {
     selectLanguage: "Select Language",
     english: "English",
     vietnamese: "Vietnamese",
+
+    // Product Visibility
+    productVisibility: "Visibility",
+    visible: "Visible",
+    hidden: "Hidden",
+    hideProduct: "Hide from customers",
+    showProduct: "Show to customers",
+    hideProductConfirm:
+      "Are you sure you want to hide this product from customers?",
+    showProductConfirm:
+      "Are you sure you want to show this product to customers?",
   },
   vi: {
     // Header
@@ -169,6 +180,17 @@ const translations = {
     selectLanguage: "Chọn ngôn ngữ",
     english: "Tiếng Anh",
     vietnamese: "Tiếng Việt",
+
+    // Product Visibility
+    productVisibility: "Hiển thị",
+    visible: "Hiển thị",
+    hidden: "Ẩn",
+    hideProduct: "Ẩn khỏi khách hàng",
+    showProduct: "Hiển thị cho khách hàng",
+    hideProductConfirm:
+      "Bạn có chắc chắn muốn ẩn sản phẩm này khỏi khách hàng?",
+    showProductConfirm:
+      "Bạn có chắc chắn muốn hiển thị sản phẩm này cho khách hàng?",
   },
 };
 

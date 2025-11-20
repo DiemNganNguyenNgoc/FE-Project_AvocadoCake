@@ -12,9 +12,11 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  EyeOff,
 } from "lucide-react";
 import { useAdminProductStore } from "../AdminProductContext";
 import ProductService from "../services/ProductService";
+import { useAdminLanguage } from "../../../../context/AdminLanguageContext";
 
 const ProductTable = () => {
   const {
@@ -48,7 +50,10 @@ const ProductTable = () => {
     totalPages,
     sortedProducts,
     clearSelection,
+    toggleProductVisibility,
   } = useAdminProductStore();
+
+  const { t } = useAdminLanguage();
 
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
@@ -231,6 +236,28 @@ const ProductTable = () => {
       }
     }
   };
+
+  const handleToggleVisibility = async (product) => {
+    const confirmMessage = product.isHidden
+      ? t("showProductConfirm")
+      : t("hideProductConfirm");
+
+    if (window.confirm(confirmMessage)) {
+      try {
+        setLoading(true);
+        const response = await ProductService.toggleProductVisibility(
+          product._id
+        );
+        toggleProductVisibility(product._id, response.data.isHidden);
+        setError(null);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("vi-VN");
@@ -481,15 +508,15 @@ const ProductTable = () => {
                   <span>Kích thước</span>
                 </div>
               </th>
-              {/* <th
+              <th
                 className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
-                onClick={() => handleSort("isActive")}
+                onClick={() => handleSort("isHidden")}
               >
                 <div className="flex items-center gap-2">
-                  <span>Trạng thái</span>
-                  {getSortIcon("isActive")}
+                  <span>{t("productVisibility")}</span>
+                  {getSortIcon("isHidden")}
                 </div>
-              </th> */}
+              </th>
               <th
                 className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-dark-3 transition-colors"
                 onClick={() => handleSort("createdAt")}
@@ -507,7 +534,7 @@ const ProductTable = () => {
           <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
             {products.length === 0 ? (
               <tr>
-                <td colSpan="9" className="px-8 py-16">
+                <td colSpan="10" className="px-8 py-16">
                   <div className="text-center">
                     <div className="w-20 h-20 mx-auto mb-6 bg-gray-1 dark:bg-dark-2 rounded-xl flex items-center justify-center">
                       <Package className="w-10 h-10 text-gray-400" />
@@ -574,6 +601,35 @@ const ProductTable = () => {
                       <span className="px-3 py-1 bg-gray-1 dark:bg-dark-2 rounded-lg text-sm font-semibold text-dark dark:text-white">
                         {product.productSize}
                       </span>
+                    </td>
+                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                      <button
+                        onClick={() => handleToggleVisibility(product)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                          product.isHidden
+                            ? "bg-red-light-6 text-red hover:bg-red-light-5"
+                            : "bg-green-light-7 text-green hover:bg-green-light-6"
+                        }`}
+                        title={
+                          product.isHidden ? t("showProduct") : t("hideProduct")
+                        }
+                      >
+                        {product.isHidden ? (
+                          <>
+                            <EyeOff className="w-4 h-4" />
+                            <span className="text-sm font-semibold">
+                              {t("hidden")}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            <span className="text-sm font-semibold">
+                              {t("visible")}
+                            </span>
+                          </>
+                        )}
+                      </button>
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-500 dark:text-gray-400">
                       {formatDate(product.createdAt)}

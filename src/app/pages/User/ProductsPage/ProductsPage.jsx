@@ -61,8 +61,10 @@ const ProductsPage = () => {
   ) => {
     try {
       const { data } = await getProductsByCategory(categoryId);
-      setProducts(data.slice(page * limit, (page + 1) * limit));
-      setTotalPages(Math.ceil(data.length / limit));
+      // Filter ra sản phẩm bị ẩn (thêm lớp bảo vệ)
+      const visibleProducts = data.filter((p) => !p.isHidden);
+      setProducts(visibleProducts.slice(page * limit, (page + 1) * limit));
+      setTotalPages(Math.ceil(visibleProducts.length / limit));
       setCurrentPage(page);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -72,8 +74,10 @@ const ProductsPage = () => {
   const fetchAllProducts = async (page = 0, limit = PAGE_SIZE) => {
     try {
       const { data } = await getAllProduct();
-      setProducts(data.slice(page * limit, (page + 1) * limit));
-      setTotalPages(Math.ceil(data.length / limit));
+      // Filter ra sản phẩm bị ẩn (thêm lớp bảo vệ)
+      const visibleProducts = data.filter((p) => !p.isHidden);
+      setProducts(visibleProducts.slice(page * limit, (page + 1) * limit));
+      setTotalPages(Math.ceil(visibleProducts.length / limit));
       setCurrentPage(page);
     } catch (err) {
       console.error("Error fetching all products:", err);
@@ -88,6 +92,8 @@ const ProductsPage = () => {
 
     try {
       const allProducts = (await getAllProduct()).data;
+      // Filter ra sản phẩm bị ẩn
+      const visibleProducts = allProducts.filter((p) => !p.isHidden);
       const now = Date.now();
       const groups = discounts
         .filter((d) => {
@@ -101,7 +107,7 @@ const ProductsPage = () => {
           );
           return {
             ...d,
-            products: allProducts.filter((p) => ids.includes(p._id)),
+            products: visibleProducts.filter((p) => ids.includes(p._id)),
           };
         });
 
