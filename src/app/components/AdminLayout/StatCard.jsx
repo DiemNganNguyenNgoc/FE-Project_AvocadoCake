@@ -27,7 +27,7 @@ const StatCard = ({
   };
 
   return (
-    <div className="group relative bg-white dark:bg-gray-dark rounded-2xl border border-gray-100 dark:border-stroke-dark p-8 min-h-[180px] flex flex-col justify-between transition-all duration-300 hover:bg-avocado-green-10 hover:border-avocado-green-50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] shadow-[0_2px_15px_rgba(0,0,0,0.08)]">
+    <div className="group relative bg-white dark:bg-gray-dark rounded-2xl border border-gray-100 dark:border-stroke-dark p-8 min-h-[180px] flex flex-col justify-between transition-all duration-300 hover:bg-avocado-green-10 hover:border-avocado-green-50 hover:shadow-lg shadow-md overflow-hidden">
       {/* Icon and Change Badge Row */}
       <div className="flex items-start justify-between mb-4">
         {/* Large Icon without background */}

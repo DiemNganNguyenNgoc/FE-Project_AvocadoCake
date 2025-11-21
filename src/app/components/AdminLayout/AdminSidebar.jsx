@@ -21,6 +21,7 @@ import {
   Cake,
   Sparkles,
   LogOut,
+  Ticket,
 } from "lucide-react";
 import { useAdminLanguage } from "../../context/AdminLanguageContext";
 
@@ -81,6 +82,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           title: t("discounts"),
           icon: Tag,
           url: "/admin/discount",
+        },
+        {
+          title: t("vouchers"),
+          icon: Ticket,
+          url: "/admin/voucher",
         },
         {
           title: t("recipe"),

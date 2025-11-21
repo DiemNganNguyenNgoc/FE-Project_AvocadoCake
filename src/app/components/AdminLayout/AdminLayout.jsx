@@ -43,14 +43,13 @@ const AdminLayout = ({ children }) => {
       <div className="flex min-h-screen bg-gray-2 dark:bg-[#020d1a]">
         <AdminSidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
-        <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
+        <div className="w-full bg-gray-2 dark:bg-[#020d1a] overflow-x-hidden">
           <AdminHeader
             onToggleSidebar={toggleSidebar}
             forceCloseMenus={forceCloseMenus}
           />
 
-          <main className="mx-auto w-full max-w-screen-2xl overflow-hidden p-6 md:p-8 2xl:p-12">
-            {/* BỎ class "isolate" */}
+          <main className="mx-auto w-full max-w-screen-2xl p-6 md:p-8 2xl:p-12">
             {children}
           </main>
         </div>

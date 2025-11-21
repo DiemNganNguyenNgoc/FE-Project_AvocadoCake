@@ -183,7 +183,6 @@ const OrderInformationPage = () => {
   }, 0);
 
   // Tổng tiền đơn = tiền hàng + ship
-
   const totalPrice = useMemo(
     () => totalItemPrice + shippingPrice,
     [totalItemPrice, shippingPrice]
@@ -557,6 +556,7 @@ const OrderInformationPage = () => {
             </div>
           </div>
         </div>
+
         {/* ============Ghi chu don hang======== */}
         <div className="Note" style={{ margin: "50px 50px" }}>
           <div>

@@ -15,6 +15,7 @@ import {
   LogOut,
   Cake,
   Sparkles,
+  Ticket,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -45,6 +46,12 @@ import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
 import AdminRecipe from "../AdminRecipe";
 import AdminStratergy from "../AdminStratergy";
+import AdminVoucher from "../AdminVoucher/AdminVoucher";
+import CreateVoucher from "../AdminVoucher/CreateVoucher";
+import CreateBulkVoucher from "../AdminVoucher/CreateBulkVoucher";
+import EditVoucher from "../AdminVoucher/EditVoucher";
+import VoucherDetail from "../AdminVoucher/VoucherDetail";
+import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -95,6 +102,17 @@ const moduleConfigs = {
     },
     basePath: "/admin/settings",
   },
+  voucher: {
+    main: AdminVoucher,
+    subPages: {
+      create: CreateVoucher,
+      "create-bulk": CreateBulkVoucher,
+      "edit/:id": EditVoucher,
+      "detail/:id": VoucherDetail,
+      "send-email/:id": SendEmailVoucher,
+    },
+    basePath: "/admin/voucher",
+  },
 };
 
 const navItems = [
@@ -132,6 +150,13 @@ const navItems = [
     icon: <TicketPercent />,
     path: "/admin/discount",
     component: AdminDiscount,
+  },
+  {
+    id: "voucher",
+    text: "Vouchers",
+    icon: <Ticket />,
+    path: "/admin/voucher",
+    component: AdminVoucher,
   },
   {
     id: "category",

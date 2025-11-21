@@ -61,6 +61,8 @@ import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory
 import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
 import AdminRecipe from "../pages/Admin/AdminRecipe/AdminRecipe.jsx";
 import AdminStratergy from "../pages/Admin/AdminStratergy/AdminStratergy.jsx";
+import PublicVoucherPage from "../pages/PublicVoucherPage/PublicVoucherPage.jsx";
+import MyVouchersPage from "../pages/MyVouchersPage/MyVouchersPage.jsx";
 
 export const routes = [
   {
@@ -480,6 +482,20 @@ export const routes = [
   {
     path: "/design-cake",
     page: DesignCakePage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+
+  // Voucher Routes - Public
+  {
+    path: "/vouchers",
+    page: PublicVoucherPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+  {
+    path: "/my-vouchers",
+    page: MyVouchersPage,
     isShowHeader: true,
     isShowFooter: true,
   },
