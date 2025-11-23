@@ -47,7 +47,6 @@ function App() {
       } catch (error) {
         console.error("Token không hợp lệ", error);
         localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
         storageData = null;
       }
     }
@@ -69,7 +68,6 @@ function App() {
         } catch (error) {
           console.warn("Không thể refresh token, yêu cầu đăng nhập lại.");
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           setShowLoading(false);
           return;
         }
@@ -124,7 +122,6 @@ function App() {
           console.error("Lỗi khi tự động refresh token:", error);
           // Nếu refresh thất bại, có thể redirect về trang login
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           window.location.href = "/sign-in";
         }
       }, refreshTime);
@@ -185,7 +182,6 @@ function App() {
           console.error("Không thể refresh token:", refreshError);
           // Redirect về trang login nếu refresh thất bại
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           window.location.href = "/sign-in";
         }
       }

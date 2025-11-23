@@ -19,6 +19,7 @@ import {
 import { toast } from "react-toastify";
 import { Ticket, X, Tag } from "lucide-react";
 import VoucherModal from "../../../components/VoucherComponents/VoucherModal";
+import ConfirmPaymentModal from "../../../components/ConfirmPaymentModal/ConfirmPaymentModal";
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -71,6 +72,16 @@ const PaymentPage = () => {
   const [selectedVouchers, setSelectedVouchers] = useState([]);
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
+
+  // Confirm payment modal
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  // DEBUG: Log state changes
+  useEffect(() => {
+    console.log("=== MODAL STATE CHANGED ===");
+    console.log("showConfirmModal:", showConfirmModal);
+  }, [showConfirmModal]);
 
   const access_token = localStorage.getItem("access_token");
 
@@ -364,9 +375,25 @@ const PaymentPage = () => {
   };
 
   const handleClickPay = async () => {
+    console.log("=== handleClickPay CALLED ===");
+    console.log("lastOrder.orderId:", lastOrder?.orderId);
+    console.log("paymentType:", paymentType);
+
     if (!lastOrder?.orderId) {
       alert("Không tìm thấy đơn hàng. Vui lòng quay lại và thử lại.");
       return;
+    }
+
+    // Validation cho payment type QR
+    if (paymentType === "qr") {
+      if (!paymentInfo.userBank) {
+        alert("Vui lòng chọn loại ví thanh toán!");
+        return;
+      }
+      if (!paymentInfo.userBankNumber) {
+        alert("Vui lòng nhập số điện thoại hoặc số tài khoản!");
+        return;
+      }
     }
 
     // Kiểm tra xem đơn hàng có tồn tại không
@@ -392,67 +419,113 @@ const PaymentPage = () => {
       return;
     }
 
+    // Hiển thị modal xác nhận
+    console.log("=== ABOUT TO SHOW MODAL ===");
+    console.log("showConfirmModal before setState:", showConfirmModal);
+    setShowConfirmModal(true);
+    console.log("setShowConfirmModal(true) CALLED");
+  };
+
+  const handleConfirmPayment = async () => {
+    setIsConfirming(true);
+
+    try {
+      // Bước 1: Xác nhận thanh toán và cập nhật voucher vào backend
+      if (selectedVouchers.length > 0) {
+        const voucherData = {
+          selectedVouchers: selectedVouchers.map((v) => ({
+            _id: v._id,
+            voucherCode: v.voucherCode,
+            voucherName: v.voucherName,
+            voucherType: v.voucherType,
+            discountAmount: calculateVoucherDiscountForVoucher(v),
+          })),
+          voucherDiscount,
+          finalTotalPrice,
+        };
+
+        await OrderService.confirmPaymentWithVoucher(
+          lastOrder.orderId,
+          voucherData,
+          access_token
+        );
+
+        console.log("Voucher confirmed and applied to order");
+      }
+
+      // Bước 2: Tiến hành thanh toán
+      await proceedWithPayment();
+    } catch (error) {
+      console.error("Error confirming payment:", error);
+      alert(error.message || "Có lỗi xảy ra khi xác nhận thanh toán");
+      setIsConfirming(false);
+      setShowConfirmModal(false);
+    }
+  };
+
+  const calculateVoucherDiscountForVoucher = (voucher) => {
+    const totalItemPrice = lastOrder.totalItemPrice || 0;
+    const shippingPrice = lastOrder.shippingPrice || 0;
+
+    if (voucher.voucherType === "PERCENTAGE") {
+      let discount = (totalItemPrice * voucher.discountValue) / 100;
+      if (voucher.maxDiscountAmount) {
+        discount = Math.min(discount, voucher.maxDiscountAmount);
+      }
+      return discount;
+    } else if (voucher.voucherType === "FIXED_AMOUNT") {
+      return voucher.discountValue;
+    } else if (voucher.voucherType === "FREE_SHIPPING") {
+      return shippingPrice;
+    }
+    return 0;
+  };
+
+  const proceedWithPayment = async () => {
     const paymentData = {
       paymentCode: `PAY-${Date.now()}`,
       userBank: paymentInfo.userBank,
       userBankNumber: paymentInfo.userBankNumber,
       paymentMethod: paymentType,
       orderId: lastOrder.orderId,
-      totalPrice: finalTotalPrice, // Sử dụng tổng tiền sau khi trừ xu
+      totalPrice: finalTotalPrice,
     };
 
     if (paymentType === "paypal") {
-      try {
-        const response = await PaymentService.createPayment(paymentData);
-        console.log("PayPal response:", response);
+      const response = await PaymentService.createPayment(paymentData);
+      console.log("PayPal response:", response);
 
-        if (response?.status === "OK") {
-          dispatch(clearSelectedProductDetails()); // Xóa selectedProductDetails
-          window.location.href = response.data.paymentUrl;
-        } else {
-          alert(
-            "Thanh toán PayPal thất bại: " +
-              (response.message || "Lỗi không xác định")
-          );
-        }
-      } catch (error) {
-        console.error("Error in handleClickPay (PayPal):", error);
-        alert("Đã xảy ra lỗi khi gọi PayPal. Vui lòng thử lại.");
+      if (response?.status === "OK") {
+        dispatch(clearSelectedProductDetails());
+        setIsConfirming(false);
+        setShowConfirmModal(false);
+        window.location.href = response.data.paymentUrl;
+      } else {
+        throw new Error(response.message || "Thanh toán PayPal thất bại");
       }
     } else if (paymentType === "qr") {
-      if (!paymentInfo.userBank) {
-        alert("Vui lòng chọn loại ví thanh toán!");
-        return;
-      }
+      const response = await PaymentService.createQrPayment(paymentData);
+      console.log("QR response:", response);
 
-      if (!paymentInfo.userBankNumber) {
-        alert("Vui lòng nhập số điện thoại hoặc số tài khoản!");
-        return;
-      }
-
-      try {
-        const response = await PaymentService.createQrPayment(paymentData);
-        console.log("QR response:", response);
-
-        if (response?.status === "OK") {
-          dispatch(clearSelectedProductDetails()); // Xóa selectedProductDetails
-          navigate("/banking-info", {
-            state: {
-              qrCodeUrl: response.data.qrCodeUrl,
-              paymentCode: response.data.paymentCode,
-              expiresAt: response.data.expiresAt,
-              adminBankInfo: response.data.adminBankInfo,
-              coinsApplied: response.data.coinsUsed,
-            },
-          });
-        } else {
-          alert(
-            "Tạo QR thất bại: " + (response.message || "Lỗi không xác định")
-          );
-        }
-      } catch (error) {
-        console.error("Error in handleClickPay (QR):", error);
-        alert("Đã xảy ra lỗi khi tạo QR. Vui lòng thử lại.");
+      if (response?.status === "OK") {
+        dispatch(clearSelectedProductDetails());
+        setIsConfirming(false);
+        setShowConfirmModal(false);
+        navigate("/banking-info", {
+          state: {
+            qrCodeUrl: response.data.qrCodeUrl,
+            paymentCode: response.data.paymentCode,
+            expiresAt: response.data.expiresAt,
+            adminBankInfo: response.data.adminBankInfo,
+            coinsApplied: coinsApplied,
+            voucherDiscount: voucherDiscount,
+            finalTotalPrice: finalTotalPrice,
+            originalTotalPrice: originalTotalPrice,
+            selectedVouchers: selectedVouchers,
+          },
+        });
+      } else {
+        throw new Error(response.message || "Tạo QR thất bại");
       }
     }
   };
@@ -1018,6 +1091,30 @@ const PaymentPage = () => {
         onClose={() => setIsVoucherModalOpen(false)}
         onSelectVoucher={setSelectedVouchers}
         selectedVouchers={selectedVouchers}
+      />
+
+      {/* Confirm Payment Modal */}
+      {console.log("=== RENDERING MODAL ===", {
+        show: showConfirmModal,
+        isConfirming,
+        originalTotalPrice,
+        voucherDiscount,
+        coinsApplied,
+        finalTotalPrice,
+      })}
+      <ConfirmPaymentModal
+        show={showConfirmModal}
+        onHide={() => !isConfirming && setShowConfirmModal(false)}
+        onConfirm={handleConfirmPayment}
+        isLoading={isConfirming}
+        orderData={{
+          originalTotalPrice,
+          voucherDiscount,
+          coinsApplied,
+          finalTotalPrice,
+          selectedVouchers,
+          paymentType,
+        }}
       />
     </div>
   );

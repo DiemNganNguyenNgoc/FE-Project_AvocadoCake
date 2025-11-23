@@ -78,7 +78,7 @@ label {
   z-index: 999;
 }
 
-.modal {
+/* .modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -87,5 +87,5 @@ label {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  z-index: 1000; /* Cao hơn overlay */
-}
+  z-index: 1000; 
+} */

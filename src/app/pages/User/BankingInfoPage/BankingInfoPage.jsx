@@ -20,6 +20,9 @@ const BankingInfoPage = () => {
     adminBankInfo,
     selectedProductIds,
     coinsApplied = 0,
+    voucherDiscount = 0,
+    finalTotalPrice: passedFinalTotal,
+    originalTotalPrice: passedOriginalTotal,
   } = location.state || {};
   const [paymentStatus, setPaymentStatus] = useState("PENDING");
   const [orderStatus, setOrderStatus] = useState("");
@@ -57,12 +60,16 @@ const BankingInfoPage = () => {
     }
   };
 
-  // Tính toán tổng tiền sau khi trừ xu
+  // Sử dụng giá trị được truyền từ PaymentPage hoặc tính toán từ lastOrder
   const originalTotalPrice =
+    passedOriginalTotal ||
     (lastOrder.totalItemPrice || 0) + (lastOrder.shippingPrice || 0);
   const finalTotalPrice =
-    lastOrder.totalPrice || originalTotalPrice - (lastOrder.coinsUsed || 0);
-  const coinsAppliedFromOrder = lastOrder.coinsUsed || 0;
+    passedFinalTotal ||
+    lastOrder.totalPrice ||
+    originalTotalPrice - (lastOrder.coinsUsed || 0);
+  const coinsAppliedFromOrder = coinsApplied || lastOrder.coinsUsed || 0;
+  const voucherDiscountApplied = voucherDiscount || 0;
 
   const resolvedOrderItems =
     lastOrder.orderItems?.map((item) => {
@@ -209,7 +216,7 @@ const BankingInfoPage = () => {
           <div className="order-total">
             Tổng tiền: {finalTotalPrice?.toLocaleString() || 0} VND
           </div>
-          {coinsAppliedFromOrder > 0 && (
+          {(coinsAppliedFromOrder > 0 || voucherDiscountApplied > 0) && (
             <div
               className="coins-info"
               style={{
@@ -224,14 +231,26 @@ const BankingInfoPage = () => {
                 <span style={{ fontWeight: "bold" }}>Tổng tiền gốc: </span>
                 <span>{originalTotalPrice?.toLocaleString()} VND</span>
               </div>
-              <div style={{ marginBottom: "5px" }}>
-                <span style={{ fontWeight: "bold", color: "#28a745" }}>
-                  Giảm giá từ xu:{" "}
-                </span>
-                <span style={{ color: "#28a745" }}>
-                  -{coinsAppliedFromOrder?.toLocaleString()} VND
-                </span>
-              </div>
+              {voucherDiscountApplied > 0 && (
+                <div style={{ marginBottom: "5px" }}>
+                  <span style={{ fontWeight: "bold", color: "#b1e321" }}>
+                    Giảm giá voucher:{" "}
+                  </span>
+                  <span style={{ color: "#b1e321" }}>
+                    -{voucherDiscountApplied?.toLocaleString()} VND
+                  </span>
+                </div>
+              )}
+              {coinsAppliedFromOrder > 0 && (
+                <div style={{ marginBottom: "5px" }}>
+                  <span style={{ fontWeight: "bold", color: "#28a745" }}>
+                    Giảm giá từ xu:{" "}
+                  </span>
+                  <span style={{ color: "#28a745" }}>
+                    -{coinsAppliedFromOrder?.toLocaleString()} VND
+                  </span>
+                </div>
+              )}
               <div>
                 <span style={{ fontWeight: "bold" }}>
                   Tổng tiền thanh toán:{" "}

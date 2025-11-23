@@ -234,7 +234,7 @@ const AdminCategory = ({ onNavigate }) => {
   const { totalPages, totalItems } = getPaginatedCategories();
 
   return (
-    <div className="min-h-screen bg-avocado-green-10">
+    <div className="min-h-screen">
       {/* Header */}
       <div className=" border-b border-avocado-brown-30">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">

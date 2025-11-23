@@ -19,6 +19,8 @@ import {
   formatVoucherValue,
 } from "../../../api/services/VoucherService";
 import { toast } from "react-toastify";
+import StatCard from "../../../components/AdminLayout/StatCard";
+import Button from "../../../components/AdminLayout/Button";
 
 const VoucherDetail = () => {
   const { id } = useParams();
@@ -35,19 +37,25 @@ const VoucherDetail = () => {
     setLoading(true);
     try {
       const accessToken = localStorage.getItem("access_token");
-      const [voucherRes, statsRes] = await Promise.all([
-        getVoucherDetails(id, accessToken),
-        getVoucherStatistics(id, accessToken),
-      ]);
+      const voucherRes = await getVoucherDetails(id, accessToken);
 
       if (voucherRes.status === "OK") {
         setVoucher(voucherRes.data);
-      }
-      if (statsRes.status === "OK") {
-        setStatistics(statsRes.data);
+
+        // Try to fetch statistics for this specific voucher if API supports it
+        try {
+          const statsRes = await getVoucherStatistics(accessToken);
+          if (statsRes.status === "OK") {
+            setStatistics(statsRes.data);
+          }
+        } catch (statsError) {
+          console.log("Statistics not available for this voucher");
+          // Don't show error toast for statistics, just log it
+        }
       }
     } catch (error) {
       toast.error("Lỗi khi tải thông tin voucher!");
+      navigate("/admin/voucher");
     } finally {
       setLoading(false);
     }
@@ -56,17 +64,19 @@ const VoucherDetail = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-avocado-green-100"></div>
       </div>
     );
   }
 
   if (!voucher) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-600 dark:text-gray-400">
-          Không tìm thấy voucher
-        </p>
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center py-12">
+          <p className="text-body-lg text-dark-6 dark:text-dark-6">
+            Không tìm thấy voucher
+          </p>
+        </div>
       </div>
     );
   }
@@ -84,16 +94,17 @@ const VoucherDetail = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
             onClick={() => navigate("/admin/voucher")}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="min-w-[48px] min-h-[48px] p-0 flex items-center justify-center"
           >
             <ArrowLeft className="w-6 h-6" />
-          </button>
+          </Button>
           <div>
             <h1 className="text-heading-4 font-bold text-dark dark:text-white">
               Chi tiết voucher
@@ -104,62 +115,64 @@ const VoucherDetail = () => {
           </div>
         </div>
 
-        <div className="flex space-x-3">
-          <button
+        <div className="flex gap-3">
+          <Button
+            variant="secondary"
             onClick={() => navigate(`/admin/voucher/send-email/${id}`)}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            <Mail className="w-4 h-4" />
+            <Mail className="w-5 h-5 mr-2" />
             <span>Gửi email</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
             onClick={() => navigate(`/admin/voucher/edit/${id}`)}
-            className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
-            <Edit className="w-4 h-4" />
+            <Edit className="w-5 h-5 mr-2" />
             <span>Chỉnh sửa</span>
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Voucher Card */}
-      <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg shadow-lg p-8 text-white">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2">
-            <div className="flex items-start space-x-4">
+      <div className="bg-avocado-green-100 rounded-2xl shadow-card-3 p-8 text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="flex items-start gap-6">
               {voucher.voucherImage && (
                 <img
                   src={voucher.voucherImage}
                   alt={voucher.voucherName}
-                  className="w-32 h-32 rounded-lg object-cover"
+                  className="w-40 h-40 rounded-2xl object-cover border-4 border-white/20 shadow-lg"
                 />
               )}
               <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-3">
+                <div className="flex items-center gap-3 mb-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      voucher.isActive ? "bg-green-500" : "bg-gray-500"
+                    className={`px-4 py-2 rounded-xl text-body-sm font-semibold shadow-md ${
+                      voucher.isActive
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-500 text-white"
                     }`}
                   >
                     {voucher.isActive ? "Đang hoạt động" : "Tạm dừng"}
                   </span>
                   {voucher.isPublic && (
-                    <span className="px-3 py-1 bg-blue-500 rounded-full text-xs font-medium">
+                    <span className="px-4 py-2 bg-blue-500 text-white rounded-xl text-body-sm font-semibold shadow-md">
                       Công khai
                     </span>
                   )}
                 </div>
-                <h2 className="text-3xl font-bold mb-2">
+                <h2 className="text-heading-3 font-bold mb-3">
                   {voucher.voucherName}
                 </h2>
-                <p className="text-white/90 mb-4">
+                <p className="text-body-md text-white/95 mb-4 leading-relaxed">
                   {voucher.voucherDescription}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {voucher.voucherTags?.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm"
+                      className="px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-xl text-body-sm font-medium"
                     >
                       #{tag}
                     </span>
@@ -169,18 +182,22 @@ const VoucherDetail = () => {
             </div>
           </div>
 
-          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6">
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/30 shadow-lg">
             <div className="text-center">
-              <p className="text-white/80 text-sm mb-2">Mã voucher</p>
-              <p className="text-3xl font-mono font-bold mb-4">
+              <p className="text-white/90 text-body-xs font-medium mb-2">
+                Mã voucher
+              </p>
+              <p className="text-heading-5 font-mono font-bold mb-4 tracking-wider">
                 {voucher.voucherCode}
               </p>
-              <div className="border-t border-white/30 pt-4">
-                <p className="text-white/80 text-sm mb-1">Giảm giá</p>
-                <p className="text-4xl font-bold">
+              <div className="border-t-2 border-white/30 pt-4">
+                <p className="text-white/90 text-body-xs font-medium mb-1">
+                  Giảm giá
+                </p>
+                <p className="text-heading-4 font-bold mb-1">
                   {formatVoucherValue(voucher)}
                 </p>
-                <p className="text-white/80 text-sm mt-2">
+                <p className="text-white/90 text-body-xs font-medium">
                   {getVoucherTypeText(voucher.voucherType)}
                 </p>
               </div>
@@ -191,129 +208,97 @@ const VoucherDetail = () => {
 
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Đã phát hành
-              </p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                {voucher.totalQuantity}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Còn lại: {remainingQuantity}
-              </p>
-            </div>
-            <Ticket className="w-12 h-12 text-blue-500" />
-          </div>
-        </div>
+        <StatCard
+          icon={<Ticket />}
+          color="bg-blue-500"
+          title="Đã phát hành"
+          value={voucher.totalQuantity}
+          subtitle={`Còn lại: ${remainingQuantity}`}
+        />
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Đã lưu
-              </p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                {voucher.claimedQuantity}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {claimedPercentage.toFixed(1)}% tổng số
-              </p>
-            </div>
-            <Users className="w-12 h-12 text-green-500" />
-          </div>
-        </div>
+        <StatCard
+          icon={<Users />}
+          color="bg-green-500"
+          title="Đã lưu"
+          value={voucher.claimedQuantity}
+          subtitle={`${claimedPercentage.toFixed(1)}% tổng số`}
+        />
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Đã sử dụng
-              </p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                {voucher.usedQuantity}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {usagePercentage.toFixed(1)}% đã lưu
-              </p>
-            </div>
-            <ShoppingCart className="w-12 h-12 text-orange-500" />
-          </div>
-        </div>
+        <StatCard
+          icon={<ShoppingCart />}
+          color="bg-orange-500"
+          title="Đã sử dụng"
+          value={voucher.usedQuantity}
+          subtitle={`${usagePercentage.toFixed(1)}% đã lưu`}
+        />
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Còn lại
-              </p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                {daysLeft > 0 ? daysLeft : 0} ngày
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {daysLeft <= 0 ? "Đã hết hạn" : "Còn hiệu lực"}
-              </p>
-            </div>
-            <Calendar className="w-12 h-12 text-purple-500" />
-          </div>
-        </div>
+        <StatCard
+          icon={<Calendar />}
+          color="bg-purple-500"
+          title="Còn lại"
+          value={`${daysLeft > 0 ? daysLeft : 0} ngày`}
+          subtitle={daysLeft <= 0 ? "Đã hết hạn" : "Còn hiệu lực"}
+        />
       </div>
 
       {/* Detailed Information */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Voucher Details */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-            <BarChart3 className="w-5 h-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h3 className="text-heading-5 font-bold mb-6 text-dark dark:text-white flex items-center">
+            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl mr-3">
+              <BarChart3 className="w-6 h-6 text-purple-500" />
+            </div>
             Thông tin chi tiết
           </h3>
-          <div className="space-y-4">
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+          <div className="space-y-1">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Loại voucher
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {getVoucherTypeText(voucher.voucherType)}
               </span>
             </div>
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Giá trị giảm
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-avocado-green-100">
                 {formatVoucherValue(voucher)}
               </span>
             </div>
             {voucher.maxDiscountAmount && (
-              <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-                <span className="text-gray-600 dark:text-gray-400">
+              <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+                <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                   Giảm tối đa
                 </span>
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="text-body-sm font-semibold text-dark dark:text-white">
                   {voucher.maxDiscountAmount.toLocaleString("vi-VN")}₫
                 </span>
               </div>
             )}
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Đơn tối thiểu
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {voucher.minOrderValue.toLocaleString("vi-VN")}₫
               </span>
             </div>
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Giới hạn/user
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {voucher.usageLimit} lần
               </span>
             </div>
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">Ưu tiên</span>
-              <span className="font-medium text-gray-900 dark:text-white">
+            <div className="flex justify-between py-4">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
+                Ưu tiên
+              </span>
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {voucher.priority}
               </span>
             </div>
@@ -321,39 +306,43 @@ const VoucherDetail = () => {
         </div>
 
         {/* Timeline */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-            <Calendar className="w-5 h-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h3 className="text-heading-5 font-bold mb-6 text-dark dark:text-white flex items-center">
+            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl mr-3">
+              <Calendar className="w-6 h-6 text-blue-500" />
+            </div>
             Thời gian
           </h3>
-          <div className="space-y-4">
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">Ngày tạo</span>
-              <span className="font-medium text-gray-900 dark:text-white">
+          <div className="space-y-1">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
+                Ngày tạo
+              </span>
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {new Date(voucher.createdAt).toLocaleString("vi-VN")}
               </span>
             </div>
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Ngày bắt đầu
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {new Date(voucher.startDate).toLocaleString("vi-VN")}
               </span>
             </div>
-            <div className="flex justify-between py-3 border-b border-gray-200 dark:border-gray-700">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4 border-b-2 border-gray-100 dark:border-gray-700">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Ngày kết thúc
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {new Date(voucher.endDate).toLocaleString("vi-VN")}
               </span>
             </div>
-            <div className="flex justify-between py-3">
-              <span className="text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between py-4">
+              <span className="text-body-sm text-dark-6 dark:text-dark-6 font-medium">
                 Cập nhật cuối
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="text-body-sm font-semibold text-dark dark:text-white">
                 {new Date(voucher.updatedAt).toLocaleString("vi-VN")}
               </span>
             </div>
@@ -363,36 +352,44 @@ const VoucherDetail = () => {
 
       {/* Advanced Statistics */}
       {statistics && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2" />
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h3 className="text-heading-5 font-bold mb-6 text-dark dark:text-white flex items-center">
+            <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-xl mr-3">
+              <TrendingUp className="w-6 h-6 text-green-500" />
+            </div>
             Thống kê nâng cao
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg">
-              <DollarSign className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl border-2 border-blue-200 dark:border-blue-800">
+              <div className="inline-flex p-3 bg-blue-500 rounded-2xl mb-4">
+                <DollarSign className="w-8 h-8 text-white" />
+              </div>
+              <p className="text-body-sm text-dark-6 dark:text-dark-6 font-medium mb-2">
                 Tổng giảm giá
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-heading-4 font-bold text-dark dark:text-white">
                 {statistics.totalDiscountAmount?.toLocaleString("vi-VN") || 0}₫
               </p>
             </div>
-            <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg">
-              <Users className="w-8 h-8 mx-auto mb-2 text-green-600" />
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl border-2 border-green-200 dark:border-green-800">
+              <div className="inline-flex p-3 bg-green-500 rounded-2xl mb-4">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <p className="text-body-sm text-dark-6 dark:text-dark-6 font-medium mb-2">
                 Người dùng duy nhất
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-heading-4 font-bold text-dark dark:text-white">
                 {statistics.uniqueUsers || 0}
               </p>
             </div>
-            <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-lg">
-              <ShoppingCart className="w-8 h-8 mx-auto mb-2 text-orange-600" />
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl border-2 border-orange-200 dark:border-orange-800">
+              <div className="inline-flex p-3 bg-orange-500 rounded-2xl mb-4">
+                <ShoppingCart className="w-8 h-8 text-white" />
+              </div>
+              <p className="text-body-sm text-dark-6 dark:text-dark-6 font-medium mb-2">
                 Đơn hàng áp dụng
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-heading-4 font-bold text-dark dark:text-white">
                 {statistics.totalOrders || 0}
               </p>
             </div>

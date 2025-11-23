@@ -6,6 +6,10 @@ import {
   updateVoucher,
 } from "../../../api/services/VoucherService";
 import { toast } from "react-toastify";
+import Button from "../../../components/AdminLayout/Button";
+import Input from "../../../components/AdminLayout/Input";
+import Select from "../../../components/AdminLayout/Select";
+import Textarea from "../../../components/AdminLayout/Textarea";
 
 const EditVoucher = () => {
   const { id } = useParams();
@@ -201,15 +205,16 @@ const EditVoucher = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center space-x-4">
-        <button
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
           onClick={() => navigate("/admin/voucher")}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          className="min-w-[48px] min-h-[48px] p-0 flex items-center justify-center"
         >
           <ArrowLeft className="w-6 h-6" />
-        </button>
+        </Button>
         <div>
           <h1 className="text-heading-4 font-bold text-dark dark:text-white">
             Chỉnh sửa voucher
@@ -220,85 +225,71 @@ const EditVoucher = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic Information */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Thông tin cơ bản
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Mã voucher <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="voucherCode"
-                value={formData.voucherCode}
-                onChange={handleInputChange}
-                placeholder="VD: SUMMER2024"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white uppercase"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Mã voucher sẽ tự động chuyển thành chữ in hoa
-              </p>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Input
+              label="Mã voucher"
+              name="voucherCode"
+              value={formData.voucherCode}
+              onChange={handleInputChange}
+              placeholder="VD: SUMMER2024"
+              required
+              helperText="Mã voucher sẽ tự động chuyển thành chữ in hoa"
+              className="uppercase"
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tên voucher <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="voucherName"
-                value={formData.voucherName}
-                onChange={handleInputChange}
-                placeholder="VD: Giảm giá mùa hè"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-            </div>
+            <Input
+              label="Tên voucher"
+              name="voucherName"
+              value={formData.voucherName}
+              onChange={handleInputChange}
+              placeholder="VD: Giảm giá mùa hè"
+              required
+            />
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Mô tả
-              </label>
-              <textarea
+            <div className="lg:col-span-2">
+              <Textarea
+                label="Mô tả"
                 name="voucherDescription"
                 value={formData.voucherDescription}
                 onChange={handleInputChange}
                 placeholder="Mô tả chi tiết về voucher..."
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
               />
             </div>
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="lg:col-span-2">
+              <label className="block text-body-sm font-semibold text-dark dark:text-white mb-3">
                 Hình ảnh voucher
               </label>
-              <div className="flex items-start space-x-4">
+              <div className="flex items-start gap-6">
                 {imagePreview ? (
-                  <div className="relative">
+                  <div className="relative group">
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg"
+                      className="w-40 h-40 object-cover rounded-2xl border-2 border-gray-200 dark:border-gray-700"
                     />
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                      className="absolute -top-2 -right-2 min-w-[32px] min-h-[32px] bg-red-500 text-white rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center justify-center"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-5 h-5" />
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                    <span className="text-xs text-gray-500">Tải ảnh lên</span>
+                  <label className="flex flex-col items-center justify-center w-40 h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                    <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                    <span className="text-body-xs text-gray-500">
+                      Tải ảnh lên
+                    </span>
                     <input
                       type="file"
                       accept="image/*"
@@ -308,10 +299,10 @@ const EditVoucher = () => {
                   </label>
                 )}
                 <div className="flex-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  <p className="text-body-sm text-dark-7 dark:text-dark-6 mb-1">
                     Chọn ảnh để cập nhật hình voucher
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-body-xs text-dark-6">
                     Định dạng: JPG, PNG. Tối đa 5MB
                   </p>
                 </div>
@@ -321,314 +312,240 @@ const EditVoucher = () => {
         </div>
 
         {/* Discount Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Cài đặt giảm giá
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Loại voucher <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="voucherType"
-                value={formData.voucherType}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              >
-                <option value="PERCENTAGE">Giảm theo phần trăm (%)</option>
-                <option value="FIXED_AMOUNT">Giảm số tiền cố định (₫)</option>
-                <option value="FREE_SHIPPING">Miễn phí vận chuyển</option>
-                <option value="COMBO">Combo ưu đãi</option>
-              </select>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Select
+              label="Loại voucher"
+              name="voucherType"
+              value={formData.voucherType}
+              onChange={handleInputChange}
+              required
+              options={[
+                { value: "PERCENTAGE", label: "Giảm theo phần trăm (%)" },
+                { value: "FIXED_AMOUNT", label: "Giảm số tiền cố định (₫)" },
+                { value: "FREE_SHIPPING", label: "Miễn phí vận chuyển" },
+                { value: "COMBO", label: "Combo ưu đãi" },
+              ]}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Giá trị giảm <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="discountValue"
-                value={formData.discountValue}
-                onChange={handleInputChange}
-                placeholder={
-                  formData.voucherType === "PERCENTAGE" ? "VD: 20" : "VD: 50000"
-                }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                {formData.voucherType === "PERCENTAGE"
+            <Input
+              label="Giá trị giảm"
+              name="discountValue"
+              type="number"
+              value={formData.discountValue}
+              onChange={handleInputChange}
+              placeholder={
+                formData.voucherType === "PERCENTAGE" ? "VD: 20" : "VD: 50000"
+              }
+              required
+              helperText={
+                formData.voucherType === "PERCENTAGE"
                   ? "Nhập giá trị % (0-100)"
-                  : "Nhập số tiền giảm (VNĐ)"}
-              </p>
-            </div>
+                  : "Nhập số tiền giảm (VNĐ)"
+              }
+            />
 
             {formData.voucherType === "PERCENTAGE" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Giảm tối đa (VNĐ)
-                </label>
-                <input
-                  type="number"
-                  name="maxDiscountAmount"
-                  value={formData.maxDiscountAmount}
-                  onChange={handleInputChange}
-                  placeholder="VD: 100000"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Số tiền giảm tối đa khi áp dụng % (tùy chọn)
-                </p>
-              </div>
+              <Input
+                label="Giảm tối đa (VNĐ)"
+                name="maxDiscountAmount"
+                type="number"
+                value={formData.maxDiscountAmount}
+                onChange={handleInputChange}
+                placeholder="VD: 100000"
+                helperText="Số tiền giảm tối đa khi áp dụng % (tùy chọn)"
+              />
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Giá trị đơn hàng tối thiểu (VNĐ)
-              </label>
-              <input
-                type="number"
-                name="minOrderValue"
-                value={formData.minOrderValue}
-                onChange={handleInputChange}
-                placeholder="VD: 200000"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Đơn hàng phải đạt giá trị này mới áp dụng được voucher
-              </p>
-            </div>
+            <Input
+              label="Giá trị đơn hàng tối thiểu (VNĐ)"
+              name="minOrderValue"
+              type="number"
+              value={formData.minOrderValue}
+              onChange={handleInputChange}
+              placeholder="VD: 200000"
+              helperText="Đơn hàng phải đạt giá trị này mới áp dụng được voucher"
+            />
           </div>
         </div>
 
         {/* Validity Period */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Thời gian hiệu lực
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Ngày bắt đầu <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="datetime-local"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Input
+              label="Ngày bắt đầu"
+              name="startDate"
+              type="datetime-local"
+              value={formData.startDate}
+              onChange={handleInputChange}
+              required
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Ngày kết thúc <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="datetime-local"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-            </div>
+            <Input
+              label="Ngày kết thúc"
+              name="endDate"
+              type="datetime-local"
+              value={formData.endDate}
+              onChange={handleInputChange}
+              required
+            />
           </div>
         </div>
 
         {/* Quantity Limits */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Giới hạn số lượng
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tổng số lượng <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="totalQuantity"
-                value={formData.totalQuantity}
-                onChange={handleInputChange}
-                placeholder="VD: 100"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Tổng số voucher có thể phát hành
-              </p>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Input
+              label="Tổng số lượng"
+              name="totalQuantity"
+              type="number"
+              value={formData.totalQuantity}
+              onChange={handleInputChange}
+              placeholder="VD: 100"
+              required
+              helperText="Tổng số voucher có thể phát hành"
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Giới hạn sử dụng/người <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="usageLimit"
-                value={formData.usageLimit}
-                onChange={handleInputChange}
-                min="1"
-                placeholder="VD: 1"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                required
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Mỗi người dùng có thể sử dụng voucher này bao nhiêu lần
-              </p>
-            </div>
+            <Input
+              label="Giới hạn sử dụng/người"
+              name="usageLimit"
+              type="number"
+              value={formData.usageLimit}
+              onChange={handleInputChange}
+              min="1"
+              placeholder="VD: 1"
+              required
+              helperText="Mỗi người dùng có thể sử dụng voucher này bao nhiêu lần"
+            />
           </div>
         </div>
 
         {/* Additional Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Cài đặt bổ sung
           </h2>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center space-x-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-avocado-green-100 dark:hover:border-avocado-green-100 transition-all">
                 <input
                   type="checkbox"
                   name="isPublic"
                   checked={formData.isPublic}
                   onChange={handleInputChange}
-                  className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                  className="w-6 h-6 text-avocado-green-100 border-gray-300 rounded-lg focus:ring-avocado-green-100 focus:ring-2"
                 />
-                <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div className="flex-1">
+                  <label className="text-body-sm font-semibold text-dark dark:text-white block cursor-pointer">
                     Hiển thị công khai
                   </label>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-body-xs text-dark-6 mt-0.5">
                     Voucher sẽ xuất hiện trong kho voucher
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-avocado-green-100 dark:hover:border-avocado-green-100 transition-all">
                 <input
                   type="checkbox"
                   name="isActive"
                   checked={formData.isActive}
                   onChange={handleInputChange}
-                  className="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                  className="w-6 h-6 text-avocado-green-100 border-gray-300 rounded-lg focus:ring-avocado-green-100 focus:ring-2"
                 />
-                <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div className="flex-1">
+                  <label className="text-body-sm font-semibold text-dark dark:text-white block cursor-pointer">
                     Kích hoạt
                   </label>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-body-xs text-dark-6 mt-0.5">
                     Voucher có thể được sử dụng
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Thẻ tag (phân cách bằng dấu phẩy)
-                </label>
-                <input
-                  type="text"
-                  name="voucherTags"
-                  value={formData.voucherTags}
-                  onChange={handleInputChange}
-                  placeholder="VD: summer, sale, hot"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Input
+                label="Thẻ tag (phân cách bằng dấu phẩy)"
+                name="voucherTags"
+                value={formData.voucherTags}
+                onChange={handleInputChange}
+                placeholder="VD: summer, sale, hot"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Độ ưu tiên
-                </label>
-                <input
-                  type="number"
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleInputChange}
-                  placeholder="0"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Số càng cao, voucher càng được ưu tiên áp dụng
-                </p>
-              </div>
+              <Input
+                label="Độ ưu tiên"
+                name="priority"
+                type="number"
+                value={formData.priority}
+                onChange={handleInputChange}
+                placeholder="0"
+                helperText="Số càng cao, voucher càng được ưu tiên áp dụng"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  ID sản phẩm áp dụng (phân cách bằng dấu phẩy)
-                </label>
-                <input
-                  type="text"
-                  name="applicableProducts"
-                  value={formData.applicableProducts}
-                  onChange={handleInputChange}
-                  placeholder="VD: 123abc, 456def"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Để trống nếu áp dụng cho tất cả sản phẩm
-                </p>
-              </div>
+              <Input
+                label="ID sản phẩm áp dụng (phân cách bằng dấu phẩy)"
+                name="applicableProducts"
+                value={formData.applicableProducts}
+                onChange={handleInputChange}
+                placeholder="VD: 123abc, 456def"
+                helperText="Để trống nếu áp dụng cho tất cả sản phẩm"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  ID danh mục áp dụng (phân cách bằng dấu phẩy)
-                </label>
-                <input
-                  type="text"
-                  name="applicableCategories"
-                  value={formData.applicableCategories}
-                  onChange={handleInputChange}
-                  placeholder="VD: abc123, def456"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Để trống nếu áp dụng cho tất cả danh mục
-                </p>
-              </div>
+              <Input
+                label="ID danh mục áp dụng (phân cách bằng dấu phẩy)"
+                name="applicableCategories"
+                value={formData.applicableCategories}
+                onChange={handleInputChange}
+                placeholder="VD: abc123, def456"
+                helperText="Để trống nếu áp dụng cho tất cả danh mục"
+              />
             </div>
           </div>
         </div>
 
         {/* Submit Buttons */}
-        <div className="flex space-x-4">
-          <button
+        <div className="flex gap-4">
+          <Button
             type="submit"
+            variant="primary"
             disabled={loading}
-            className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1"
           >
             {loading ? (
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                 <span>Đang cập nhật...</span>
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="w-5 h-5 mr-2" />
                 <span>Cập nhật voucher</span>
               </>
             )}
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={() => navigate("/admin/voucher")}
-            className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+            className="px-8"
           >
             Hủy
-          </button>
+          </Button>
         </div>
       </form>
     </div>

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Upload, Save, Copy } from "lucide-react";
+import { ArrowLeft, Upload, Save, Copy, X } from "lucide-react";
 import { createBulkVouchers } from "../../../api/services/VoucherService";
 import { toast } from "react-toastify";
+import Button from "../../../components/AdminLayout/Button";
+import Input from "../../../components/AdminLayout/Input";
+import Select from "../../../components/AdminLayout/Select";
+import Textarea from "../../../components/AdminLayout/Textarea";
 
 const CreateBulkVoucher = () => {
   const navigate = useNavigate();
@@ -104,16 +108,17 @@ const CreateBulkVoucher = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
             onClick={() => navigate("/admin/voucher")}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="min-w-[48px] min-h-[48px] p-0 flex items-center justify-center"
           >
             <ArrowLeft className="w-6 h-6" />
-          </button>
+          </Button>
           <div>
             <h1 className="text-heading-4 font-bold text-dark dark:text-white">
               Tạo voucher hàng loạt
@@ -125,75 +130,63 @@ const CreateBulkVoucher = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Bulk Settings */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg shadow-md p-6 border-2 border-purple-200 dark:border-purple-700">
-          <div className="flex items-start space-x-4">
-            <div className="bg-purple-100 dark:bg-purple-800 p-3 rounded-lg">
-              <Copy className="w-6 h-6 text-purple-600 dark:text-purple-300" />
+        <div className="bg-gradient-to-br to-avocado-green-100 dark:from-avocado-green-900/20 dark:to-avocado-green-800/20 rounded-2xl shadow-card-3 p-8 border-2 border-avocado-green-200 dark:border-avocado-green-700">
+          <div className="flex items-start gap-6">
+            <div className="bg-avocado-green-100 dark:bg-avocado-green-800 p-4 rounded-2xl shadow-md">
+              <Copy className="w-8 h-8 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+              <h2 className="text-heading-5 font-bold mb-3 text-dark dark:text-white">
                 Cấu hình tạo hàng loạt
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-body-sm text-dark-7 dark:text-dark-6 mb-6">
                 Hệ thống sẽ tự động tạo mã voucher với số thứ tự. VD:
                 SUMMER0001, SUMMER0002, ...
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Mã gốc <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="baseCode"
-                    value={formData.baseCode}
-                    onChange={handleChange}
-                    required
-                    placeholder="VD: SUMMER"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white uppercase"
-                  />
-                </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Input
+                  label="Mã gốc"
+                  name="baseCode"
+                  value={formData.baseCode}
+                  onChange={handleChange}
+                  required
+                  placeholder="VD: SUMMER"
+                  className="uppercase"
+                />
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Số lượng <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="quantity"
-                    value={formData.quantity}
-                    onChange={handleChange}
-                    required
-                    min="2"
-                    max="1000"
-                    placeholder="VD: 100"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Tối đa 1000 voucher
-                  </p>
-                </div>
+                <Input
+                  label="Số lượng"
+                  name="quantity"
+                  type="number"
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  required
+                  min="2"
+                  max="1000"
+                  placeholder="VD: 100"
+                  helperText="Tối đa 1000 voucher"
+                />
               </div>
 
               {formData.baseCode && formData.quantity && (
-                <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <div className="mt-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border-2 border-avocado-green-200 dark:border-avocado-green-700">
+                  <p className="text-body-sm font-semibold text-dark dark:text-white mb-3">
                     Xem trước mã voucher:
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {getExampleCodes().map((code, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-mono"
+                        className="px-4 py-2 bg-avocado-green-100 text-white rounded-xl text-body-sm font-mono font-semibold shadow-sm"
                       >
                         {code}
                       </span>
                     ))}
                     {formData.quantity > 3 && (
-                      <span className="px-3 py-1 text-gray-500 text-sm">
+                      <span className="px-4 py-2 text-dark-6 text-body-sm font-medium">
                         ... và {formData.quantity - 3} mã khác
                       </span>
                     )}
@@ -205,279 +198,266 @@ const CreateBulkVoucher = () => {
         </div>
 
         {/* Basic Information */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Thông tin voucher
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tên voucher <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="voucherName"
-                value={formData.voucherName}
-                onChange={handleChange}
-                required
-                placeholder="VD: Giảm giá mùa hè"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Sẽ thêm số thứ tự vào cuối (VD: Giảm giá mùa hè #1)
-              </p>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Input
+              label="Tên voucher"
+              name="voucherName"
+              value={formData.voucherName}
+              onChange={handleChange}
+              required
+              placeholder="VD: Giảm giá mùa hè"
+              helperText="Sẽ thêm số thứ tự vào cuối (VD: Giảm giá mùa hè #1)"
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Số lần dùng mỗi voucher
-              </label>
-              <input
-                type="number"
-                name="totalQuantityPerVoucher"
-                value={formData.totalQuantityPerVoucher}
-                onChange={handleChange}
-                min="1"
-                placeholder="VD: 1"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Mỗi voucher có thể dùng bao nhiêu lần
-              </p>
-            </div>
+            <Input
+              label="Số lần dùng mỗi voucher"
+              name="totalQuantityPerVoucher"
+              type="number"
+              value={formData.totalQuantityPerVoucher}
+              onChange={handleChange}
+              min="1"
+              placeholder="VD: 1"
+              helperText="Mỗi voucher có thể dùng bao nhiêu lần"
+            />
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Mô tả <span className="text-red-500">*</span>
-              </label>
-              <textarea
+            <div className="lg:col-span-2">
+              <Textarea
+                label="Mô tả"
                 name="voucherDescription"
                 value={formData.voucherDescription}
                 onChange={handleChange}
                 required
-                rows="3"
+                rows={3}
                 placeholder="Mô tả chi tiết về voucher..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
               />
             </div>
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="lg:col-span-2">
+              <label className="block text-body-sm font-semibold text-dark dark:text-white mb-3">
                 Hình ảnh voucher
               </label>
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600">
-                  <Upload className="w-5 h-5 mr-2" />
-                  <span>Chọn ảnh</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-32 h-32 object-cover rounded-lg"
-                  />
+              <div className="flex items-start gap-6">
+                {imagePreview ? (
+                  <div className="relative group">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-40 h-40 object-cover rounded-2xl border-2 border-gray-200 dark:border-gray-700"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setFormData((prev) => ({
+                          ...prev,
+                          voucherImage: null,
+                        }));
+                      }}
+                      className="absolute -top-2 -right-2 min-w-[32px] min-h-[32px] bg-red-500 text-white rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center justify-center"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center w-40 h-40 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                    <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                    <span className="text-body-xs text-gray-500">
+                      Tải ảnh lên
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
                 )}
+                <div className="flex-1">
+                  <p className="text-body-sm text-dark-7 dark:text-dark-6 mb-1">
+                    Chọn ảnh để thêm hình voucher
+                  </p>
+                  <p className="text-body-xs text-dark-6">
+                    Định dạng: JPG, PNG. Tối đa 5MB
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Discount Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Cài đặt giảm giá
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Loại voucher <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="voucherType"
-                value={formData.voucherType}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              >
-                <option value="PERCENTAGE">Giảm theo phần trăm (%)</option>
-                <option value="FIXED_AMOUNT">Giảm số tiền cố định (₫)</option>
-                <option value="FREE_SHIPPING">Miễn phí vận chuyển</option>
-                <option value="COMBO">Combo đặc biệt</option>
-              </select>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Select
+              label="Loại voucher"
+              name="voucherType"
+              value={formData.voucherType}
+              onChange={handleChange}
+              required
+              options={[
+                { value: "PERCENTAGE", label: "Giảm theo phần trăm (%)" },
+                { value: "FIXED_AMOUNT", label: "Giảm số tiền cố định (₫)" },
+                { value: "FREE_SHIPPING", label: "Miễn phí vận chuyển" },
+                { value: "COMBO", label: "Combo đặc biệt" },
+              ]}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Giá trị giảm <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                name="discountValue"
-                value={formData.discountValue}
-                onChange={handleChange}
-                required
-                min="0"
-                placeholder={
-                  formData.voucherType === "PERCENTAGE" ? "VD: 10" : "VD: 20000"
-                }
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
+            <Input
+              label="Giá trị giảm"
+              name="discountValue"
+              type="number"
+              value={formData.discountValue}
+              onChange={handleChange}
+              required
+              min="0"
+              placeholder={
+                formData.voucherType === "PERCENTAGE" ? "VD: 10" : "VD: 20000"
+              }
+            />
 
             {formData.voucherType === "PERCENTAGE" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Giảm tối đa
-                </label>
-                <input
-                  type="number"
-                  name="maxDiscountAmount"
-                  value={formData.maxDiscountAmount}
-                  onChange={handleChange}
-                  min="0"
-                  placeholder="VD: 50000"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Đơn hàng tối thiểu
-              </label>
-              <input
+              <Input
+                label="Giảm tối đa"
+                name="maxDiscountAmount"
                 type="number"
-                name="minOrderValue"
-                value={formData.minOrderValue}
+                value={formData.maxDiscountAmount}
                 onChange={handleChange}
                 min="0"
-                placeholder="VD: 100000"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                placeholder="VD: 50000"
               />
-            </div>
+            )}
+
+            <Input
+              label="Đơn hàng tối thiểu"
+              name="minOrderValue"
+              type="number"
+              value={formData.minOrderValue}
+              onChange={handleChange}
+              min="0"
+              placeholder="VD: 100000"
+            />
           </div>
         </div>
 
         {/* Validity Period */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Thời hạn sử dụng
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Ngày bắt đầu <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="datetime-local"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Input
+              label="Ngày bắt đầu"
+              name="startDate"
+              type="datetime-local"
+              value={formData.startDate}
+              onChange={handleChange}
+              required
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Ngày kết thúc <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="datetime-local"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
+            <Input
+              label="Ngày kết thúc"
+              name="endDate"
+              type="datetime-local"
+              value={formData.endDate}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
         {/* Additional Settings */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+          <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
             Cài đặt bổ sung
           </h2>
 
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                name="isPublic"
-                checked={formData.isPublic}
-                onChange={handleChange}
-                className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
-              />
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Hiển thị công khai (Không khuyến nghị cho voucher hàng loạt)
-              </label>
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-avocado-green-100 dark:hover:border-avocado-green-100 transition-all">
+                <input
+                  type="checkbox"
+                  name="isPublic"
+                  checked={formData.isPublic}
+                  onChange={handleChange}
+                  className="w-6 h-6 text-avocado-green-100 border-gray-300 rounded-lg focus:ring-avocado-green-100 focus:ring-2"
+                />
+                <div className="flex-1">
+                  <label className="text-body-sm font-semibold text-dark dark:text-white block cursor-pointer">
+                    Hiển thị công khai
+                  </label>
+                  <p className="text-body-xs text-dark-6 mt-0.5">
+                    Không khuyến nghị cho voucher hàng loạt
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-avocado-green-100 dark:hover:border-avocado-green-100 transition-all">
+                <input
+                  type="checkbox"
+                  name="isActive"
+                  checked={formData.isActive}
+                  onChange={handleChange}
+                  className="w-6 h-6 text-avocado-green-100 border-gray-300 rounded-lg focus:ring-avocado-green-100 focus:ring-2"
+                />
+                <div className="flex-1">
+                  <label className="text-body-sm font-semibold text-dark dark:text-white block cursor-pointer">
+                    Kích hoạt ngay
+                  </label>
+                  <p className="text-body-xs text-dark-6 mt-0.5">
+                    Voucher có thể được sử dụng ngay
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
-              />
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Kích hoạt ngay
-              </label>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Tags (phân cách bằng dấu phẩy)
-              </label>
-              <input
-                type="text"
-                name="tags"
-                value={formData.tags}
-                onChange={handleChange}
-                placeholder="VD: BULK, CAMPAIGN, LIMITED"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
+            <Input
+              label="Tags (phân cách bằng dấu phẩy)"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              placeholder="VD: BULK, CAMPAIGN, LIMITED"
+            />
           </div>
         </div>
 
         {/* Submit Buttons */}
-        <div className="flex items-center justify-end space-x-4">
-          <button
+        <div className="flex items-center justify-end gap-4">
+          <Button
             type="button"
+            variant="secondary"
             onClick={() => navigate("/admin/voucher")}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+            className="px-8"
           >
             Hủy
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
+            variant="primary"
             disabled={loading}
-            className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8"
           >
             {loading ? (
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                 <span>Đang tạo {formData.quantity} voucher...</span>
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="w-5 h-5 mr-2" />
                 <span>Tạo {formData.quantity || 0} voucher</span>
               </>
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

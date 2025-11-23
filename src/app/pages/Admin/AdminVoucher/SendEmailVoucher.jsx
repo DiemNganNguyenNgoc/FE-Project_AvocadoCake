@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Mail, Send, UserPlus, Upload } from "lucide-react";
+import { ArrowLeft, Mail, Send, UserPlus, Upload, X } from "lucide-react";
 import {
   getVoucherDetails,
   sendVoucherEmail,
 } from "../../../api/services/VoucherService";
 import { getAllUser } from "../../../api/services/UserService";
 import { toast } from "react-toastify";
+import Button from "../../../components/AdminLayout/Button";
+import Input from "../../../components/AdminLayout/Input";
 
 const SendEmailVoucher = () => {
   const { id } = useParams();
@@ -128,22 +130,23 @@ const SendEmailVoucher = () => {
   if (!voucher) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-avocado-green-100"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
             onClick={() => navigate("/admin/voucher")}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="min-w-[48px] min-h-[48px] p-0 flex items-center justify-center"
           >
             <ArrowLeft className="w-6 h-6" />
-          </button>
+          </Button>
           <div>
             <h1 className="text-heading-4 font-bold text-dark dark:text-white">
               Gửi voucher qua email
@@ -156,21 +159,27 @@ const SendEmailVoucher = () => {
       </div>
 
       {/* Voucher Preview */}
-      <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg shadow-lg p-6 text-white">
-        <div className="flex items-center space-x-4">
+      <div className="bg-gradient-to-br from-avocado-green-100 to-avocado-green-200 rounded-2xl shadow-card-3 p-8 text-white">
+        <div className="flex items-center gap-6">
           {voucher.voucherImage && (
             <img
               src={voucher.voucherImage}
               alt={voucher.voucherName}
-              className="w-24 h-24 rounded-lg object-cover"
+              className="w-32 h-32 rounded-2xl object-cover border-4 border-white/20 shadow-lg"
             />
           )}
           <div className="flex-1">
-            <h3 className="text-2xl font-bold mb-2">{voucher.voucherName}</h3>
-            <p className="text-white/90 mb-2">{voucher.voucherDescription}</p>
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
-              <p className="text-xs">Mã voucher</p>
-              <p className="text-xl font-mono font-bold">
+            <h3 className="text-heading-4 font-bold mb-3">
+              {voucher.voucherName}
+            </h3>
+            <p className="text-body-md text-white/95 mb-4">
+              {voucher.voucherDescription}
+            </p>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3 inline-block border-2 border-white/30">
+              <p className="text-body-xs text-white/90 font-medium">
+                Mã voucher
+              </p>
+              <p className="text-heading-5 font-mono font-bold mt-1">
                 {voucher.voucherCode}
               </p>
             </div>
@@ -182,50 +191,60 @@ const SendEmailVoucher = () => {
         {/* Email Input Section */}
         <div className="lg:col-span-2 space-y-6">
           {/* Add Email Manually */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-              <Mail className="w-5 h-5 mr-2" />
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+            <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white flex items-center">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl mr-3">
+                <Mail className="w-6 h-6 text-blue-500" />
+              </div>
               Thêm email
             </h2>
 
-            <div className="flex space-x-2">
-              <input
-                type="email"
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleAddEmail()}
-                placeholder="Nhập email và nhấn Enter..."
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
-              />
-              <button
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <Input
+                  type="email"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleAddEmail()}
+                  placeholder="Nhập email và nhấn Enter..."
+                />
+              </div>
+              <Button
                 onClick={handleAddEmail}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                variant="primary"
+                className="px-6"
               >
                 Thêm
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+            <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
               Thao tác nhanh
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={handleSelectAllUsers}
-                className="flex items-center justify-center space-x-2 p-4 border-2 border-purple-300 dark:border-purple-700 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                className="flex items-center justify-center gap-3 p-6 border-2 border-purple-300 dark:border-purple-700 rounded-2xl hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all min-h-[80px] group"
               >
-                <UserPlus className="w-5 h-5 text-purple-600" />
-                <span className="font-medium">
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl group-hover:scale-110 transition-transform">
+                  <UserPlus className="w-6 h-6 text-purple-600" />
+                </div>
+                <span className="font-semibold text-body-sm text-dark dark:text-white">
                   Chọn tất cả user ({users.length})
                 </span>
               </button>
 
-              <label className="flex items-center justify-center space-x-2 p-4 border-2 border-blue-300 dark:border-blue-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer">
-                <Upload className="w-5 h-5 text-blue-600" />
-                <span className="font-medium">Upload file email</span>
+              <label className="flex items-center justify-center gap-3 p-6 border-2 border-blue-300 dark:border-blue-700 rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all min-h-[80px] cursor-pointer group">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl group-hover:scale-110 transition-transform">
+                  <Upload className="w-6 h-6 text-blue-600" />
+                </div>
+                <span className="font-semibold text-body-sm text-dark dark:text-white">
+                  Upload file email
+                </span>
                 <input
                   type="file"
                   accept=".txt,.csv"
@@ -235,47 +254,52 @@ const SendEmailVoucher = () => {
               </label>
             </div>
 
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-body-xs text-dark-6 mt-4 px-2">
               * File txt/csv, mỗi email một dòng hoặc phân cách bằng dấu phẩy
             </p>
           </div>
 
           {/* Selected Emails List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-heading-5 font-bold text-dark dark:text-white">
                 Danh sách email ({selectedEmails.length})
               </h2>
               {selectedEmails.length > 0 && (
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => setSelectedEmails([])}
-                  className="text-sm text-red-600 hover:text-red-700 font-medium"
+                  className="text-red-600 hover:text-red-700"
                 >
                   Xóa tất cả
-                </button>
+                </Button>
               )}
             </div>
 
             {selectedEmails.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <Mail className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>Chưa có email nào được thêm</p>
+              <div className="text-center py-12 text-dark-6">
+                <div className="inline-flex p-4 bg-gray-100 dark:bg-gray-700 rounded-2xl mb-4">
+                  <Mail className="w-12 h-12 opacity-50" />
+                </div>
+                <p className="text-body-sm font-medium">
+                  Chưa có email nào được thêm
+                </p>
               </div>
             ) : (
               <div className="max-h-96 overflow-y-auto space-y-2">
                 {selectedEmails.map((email, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group"
                   >
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className="text-body-sm text-dark dark:text-white font-medium">
                       {email}
                     </span>
                     <button
                       onClick={() => handleRemoveEmail(email)}
-                      className="text-red-600 hover:text-red-700 text-sm font-medium"
+                      className="min-w-[32px] min-h-[32px] text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"
                     >
-                      Xóa
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
@@ -286,26 +310,26 @@ const SendEmailVoucher = () => {
 
         {/* Email Preview */}
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sticky top-6">
-            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card-2 p-8 sticky top-6">
+            <h2 className="text-heading-5 font-bold mb-6 text-dark dark:text-white">
               Xem trước email
             </h2>
 
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
+            <div className="border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-6 space-y-4">
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-body-xs text-dark-6 font-medium mb-2">
                   Tiêu đề:
                 </p>
-                <p className="text-sm font-medium">
+                <p className="text-body-sm font-semibold text-dark dark:text-white">
                   🎉 Bạn nhận được voucher {voucher.voucherName}!
                 </p>
               </div>
 
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-body-xs text-dark-6 font-medium mb-2">
                   Nội dung:
                 </p>
-                <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                <div className="text-body-xs text-dark-7 dark:text-dark-6 space-y-1.5 leading-relaxed">
                   <p>✨ Chúc mừng bạn!</p>
                   <p>📋 Mã: {voucher.voucherCode}</p>
                   <p>
@@ -322,43 +346,45 @@ const SendEmailVoucher = () => {
 
               {voucher.voucherImage && (
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  <p className="text-body-xs text-dark-6 font-medium mb-2">
                     Hình ảnh:
                   </p>
                   <img
                     src={voucher.voucherImage}
                     alt="Voucher"
-                    className="w-full rounded-lg"
+                    className="w-full rounded-xl"
                   />
                 </div>
               )}
             </div>
 
-            <div className="mt-6 space-y-3">
-              <button
+            <div className="mt-8 space-y-3">
+              <Button
                 onClick={handleSendEmail}
                 disabled={loading || selectedEmails.length === 0}
-                className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="primary"
+                className="w-full"
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                     <span>Đang gửi...</span>
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5 mr-2" />
                     <span>Gửi đến {selectedEmails.length} email</span>
                   </>
                 )}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={() => navigate("/admin/voucher")}
-                className="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+                variant="secondary"
+                className="w-full"
               >
                 Hủy
-              </button>
+              </Button>
             </div>
           </div>
         </div>
