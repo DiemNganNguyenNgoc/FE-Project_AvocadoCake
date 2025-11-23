@@ -8,12 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import ForgotPassword from "../ForgotPasswordPage/pages/EnterEmail";
 import { useMutation } from "@tanstack/react-query";
 import * as UserService from "../../api/services/UserService";
+import * as AuthService from "../../api/services/AuthService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import Message from "../../components/MessageComponent/Message";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/slides/userSlide";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const LogInPage = () => {
   const [formData, setFormData] = useState({
@@ -112,51 +114,99 @@ const LogInPage = () => {
     mutation.mutate(formData);
   };
 
+  // Google Login Handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setShowLoading(true);
+      const token = credentialResponse.credential;
+      const response = await AuthService.loginWithGoogle(token);
+
+      if (response.status === "OK") {
+        localStorage.setItem("access_token", response.access_token);
+
+        const decoded = jwtDecode(response.access_token);
+        if (decoded?.id) {
+          const userDetails = await UserService.getDetailsUser(
+            decoded.id,
+            response.access_token
+          );
+          dispatch(
+            updateUser({
+              ...userDetails?.data,
+              access_token: response.access_token,
+            })
+          );
+        }
+
+        setStatusMessage({
+          type: "Success",
+          message: "Đăng nhập Google thành công! Đang chuyển đến trang chủ...",
+        });
+        setTimeout(() => navigate("/"), 1500);
+      }
+    } catch (error) {
+      setStatusMessage({
+        type: "Error",
+        message: error.message || "Đăng nhập Google thất bại!",
+      });
+    } finally {
+      setShowLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setStatusMessage({
+      type: "Error",
+      message: "Đăng nhập Google thất bại!",
+    });
+  };
+
   return (
-    <div className="container-xl container-login">
-      {statusMessage && (
-        <Message
-          type={statusMessage.type}
-          message={statusMessage.message}
-          duration={3000}
-          onClose={() => setStatusMessage(null)}
-        />
-      )}
-      <div className="login-container">
-        {/* logIn right */}
-        <div className="login-container__img">
-          <img className="login__img" src={img1} alt="Hình cái bánh" />
-          <img className="login__logo" src={img2} alt="Login logo" />
-        </div>
-        {/* logIn left */}
-        <div className="login__left">
-          <h1 className="login__title">ĐĂNG NHẬP</h1>
-          {/* Hiển thị spinner loading */}
-          <Loading isLoading={showLoading} />
-          {!showLoading && (
-            <form onSubmit={handleSubmit}>
-              <FormComponent
-                // id="emailInput"
-                name="userEmail"
-                label="Email"
-                type="email"
-                placeholder="Nhập email"
-                value={formData.userEmail}
-                // onChange={handleChange}
-                onChange={handleUserEmailChange}
-              />
-              <FormComponent
-                // id="passwordInput"
-                name="userPassword"
-                label="Password"
-                type="password"
-                placeholder="Nhập mật khẩu"
-                value={formData.userPassword}
-                // onChange={handleChange}
-                onChange={handleUserPasswordChange}
-              />
-              {/* hiện thông báo lỗi */}
-              {/* {errorMessage && (
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <div className="container-xl container-login">
+        {statusMessage && (
+          <Message
+            type={statusMessage.type}
+            message={statusMessage.message}
+            duration={3000}
+            onClose={() => setStatusMessage(null)}
+          />
+        )}
+        <div className="login-container">
+          {/* logIn right */}
+          <div className="login-container__img">
+            <img className="login__img" src={img1} alt="Hình cái bánh" />
+            <img className="login__logo" src={img2} alt="Login logo" />
+          </div>
+          {/* logIn left */}
+          <div className="login__left">
+            <h1 className="login__title">ĐĂNG NHẬP</h1>
+            {/* Hiển thị spinner loading */}
+            <Loading isLoading={showLoading} />
+            {!showLoading && (
+              <form onSubmit={handleSubmit}>
+                <FormComponent
+                  // id="emailInput"
+                  name="userEmail"
+                  label="Email"
+                  type="email"
+                  placeholder="Nhập email"
+                  value={formData.userEmail}
+                  // onChange={handleChange}
+                  onChange={handleUserEmailChange}
+                />
+                <FormComponent
+                  // id="passwordInput"
+                  name="userPassword"
+                  label="Password"
+                  type="password"
+                  placeholder="Nhập mật khẩu"
+                  value={formData.userPassword}
+                  // onChange={handleChange}
+                  onChange={handleUserPasswordChange}
+                />
+                {/* hiện thông báo lỗi */}
+                {/* {errorMessage && (
                 <span
                   style={{
                     color: "red",
@@ -169,35 +219,76 @@ const LogInPage = () => {
                 </span>
               )} */}
 
-              {/* Thêm phần checkbox */}
-              <div className="login__extend">
-                {/* <label className="remember__password">
+                {/* Thêm phần checkbox */}
+                <div className="login__extend">
+                  {/* <label className="remember__password">
                   <input className="remember__checkbox" type="checkbox" />
                   Ghi nhớ mật khẩu
                 </label> */}
-                <div
-                  onClick={handleForgotPassword}
-                  className="forgot__password"
-                >
-                  Quên mật khẩu?
+                  <div
+                    onClick={handleForgotPassword}
+                    className="forgot__password"
+                  >
+                    Quên mật khẩu?
+                  </div>
                 </div>
+                <ButtonFormComponent type="submit" disabled={!isFormValid}>
+                  Đăng nhập
+                </ButtonFormComponent>
+              </form>
+            )}
+
+            {/* Google Login Button */}
+            {!showLoading && (
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    width: "100%",
+                  }}
+                >
+                  <div
+                    style={{ flex: 1, height: "1px", background: "#ddd" }}
+                  ></div>
+                  <span style={{ color: "#666", fontSize: "14px" }}>hoặc</span>
+                  <div
+                    style={{ flex: 1, height: "1px", background: "#ddd" }}
+                  ></div>
+                </div>
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  theme="outline"
+                  size="large"
+                  text="signin_with"
+                  shape="rectangular"
+                  width="300"
+                />
               </div>
-              <ButtonFormComponent type="submit" disabled={!isFormValid}>
-                Đăng nhập
-              </ButtonFormComponent>
-            </form>
-          )}
-          <div className="case__signup">
-            Bạn chưa có tài khoản?
-            <u>
-              <Link to="/signup" className="btn__goto__signup">
-                Đăng ký
-              </Link>
-            </u>
+            )}
+
+            <div className="case__signup">
+              Bạn chưa có tài khoản?
+              <u>
+                <Link to="/signup" className="btn__goto__signup">
+                  Đăng ký
+                </Link>
+              </u>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 
