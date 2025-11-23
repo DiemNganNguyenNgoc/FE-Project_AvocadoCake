@@ -67,7 +67,7 @@ const SendEmailVoucher = () => {
   };
 
   const handleSelectAllUsers = () => {
-    const allEmails = users.map((u) => u.email);
+    const allEmails = users.map((u) => u.userEmail).filter(Boolean);
     setSelectedEmails([...new Set([...selectedEmails, ...allEmails])]);
     toast.success(`Đã thêm ${allEmails.length} email!`);
   };
