@@ -63,6 +63,7 @@ import AdminRecipe from "../pages/Admin/AdminRecipe/AdminRecipe.jsx";
 import AdminStratergy from "../pages/Admin/AdminStratergy/AdminStratergy.jsx";
 import PublicVoucherPage from "../pages/PublicVoucherPage/PublicVoucherPage.jsx";
 import MyVouchersPage from "../pages/MyVouchersPage/MyVouchersPage.jsx";
+import ImageSearchResultsPage from "../pages/ImageSearchResultsPage/ImageSearchResultsPage.jsx";
 
 export const routes = [
   {
@@ -427,6 +428,12 @@ export const routes = [
   {
     path: "/search",
     page: SearchResultPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+  {
+    path: "/search/image-results",
+    page: ImageSearchResultsPage,
     isShowHeader: true,
     isShowFooter: true,
   },
