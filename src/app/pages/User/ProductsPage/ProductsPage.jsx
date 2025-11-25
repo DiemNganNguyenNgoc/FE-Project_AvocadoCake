@@ -32,6 +32,10 @@ const ProductsPage = () => {
   const [promoPage, setPromoPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(null);
+  const [sortBy, setSortBy] = useState("default");
+  const [priceRanges, setPriceRanges] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,6 +58,59 @@ const ProductsPage = () => {
     })();
   }, []);
 
+  // Filter and sort products
+  const filterAndSortProducts = (productList) => {
+    let filtered = [...productList];
+
+    // Apply price filter
+    if (priceRanges.length > 0) {
+      filtered = filtered.filter((p) => {
+        const price = p.productPrice;
+        return priceRanges.some((range) => {
+          switch (range) {
+            case "under_10k":
+              return price < 10000;
+            case "from_10k_to_50k":
+              return price >= 10000 && price < 50000;
+            case "from_50k_to_100k":
+              return price >= 50000 && price < 100000;
+            case "from_100k_to_200k":
+              return price >= 100000 && price < 200000;
+            case "from_200k_to_500k":
+              return price >= 200000 && price < 500000;
+            case "above_500k":
+              return price >= 500000;
+            default:
+              return true;
+          }
+        });
+      });
+    }
+
+    // Apply sorting
+    switch (sortBy) {
+      case "name_asc":
+        filtered.sort((a, b) => a.productName.localeCompare(b.productName));
+        break;
+      case "name_desc":
+        filtered.sort((a, b) => b.productName.localeCompare(a.productName));
+        break;
+      case "newest":
+        filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case "price_high":
+        filtered.sort((a, b) => b.productPrice - a.productPrice);
+        break;
+      case "price_low":
+        filtered.sort((a, b) => a.productPrice - b.productPrice);
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  };
+
   const fetchProductsByCategory = async (
     categoryId,
     page = 0,
@@ -63,8 +120,10 @@ const ProductsPage = () => {
       const { data } = await getProductsByCategory(categoryId);
       // Filter ra sản phẩm bị ẩn (thêm lớp bảo vệ)
       const visibleProducts = data.filter((p) => !p.isHidden);
-      setProducts(visibleProducts.slice(page * limit, (page + 1) * limit));
-      setTotalPages(Math.ceil(visibleProducts.length / limit));
+      setAllProducts(visibleProducts);
+      const filtered = filterAndSortProducts(visibleProducts);
+      setProducts(filtered.slice(page * limit, (page + 1) * limit));
+      setTotalPages(Math.ceil(filtered.length / limit));
       setCurrentPage(page);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -76,8 +135,10 @@ const ProductsPage = () => {
       const { data } = await getAllProduct();
       // Filter ra sản phẩm bị ẩn (thêm lớp bảo vệ)
       const visibleProducts = data.filter((p) => !p.isHidden);
-      setProducts(visibleProducts.slice(page * limit, (page + 1) * limit));
-      setTotalPages(Math.ceil(visibleProducts.length / limit));
+      setAllProducts(visibleProducts);
+      const filtered = filterAndSortProducts(visibleProducts);
+      setProducts(filtered.slice(page * limit, (page + 1) * limit));
+      setTotalPages(Math.ceil(filtered.length / limit));
       setCurrentPage(page);
     } catch (err) {
       console.error("Error fetching all products:", err);
@@ -135,6 +196,16 @@ const ProductsPage = () => {
     fetchAllProducts();
   };
 
+  const handleSortChange = (sortType) => {
+    setSortBy(sortType);
+  };
+
+  const handlePriceRangeToggle = (range) => {
+    setPriceRanges((prev) =>
+      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range]
+    );
+  };
+
   const getImageUrl = (url) => {
     if (!url) return "/fallback.png";
     return url.startsWith("http")
@@ -180,6 +251,7 @@ const ProductsPage = () => {
     }
 
     fetchAllProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categories, discounts, showPromo, previousCategoryId]);
 
   useEffect(() => {
@@ -187,7 +259,19 @@ const ProductsPage = () => {
     else if (currentCategory !== 1)
       fetchProductsByCategory(currentCategory, currentPage);
     // currentCategory === 1 => promo handled by promoPage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, currentCategory]);
+
+  // Re-apply filters when sorting or price ranges change
+  useEffect(() => {
+    if (currentCategory === 1 || allProducts.length === 0) return;
+
+    const filtered = filterAndSortProducts(allProducts);
+    setProducts(filtered.slice(0, PAGE_SIZE));
+    setTotalPages(Math.ceil(filtered.length / PAGE_SIZE));
+    setCurrentPage(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy, priceRanges]);
 
   const handleDetail = (productId, source = products) => {
     const p = source.find((prod) => prod._id === productId);
@@ -296,39 +380,140 @@ const ProductsPage = () => {
         </div>
 
         <div className="flex flex-row gap-4">
-          <div className="flex flex-col">
-            <SideMenuComponent
-              key="all-products"
-              value={null}
-              isActive={currentCategory === null}
-              onClick={handleAllProductsClick}
-            >
-              {t("product_page.all_products")}
-            </SideMenuComponent>
-
-            <SideMenuComponent
-              key="promo-product"
-              value={null}
-              isActive={currentCategory === 1}
-              onClick={handlePromoProductsClick}
-            >
-              {t("product_page.discount")}
-            </SideMenuComponent>
-
-            {categories.map((c) => (
-              <SideMenuComponent
-                key={c._id}
-                value={c._id}
-                isActive={currentCategory === c._id}
-                onClick={() => handleCategoryClick(c._id, c.categoryName)}
+          {/* Sidebar with filters */}
+          <div className="flex flex-col" style={{ minWidth: "250px" }}>
+            {/* Category dropdown */}
+            <div className="category-dropdown">
+              <div 
+                className="category-dropdown__header"
+                onClick={() => setIsCategoryExpanded(!isCategoryExpanded)}
               >
-                {c.categoryName}
-              </SideMenuComponent>
-            ))}
+                <h3 className="category-dropdown__title">
+                  {t("product_page.category_filter")}
+                </h3>
+                <span className={`category-dropdown__icon ${isCategoryExpanded ? 'expanded' : ''}`}>
+                  ▼
+                </span>
+              </div>
+              <div className={`category-dropdown__content ${isCategoryExpanded ? 'expanded' : ''}`}>
+                <SideMenuComponent
+                  key="all-products"
+                  value={null}
+                  isActive={currentCategory === null}
+                  onClick={handleAllProductsClick}
+                >
+                  {t("product_page.all_products")}
+                </SideMenuComponent>
+
+                <SideMenuComponent
+                  key="promo-product"
+                  value={null}
+                  isActive={currentCategory === 1}
+                  onClick={handlePromoProductsClick}
+                >
+                  {t("product_page.discount")}
+                </SideMenuComponent>
+
+                {categories.map((c) => (
+                  <SideMenuComponent
+                    key={c._id}
+                    value={c._id}
+                    isActive={currentCategory === c._id}
+                    onClick={() => handleCategoryClick(c._id, c.categoryName)}
+                  >
+                    {c.categoryName}
+                  </SideMenuComponent>
+                ))}
+              </div>
+            </div>
+
+            {/* Price filter */}
+            <div className="price-filter">
+              <h3 className="price-filter__title">
+                {t("product_page.price_filter")}
+              </h3>
+              {[
+                "under_10k",
+                "from_10k_to_50k",
+                "from_50k_to_100k",
+                "from_100k_to_200k",
+                "from_200k_to_500k",
+                "above_500k",
+              ].map((range) => (
+                <div
+                  key={range}
+                  className="price-filter__option"
+                  onClick={() => handlePriceRangeToggle(range)}
+                >
+                  <input
+                    type="checkbox"
+                    className="price-filter__checkbox"
+                    checked={priceRanges.includes(range)}
+                    onChange={() => handlePriceRangeToggle(range)}
+                  />
+                  <label className="price-filter__label">
+                    {t(`product_page.${range}`)}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-            {renderProductsList()}
+          {/* Products area */}
+          <div className="flex-1">
+            {/* Sort bar */}
+            <div className="product__sort-bar">
+              <span className="product__sort-label">
+                {t("product_page.sort_by")}
+              </span>
+              <div className="product__sort-buttons">
+                <button
+                  className={`product__sort-btn ${
+                    sortBy === "name_asc" ? "active" : ""
+                  }`}
+                  onClick={() => handleSortChange("name_asc")}
+                >
+                  {t("product_page.sort_name_asc")}
+                </button>
+                <button
+                  className={`product__sort-btn ${
+                    sortBy === "name_desc" ? "active" : ""
+                  }`}
+                  onClick={() => handleSortChange("name_desc")}
+                >
+                  {t("product_page.sort_name_desc")}
+                </button>
+                <button
+                  className={`product__sort-btn ${
+                    sortBy === "newest" ? "active" : ""
+                  }`}
+                  onClick={() => handleSortChange("newest")}
+                >
+                  {t("product_page.sort_newest")}
+                </button>
+                <button
+                  className={`product__sort-btn ${
+                    sortBy === "price_high" ? "active" : ""
+                  }`}
+                  onClick={() => handleSortChange("price_high")}
+                >
+                  {t("product_page.sort_price_high")}
+                </button>
+                <button
+                  className={`product__sort-btn ${
+                    sortBy === "price_low" ? "active" : ""
+                  }`}
+                  onClick={() => handleSortChange("price_low")}
+                >
+                  {t("product_page.sort_price_low")}
+                </button>
+              </div>
+            </div>
+
+            {/* Products grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+              {renderProductsList()}
+            </div>
           </div>
         </div>
       </div>

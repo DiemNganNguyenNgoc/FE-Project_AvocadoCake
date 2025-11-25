@@ -181,14 +181,28 @@ const MiniGamePage = () => {
       return;
     }
     // Ghép đáp án từ missingInput vào puzzle.puzzle theo đúng hiddenIndices
+    console.log("=== DEBUG START ===");
+    console.log("puzzle.puzzle:", puzzle.puzzle);
+    console.log("hiddenIndices:", hiddenIndices);
+    console.log("missingInput:", missingInput);
+
     let arr = puzzle.puzzle.split("");
     let inputArr = missingInput.split("");
+
+    console.log("arr before fill:", arr);
+    console.log("inputArr:", inputArr);
+
     for (let i = 0; i < hiddenIndices.length; i++) {
+      console.log(
+        `Filling position ${hiddenIndices[i]} with inputArr[${i}] = '${inputArr[i]}'`
+      );
       arr[hiddenIndices[i]] = inputArr[i] || "_";
     }
+
     const answer = arr.join("");
     console.log("arr after fill:", arr);
     console.log("answer to submit:", answer);
+    console.log("=== DEBUG END ===");
 
     try {
       const response = await GameService.submitAnswer(answer);
@@ -418,10 +432,10 @@ const MiniGamePage = () => {
                   type="text"
                   value={missingInput}
                   onChange={(e) => {
-                    // Chỉ cho nhập ký tự chữ cái, tối đa hiddenIndices.length
+                    // Chỉ cho nhập ký tự chữ cái và số, tối đa hiddenIndices.length
                     let value = e.target.value
                       .toUpperCase()
-                      .replace(/[^A-Z]/g, "");
+                      .replace(/[^A-Z0-9]/g, "");
                     if (value.length > hiddenIndices.length)
                       value = value.slice(0, hiddenIndices.length);
                     setMissingInput(value);
