@@ -27,7 +27,7 @@ export const searchByImage = async (imageFile, topK = 10, threshold = 0.5) => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        timeout: 30000, // 30 second timeout
+        timeout: 60000, // 60 second timeout (first request may download model)
       }
     );
 
@@ -84,7 +84,7 @@ export const searchByImageUrl = async (
           top_k: topK,
           threshold: threshold,
         },
-        timeout: 30000,
+        timeout: 60000, // 60 second timeout
       }
     );
 
