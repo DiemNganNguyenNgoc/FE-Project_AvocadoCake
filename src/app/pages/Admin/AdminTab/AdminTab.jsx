@@ -52,6 +52,7 @@ import CreateBulkVoucher from "../AdminVoucher/CreateBulkVoucher";
 import EditVoucher from "../AdminVoucher/EditVoucher";
 import VoucherDetail from "../AdminVoucher/VoucherDetail";
 import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
+import AdminRating from "../AdminRating/AdminRating";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -213,6 +214,13 @@ const navItems = [
     icon: <Gamepad2 />,
     path: "/admin/quiz",
     component: AdminQuiz,
+  },
+  {
+    id: "ratings",
+    text: "Ratings",
+    icon: <Sparkles />,
+    path: "/admin/ratings",
+    component: AdminRating,
   },
   {
     id: "settings",

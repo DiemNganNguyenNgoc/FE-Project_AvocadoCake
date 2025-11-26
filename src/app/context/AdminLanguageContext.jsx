@@ -97,6 +97,21 @@ const translations = {
       "Are you sure you want to hide this product from customers?",
     showProductConfirm:
       "Are you sure you want to show this product to customers?",
+
+    // Ratings
+    ratings: "Ratings",
+    ratingManagement: "Rating Management",
+    totalRatings: "Total Ratings",
+    averageRating: "Average Rating",
+    visibleRatings: "Visible",
+    hiddenRatings: "Hidden",
+    withComments: "With Comments",
+    ratingDistribution: "Rating Distribution",
+    detailedStats: "Detailed Statistics",
+    hideRating: "Hide rating",
+    showRating: "Show rating",
+    deleteRating: "Delete rating",
+    noComment: "No comment",
   },
   vi: {
     // Header
@@ -193,6 +208,21 @@ const translations = {
       "Bạn có chắc chắn muốn ẩn sản phẩm này khỏi khách hàng?",
     showProductConfirm:
       "Bạn có chắc chắn muốn hiển thị sản phẩm này cho khách hàng?",
+
+    // Ratings
+    ratings: "Đánh giá",
+    ratingManagement: "Quản lý đánh giá",
+    totalRatings: "Tổng đánh giá",
+    averageRating: "Đánh giá trung bình",
+    visibleRatings: "Hiển thị",
+    hiddenRatings: "Ẩn",
+    withComments: "Có bình luận",
+    ratingDistribution: "Phân bố đánh giá",
+    detailedStats: "Thống kê chi tiết",
+    hideRating: "Ẩn đánh giá",
+    showRating: "Hiện đánh giá",
+    deleteRating: "Xóa đánh giá",
+    noComment: "Không có bình luận",
   },
 };
 

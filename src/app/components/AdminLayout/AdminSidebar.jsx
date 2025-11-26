@@ -103,6 +103,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           icon: Sparkles,
           url: "/admin/stratergy",
         },
+        {
+          title: t("ratings"),
+          icon: MessageSquare,
+          url: "/admin/ratings",
+        },
       ],
     },
     {
