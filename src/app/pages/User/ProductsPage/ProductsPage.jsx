@@ -384,18 +384,26 @@ const ProductsPage = () => {
           <div className="flex flex-col" style={{ minWidth: "250px" }}>
             {/* Category dropdown */}
             <div className="category-dropdown">
-              <div 
+              <div
                 className="category-dropdown__header"
                 onClick={() => setIsCategoryExpanded(!isCategoryExpanded)}
               >
                 <h3 className="category-dropdown__title">
                   {t("product_page.category_filter")}
                 </h3>
-                <span className={`category-dropdown__icon ${isCategoryExpanded ? 'expanded' : ''}`}>
+                <span
+                  className={`category-dropdown__icon ${
+                    isCategoryExpanded ? "expanded" : ""
+                  }`}
+                >
                   ▼
                 </span>
               </div>
-              <div className={`category-dropdown__content ${isCategoryExpanded ? 'expanded' : ''}`}>
+              <div
+                className={`category-dropdown__content ${
+                  isCategoryExpanded ? "expanded" : ""
+                }`}
+              >
                 <SideMenuComponent
                   key="all-products"
                   value={null}
@@ -429,9 +437,36 @@ const ProductsPage = () => {
 
             {/* Price filter */}
             <div className="price-filter">
-              <h3 className="price-filter__title">
-                {t("product_page.price_filter")}
-              </h3>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "12px",
+                }}
+              >
+                <h3 className="price-filter__title" style={{ margin: 0 }}>
+                  {t("product_page.price_filter")}
+                </h3>
+                {priceRanges.length > 0 && (
+                  <button
+                    onClick={() => setPriceRanges([])}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#d32f2f",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      padding: "4px 8px",
+                      textDecoration: "underline",
+                    }}
+                    title="Đặt lại tất cả bộ lọc giá"
+                  >
+                    Đặt lại
+                  </button>
+                )}
+              </div>
               {[
                 "under_10k",
                 "from_10k_to_50k",
@@ -440,10 +475,14 @@ const ProductsPage = () => {
                 "from_200k_to_500k",
                 "above_500k",
               ].map((range) => (
-                <div
+                <label
                   key={range}
                   className="price-filter__option"
-                  onClick={() => handlePriceRangeToggle(range)}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   <input
                     type="checkbox"
@@ -451,10 +490,10 @@ const ProductsPage = () => {
                     checked={priceRanges.includes(range)}
                     onChange={() => handlePriceRangeToggle(range)}
                   />
-                  <label className="price-filter__label">
+                  <span className="price-filter__label">
                     {t(`product_page.${range}`)}
-                  </label>
-                </div>
+                  </span>
+                </label>
               ))}
             </div>
           </div>

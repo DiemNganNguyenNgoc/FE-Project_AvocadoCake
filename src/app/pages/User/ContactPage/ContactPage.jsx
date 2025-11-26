@@ -6,7 +6,7 @@ const ContactPage = () => {
     <div>
       <div className="text-center mb-12">
         <h1 className="productadmin__title">LIÊN HỆ</h1>
-        <h3 className="text-xl mt-4 text-gray-700">
+        <h3 className="contact text-xl mt-4 text-gray-700">
           Cách thức liên hệ với Avocado Bakery
         </h3>
       </div>

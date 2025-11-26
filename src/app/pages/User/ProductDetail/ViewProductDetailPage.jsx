@@ -300,7 +300,23 @@ const ViewProductDetailPage = () => {
         }
 
         console.log("Final recommended products:", recommendedProducts);
-        setRelatedProducts(recommendedProducts);
+
+        // Random 5 sản phẩm để hiển thị (nếu có nhiều hơn 5)
+        let displayProducts = recommendedProducts;
+        if (recommendedProducts.length > 5) {
+          // Shuffle array và lấy 5 sản phẩm đầu tiên
+          const shuffled = [...recommendedProducts].sort(
+            () => Math.random() - 0.5
+          );
+          displayProducts = shuffled.slice(0, 5);
+          console.log(
+            "Randomly selected 5 products from",
+            recommendedProducts.length,
+            "products"
+          );
+        }
+
+        setRelatedProducts(displayProducts);
       } catch (error) {
         console.error("Lỗi khi lấy khuyến nghị hoặc fallback:", error);
         setRelatedProducts([]);

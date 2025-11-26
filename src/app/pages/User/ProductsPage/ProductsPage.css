@@ -79,18 +79,19 @@
   justify-content: space-between;
   padding: 16px;
   cursor: pointer;
-  background-color: #c9a86a;
-  color: white;
+  /* background-color: #c9a86a; */
+  color: var(--brown100);
   transition: background-color 0.3s;
 }
 
 .category-dropdown__header:hover {
-  background-color: #b8955a;
+  background-color: var(--brown100);
+  color: var(--green100);
 }
 
 .category-dropdown__title {
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0;
 }
 
