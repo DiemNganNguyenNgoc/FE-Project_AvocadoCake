@@ -15,7 +15,9 @@ import {
 } from "../../../api/services/productServices";
 import RatingStar from "../../../components/RatingStar/RatingStar";
 import { getProductRatings } from "../../../api/services/OrderService";
-import { Card, ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
+import StratergyService from "../../Admin/AdminStratergy/services/StratergyService";
+import CardProduct from "../../../components/CardProduct/CardProduct";
 
 const ViewProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -342,6 +344,10 @@ const ViewProductDetailPage = () => {
   const [visibleRatingsCount, setVisibleRatingsCount] = useState(10); // Hiển thị 10 comments đầu tiên
   const RATINGS_PER_PAGE = 10;
 
+  // State cho combo products
+  const [comboProducts, setComboProducts] = useState([]);
+  const [loadingCombos, setLoadingCombos] = useState(false);
+
   // Fetch ratings when product changes
   useEffect(() => {
     const fetchRatings = async () => {
@@ -363,6 +369,66 @@ const ViewProductDetailPage = () => {
     };
 
     fetchRatings();
+  }, [product.productId]);
+
+  // Fetch combo products when product changes
+  useEffect(() => {
+    const fetchCombos = async () => {
+      if (product.productId) {
+        try {
+          setLoadingCombos(true);
+          console.log("Fetching combos for product:", product.productId);
+
+          const response = await StratergyService.getProductCombos(
+            product.productId
+          );
+          console.log("Combo response:", response);
+
+          if (Array.isArray(response) && response.length > 0) {
+            // Lấy tất cả product IDs từ combos (loại bỏ product hiện tại)
+            const comboProductIds = new Set();
+            response.forEach((combo) => {
+              // Mỗi combo có product_1_id và product_2_id
+              if (combo.product_1_id !== product.productId) {
+                comboProductIds.add(combo.product_1_id);
+              }
+              if (combo.product_2_id !== product.productId) {
+                comboProductIds.add(combo.product_2_id);
+              }
+            });
+
+            console.log("Combo product IDs:", Array.from(comboProductIds));
+
+            // Fetch chi tiết các sản phẩm combo
+            const comboProductsData = await Promise.all(
+              Array.from(comboProductIds).map(async (id) => {
+                try {
+                  const res = await getDetailsproduct(id);
+                  return res.data;
+                } catch (err) {
+                  console.error(`Error fetching combo product ${id}:`, err);
+                  return null;
+                }
+              })
+            );
+
+            const validComboProducts = comboProductsData.filter(Boolean);
+            console.log("Valid combo products:", validComboProducts);
+            setComboProducts(validComboProducts.slice(0, 5)); // Giới hạn 5 sản phẩm
+          } else {
+            console.log("No combos found for this product");
+            setComboProducts([]);
+          }
+        } catch (error) {
+          console.error("Error fetching combos:", error);
+          setComboProducts([]);
+        } finally {
+          setLoadingCombos(false);
+        }
+      }
+    };
+
+    fetchCombos();
   }, [product.productId]);
 
   return (
@@ -419,6 +485,37 @@ const ViewProductDetailPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Combo Products Section */}
+        {comboProducts.length > 0 && (
+          <div className="combo-section mt-4 mb-4">
+            <h3 className="mb-3">🎁 Thường mua cùng nhau</h3>
+            {loadingCombos ? (
+              <div>Đang tải combo sản phẩm...</div>
+            ) : (
+              <div className="combo-products-grid">
+                {comboProducts.map((comboProduct) => (
+                  <CardProduct
+                    key={comboProduct._id}
+                    id={comboProduct._id}
+                    type={comboProduct.productCategory}
+                    img={comboProduct.productImage}
+                    title={comboProduct.productName}
+                    price={comboProduct.productPrice}
+                    size={comboProduct.productSize}
+                    discount={comboProduct.discount || 0}
+                    averageRating={comboProduct.averageRating || 5.0}
+                    totalRatings={comboProduct.totalRatings || 0}
+                    onCardClick={() =>
+                      navigate("/product-detail", { state: comboProduct })
+                    }
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* info bot */}
         <div className="info__bot">
           <label className="description">Mô Tả</label>

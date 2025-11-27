@@ -131,3 +131,75 @@
   color: #333;
   font-size: 14px;
 }
+
+/* Combo Products Section Styles */
+.combo-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.combo-section h3 {
+  color: var(--brown100);
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.combo-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.combo-product-card {
+  border: 2px solid #f0f0f0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.combo-product-card:hover {
+  border-color: var(--brown100);
+  box-shadow: 0 4px 12px rgba(212, 128, 61, 0.2);
+  transform: translateY(-5px);
+}
+
+.combo-product-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.combo-product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.combo-product-card .card-body {
+  padding: 15px;
+}
+
+.combo-product-card .card-title {
+  color: #333;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combo-product-card .card-text {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .combo-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .combo-section h3 {
+    font-size: 1.5rem;
+  }
+}

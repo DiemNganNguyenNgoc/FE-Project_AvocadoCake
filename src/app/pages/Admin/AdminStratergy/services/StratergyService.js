@@ -61,6 +61,42 @@ class StratergyService {
   }
 
   /**
+   * 2.1. Lấy combo sản phẩm cho một sản phẩm cụ thể
+   * Từ danh sách combo, tìm những combo chứa productId
+   *
+   * @param {string} productId - ID của sản phẩm
+   * @param {number} minSupport - Ngưỡng support tối thiểu (0.01-0.5)
+   * @param {number} minConfidence - Ngưỡng confidence tối thiểu (0.1-0.9)
+   * @returns {Promise} Danh sách combo chứa sản phẩm này
+   */
+  async getProductCombos(productId, minSupport = 0.01, minConfidence = 0.3) {
+    try {
+      const response = await this.discoverCombos(minSupport, minConfidence);
+      console.log("Raw combo response:", response);
+
+      // response đã là mảng combos trực tiếp từ discoverCombos
+      if (Array.isArray(response)) {
+        const productCombos = response.filter(
+          (combo) =>
+            combo.product_1_id === productId || combo.product_2_id === productId
+        );
+        console.log(
+          "Filtered combos for product",
+          productId,
+          ":",
+          productCombos
+        );
+        return productCombos;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error getting product combos:", error);
+      return [];
+    }
+  }
+
+  /**
    * 3. Lấy danh sách sự kiện sắp tới
    * GET /api/event-promotions/upcoming-events
    *
