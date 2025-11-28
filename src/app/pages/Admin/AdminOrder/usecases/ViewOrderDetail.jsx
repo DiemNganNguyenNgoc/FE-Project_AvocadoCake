@@ -50,7 +50,23 @@ const ViewOrderDetail = ({ onBack }) => {
         const token = localStorage.getItem("access_token");
         const response = await StatusService.getAllStatus(token);
         if (response.status === "OK" && response.data) {
-          setStatusList(response.data);
+          // Sắp xếp status theo thứ tự logic
+          const statusOrder = {
+            PENDING: 1,
+            PAID: 2,
+            PROCESSING: 3,
+            DELIVERING: 4,
+            COMPLETED: 5,
+            CANCEL: 6,
+          };
+
+          const sortedStatuses = [...response.data].sort((a, b) => {
+            const orderA = statusOrder[a.statusCode] || 999;
+            const orderB = statusOrder[b.statusCode] || 999;
+            return orderA - orderB;
+          });
+
+          setStatusList(sortedStatuses);
         }
       } catch (error) {
         console.error("Error fetching statuses:", error);

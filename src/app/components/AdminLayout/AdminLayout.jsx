@@ -40,10 +40,10 @@ const AdminLayout = ({ children }) => {
 
   return (
     <AdminLanguageProvider>
-      <div className="flex min-h-screen bg-gray-2 dark:bg-[#020d1a]">
+      <div className="flex min-h-screen bg-white dark:bg-gray-900">
         <AdminSidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
-        <div className="w-full bg-gray-2 dark:bg-[#020d1a] overflow-x-hidden">
+        <div className="w-full overflow-x-hidden">
           <AdminHeader
             onToggleSidebar={toggleSidebar}
             forceCloseMenus={forceCloseMenus}

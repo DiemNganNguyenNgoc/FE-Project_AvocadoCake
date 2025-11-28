@@ -32,7 +32,23 @@ const UpdateOrderStatus = ({
       const statusData = response.data || response;
 
       if (Array.isArray(statusData)) {
-        setStatusOptions(statusData);
+        // Sắp xếp status theo thứ tự logic
+        const statusOrder = {
+          PENDING: 1,
+          PAID: 2,
+          PROCESSING: 3,
+          DELIVERING: 4,
+          COMPLETED: 5,
+          CANCEL: 6,
+        };
+
+        const sortedStatuses = [...statusData].sort((a, b) => {
+          const orderA = statusOrder[a.statusCode] || 999;
+          const orderB = statusOrder[b.statusCode] || 999;
+          return orderA - orderB;
+        });
+
+        setStatusOptions(sortedStatuses);
 
         // Get current status of selected orders
         if (selectedOrders.length > 0) {
@@ -41,7 +57,7 @@ const UpdateOrderStatus = ({
           );
           if (selectedOrdersData.length > 0) {
             const currentStatus = selectedOrdersData[0].status;
-            const index = statusData.findIndex(
+            const index = sortedStatuses.findIndex(
               (status) => status._id === currentStatus?._id
             );
             setCurrentStatusIndex(index);

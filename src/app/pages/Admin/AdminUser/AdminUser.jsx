@@ -7,6 +7,7 @@ import UserTable from "./partials/UserTable";
 import AddUser from "./usecases/AddUser";
 import UpdateUser from "./usecases/UpdateUser";
 import ViewUserDetail from "./usecases/ViewUserDetail";
+import Button from "../../../components/AdminLayout/Button";
 
 const AdminUserContent = ({ onNavigate }) => {
   const {
@@ -71,13 +72,10 @@ const AdminUserContent = ({ onNavigate }) => {
               Quản lý tài khoản người dùng trong hệ thống
             </p>
           </div>
-          <button
-            onClick={handleCreateUser}
-            className="flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
+          <Button onClick={handleCreateUser}>
             <Plus className="w-4 h-4 mr-2" />
             Create
-          </button>
+          </Button>
         </div>
       </div>
 

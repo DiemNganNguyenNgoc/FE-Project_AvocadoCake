@@ -8,6 +8,7 @@ import { useAdminRatingStore } from "./adminRatingStore";
 import AdminCardComponent from "../../../components/AdminComponents/AdminCardComponent";
 import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
 import AdminStatsCardComponent from "../../../components/AdminComponents/AdminStatsCardComponent";
+import { Button } from "../../../components/AdminLayout";
 
 const AdminRating = () => {
   // Zustand store
@@ -111,11 +112,10 @@ const AdminRating = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <AdminButtonComponent
+              <Button
                 onClick={handleRefresh}
                 disabled={loading}
                 variant="outline"
-                size="medium"
                 icon={
                   <svg
                     className="w-5 h-5"
@@ -133,7 +133,7 @@ const AdminRating = () => {
                 }
               >
                 Làm mới
-              </AdminButtonComponent>
+              </Button>
             </div>
           </div>
         </div>

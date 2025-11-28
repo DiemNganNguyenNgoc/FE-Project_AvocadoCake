@@ -114,7 +114,7 @@ const AdminOrder = ({ onNavigate }) => {
             <Button
               onClick={handleRefresh}
               disabled={loading}
-              className="flex items-center px-3 py-2 border border-gray-300 bg-green-600 text-medium font-medium text-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              variant="secondary"
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}

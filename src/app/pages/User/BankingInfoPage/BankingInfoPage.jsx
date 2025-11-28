@@ -7,7 +7,11 @@ import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../../redux/slides/cartSlide";
 import { updateOrder } from "../../../redux/slides/orderSlide";
-import { getDetailsOrder } from "../../../api/services/OrderService";
+import {
+  getDetailsOrder,
+  updateOrderStatus,
+} from "../../../api/services/OrderService";
+import { getAllStatus } from "../../../api/services/StatusService";
 
 const BankingInfoPage = () => {
   const navigate = useNavigate();
@@ -154,42 +158,82 @@ const BankingInfoPage = () => {
     navigate("/payment");
   };
 
-  const handleDone = () => {
-    // Lấy thông tin đơn hàng từ lastOrder
-    if (lastOrder.orderItems && lastOrder.orderItems.length > 0) {
-      try {
-        // Lấy cart hiện tại từ localStorage
-        const cartData = JSON.parse(localStorage.getItem("cart")) || {
-          products: [],
-        };
+  const handleDone = async () => {
+    try {
+      // 1. Cập nhật trạng thái đơn hàng sang "PAID" (Đã thanh toán)
+      if (lastOrder.orderId) {
+        const accessToken = localStorage.getItem("access_token");
 
-        // Lấy danh sách ID sản phẩm đã mua từ lastOrder
-        const purchasedProductIds = lastOrder.orderItems.map(
-          (item) => item.product
+        // Lấy danh sách tất cả status
+        const statusResponse = await getAllStatus(accessToken);
+        const allStatuses = statusResponse.data || statusResponse;
+
+        // Tìm status "PAID"
+        const paidStatus = allStatuses.find(
+          (status) => status.statusCode === "PAID"
         );
 
-        // Lọc ra các sản phẩm chưa mua
-        const remainingProducts = cartData.products.filter(
-          (product) => !purchasedProductIds.includes(product.id)
-        );
-
-        // Cập nhật lại cart trong localStorage
-        localStorage.setItem(
-          "cart",
-          JSON.stringify({ products: remainingProducts })
-        );
-
-        // Cập nhật Redux store
-        purchasedProductIds.forEach((productId) => {
-          dispatch(removeFromCart({ id: productId }));
-        });
-
-        console.log("Đã xóa sản phẩm đã mua khỏi giỏ hàng");
-      } catch (error) {
-        console.error("Error updating cart:", error);
+        if (paidStatus) {
+          // Cập nhật trạng thái đơn hàng
+          await updateOrderStatus(
+            lastOrder.orderId,
+            paidStatus._id,
+            accessToken
+          );
+          console.log("✅ Đã cập nhật trạng thái đơn hàng sang PAID");
+          setMessage("Đã xác nhận thanh toán thành công! 🎉");
+        } else {
+          console.warn("⚠️ Không tìm thấy status PAID");
+        }
       }
+
+      // 2. Xóa sản phẩm đã mua khỏi giỏ hàng
+      if (lastOrder.orderItems && lastOrder.orderItems.length > 0) {
+        try {
+          // Lấy cart hiện tại từ localStorage
+          const cartData = JSON.parse(localStorage.getItem("cart")) || {
+            products: [],
+          };
+
+          // Lấy danh sách ID sản phẩm đã mua từ lastOrder
+          const purchasedProductIds = lastOrder.orderItems.map(
+            (item) => item.product
+          );
+
+          // Lọc ra các sản phẩm chưa mua
+          const remainingProducts = cartData.products.filter(
+            (product) => !purchasedProductIds.includes(product.id)
+          );
+
+          // Cập nhật lại cart trong localStorage
+          localStorage.setItem(
+            "cart",
+            JSON.stringify({ products: remainingProducts })
+          );
+
+          // Cập nhật Redux store
+          purchasedProductIds.forEach((productId) => {
+            dispatch(removeFromCart({ id: productId }));
+          });
+
+          console.log("✅ Đã xóa sản phẩm đã mua khỏi giỏ hàng");
+        } catch (error) {
+          console.error("Error updating cart:", error);
+        }
+      }
+
+      // 3. Chuyển về trang chủ sau 2 giây
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.error("❌ Error in handleDone:", error);
+      setMessage("Có lỗi xảy ra. Vui lòng thử lại.");
+      // Vẫn cho phép navigate về home sau 3 giây dù có lỗi
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     }
-    navigate("/");
   };
 
   return (

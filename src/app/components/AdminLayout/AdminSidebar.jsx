@@ -24,11 +24,19 @@ import {
   Ticket,
 } from "lucide-react";
 import { useAdminLanguage } from "../../context/AdminLanguageContext";
+import logoImg from "../../assets/img/AVOCADO.png";
 
 const AdminSidebar = ({ isOpen, onToggle }) => {
   const { t } = useAdminLanguage();
   const location = useLocation();
   const [expandedItems, setExpandedItems] = useState([]);
+
+  // Set dashboard as active on initial load
+  useEffect(() => {
+    if (location.pathname === "/admin" || location.pathname === "/admin/") {
+      window.history.replaceState(null, "", "/admin/dashboard");
+    }
+  }, [location.pathname]);
 
   const toggleExpanded = (title) => {
     setExpandedItems((prev) => (prev.includes(title) ? [] : [title]));
@@ -41,7 +49,7 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
         {
           title: t("dashboard"),
           icon: Home,
-          url: "/admin/dashboard ",
+          url: "/admin/dashboard",
         },
         // {
         //   title: t('analytics'),
@@ -147,8 +155,10 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
         <Link
           to={item.url}
           onClick={onClick}
-          className={`flex items-center gap-3 py-3 px-3.5 rounded-lg font-medium text-dark-4 transition-all duration-200 hover:bg-gray-100 hover:text-dark ${
-            isActive ? "bg-[rgba(87,80,241,0.07)] text-primary" : ""
+          className={`flex items-center gap-3 py-3 px-3.5 rounded-lg font-medium transition-all duration-200 ${
+            isActive
+              ? "bg-avocado-green-10 !text-avocado-green-100"
+              : "text-dark-4 hover:bg-gray-100 hover:text-dark"
           } ${className}`}
         >
           {children}
@@ -159,8 +169,10 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
     return (
       <button
         onClick={onClick}
-        className={`flex w-full items-center gap-3 py-3 px-3.5 rounded-lg font-medium text-dark-4 transition-all duration-200 hover:bg-gray-100 hover:text-dark ${
-          isActive ? "bg-[rgba(87,80,241,0.07)] text-primary" : ""
+        className={`flex w-full items-center gap-3 py-3 px-3.5 rounded-lg font-medium transition-all duration-200 ${
+          isActive
+            ? "bg-avocado-green-30 !text-avocado-green-100"
+            : "text-dark-4 hover:bg-gray-100 hover:text-dark"
         } ${className}`}
       >
         {children}
@@ -198,12 +210,7 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
               onClick={() => window.innerWidth < 1024 && onToggle()}
               className="px-0 py-2.5 min-[850px]:py-0"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Package className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-dark">AvocadoCake</span>
-              </div>
+              <img src={logoImg} alt="AvocadoCake Logo" className="h-24" />
             </Link>
 
             {window.innerWidth < 1024 && (
