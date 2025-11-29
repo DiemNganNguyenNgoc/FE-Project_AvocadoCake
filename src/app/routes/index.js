@@ -64,6 +64,7 @@ import AdminStratergy from "../pages/Admin/AdminStratergy/AdminStratergy.jsx";
 import PublicVoucherPage from "../pages/PublicVoucherPage/PublicVoucherPage.jsx";
 import MyVouchersPage from "../pages/MyVouchersPage/MyVouchersPage.jsx";
 import ImageSearchResultsPage from "../pages/ImageSearchResultsPage/ImageSearchResultsPage.jsx";
+import RankBenefitsPage from "../pages/User/RankBenefitsPage/RankBenefitsPage.jsx";
 
 export const routes = [
   {
@@ -503,6 +504,13 @@ export const routes = [
   {
     path: "/my-vouchers",
     page: MyVouchersPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+
+  {
+    path: "/rank-benefits",
+    page: RankBenefitsPage,
     isShowHeader: true,
     isShowFooter: true,
   },

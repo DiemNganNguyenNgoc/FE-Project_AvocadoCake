@@ -21,11 +21,13 @@ const MyVouchersPage = () => {
         return;
       }
 
-      const response = await getUserVouchers(accessToken);
+      const response = await getUserVouchers(null, accessToken);
+      console.log("Vouchers response:", response);
       if (response.status === "OK") {
         setVouchers(response.data || []);
       }
     } catch (error) {
+      console.error("Error fetching vouchers:", error);
       toast.error("Lỗi khi tải danh sách voucher!");
     } finally {
       setLoading(false);
@@ -55,33 +57,36 @@ const MyVouchersPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 py-8">
+      <div className=" border-b-2 border-avocado-brown-30 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center text-white">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-3">
-              <Ticket className="w-8 h-8" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-avocado-brown-100 border-2 border-white rounded-2xl mb-4">
+              <Ticket className="w-10 h-10" />
             </div>
-            <h1 className="text-3xl font-bold mb-2">Voucher Của Tôi</h1>
-            <p className="text-white/90">Quản lý tất cả voucher đã lưu</p>
+            <h1 className="text-4xl font-bold mb-2">Voucher Của Tôi</h1>
+            <p className="text-avocado-brown-100/95 text-lg">
+              Quản lý tất cả voucher đã lưu
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-10">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const count = getStatistics(tab.value);
+            const isActive = activeTab === tab.value;
             return (
               <div
                 key={tab.value}
-                className={`bg-gradient-to-br from-${tab.color}-500 to-${
-                  tab.color
-                }-600 rounded-lg shadow-md p-6 text-white cursor-pointer transition-transform hover:scale-105 ${
-                  activeTab === tab.value ? "ring-4 ring-white" : ""
+                className={`bg-white rounded-2xl p-8 cursor-pointer transition-all duration-200 ${
+                  isActive
+                    ? "border-3 border-avocado-green-100"
+                    : "border-2 border-gray-3 hover:border-avocado-green-100"
                 }`}
                 onClick={() => setActiveTab(tab.value)}
                 role="button"
@@ -95,12 +100,14 @@ const MyVouchersPage = () => {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className={`text-${tab.color}-100 text-sm mb-1`}>
+                    <p className="text-sm text-avocado-brown-100/60 mb-2 font-medium">
                       {tab.label}
                     </p>
-                    <p className="text-3xl font-bold">{count}</p>
+                    <p className="text-4xl font-bold text-avocado-brown-100">
+                      {count}
+                    </p>
                   </div>
-                  <Icon className={`w-12 h-12 text-${tab.color}-200`} />
+                  <Icon className="w-14 h-14 text-avocado-green-100" />
                 </div>
               </div>
             );
@@ -108,28 +115,29 @@ const MyVouchersPage = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
-          <div className="flex border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white rounded-2xl border-2 border-gray-3 mb-8">
+          <div className="flex border-b-2 border-gray-3">
             {tabs.map((tab) => {
               const Icon = tab.icon;
+              const isActive = activeTab === tab.value;
               return (
                 <button
                   key={tab.value}
                   onClick={() => setActiveTab(tab.value)}
-                  className={`flex-1 flex items-center justify-center space-x-2 py-4 px-6 font-medium transition-colors ${
-                    activeTab === tab.value
-                      ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  className={`flex-1 flex items-center justify-center space-x-3 py-5 px-6 font-semibold text-base transition-colors ${
+                    isActive
+                      ? "text-avocado-brown-100 border-b-3 border-avocado-green-80 bg-avocado-green-10"
+                      : "text-gray-5 hover:text-avocado-brown-100 hover:bg-gray-1"
                   }`}
                   aria-label={`Tab ${tab.label}`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-6 h-6" />
                   <span>{tab.label}</span>
                   <span
-                    className={`px-2 py-0.5 text-xs rounded-full ${
-                      activeTab === tab.value
-                        ? "bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                    className={`px-3 py-1 text-sm font-bold rounded-full ${
+                      isActive
+                        ? "bg-avocado-green-80 text-white"
+                        : "bg-gray-3 text-gray-6"
                     }`}
                   >
                     {getStatistics(tab.value)}
@@ -142,18 +150,18 @@ const MyVouchersPage = () => {
 
         {/* Voucher List */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+          <div className="flex items-center justify-center py-24">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-3 border-t-avocado-green-100"></div>
           </div>
         ) : filteredVouchers.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
-            <Ticket className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+          <div className="bg-white rounded-2xl border-2 border-gray-3 p-16 text-center">
+            <Ticket className="w-20 h-20 mx-auto text-gray-4 mb-6" />
+            <h3 className="text-2xl font-bold text-avocado-brown-100 mb-3">
               {activeTab === "ACTIVE" && "Bạn chưa có voucher nào"}
               {activeTab === "USED" && "Bạn chưa sử dụng voucher nào"}
               {activeTab === "EXPIRED" && "Không có voucher hết hạn"}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-6 text-lg mb-8">
               {activeTab === "ACTIVE" &&
                 "Hãy đến kho voucher để săn ngay những ưu đãi hấp dẫn!"}
               {activeTab === "USED" &&
@@ -164,7 +172,7 @@ const MyVouchersPage = () => {
             {activeTab === "ACTIVE" && (
               <button
                 onClick={() => navigate("/vouchers")}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 font-medium"
+                className="px-8 py-4 bg-avocado-green-80 text-white rounded-xl hover:bg-avocado-green-80/90 font-bold text-lg border-2 border-avocado-green-80 transition-colors"
                 aria-label="Đi săn voucher"
               >
                 Đi săn voucher
@@ -174,29 +182,42 @@ const MyVouchersPage = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredVouchers.map((userVoucher) => (
-                <VoucherCard
-                  key={userVoucher._id}
-                  voucher={userVoucher.voucherDetails}
-                  userStatus={userVoucher}
-                  onUse={activeTab === "ACTIVE" ? handleUseVoucher : null}
-                  showActions={true}
-                />
-              ))}
+              {filteredVouchers.map((userVoucher) => {
+                // Handle both possible data structures
+                const voucherData =
+                  userVoucher.voucherDetails ||
+                  userVoucher.voucher ||
+                  userVoucher;
+
+                if (!voucherData || !voucherData.endDate) {
+                  console.warn("Invalid voucher data:", userVoucher);
+                  return null;
+                }
+
+                return (
+                  <VoucherCard
+                    key={userVoucher._id}
+                    voucher={voucherData}
+                    userStatus={userVoucher.status || userVoucher}
+                    onUse={activeTab === "ACTIVE" ? handleUseVoucher : null}
+                    showActions={true}
+                  />
+                );
+              })}
             </div>
 
             {/* CTA for active vouchers */}
             {activeTab === "ACTIVE" && filteredVouchers.length > 0 && (
-              <div className="mt-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg shadow-lg p-8 text-center text-white">
-                <h3 className="text-2xl font-bold mb-2">
+              <div className="mt-10 bg-avocado-green-80 rounded-2xl border-2 border-avocado-brown-30 p-10 text-center text-white">
+                <h3 className="text-3xl font-bold mb-3">
                   Bạn có {filteredVouchers.length} voucher có thể dùng!
                 </h3>
-                <p className="text-white/90 mb-6">
+                <p className="text-white/95 text-lg mb-8">
                   Mua sắm ngay để tận dụng ưu đãi tuyệt vời
                 </p>
                 <button
                   onClick={() => navigate("/products")}
-                  className="px-8 py-3 bg-white text-purple-600 rounded-lg hover:bg-gray-100 font-medium transition-colors"
+                  className="px-10 py-4 bg-avocado-brown-100 text-white rounded-xl hover:bg-avocado-brown-100/90 font-bold text-lg border-2 border-avocado-brown-100 transition-colors"
                   aria-label="Mua sắm ngay"
                 >
                   Mua sắm ngay

@@ -22,6 +22,7 @@ import {
   Sparkles,
   LogOut,
   Ticket,
+  Award,
 } from "lucide-react";
 import { useAdminLanguage } from "../../context/AdminLanguageContext";
 import logoImg from "../../assets/img/AVOCADO.png";
@@ -95,6 +96,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           title: t("vouchers"),
           icon: Ticket,
           url: "/admin/voucher",
+        },
+        {
+          title: t("Ranks"),
+          icon: Award,
+          url: "/admin/rank",
         },
         {
           title: t("recipe"),

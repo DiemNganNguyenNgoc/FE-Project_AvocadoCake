@@ -16,6 +16,7 @@ import {
   Cake,
   Sparkles,
   Ticket,
+  Award,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -53,6 +54,7 @@ import EditVoucher from "../AdminVoucher/EditVoucher";
 import VoucherDetail from "../AdminVoucher/VoucherDetail";
 import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
 import AdminRating from "../AdminRating/AdminRating";
+import AdminRank from "../AdminRank/AdminRank";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -158,6 +160,13 @@ const navItems = [
     icon: <Ticket />,
     path: "/admin/voucher",
     component: AdminVoucher,
+  },
+  {
+    id: "rank",
+    text: "Ranks",
+    icon: <Award />,
+    path: "/admin/rank",
+    component: AdminRank,
   },
   {
     id: "category",
