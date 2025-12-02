@@ -72,18 +72,21 @@ const RankBenefitsPage = () => {
 
         {/* User Current Rank Card */}
         {userRankData && (
-          <div className="mb-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-8 text-white shadow-lg">
+          <div
+            className="mb-12 bg-white p-8 border"
+            style={{ borderRadius: "16px" }}
+          >
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-6">
                 <div className="text-6xl">{userRankData.currentRank.icon}</div>
                 <div>
-                  <h2 className="text-3xl font-bold mb-2">
+                  <h2 className="text-3xl font-bold mb-2 text-gray-900">
                     Hạng {userRankData.currentRank.rankDisplayName}
                   </h2>
-                  <p className="text-purple-100">
+                  <p className="text-gray-600">
                     Tổng chi tiêu: {formatCurrency(userRankData.totalSpending)}
                   </p>
-                  <p className="text-lg font-semibold mt-2">
+                  <p className="text-lg font-semibold mt-2 text-avocado-green-100">
                     Giảm giá hiện tại: {userRankData.discountPercent}%
                   </p>
                 </div>
@@ -92,28 +95,31 @@ const RankBenefitsPage = () => {
               {/* Progress to Next Rank */}
               {userRankData.progressToNextRank?.hasNextRank && (
                 <div className="flex-1 max-w-md">
-                  <div className="bg-white/20 rounded-full p-4">
-                    <div className="flex justify-between text-sm mb-2">
+                  <div
+                    className="bg-gray-50 p-4"
+                    style={{ borderRadius: "16px" }}
+                  >
+                    <div className="flex justify-between text-sm mb-2 text-gray-700">
                       <span>Tiến độ đến rank tiếp theo</span>
                       <span className="font-bold">
                         {userRankData.progressToNextRank.progress}%
                       </span>
                     </div>
-                    <div className="w-full bg-white/30 rounded-full h-4 overflow-hidden">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-white h-full rounded-full transition-all duration-500"
+                        className="bg-avocado-green-100 h-full rounded-full transition-all duration-500"
                         style={{
                           width: `${userRankData.progressToNextRank.progress}%`,
                         }}
                       />
                     </div>
-                    <p className="text-sm mt-2 text-purple-100">
+                    <p className="text-sm mt-2 text-gray-600">
                       Còn{" "}
                       {formatCurrency(
                         userRankData.progressToNextRank.remainingSpending
                       )}{" "}
                       nữa để đạt hạng{" "}
-                      <span className="font-bold">
+                      <span className="font-bold text-gray-900">
                         {
                           userRankData.progressToNextRank.nextRank
                             .rankDisplayName
@@ -135,41 +141,24 @@ const RankBenefitsPage = () => {
             return (
               <div
                 key={rank._id}
-                className={`relative rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:scale-105 ${
-                  isCurrentRank ? "ring-4 ring-offset-4" : ""
-                }`}
+                className="relative overflow-hidden transition-all duration-300 hover:scale-105"
                 style={{
-                  ringColor: isCurrentRank ? rank.color : "transparent",
-                  borderWidth: "2px",
-                  borderStyle: "solid",
-                  borderColor: `${rank.color}40`,
+                  borderRadius: "16px",
+                  border: isCurrentRank
+                    ? "2px solid #27a300"
+                    : "0.5px solid #d1d5db",
                 }}
               >
-                {/* Rank Badge */}
-                {isCurrentRank && (
-                  <div
-                    className="absolute top-4 right-4 px-4 py-2 rounded-full text-white font-bold text-sm shadow-lg z-10"
-                    style={{ backgroundColor: rank.color }}
-                  >
-                    Hạng hiện tại
-                  </div>
-                )}
-
                 {/* Card Header */}
-                <div
-                  className="p-8 text-white text-center"
-                  style={{
-                    background: `linear-gradient(135deg, ${rank.color}ee, ${rank.color}cc)`,
-                  }}
-                >
+                <div className="p-8 bg-gray-50 text-center border-b">
                   <div className="text-6xl mb-4">{rank.icon}</div>
-                  <h3 className="text-2xl font-bold mb-2">
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900">
                     {rank.rankDisplayName}
                   </h3>
-                  <div className="text-3xl font-bold mb-4">
+                  <div className="text-3xl font-bold mb-2 text-avocado-green-100">
                     {rank.discountPercent}%
                   </div>
-                  <p className="text-sm opacity-90">Giảm giá mọi đơn hàng</p>
+                  <p className="text-sm text-gray-600">Giảm giá mọi đơn hàng</p>
                 </div>
 
                 {/* Card Body */}
@@ -251,10 +240,10 @@ const RankBenefitsPage = () => {
         )}
 
         {/* Info Section */}
-        <div className="mt-16 bg-blue-50 rounded-2xl p-8 border-2 border-blue-100">
+        <div className="mt-16 bg-avocado-green-10 rounded-2xl p-8 border-2 border-blue-100">
           <div className="max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              💡 Cách thức hoạt động
+              Cách thức hoạt động
             </h3>
             <div className="space-y-4 text-gray-700">
               <div className="flex items-start gap-4">

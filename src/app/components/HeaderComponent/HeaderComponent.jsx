@@ -355,6 +355,12 @@ const HeaderComponent = () => {
                         Voucher
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
+                        to="/rank-benefits"
+                        isActive={activePath.startsWith("/rank-benefits")}
+                      >
+                        Rank
+                      </ButtonNoBGComponent>
+                      <ButtonNoBGComponent
                         to="/design-cake"
                         isActive={activePath.startsWith("/design-cake")}
                       >

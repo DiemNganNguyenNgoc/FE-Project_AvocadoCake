@@ -31,6 +31,12 @@ const AdminUserContent = ({ onNavigate }) => {
       try {
         setLoading(true);
         const response = await UserService.getAllUsers();
+        console.log("👥 Full API Response:", response);
+        console.log("👥 Response.data:", response.data);
+        console.log(
+          "👥 Sample user with rank:",
+          response.data?.find((u) => u.currentRank)
+        );
         setUsers(response.data || response);
         setError(null);
       } catch (error) {
