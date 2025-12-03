@@ -1,4 +1,3 @@
-import { Plus } from "lucide-react";
 import React from "react";
 
 const ToppingToolbar = ({ toppings, onAdd }) => {
@@ -36,7 +35,7 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
         <button
           onClick={handleAdd}
           disabled={!selectedTopping}
-          className="bg-sky-500 text-white px-3 py-2 rounded-lg hover:bg-sky-600 disabled:opacity-50 transition"
+          className="bg-green-600 text-white px-4 py-2 rounded-lg shadow"
         >
           Thêm
         </button>
