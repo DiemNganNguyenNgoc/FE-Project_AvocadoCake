@@ -161,6 +161,26 @@
 }
 
 /* ===========================
+   Coins Display
+=========================== */
+.coins__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #fff8e1;
+  border-radius: 20px;
+  border: 2px solid #ffd54f;
+  white-space: nowrap;
+}
+
+.coins__text {
+  font-weight: 600;
+  color: #f57c00;
+  font-size: 1.4rem;
+}
+
+/* ===========================
    Responsive
 =========================== */
 

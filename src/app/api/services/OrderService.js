@@ -312,6 +312,38 @@ export const applyCoinsToOrder = async (orderId, coinsToUse, access_token) => {
   }
 };
 
+// Xác nhận thanh toán với voucher
+export const confirmPaymentWithVoucher = async (
+  orderId,
+  voucherData,
+  access_token
+) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/confirm-payment-voucher`,
+      { orderId, voucherData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi xác nhận thanh toán.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
 // Lấy top đơn hàng mới nhất
 export const getRecentOrders = async (access_token, limit = 5) => {
   try {

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useReducer } from "react";
-import ProductService from "./services/ProductService";
 
 // Initial state
 const initialState = {
@@ -8,6 +7,8 @@ const initialState = {
   error: null,
   searchTerm: "",
   filterCategory: "all",
+  filterPriceMin: "",
+  filterPriceMax: "",
   sortField: "createdAt",
   sortDirection: "desc",
   currentPage: 1,
@@ -29,6 +30,8 @@ const ActionTypes = {
   SET_CATEGORIES: "SET_CATEGORIES",
   SET_SEARCH_TERM: "SET_SEARCH_TERM",
   SET_FILTER_CATEGORY: "SET_FILTER_CATEGORY",
+  SET_FILTER_PRICE_MIN: "SET_FILTER_PRICE_MIN",
+  SET_FILTER_PRICE_MAX: "SET_FILTER_PRICE_MAX",
   SET_SORT: "SET_SORT",
   SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
   SET_ITEMS_PER_PAGE: "SET_ITEMS_PER_PAGE",
@@ -44,6 +47,7 @@ const ActionTypes = {
   UPDATE_PRODUCT: "UPDATE_PRODUCT",
   DELETE_PRODUCT: "DELETE_PRODUCT",
   DELETE_MULTIPLE_PRODUCTS: "DELETE_MULTIPLE_PRODUCTS",
+  TOGGLE_PRODUCT_VISIBILITY: "TOGGLE_PRODUCT_VISIBILITY",
   RESET: "RESET",
 };
 
@@ -67,6 +71,12 @@ const adminProductReducer = (state, action) => {
 
     case ActionTypes.SET_FILTER_CATEGORY:
       return { ...state, filterCategory: action.payload, currentPage: 1 };
+
+    case ActionTypes.SET_FILTER_PRICE_MIN:
+      return { ...state, filterPriceMin: action.payload, currentPage: 1 };
+
+    case ActionTypes.SET_FILTER_PRICE_MAX:
+      return { ...state, filterPriceMax: action.payload, currentPage: 1 };
 
     case ActionTypes.SET_SORT:
       return {
@@ -158,6 +168,16 @@ const adminProductReducer = (state, action) => {
         ),
       };
 
+    case ActionTypes.TOGGLE_PRODUCT_VISIBILITY:
+      return {
+        ...state,
+        products: state.products.map((product) =>
+          product._id === action.payload.id
+            ? { ...product, isHidden: action.payload.isHidden }
+            : product
+        ),
+      };
+
     case ActionTypes.RESET:
       return initialState;
 
@@ -186,6 +206,25 @@ const getFilteredProducts = (state) => {
     filtered = filtered.filter(
       (product) => product.productCategory === state.filterCategory
     );
+  }
+
+  // Filter by price range
+  if (state.filterPriceMin !== "" && state.filterPriceMin !== null) {
+    const minPrice = parseFloat(state.filterPriceMin);
+    if (!isNaN(minPrice)) {
+      filtered = filtered.filter(
+        (product) => parseFloat(product.productPrice) >= minPrice
+      );
+    }
+  }
+
+  if (state.filterPriceMax !== "" && state.filterPriceMax !== null) {
+    const maxPrice = parseFloat(state.filterPriceMax);
+    if (!isNaN(maxPrice)) {
+      filtered = filtered.filter(
+        (product) => parseFloat(product.productPrice) <= maxPrice
+      );
+    }
   }
 
   return filtered;
@@ -251,6 +290,16 @@ export const AdminProductProvider = ({ children }) => {
         type: ActionTypes.SET_FILTER_CATEGORY,
         payload: filterCategory,
       }),
+    setFilterPriceMin: (filterPriceMin) =>
+      dispatch({
+        type: ActionTypes.SET_FILTER_PRICE_MIN,
+        payload: filterPriceMin,
+      }),
+    setFilterPriceMax: (filterPriceMax) =>
+      dispatch({
+        type: ActionTypes.SET_FILTER_PRICE_MAX,
+        payload: filterPriceMax,
+      }),
     setSort: (field, direction) =>
       dispatch({ type: ActionTypes.SET_SORT, payload: { field, direction } }),
     setCurrentPage: (page) =>
@@ -284,6 +333,11 @@ export const AdminProductProvider = ({ children }) => {
       dispatch({
         type: ActionTypes.DELETE_MULTIPLE_PRODUCTS,
         payload: productIds,
+      }),
+    toggleProductVisibility: (id, isHidden) =>
+      dispatch({
+        type: ActionTypes.TOGGLE_PRODUCT_VISIBILITY,
+        payload: { id, isHidden },
       }),
     reset: () => dispatch({ type: ActionTypes.RESET }),
   };

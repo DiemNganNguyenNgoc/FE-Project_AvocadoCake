@@ -5,6 +5,7 @@ import OrderTable from "./partials/OrderTable";
 import Breadcrumb from "./partials/Breadcrumb";
 import UpdateOrderStatus from "./usecases/UpdateOrderStatus";
 import ViewOrderDetail from "./usecases/ViewOrderDetail";
+import Button from "../../../components/AdminLayout/Button";
 
 const AdminOrder = ({ onNavigate }) => {
   const {
@@ -15,6 +16,12 @@ const AdminOrder = ({ onNavigate }) => {
     fetchOrders,
     deleteOrder,
     clearSelection,
+    selectOrder,
+    sortBy,
+    sortOrder,
+    setSortBy,
+    setSortOrder,
+    updateMultipleOrderStatuses,
   } = useAdminOrderStore();
 
   const [currentView, setCurrentView] = useState("main");
@@ -52,11 +59,21 @@ const AdminOrder = ({ onNavigate }) => {
       alert("Vui lòng chọn ít nhất một đơn hàng để cập nhật trạng thái");
       return;
     }
-    if (onNavigate) {
-      onNavigate("update-status");
-    } else {
-      setCurrentView("update-status");
+
+    // Check if all selected orders have the same status
+    const selectedOrdersData = orders.filter((order) =>
+      selectedOrders.includes(order._id)
+    );
+
+    const statuses = [...new Set(selectedOrdersData.map((o) => o.status?._id))];
+
+    if (statuses.length > 1) {
+      alert("Vui lòng chọn các đơn hàng có cùng trạng thái để cập nhật");
+      return;
     }
+
+    // Always use internal view to preserve state
+    setCurrentView("update-status");
   };
 
   const handleBackToMain = () => {
@@ -70,7 +87,15 @@ const AdminOrder = ({ onNavigate }) => {
 
   // Render different views
   if (currentView === "update-status") {
-    return <UpdateOrderStatus onBack={handleBackToMain} />;
+    return (
+      <UpdateOrderStatus
+        onBack={handleBackToMain}
+        selectedOrders={selectedOrders}
+        orders={orders}
+        updateMultipleOrderStatuses={updateMultipleOrderStatuses}
+        clearSelection={clearSelection}
+      />
+    );
   }
 
   if (currentView === "view") {
@@ -86,30 +111,30 @@ const AdminOrder = ({ onNavigate }) => {
         <div className="flex justify-between items-center mt-4">
           <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng</h1>
           <div className="flex items-center space-x-3">
-            <button
+            <Button
               onClick={handleRefresh}
               disabled={loading}
-              className="flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              variant="secondary"
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
               />
               Làm mới
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleUpdateStatus}
               disabled={selectedOrders.length === 0}
-              className="flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="primary"
             >
-              Cập nhật trạng thái
-            </button>
-            <button
+              Cập nhật trạng thái ({selectedOrders.length})
+            </Button>
+            <Button
               onClick={() => onNavigate("create")}
-              className="flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="flex items-center px-4 py-2 avocado-green border border-transparent text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               <Plus className="w-4 h-4 mr-2" />
               Tạo mới
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -124,6 +149,14 @@ const AdminOrder = ({ onNavigate }) => {
       {/* Orders Table */}
       <OrderTable
         orders={orders}
+        selectedOrders={selectedOrders}
+        loading={loading}
+        selectOrder={selectOrder}
+        clearSelection={clearSelection}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        setSortBy={setSortBy}
+        setSortOrder={setSortOrder}
         onViewOrder={handleViewOrder}
         onEditOrder={handleEditOrder}
         onDeleteOrder={handleDeleteOrder}

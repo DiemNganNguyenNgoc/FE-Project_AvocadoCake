@@ -15,6 +15,8 @@ import Loading from "../LoadingComponent/Loading";
 import UserIconComponent from "../UserIconComponent/UserIconComponent";
 import CartIconComponent from "../CartIconComponent/CartIconComponent";
 import VoiceComponent from "../VoiceComponent/VoiceComponent";
+import RankBadge from "../RankBadge/RankBadge";
+import { getUserRank } from "../../api/services/RankService";
 
 const HeaderComponent = () => {
   const navigate = useNavigate();
@@ -27,6 +29,8 @@ const HeaderComponent = () => {
   const [userImage, setUserImage] = useState("");
   const [showPopover, setShowPopover] = useState(false);
   const [isLoadingCoins, setIsLoadingCoins] = useState(false);
+  const [userRankData, setUserRankData] = useState(null);
+  const [isLoadingRank, setIsLoadingRank] = useState(false);
 
   const handleNavigationLogin = () => {
     navigate("/login");
@@ -73,6 +77,25 @@ const HeaderComponent = () => {
     }
   };
 
+  // Lấy thông tin rank của user
+  const fetchUserRank = async () => {
+    if (!user?.id || !access_token) {
+      return;
+    }
+
+    try {
+      setIsLoadingRank(true);
+      const response = await getUserRank(user.id, access_token);
+      if (response.status === "OK") {
+        setUserRankData(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching user rank:", error);
+    } finally {
+      setIsLoadingRank(false);
+    }
+  };
+
   const handleLogout = async () => {
     setShowLoading(true);
     await UserService.logoutUser();
@@ -100,6 +123,7 @@ const HeaderComponent = () => {
   useEffect(() => {
     if (user?.id && access_token) {
       fetchUserCoins();
+      fetchUserRank();
     }
   }, [user?.id, access_token]);
 
@@ -129,6 +153,13 @@ const HeaderComponent = () => {
   const handleUserInfo = () => {
     navigate("/profile"); // Navigate to user information page
   };
+  const handleVoucher = () => {
+    navigate("/my-vouchers"); // Navigate to voucher page
+  };
+
+  const handleRankBenefits = () => {
+    navigate("/rank-benefits");
+  };
 
   //Voice search
   // const handleVoiceSearch = (query) => {
@@ -149,6 +180,20 @@ const HeaderComponent = () => {
             onClick={handleUserInfo}
           >
             Thông tin người dùng
+          </SideMenuComponent>
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleVoucher}
+          >
+            Voucher của tôi
+          </SideMenuComponent>
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleRankBenefits}
+          >
+            Quyền lợi Rank
           </SideMenuComponent>
           <SideMenuComponent
             variant="link"
@@ -194,7 +239,7 @@ const HeaderComponent = () => {
                   />
                 </div>
 
-                {/* Cart + Coins + User */}
+                {/* Cart + Coins + Rank + User */}
                 <div className="col-6 col-md-4 d-flex justify-content-end align-items-center gap-3 mt-2 mt-md-0">
                   {user?.isAdmin === false && (
                     <div className={styles.cart__icon__wrapper}>
@@ -214,6 +259,13 @@ const HeaderComponent = () => {
                         {isLoadingCoins ? "..." : user.coins.toLocaleString()}
                       </span>
                     </div>
+                  )}
+
+                  {user?.isAdmin === false && user?.isLoggedIn && (
+                    <RankBadge
+                      userRankData={userRankData}
+                      loading={isLoadingRank}
+                    />
                   )}
 
                   <Loading isLoading={showLoading} />
@@ -278,7 +330,7 @@ const HeaderComponent = () => {
                       <ButtonNoBGComponent to="/admin/introduce">
                         Liên hệ
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/admin/store-info">
+                      <ButtonNoBGComponent to="/admin/dashboard">
                         Quản lí
                       </ButtonNoBGComponent>
                     </>
@@ -295,6 +347,18 @@ const HeaderComponent = () => {
                         isActive={activePath.startsWith("/products")}
                       >
                         Sản phẩm
+                      </ButtonNoBGComponent>
+                      <ButtonNoBGComponent
+                        to="/vouchers"
+                        isActive={activePath.startsWith("/vouchers")}
+                      >
+                        Voucher
+                      </ButtonNoBGComponent>
+                      <ButtonNoBGComponent
+                        to="/rank-benefits"
+                        isActive={activePath.startsWith("/rank-benefits")}
+                      >
+                        Rank
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
                         to="/design-cake"

@@ -1,6 +1,8 @@
 import React from "react";
-import { Edit, Eye, Trash2, MoreVertical } from "lucide-react";
+import { Edit, Eye, Trash2, MoreVertical, EyeOff } from "lucide-react";
 import { useAdminProductStore } from "../AdminProductContext";
+import { useAdminLanguage } from "../../../../context/AdminLanguageContext";
+import ProductService from "../services/ProductService";
 
 const ProductCard = ({ product }) => {
   const {
@@ -11,8 +13,12 @@ const ProductCard = ({ product }) => {
     toggleProductSelection,
     selectedProducts,
     categories,
+    toggleProductVisibility,
+    setLoading,
+    setError,
   } = useAdminProductStore();
 
+  const { t } = useAdminLanguage();
   const isSelected = selectedProducts.includes(product._id);
 
   const handleView = () => {
@@ -32,6 +38,28 @@ const ProductCard = ({ product }) => {
       )
     ) {
       deleteProduct(product._id);
+    }
+  };
+
+  const handleToggleVisibility = async (e) => {
+    e.stopPropagation();
+    const confirmMessage = product.isHidden
+      ? t("showProductConfirm")
+      : t("hideProductConfirm");
+
+    if (window.confirm(confirmMessage)) {
+      try {
+        setLoading(true);
+        const response = await ProductService.toggleProductVisibility(
+          product._id
+        );
+        toggleProductVisibility(product._id, response.data.isHidden);
+        setError(null);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -93,10 +121,16 @@ const ProductCard = ({ product }) => {
         />
 
         {/* Discount Badge - Top Left */}
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
           <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
             -15%
           </span>
+          {product.isHidden && (
+            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+              <EyeOff className="w-3 h-3" />
+              {t("hidden")}
+            </span>
+          )}
         </div>
 
         {/* Selection Checkbox - Top Right */}
@@ -197,7 +231,28 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Actions - Giữ nguyên ở dưới cùng */}
-        <div className="flex items-center justify-between border-t border-gray-200 action-buttons">
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4 action-buttons">
+          <button
+            onClick={handleToggleVisibility}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-sm font-medium ${
+              product.isHidden
+                ? "bg-red-100 text-red-600 hover:bg-red-200"
+                : "bg-green-100 text-green-600 hover:bg-green-200"
+            }`}
+            title={product.isHidden ? t("showProduct") : t("hideProduct")}
+          >
+            {product.isHidden ? (
+              <>
+                <EyeOff className="w-4 h-4" />
+                <span>{t("hidden")}</span>
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" />
+                <span>{t("visible")}</span>
+              </>
+            )}
+          </button>
           <div className="flex space-x-2">
             <button
               onClick={handleView}

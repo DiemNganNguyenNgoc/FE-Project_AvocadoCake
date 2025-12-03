@@ -68,7 +68,7 @@ const RecommendationCarouselComponent = ({ products }) => {
                 title={product.productName}
                 price={product.productPrice}
                 id={product._id}
-                onClick={() => handleDetail(product)}
+                onCardClick={() => handleDetail(product)}
                 averageRating={product.averageRating || 5.0}
                 totalRatings={product.totalRatings || 0}
                 discount={product.discount || 0}

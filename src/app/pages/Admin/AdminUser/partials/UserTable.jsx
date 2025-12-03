@@ -142,6 +142,7 @@ const UserTable = () => {
       "Phone",
       "Email",
       "Role",
+      "Rank",
       "Orders",
       "Join On",
     ];
@@ -153,7 +154,8 @@ const UserTable = () => {
       user.userPhone || "N/A",
       user.userEmail || "N/A",
       user.isAdmin ? "Admin" : "User",
-      "0",
+      user.currentRank?.rankDisplayName || "Chưa có rank",
+      user.orderCount || 0,
       formatDate(user.createdAt),
     ]);
 
@@ -430,6 +432,11 @@ const UserTable = () => {
                 </th>
                 <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   <div className="flex items-center space-x-1">
+                    <span>Rank</span>
+                  </div>
+                </th>
+                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <div className="flex items-center space-x-1">
                     <span>Orders</span>
                   </div>
                 </th>
@@ -450,6 +457,15 @@ const UserTable = () => {
             <tbody className="bg-white dark:bg-gray-dark divide-y divide-stroke dark:divide-stroke-dark">
               {currentData.map((user, index) => {
                 const isSelected = selectedUsers.includes(user._id);
+
+                // 🔍 Debug user data
+                if (index === 0) {
+                  console.log("👤 Sample User Data:", {
+                    userName: user.userName,
+                    currentRank: user.currentRank,
+                    orderCount: user.orderCount,
+                  });
+                }
 
                 return (
                   <tr
@@ -484,8 +500,29 @@ const UserTable = () => {
                     <td className="px-8 py-5 whitespace-nowrap">
                       {getRoleBadge(user.isAdmin)}
                     </td>
+                    <td className="px-8 py-5 whitespace-nowrap">
+                      {user.currentRank &&
+                      typeof user.currentRank === "object" &&
+                      user.currentRank.rankDisplayName ? (
+                        <span
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                          style={{
+                            backgroundColor:
+                              (user.currentRank.color || "#CD7F32") + "20",
+                            color: user.currentRank.color || "#CD7F32",
+                          }}
+                        >
+                          {user.currentRank.icon || "🏅"}{" "}
+                          {user.currentRank.rankDisplayName}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-sm">
+                          Chưa có rank
+                        </span>
+                      )}
+                    </td>
                     <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
-                      0
+                      {user.orderCount || 0}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
                       {formatDate(user.createdAt)}

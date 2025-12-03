@@ -224,6 +224,20 @@ class ProductService {
     }
   }
 
+  // Toggle product visibility (hide/show)
+  static async toggleProductVisibility(id) {
+    try {
+      const response = await apiClient.patch(
+        `/product/toggle-visibility/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to toggle product visibility"
+      );
+    }
+  }
+
   static async fetchCategoryById(id) {
     try {
       const accessToken = localStorage.getItem("access_token");

@@ -7,7 +7,11 @@ import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../../redux/slides/cartSlide";
 import { updateOrder } from "../../../redux/slides/orderSlide";
-import { getDetailsOrder } from "../../../api/services/OrderService";
+import {
+  getDetailsOrder,
+  updateOrderStatus,
+} from "../../../api/services/OrderService";
+import { getAllStatus } from "../../../api/services/StatusService";
 
 const BankingInfoPage = () => {
   const navigate = useNavigate();
@@ -20,6 +24,9 @@ const BankingInfoPage = () => {
     adminBankInfo,
     selectedProductIds,
     coinsApplied = 0,
+    voucherDiscount = 0,
+    finalTotalPrice: passedFinalTotal,
+    originalTotalPrice: passedOriginalTotal,
   } = location.state || {};
   const [paymentStatus, setPaymentStatus] = useState("PENDING");
   const [orderStatus, setOrderStatus] = useState("");
@@ -57,12 +64,16 @@ const BankingInfoPage = () => {
     }
   };
 
-  // Tính toán tổng tiền sau khi trừ xu
+  // Sử dụng giá trị được truyền từ PaymentPage hoặc tính toán từ lastOrder
   const originalTotalPrice =
+    passedOriginalTotal ||
     (lastOrder.totalItemPrice || 0) + (lastOrder.shippingPrice || 0);
   const finalTotalPrice =
-    lastOrder.totalPrice || originalTotalPrice - (lastOrder.coinsUsed || 0);
-  const coinsAppliedFromOrder = lastOrder.coinsUsed || 0;
+    passedFinalTotal ||
+    lastOrder.totalPrice ||
+    originalTotalPrice - (lastOrder.coinsUsed || 0);
+  const coinsAppliedFromOrder = coinsApplied || lastOrder.coinsUsed || 0;
+  const voucherDiscountApplied = voucherDiscount || 0;
 
   const resolvedOrderItems =
     lastOrder.orderItems?.map((item) => {
@@ -147,42 +158,82 @@ const BankingInfoPage = () => {
     navigate("/payment");
   };
 
-  const handleDone = () => {
-    // Lấy thông tin đơn hàng từ lastOrder
-    if (lastOrder.orderItems && lastOrder.orderItems.length > 0) {
-      try {
-        // Lấy cart hiện tại từ localStorage
-        const cartData = JSON.parse(localStorage.getItem("cart")) || {
-          products: [],
-        };
+  const handleDone = async () => {
+    try {
+      // 1. Cập nhật trạng thái đơn hàng sang "PAID" (Đã thanh toán)
+      if (lastOrder.orderId) {
+        const accessToken = localStorage.getItem("access_token");
 
-        // Lấy danh sách ID sản phẩm đã mua từ lastOrder
-        const purchasedProductIds = lastOrder.orderItems.map(
-          (item) => item.product
+        // Lấy danh sách tất cả status
+        const statusResponse = await getAllStatus(accessToken);
+        const allStatuses = statusResponse.data || statusResponse;
+
+        // Tìm status "PAID"
+        const paidStatus = allStatuses.find(
+          (status) => status.statusCode === "PAID"
         );
 
-        // Lọc ra các sản phẩm chưa mua
-        const remainingProducts = cartData.products.filter(
-          (product) => !purchasedProductIds.includes(product.id)
-        );
-
-        // Cập nhật lại cart trong localStorage
-        localStorage.setItem(
-          "cart",
-          JSON.stringify({ products: remainingProducts })
-        );
-
-        // Cập nhật Redux store
-        purchasedProductIds.forEach((productId) => {
-          dispatch(removeFromCart({ id: productId }));
-        });
-
-        console.log("Đã xóa sản phẩm đã mua khỏi giỏ hàng");
-      } catch (error) {
-        console.error("Error updating cart:", error);
+        if (paidStatus) {
+          // Cập nhật trạng thái đơn hàng
+          await updateOrderStatus(
+            lastOrder.orderId,
+            paidStatus._id,
+            accessToken
+          );
+          console.log("✅ Đã cập nhật trạng thái đơn hàng sang PAID");
+          setMessage("Đã xác nhận thanh toán thành công! 🎉");
+        } else {
+          console.warn("⚠️ Không tìm thấy status PAID");
+        }
       }
+
+      // 2. Xóa sản phẩm đã mua khỏi giỏ hàng
+      if (lastOrder.orderItems && lastOrder.orderItems.length > 0) {
+        try {
+          // Lấy cart hiện tại từ localStorage
+          const cartData = JSON.parse(localStorage.getItem("cart")) || {
+            products: [],
+          };
+
+          // Lấy danh sách ID sản phẩm đã mua từ lastOrder
+          const purchasedProductIds = lastOrder.orderItems.map(
+            (item) => item.product
+          );
+
+          // Lọc ra các sản phẩm chưa mua
+          const remainingProducts = cartData.products.filter(
+            (product) => !purchasedProductIds.includes(product.id)
+          );
+
+          // Cập nhật lại cart trong localStorage
+          localStorage.setItem(
+            "cart",
+            JSON.stringify({ products: remainingProducts })
+          );
+
+          // Cập nhật Redux store
+          purchasedProductIds.forEach((productId) => {
+            dispatch(removeFromCart({ id: productId }));
+          });
+
+          console.log("✅ Đã xóa sản phẩm đã mua khỏi giỏ hàng");
+        } catch (error) {
+          console.error("Error updating cart:", error);
+        }
+      }
+
+      // 3. Chuyển về trang chủ sau 2 giây
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      console.error("❌ Error in handleDone:", error);
+      setMessage("Có lỗi xảy ra. Vui lòng thử lại.");
+      // Vẫn cho phép navigate về home sau 3 giây dù có lỗi
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     }
-    navigate("/");
   };
 
   return (
@@ -209,7 +260,7 @@ const BankingInfoPage = () => {
           <div className="order-total">
             Tổng tiền: {finalTotalPrice?.toLocaleString() || 0} VND
           </div>
-          {coinsAppliedFromOrder > 0 && (
+          {(coinsAppliedFromOrder > 0 || voucherDiscountApplied > 0) && (
             <div
               className="coins-info"
               style={{
@@ -224,14 +275,26 @@ const BankingInfoPage = () => {
                 <span style={{ fontWeight: "bold" }}>Tổng tiền gốc: </span>
                 <span>{originalTotalPrice?.toLocaleString()} VND</span>
               </div>
-              <div style={{ marginBottom: "5px" }}>
-                <span style={{ fontWeight: "bold", color: "#28a745" }}>
-                  Giảm giá từ xu:{" "}
-                </span>
-                <span style={{ color: "#28a745" }}>
-                  -{coinsAppliedFromOrder?.toLocaleString()} VND
-                </span>
-              </div>
+              {voucherDiscountApplied > 0 && (
+                <div style={{ marginBottom: "5px" }}>
+                  <span style={{ fontWeight: "bold", color: "#b1e321" }}>
+                    Giảm giá voucher:{" "}
+                  </span>
+                  <span style={{ color: "#b1e321" }}>
+                    -{voucherDiscountApplied?.toLocaleString()} VND
+                  </span>
+                </div>
+              )}
+              {coinsAppliedFromOrder > 0 && (
+                <div style={{ marginBottom: "5px" }}>
+                  <span style={{ fontWeight: "bold", color: "#28a745" }}>
+                    Giảm giá từ xu:{" "}
+                  </span>
+                  <span style={{ color: "#28a745" }}>
+                    -{coinsAppliedFromOrder?.toLocaleString()} VND
+                  </span>
+                </div>
+              )}
               <div>
                 <span style={{ fontWeight: "bold" }}>
                   Tổng tiền thanh toán:{" "}

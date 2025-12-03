@@ -77,7 +77,7 @@ const TopProducts = () => {
   }
 
   return (
-    <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
+    <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card overflow-hidden">
       {/* Header */}
       <div className="border-b border-stroke px-4 py-4 dark:border-dark-3 sm:px-6 xl:px-7.5">
         <h2 className="font-medium text-dark dark:text-white text-body-2xlg">
@@ -89,17 +89,23 @@ const TopProducts = () => {
       </div>
 
       {/* Content */}
-      <div className="p-4 sm:p-6 xl:p-7.5">
+      <div className="p-4 sm:p-6 xl:p-7.5 overflow-hidden">
         {products.length === 0 ? (
           <div className="py-8 text-center text-dark-6 dark:text-dark-6">
             Không có dữ liệu sản phẩm
           </div>
         ) : (
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <div
+            className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar -mx-4 px-4 sm:-mx-6 sm:px-6 xl:-mx-7.5 xl:px-7.5"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "#cbd5e1 #f1f5f9",
+            }}
+          >
             {products.map((product) => (
               <div
                 key={product.id}
-                className="relative flex-shrink-0 w-48 rounded-[10px] bg-gray-1 p-4 shadow-card transition-all hover:shadow-card-2 dark:bg-dark-2"
+                className="relative flex-shrink-0 w-48 min-w-[12rem] rounded-[10px] bg-gray-1 p-4 shadow-card transition-all hover:shadow-card-2 dark:bg-dark-2"
               >
                 {/* Discount badge */}
                 {product.discount !== "0%" && (

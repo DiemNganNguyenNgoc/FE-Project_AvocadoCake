@@ -13,6 +13,10 @@ import {
   Settings,
   Gamepad2,
   LogOut,
+  Cake,
+  Sparkles,
+  Ticket,
+  Award,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -41,6 +45,16 @@ import NotificationSettings from "../AdminSetting/usecases/NotificationSettings"
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
+import AdminRecipe from "../AdminRecipe";
+import AdminStratergy from "../AdminStratergy";
+import AdminVoucher from "../AdminVoucher/AdminVoucher";
+import CreateVoucher from "../AdminVoucher/CreateVoucher";
+import CreateBulkVoucher from "../AdminVoucher/CreateBulkVoucher";
+import EditVoucher from "../AdminVoucher/EditVoucher";
+import VoucherDetail from "../AdminVoucher/VoucherDetail";
+import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
+import AdminRating from "../AdminRating/AdminRating";
+import AdminRank from "../AdminRank/AdminRank";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -91,6 +105,17 @@ const moduleConfigs = {
     },
     basePath: "/admin/settings",
   },
+  voucher: {
+    main: AdminVoucher,
+    subPages: {
+      create: CreateVoucher,
+      "create-bulk": CreateBulkVoucher,
+      "edit/:id": EditVoucher,
+      "detail/:id": VoucherDetail,
+      "send-email/:id": SendEmailVoucher,
+    },
+    basePath: "/admin/voucher",
+  },
 };
 
 const navItems = [
@@ -130,6 +155,20 @@ const navItems = [
     component: AdminDiscount,
   },
   {
+    id: "voucher",
+    text: "Vouchers",
+    icon: <Ticket />,
+    path: "/admin/voucher",
+    component: AdminVoucher,
+  },
+  {
+    id: "rank",
+    text: "Ranks",
+    icon: <Award />,
+    path: "/admin/rank",
+    component: AdminRank,
+  },
+  {
     id: "category",
     text: "Category",
     icon: <LibraryBig />,
@@ -165,11 +204,32 @@ const navItems = [
     component: () => <div>Strategies Content</div>,
   },
   {
+    id: "recipes",
+    text: "Recipes",
+    icon: <Cake />,
+    path: "/admin/recipes",
+    component: AdminRecipe,
+  },
+  {
+    id: "stratergy",
+    text: "AI Strategy",
+    icon: <Sparkles />,
+    path: "/admin/stratergy",
+    component: AdminStratergy,
+  },
+  {
     id: "quiz",
     text: "Quiz",
     icon: <Gamepad2 />,
     path: "/admin/quiz",
     component: AdminQuiz,
+  },
+  {
+    id: "ratings",
+    text: "Ratings",
+    icon: <Sparkles />,
+    path: "/admin/ratings",
+    component: AdminRating,
   },
   {
     id: "settings",
