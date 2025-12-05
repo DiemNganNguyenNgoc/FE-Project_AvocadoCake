@@ -8,6 +8,7 @@ import * as PaymentService from "../../../api/services/PaymentService";
 import * as UserService from "../../../api/services/UserService";
 import * as OrderService from "../../../api/services/OrderService";
 import * as VoucherService from "../../../api/services/VoucherService";
+import * as RankService from "../../../api/services/RankService";
 import { createPayment } from "../../../redux/slides/paymentSlide";
 import { updateUserCoins } from "../../../redux/slides/userSlide";
 import axios from "axios";
@@ -38,6 +39,10 @@ const PaymentPage = () => {
   } = lastOrder;
 
   console.log("laddd order", lastOrder);
+  console.log("🎖️ Rank Discount:", {
+    rankDiscount: lastOrder.rankDiscount,
+    rankDiscountPercent: lastOrder.rankDiscountPercent,
+  });
 
   const resolvedOrderItems = orderItems.map((item) => {
     const product = cart.products.find((p) => p.id === item.product);
@@ -73,6 +78,9 @@ const PaymentPage = () => {
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
 
+  // Rank state - lấy từ API như Header
+  const [userRankInfo, setUserRankInfo] = useState(null);
+
   // Confirm payment modal
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -89,9 +97,100 @@ const PaymentPage = () => {
   const originalTotalPrice =
     (lastOrder.totalItemPrice || 0) + (lastOrder.shippingPrice || 0);
 
+  // Lấy rank discount từ order
+  // Nếu order chưa có rankDiscount (order cũ), tính từ userRankInfo API
+  let rankDiscount = 0;
+  let rankDiscountPercent = 0;
+
+  // Ưu tiên 1: Lấy từ order nếu có (và không phải 0)
+  if (
+    lastOrder.rankDiscount != null &&
+    lastOrder.rankDiscountPercent != null &&
+    !isNaN(lastOrder.rankDiscount) &&
+    !isNaN(lastOrder.rankDiscountPercent)
+  ) {
+    rankDiscount = Number(lastOrder.rankDiscount);
+    rankDiscountPercent = Number(lastOrder.rankDiscountPercent);
+    console.log(
+      `🎖️ Sử dụng rank discount từ order: ${rankDiscountPercent}% = ${rankDiscount}đ`
+    );
+  }
+  // Ưu tiên 2: Tính từ userRankInfo API nếu order không có
+  else if (userRankInfo?.currentRank && lastOrder.totalItemPrice) {
+    rankDiscountPercent = userRankInfo.currentRank.discountPercent || 0;
+    rankDiscount = (lastOrder.totalItemPrice * rankDiscountPercent) / 100;
+    console.log(
+      `🎖️ Tính rank discount từ API: ${rankDiscountPercent}% = ${rankDiscount}đ`
+    );
+  }
+  // Ưu tiên 3: Lấy từ user Redux nếu có currentRank
+  else if (user?.currentRank && lastOrder.totalItemPrice) {
+    // Nếu currentRank là object đã populate
+    if (
+      typeof user.currentRank === "object" &&
+      user.currentRank.discountPercent != null
+    ) {
+      rankDiscountPercent = user.currentRank.discountPercent || 0;
+      rankDiscount = (lastOrder.totalItemPrice * rankDiscountPercent) / 100;
+      console.log(
+        `🎖️ Tính rank discount từ Redux user: ${rankDiscountPercent}% = ${rankDiscount}đ`
+      );
+    }
+  }
+
+  console.log("🎖️ PaymentPage - User from Redux:", {
+    userId: user?.id,
+    currentRank: user?.currentRank,
+    totalSpending: user?.totalSpending,
+    fullUser: user,
+  });
+
+  console.log("💰 Payment Page - Price Calculation:", {
+    originalTotalPrice,
+    rankDiscount,
+    rankDiscountPercent,
+    voucherDiscount,
+    coinsApplied,
+    userRank: user?.currentRank,
+    lastOrderData: {
+      totalItemPrice: lastOrder.totalItemPrice,
+      shippingPrice: lastOrder.shippingPrice,
+      rankDiscount: lastOrder.rankDiscount,
+      rankDiscountPercent: lastOrder.rankDiscountPercent,
+    },
+  });
+
   useEffect(() => {
-    setFinalTotalPrice(originalTotalPrice - coinsApplied - voucherDiscount);
-  }, [originalTotalPrice, coinsApplied, voucherDiscount]);
+    setFinalTotalPrice(
+      originalTotalPrice - rankDiscount - coinsApplied - voucherDiscount
+    );
+  }, [originalTotalPrice, rankDiscount, coinsApplied, voucherDiscount]);
+
+  // Lấy thông tin rank của user khi component mount
+  useEffect(() => {
+    const fetchUserRank = async () => {
+      if (user?.id && access_token) {
+        try {
+          const response = await RankService.getUserRank(user.id, access_token);
+          console.log("🎖️ Fetched rank from API:", response);
+          console.log("🎖️ Response data structure:", {
+            status: response?.status,
+            hasData: !!response?.data,
+            currentRank: response?.data?.currentRank,
+            discountPercent: response?.data?.currentRank?.discountPercent,
+            totalSpending: response?.data?.totalSpending,
+          });
+          if (response?.status === "OK" && response?.data) {
+            setUserRankInfo(response.data);
+          }
+        } catch (error) {
+          console.error("❌ Error fetching user rank:", error);
+        }
+      }
+    };
+
+    fetchUserRank();
+  }, [user?.id, access_token]);
 
   // Lấy thông tin xu của user khi component mount
   useEffect(() => {
@@ -519,6 +618,8 @@ const PaymentPage = () => {
             adminBankInfo: response.data.adminBankInfo,
             coinsApplied: coinsApplied,
             voucherDiscount: voucherDiscount,
+            rankDiscount: rankDiscount,
+            rankDiscountPercent: rankDiscountPercent,
             finalTotalPrice: finalTotalPrice,
             originalTotalPrice: originalTotalPrice,
             selectedVouchers: selectedVouchers,
@@ -943,19 +1044,45 @@ const PaymentPage = () => {
 
           {paymentType === "qr" && (
             <div className="WalletHolder">
+              <label
+                htmlFor="wallet-select"
+                style={{
+                  display: "block",
+                  marginBottom: "5px",
+                  fontWeight: "500",
+                }}
+              >
+                Chọn ví điện tử:
+              </label>
               <select
+                id="wallet-select"
                 className="E-wallet"
                 name="Wallet"
                 value={paymentInfo.userBank}
                 onChange={handleInputChange("userBank")}
                 style={{ width: "100%", margin: "10px 0" }}
+                aria-label="Chọn ví điện tử thanh toán"
+                title="Chọn ví điện tử thanh toán"
               >
                 <option value="momo">MoMo</option>
                 <option value="vnpay">VNPay</option>
                 <option value="techcombank">Techcombank</option>
               </select>
               <div className="inputSdt">
+                <label
+                  htmlFor="bank-number"
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {paymentInfo.userBank === "momo"
+                    ? "Số điện thoại MoMo:"
+                    : "Số tài khoản ngân hàng:"}
+                </label>
                 <input
+                  id="bank-number"
                   type="text"
                   className="input2"
                   placeholder={
@@ -966,6 +1093,16 @@ const PaymentPage = () => {
                   value={paymentInfo.userBankNumber}
                   onChange={handleInputChange("userBankNumber")}
                   style={{ width: "100%" }}
+                  aria-label={
+                    paymentInfo.userBank === "momo"
+                      ? "Nhập số điện thoại MoMo"
+                      : "Nhập số tài khoản ngân hàng"
+                  }
+                  title={
+                    paymentInfo.userBank === "momo"
+                      ? "Nhập số điện thoại MoMo"
+                      : "Nhập số tài khoản ngân hàng"
+                  }
                 />
               </div>
             </div>
@@ -1035,6 +1172,36 @@ const PaymentPage = () => {
               >
                 {voucherDiscount > 0 ? "-" : ""}
                 {voucherDiscount.toLocaleString()} VND
+              </p>
+            </div>
+            <div
+              className="rank-discount"
+              style={{
+                marginBottom: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                color: rankDiscount > 0 ? "#d4af37" : "inherit",
+              }}
+            >
+              <label
+                style={{
+                  paddingLeft: "10px",
+                  fontWeight: rankDiscount > 0 ? "bold" : "normal",
+                }}
+              >
+                Giảm giá hạng
+                {rankDiscountPercent > 0 ? ` (-${rankDiscountPercent}%)` : ""}:
+              </label>
+              <p
+                style={{
+                  margin: 0,
+                  fontWeight: rankDiscount > 0 ? "bold" : "normal",
+                  paddingRight: "10px",
+                }}
+              >
+                {rankDiscount > 0 ? "-" : ""}
+                {rankDiscount.toLocaleString()} VND
               </p>
             </div>
             {coinsApplied > 0 && (
@@ -1109,6 +1276,8 @@ const PaymentPage = () => {
         isLoading={isConfirming}
         orderData={{
           originalTotalPrice,
+          rankDiscount,
+          rankDiscountPercent,
           voucherDiscount,
           coinsApplied,
           finalTotalPrice,

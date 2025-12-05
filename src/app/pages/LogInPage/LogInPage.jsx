@@ -83,7 +83,8 @@ const LogInPage = () => {
 
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
-    // console.log("res", res);
+    console.log("🎖️ Login - User details from API:", res?.data);
+    console.log("🎖️ Login - CurrentRank:", res?.data?.currentRank);
     dispatch(updateUser({ ...res?.data, access_token: token }));
   };
 

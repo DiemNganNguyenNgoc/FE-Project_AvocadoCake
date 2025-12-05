@@ -31,6 +31,7 @@ import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
 import AdminOrder from "../AdminOrder/AdminOrder";
 import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
+import CreateOrder from "../AdminOrder/usecases/CreateOrder";
 import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
 import AdminDiscount from "../AdminDiscount";
@@ -86,6 +87,7 @@ const moduleConfigs = {
   orders: {
     main: AdminOrder,
     subPages: {
+      create: CreateOrder,
       "update-status": UpdateOrderStatus,
       "view-detail": ViewOrderDetail,
       "view-detail/:orderId": ViewOrderDetail,
