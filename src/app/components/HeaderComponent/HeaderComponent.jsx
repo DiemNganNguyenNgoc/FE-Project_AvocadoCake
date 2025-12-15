@@ -31,9 +31,22 @@ const HeaderComponent = () => {
   const [isLoadingCoins, setIsLoadingCoins] = useState(false);
   const [userRankData, setUserRankData] = useState(null);
   const [isLoadingRank, setIsLoadingRank] = useState(false);
+  const [showOthersDropdown, setShowOthersDropdown] = useState(false);
 
   const handleNavigationLogin = () => {
     navigate("/login");
+  };
+
+  const handleIntroduce = () => {
+    console.log("Navigating to introduce");
+    setShowOthersDropdown(false);
+    navigate("/introduce");
+  };
+
+  const handleContact = () => {
+    console.log("Navigating to contact");
+    setShowOthersDropdown(false);
+    navigate("/contact");
   };
   const handleClickCart = () => {
     navigate("/cart");
@@ -141,6 +154,25 @@ const HeaderComponent = () => {
     };
   }, [showPopover]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showOthersDropdown &&
+        !event.target.closest(`.${styles.others__dropdown}`)
+      ) {
+        setShowOthersDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showOthersDropdown]);
+
+  // Cập nhật activePath và đóng dropdown khi location thay đổi
+  useEffect(() => {
+    setActivePath(location.pathname);
+    setShowOthersDropdown(false);
+  }, [location.pathname]);
+
   //Click Search
   const handleSearch = (query) => {
     if (!query.trim()) {
@@ -201,6 +233,29 @@ const HeaderComponent = () => {
             onClick={handleLogout}
           >
             Đăng xuất
+          </SideMenuComponent>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
+
+  const othersPopover = (
+    <Popover id="popover-others">
+      <Popover.Body>
+        <div className="d-flex flex-column">
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleIntroduce}
+          >
+            Giới thiệu
+          </SideMenuComponent>
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleContact}
+          >
+            Liên hệ
           </SideMenuComponent>
         </div>
       </Popover.Body>
@@ -379,18 +434,6 @@ const HeaderComponent = () => {
                         Tin tức
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
-                        to="/introduce"
-                        isActive={activePath === "/introduce"}
-                      >
-                        Giới thiệu
-                      </ButtonNoBGComponent>
-                      <ButtonNoBGComponent
-                        to="/contact"
-                        isActive={activePath === "/contact"}
-                      >
-                        Liên hệ
-                      </ButtonNoBGComponent>
-                      <ButtonNoBGComponent
                         to="/quizz"
                         isActive={activePath === "/quizz"}
                       >
@@ -402,6 +445,44 @@ const HeaderComponent = () => {
                       >
                         Game
                       </ButtonNoBGComponent>
+                      <OverlayTrigger
+                        trigger="click"
+                        placement="bottom"
+                        show={showOthersDropdown}
+                        onToggle={(nextShow) => setShowOthersDropdown(nextShow)}
+                        overlay={othersPopover}
+                        rootClose
+                      >
+                        <div>
+                          <ButtonNoBGComponent
+                            className={`${styles.others__button} ${
+                              ["/introduce", "/contact"].includes(activePath)
+                                ? styles.active
+                                : ""
+                            }`}
+                            onClick={() => {
+                              console.log("Nút Khác được click!");
+                            }}
+                          >
+                            Khác
+                            <svg
+                              className={`${styles.dropdown__icon} ${
+                                showOthersDropdown ? styles.rotate : ""
+                              }`}
+                              width="12"
+                              height="8"
+                              viewBox="0 0 12 8"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M6 8L0.803848 0.5L11.1962 0.5L6 8Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </ButtonNoBGComponent>
+                        </div>
+                      </OverlayTrigger>
                     </>
                   )}
                 </div>

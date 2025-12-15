@@ -181,6 +181,112 @@
 }
 
 /* ===========================
+   Others Dropdown
+=========================== */
+.others__dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.others__button {
+  /* Style giống ButtonNoBGComponent */
+  display: flex;
+  min-width: var(--button-width);
+  height: var(--button-height);
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  color: var(--green100);
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  font-weight: 600;
+  transition-duration: 0.25s;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.others__button:hover {
+  color: var(--brown100);
+  opacity: 0.9;
+  text-shadow: 1px 0 0 currentColor;
+}
+
+.others__button:active,
+.others__button:focus {
+  color: var(--brown100);
+  transition: 0.25s;
+  transform: scale(1.2);
+}
+
+.others__button.active {
+  color: var(--brown100);
+  text-shadow: 1px 0 0 currentColor;
+}
+
+.dropdown__icon {
+  transition: transform 0.3s ease;
+  width: 12px;
+  height: 8px;
+}
+
+.dropdown__icon.rotate {
+  transform: rotate(180deg);
+}
+
+.others__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 160px;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.others__item {
+  display: block;
+  padding: 12px 16px;
+  color: var(--brown100);
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.others__item:last-child {
+  border-bottom: none;
+}
+
+.others__item:hover {
+  background-color: var(--green50, #e8f5e9);
+  color: var(--green100);
+  padding-left: 20px;
+}
+
+.others__item.active {
+  background-color: var(--green100);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* ===========================
    Responsive
 =========================== */
 
