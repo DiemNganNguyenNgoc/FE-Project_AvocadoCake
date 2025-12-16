@@ -4,22 +4,26 @@ import ButtonComponent from "../../../../components/ButtonComponent/ButtonCompon
 import CheckboxComponent from "../../../../components/CheckboxComponent/CheckboxComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
 import "./CategoryListPage.css";
+import { getAllCategory } from "../../../../api/services/CategoryService";
 
 const CategoryListPage = () => {
   const navigate = useNavigate();
 
-  const [selectedRows, setSelectedRows] = useState([]);  // State lưu danh sách các hàng được chọn
+  const [selectedRows, setSelectedRows] = useState([]); // State lưu danh sách các hàng được chọn
   const [categories, setCategories] = useState([]); // State lưu danh sách categories
   const AddCategory = () => {
-    navigate("/admin/add-category")
-  }
+    navigate("/admin/add-category");
+  };
 
   const handleEdit = () => {
-    if (selectedRows.length === 1) { // Đảm bảo chỉ có 1 category được chọn
+    if (selectedRows.length === 1) {
+      // Đảm bảo chỉ có 1 category được chọn
       const categoryId = selectedRows[0];
 
       // Tìm category dựa trên categoryId
-      const selectedCategory = categories.find((category) => category._id === categoryId);
+      const selectedCategory = categories.find(
+        (category) => category._id === categoryId
+      );
 
       if (selectedCategory) {
         const { categoryCode, categoryName } = selectedCategory; // Lấy mã và tên loại
@@ -37,21 +41,20 @@ const CategoryListPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/category/get-all-category");
-        const data = await response.json(); // Giả sử API trả về dữ liệu ở dạng JSON
+        const data = await getAllCategory();
+        // data chính là res.data bạn return trong service
 
-        // Kiểm tra dữ liệu trả về có đúng format hay không
-        if (data.status === "OK" && Array.isArray(data.data)) {
-          setCategories(data.data); // Lưu dữ liệu vào state nếu dữ liệu hợp lệ
+        if (Array.isArray(data.data)) {
+          setCategories(data.data);
         } else {
-          console.error("Unexpected data format", data);
+          console.error("Categories data is not in expected format");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error(error.message || "Lỗi khi lấy danh mục");
       }
     };
 
-    fetchCategories(); // Gọi hàm fetchCategories khi component mount
+    fetchCategories();
   }, []);
 
   // Hàm toggle chọn một dòng
@@ -81,23 +84,30 @@ const CategoryListPage = () => {
     }
 
     // Hiển thị hộp thoại xác nhận
-    const isConfirmed = window.confirm("Are you sure you want to delete the selected categories?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete the selected categories?"
+    );
 
     if (isConfirmed) {
       try {
         // Gửi yêu cầu xóa từng category được chọn
         for (let categoryId of selectedRows) {
-          const response = await fetch(`/api/category/delete-category/${categoryId}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await fetch(
+            `/api/category/delete-category/${categoryId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
           const data = await response.json();
 
           if (!response.ok) {
-            alert(`Error deleting category with ID ${categoryId}: ${data.message}`);
+            alert(
+              `Error deleting category with ID ${categoryId}: ${data.message}`
+            );
             continue; // Nếu có lỗi với category này, chuyển sang category tiếp theo
           }
         }
@@ -105,9 +115,10 @@ const CategoryListPage = () => {
         alert("Selected categories have been deleted successfully!");
 
         // Cập nhật lại danh sách categories sau khi xóa
-        setCategories(categories.filter((category) => !selectedRows.includes(category._id)));
+        setCategories(
+          categories.filter((category) => !selectedRows.includes(category._id))
+        );
         setSelectedRows([]); // Clear selected rows
-
       } catch (error) {
         console.error("Error deleting categories:", error);
         alert("Something went wrong while deleting the categories.");
@@ -117,27 +128,32 @@ const CategoryListPage = () => {
     }
   };
 
-
   const handleDeleteCategory = async (categoryId) => {
     // Hiển thị hộp thoại xác nhận
-    const isConfirmed = window.confirm("Are you sure you want to delete this category?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
 
     if (isConfirmed) {
-
       try {
-        const response = await fetch(`/api/category/delete-category/${categoryId}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `/api/category/delete-category/${categoryId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const data = await response.json();
 
         if (response.ok) {
           alert("Category deleted successfully!");
           // Cập nhật UI hoặc làm mới danh sách category nếu cần
-          setCategories(categories.filter((category) => category._id !== categoryId)); // Cập nhật lại danh sách
+          setCategories(
+            categories.filter((category) => category._id !== categoryId)
+          ); // Cập nhật lại danh sách
         } else {
           alert(`Error: ${data.message}`);
         }
@@ -174,9 +190,18 @@ const CategoryListPage = () => {
               <h2 className="category-list__title">Loại bánh hiện có</h2>
               <div className="btn__action">
                 {/* <ButtonComponent className="btn btn-delete">Chi tiết</ButtonComponent> */}
-                <ButtonComponent className="btn btn-delete" onClick={handleDelete}>Xóa</ButtonComponent>
-                <ButtonComponent className="btn btn-add" onClick={AddCategory}>Thêm</ButtonComponent>
-                <ButtonComponent className="btn btn-edit" onClick={handleEdit}>Sửa</ButtonComponent>
+                <ButtonComponent
+                  className="btn btn-delete"
+                  onClick={handleDelete}
+                >
+                  Xóa
+                </ButtonComponent>
+                <ButtonComponent className="btn btn-add" onClick={AddCategory}>
+                  Thêm
+                </ButtonComponent>
+                <ButtonComponent className="btn btn-edit" onClick={handleEdit}>
+                  Sửa
+                </ButtonComponent>
               </div>
             </div>
             {/* Table */}
@@ -212,7 +237,12 @@ const CategoryListPage = () => {
                       <td>{index + 1}</td>
                       <td>{category.categoryCode}</td> {/* Hiển thị mã loại */}
                       <td>{category.categoryName}</td> {/* Hiển thị tên loại */}
-                      <td>{new Date(category.createdAt).toLocaleDateString("vi-VN")}</td> {/* Hiển thị ngày tạo */}
+                      <td>
+                        {new Date(category.createdAt).toLocaleDateString(
+                          "vi-VN"
+                        )}
+                      </td>{" "}
+                      {/* Hiển thị ngày tạo */}
                       <td>
                         <button
                           className="delete-btn"

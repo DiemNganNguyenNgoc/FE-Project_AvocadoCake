@@ -178,24 +178,30 @@ export const searchProducts = async (query) => {
   }
 };
 
-export const getProductsByCategory = async (categoryId) => {
+// services/productService.js
+export const getProductsByCategory = async (
+  categoryId,
+  page = 0,
+  limit = 8
+) => {
   try {
     const res = await axiosJWT.get(
       `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${categoryId}`,
       {
+        params: { page, limit },
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
-    return res.data; // Trả dữ liệu nếu thành công
+    return res.data;
   } catch (error) {
     if (error.response) {
       throw {
         message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
     } else {
-      throw { product: 500, message: "Không thể kết nối đến máy chủ." };
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
     }
   }
 };

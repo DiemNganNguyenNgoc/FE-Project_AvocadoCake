@@ -8,7 +8,7 @@ import SizeComponent from "../../../../components/SizeComponent/SizeComponent";
 import { useNavigate } from "react-router-dom";
 import * as productService from "../../../../api/services/productServices";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
-
+import { getAllCategory } from "../../../../api/services/CategoryService";
 
 const UpdateProductPage = () => {
   const navigate = useNavigate();
@@ -24,37 +24,24 @@ const UpdateProductPage = () => {
       productDescription: "",
     }
   );
-  const [categories, setCategories] = useState([]); // State lưu danh sách category
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        const data = await getAllCategory();
+        // data chính là res.data bạn return trong service
 
-        const response = await fetch("http://localhost:3001/api/category/get-all-category", {
-          method: "GET", // Phương thức GET để lấy danh sách category
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await response.json(); // Chuyển đổi dữ liệu từ JSON
-        console.log("Categories data:", categories);
-
-        // Kiểm tra và gán mảng categories từ data.data
         if (Array.isArray(data.data)) {
-          setCategories(data.data); // Lưu danh sách category vào state
-
+          setCategories(data.data);
         } else {
           console.error("Categories data is not in expected format");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error(error.message || "Lỗi khi lấy danh mục");
       }
     };
+
     fetchCategories();
   }, []);
 
@@ -80,38 +67,38 @@ const UpdateProductPage = () => {
     document.getElementById("imageInput").click(); // Kích hoạt input chọn file
   };
 
-
-  const mutation = useMutationHook(
-    async (data) => {
-      for (let pair of data.formData.entries()) {
-        console.log("form", `${pair[0]}: ${pair[1]}`);
-      }
-      console.log("DATA", data)
-      const response = await productService.updateProduct(data.id, accessToken, data.formData);
-      console.log("RESULT", response);
-      try {
-        const result = await response;
-
-        if (result.status === "OK") {
-          alert("Cập nhật thành công!");
-          navigate('/admin/products')
-          // Reset form
-          //setProduct({productName: "", productPrice: "", productCategory:null, productImage:null, productSize:"" });
-        } else {
-          alert(`Thêm bánh thất bại: ${result.message}`);
-        }
-      } catch (error) {
-        alert("Đã xảy ra lỗi khi thêm bánh!");
-        console.error(error);
-      }
-      return response;
+  const mutation = useMutationHook(async (data) => {
+    for (let pair of data.formData.entries()) {
+      console.log("form", `${pair[0]}: ${pair[1]}`);
     }
-  );
+    console.log("DATA", data);
+    const response = await productService.updateProduct(
+      data.id,
+      accessToken,
+      data.formData
+    );
+    console.log("RESULT", response);
+    try {
+      const result = await response;
+
+      if (result.status === "OK") {
+        alert("Cập nhật thành công!");
+        navigate("/admin/products");
+        // Reset form
+        //setProduct({productName: "", productPrice: "", productCategory:null, productImage:null, productSize:"" });
+      } else {
+        alert(`Thêm bánh thất bại: ${result.message}`);
+      }
+    } catch (error) {
+      alert("Đã xảy ra lỗi khi thêm bánh!");
+      console.error(error);
+    }
+    return response;
+  });
   const { data, isLoading, isSuccess, isError } = mutation;
 
   const handleSubmit = () => {
-
-    console.log("state", product)
+    console.log("state", product);
     const formData = new FormData();
     formData.append("productName", product.productName);
     formData.append("productPrice", product.productPrice);
@@ -121,27 +108,30 @@ const UpdateProductPage = () => {
     formData.append("productImage", product.productImage);
     // Kiểm tra FormData
 
-    const data = { id: product.productId, formData: formData }
+    const data = { id: product.productId, formData: formData };
 
-    const response = mutation.mutate(data)
+    const response = mutation.mutate(data);
   };
-
-
 
   //Xoa
 
   const handleDelete = async (productId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
 
     if (confirmDelete) {
       try {
         // Call the API to delete the product and image
-        const response = await productService.deleteProduct(productId, accessToken)
-        console.log("RESPONSE", response)
-        if (response.status = "OK") {
+        const response = await productService.deleteProduct(
+          productId,
+          accessToken
+        );
+        console.log("RESPONSE", response);
+        if ((response.status = "OK")) {
           alert("Product deleted successfully!");
           // Redirect to product list page
-          navigate("/admin/products")
+          navigate("/admin/products");
         }
       } catch (error) {
         console.error("Error deleting product:", error);
@@ -149,7 +139,6 @@ const UpdateProductPage = () => {
       }
     }
   };
-
 
   return (
     <div>
@@ -227,10 +216,20 @@ const UpdateProductPage = () => {
                   value={product.productCategory}
                   onChange={handleInputChange}
                   className="choose-property"
-                  style={{ width: "36rem", height: "6rem", border: "none", color: "grey", borderRadius: "50px", boxShadow: "0px 2px 4px 0px #203c1640", padding: "15px" }}
+                  style={{
+                    width: "36rem",
+                    height: "6rem",
+                    border: "none",
+                    color: "grey",
+                    borderRadius: "50px",
+                    boxShadow: "0px 2px 4px 0px #203c1640",
+                    padding: "15px",
+                  }}
                   placeholder="Chọn loại sản phẩm"
                 >
-                  <option value="" disabled>Chọn loại sản phẩm</option>
+                  <option value="" disabled>
+                    Chọn loại sản phẩm
+                  </option>
                   {Array.isArray(categories) && categories.length > 0 ? (
                     categories.map((category) => (
                       <option key={category._id} value={category._id}>
@@ -291,8 +290,12 @@ const UpdateProductPage = () => {
         {/* submit */}
         <div className="btn-submit">
           <ButtonComponent onClick={handleSubmit}>Lưu</ButtonComponent>
-          <ButtonComponent onClick={() => handleDelete(product.productId)}>Xóa</ButtonComponent>
-          <ButtonComponent onClick={() => navigate("/admin/products")}>Thoát</ButtonComponent>
+          <ButtonComponent onClick={() => handleDelete(product.productId)}>
+            Xóa
+          </ButtonComponent>
+          <ButtonComponent onClick={() => navigate("/admin/products")}>
+            Thoát
+          </ButtonComponent>
         </div>
       </div>
     </div>

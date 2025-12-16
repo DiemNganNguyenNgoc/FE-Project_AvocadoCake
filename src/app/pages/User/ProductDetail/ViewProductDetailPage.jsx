@@ -16,6 +16,7 @@ import {
 import RatingStar from "../../../components/RatingStar/RatingStar";
 import { getProductRatings } from "../../../api/services/OrderService";
 import { Card, ListGroup } from "react-bootstrap";
+import { getAllCategory } from "../../../api/services/CategoryService";
 
 const ViewProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -60,98 +61,77 @@ const ViewProductDetailPage = () => {
   );
 
   //Lay danh sach Category
-  const [categories, setCategories] = useState([]); // State lưu danh sách category
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3001/api/category/get-all-category",
-          {
-            method: "GET", // Phương thức GET để lấy danh sách category
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const data = await getAllCategory();
+        // data chính là res.data bạn return trong service
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await response.json(); // Chuyển đổi dữ liệu từ JSON
-        console.log("Categories data:", categories);
-
-        // Kiểm tra và gán mảng categories từ data.data
         if (Array.isArray(data.data)) {
-          setCategories(data.data); // Lưu danh sách category vào state
+          setCategories(data.data);
         } else {
           console.error("Categories data is not in expected format");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error(error.message || "Lỗi khi lấy danh mục");
       }
     };
+
     fetchCategories();
   }, []);
 
   // Lấy sản phẩm cùng category
   useEffect(() => {
-    const fetchRelatedProducts = async () => {
+    const fetchRecommendations = async () => {
+      setIsLoading(true);
       try {
-        console.log("Current product:", product);
-        console.log("Product Category:", product.productCategory);
-        console.log("Product ID:", product.productId);
+        const userId = user?.id || null;
+        let recommendedProducts = [];
 
-        // Kiểm tra xem product có đầy đủ thông tin không
-        if (!product.productCategory || !product.productId) {
-          console.log("Product data is incomplete");
-          return;
+        if (userId) {
+          const response = await getRecommendations(userId, product.productId);
+
+          const recommendations = response.data || [];
+
+          if (Array.isArray(recommendations) && recommendations.length > 0) {
+            const fetched = await Promise.all(
+              recommendations.map(async (id) => {
+                const res = await getDetailsproduct(id);
+                return res.data;
+              })
+            );
+            recommendedProducts = fetched.filter(Boolean);
+          }
         }
 
-        const queryParams = new URLSearchParams({
-          page: 0,
-          limit: 8,
-        }).toString();
-
-        const url = `http://localhost:3001/api/product/get-product-by-category/${product.productCategory}?${queryParams}`;
-        console.log("Fetching URL:", url);
-
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
-        console.log("Category products response:", data);
-
-        if (Array.isArray(data.data)) {
-          // Lọc bỏ sản phẩm hiện tại khỏi danh sách
-          const filteredProducts = data.data.filter(
-            (p) => p._id !== product.productId
+        // 👉 Fallback dùng service
+        if (recommendedProducts.length === 0 && product.productCategory) {
+          const data = await getProductsByCategory(
+            product.productCategory,
+            0,
+            8
           );
-          console.log("Filtered products:", filteredProducts);
-          setRelatedProducts(filteredProducts);
-        } else {
-          console.log("No products found in category");
-          setRelatedProducts([]);
+
+          recommendedProducts = Array.isArray(data.data)
+            ? data.data.filter((p) => p._id !== product.productId)
+            : [];
         }
+
+        setRelatedProducts(recommendedProducts);
       } catch (error) {
-        console.error("Error fetching related products:", error);
+        console.error(error.message || "Lỗi khi lấy khuyến nghị hoặc fallback");
         setRelatedProducts([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    // Chỉ gọi fetchRelatedProducts khi product có đầy đủ thông tin
-    if (product.productCategory && product.productId) {
-      fetchRelatedProducts();
+    if (product.productId) {
+      fetchRecommendations();
     }
-  }, [product]);
+  }, [product.productId, user]);
 
   // Hàm thêm sản phẩm vào giỏ hàng
   const handleAddToCart = () => {
@@ -225,7 +205,7 @@ const ViewProductDetailPage = () => {
 
         if (userId) {
           const response = await getRecommendations(userId, product.productId);
-          console.log("Recommendations response:", response);
+
           const recommendations = response.data || [];
 
           if (Array.isArray(recommendations) && recommendations.length > 0) {
@@ -239,33 +219,24 @@ const ViewProductDetailPage = () => {
           }
         }
 
-        // Nếu không có userId hoặc không có khuyến nghị, fallback sang sản phẩm cùng category
+        // 👉 Fallback: dùng service, KHÔNG dùng fetch
         if (recommendedProducts.length === 0 && product.productCategory) {
           console.log("Fallback to category recommendations");
-          const queryParams = new URLSearchParams({
-            page: 0,
-            limit: 8,
-          }).toString();
 
-          const url = `http://localhost:3001/api/product/get-product-by-category/${product.productCategory}?${queryParams}`;
-          const response = await fetch(url, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const data = await getProductsByCategory(
+            product.productCategory,
+            0,
+            8
+          );
 
-          const data = await response.json();
-          const fallbackProducts = Array.isArray(data.data)
+          recommendedProducts = Array.isArray(data.data)
             ? data.data.filter((p) => p._id !== product.productId)
             : [];
-
-          recommendedProducts = fallbackProducts;
         }
 
         setRelatedProducts(recommendedProducts);
       } catch (error) {
-        console.error("Lỗi khi lấy khuyến nghị hoặc fallback:", error);
+        console.error(error.message || "Lỗi khi lấy khuyến nghị hoặc fallback");
         setRelatedProducts([]);
       } finally {
         setIsLoading(false);

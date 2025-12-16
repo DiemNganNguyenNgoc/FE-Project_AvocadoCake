@@ -6,6 +6,7 @@ import FormComponent from "../../../../components/FormComponent/FormComponent";
 import Loading from "../../../../components/LoadingComponent/Loading";
 import { useMutationHook } from "../../../../hooks/useMutationHook";
 import "./AddProductPage.css";
+import { getAllCategory } from "../../../../api/services/CategoryService";
 
 const AddProductPage = () => {
   const navigate = useNavigate();
@@ -22,40 +23,24 @@ const AddProductPage = () => {
   const [categories, setCategories] = useState([]); // State lưu danh sách category
   const [previewImage, setPreviewImage] = useState(null); // State để lưu URL của ảnh preview
   // Fetch danh sách category khi component được mount
-
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        const data = await getAllCategory();
+        // data chính là res.data bạn return trong service
 
-        const response = await fetch("http://localhost:3001/api/category/get-all-category", {
-          method: "GET", // Phương thức GET để lấy danh sách category
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await response.json(); // Chuyển đổi dữ liệu từ JSON
-        console.log("Categories data:", categories);
-
-        // Kiểm tra và gán mảng categories từ data.data
         if (Array.isArray(data.data)) {
-          setCategories(data.data); // Lưu danh sách category vào state
+          setCategories(data.data);
         } else {
           console.error("Categories data is not in expected format");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error(error.message || "Lỗi khi lấy danh mục");
       }
     };
+
     fetchCategories();
   }, []);
-
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +49,7 @@ const AddProductPage = () => {
 
   const handleOnChangeImg = (event) => {
     const file = event.target.files[0];
-    setstateProduct({ ...stateproduct, productImage: file })
+    setstateProduct({ ...stateproduct, productImage: file });
     const previewUrl = URL.createObjectURL(file); // Tạo URL preview từ file
     setPreviewImage(previewUrl); // Cập nhật state previewImage
     // // if (file) {
@@ -87,34 +72,31 @@ const AddProductPage = () => {
     // }
   };
 
-  const mutation = useMutationHook(
-    async (data) => {
+  const mutation = useMutationHook(async (data) => {
+    const response = await createProduct(data, accessToken);
+    console.log("RESKLT", response);
+    try {
+      const result = await response;
 
-      const response = await createProduct(data, accessToken);
-      console.log("RESKLT", response);
-      try {
-        const result = await response;
-        
-        if (result.status === "OK") {
-          alert("Thêm bánh thành công!");
-          navigate('/admin/products')
-          // Reset form
-          //setProduct({productName: "", productPrice: "", productCategory:null, productImage:null, productSize:"" });
-        } else {
-          alert(`Thêm bánh thất bại: ${result.message}`);
-        }
-      } catch (error) {
-        alert("Đã xảy ra lỗi khi thêm bánh!");
-        console.error(error);
+      if (result.status === "OK") {
+        alert("Thêm bánh thành công!");
+        navigate("/admin/products");
+        // Reset form
+        //setProduct({productName: "", productPrice: "", productCategory:null, productImage:null, productSize:"" });
+      } else {
+        alert(`Thêm bánh thất bại: ${result.message}`);
       }
-      return response;
+    } catch (error) {
+      alert("Đã xảy ra lỗi khi thêm bánh!");
+      console.error(error);
     }
-  );
+    return response;
+  });
   const { data, isLoading, isSuccess, isError } = mutation;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("state", stateproduct)
+    console.log("state", stateproduct);
     const formData = new FormData();
     formData.append("productName", stateproduct.productName);
     formData.append("productPrice", stateproduct.productPrice);
@@ -127,12 +109,8 @@ const AddProductPage = () => {
       console.log(`${pair[0]}: ${pair[1]}`);
     }
 
-    const response = mutation.mutate(formData)
-   
+    const response = mutation.mutate(formData);
   };
-
-
-
 
   return (
     <div>
@@ -144,7 +122,6 @@ const AddProductPage = () => {
           <div className="info__top">
             {/* Info left */}
             <div className="info__left">
-
               <input
                 // className="product__image"
                 type="file"
@@ -161,7 +138,7 @@ const AddProductPage = () => {
                     style={{
                       width: "36rem",
                       height: "40rem",
-                      borderRadius: "15px"
+                      borderRadius: "15px",
                     }}
                   />
                 )}
@@ -181,7 +158,6 @@ const AddProductPage = () => {
                 </svg>
               </div> */}
             </div>
-
 
             {/* Info right */}
             <div className="info__right">
@@ -218,10 +194,20 @@ const AddProductPage = () => {
                   value={stateproduct.productCategory}
                   onChange={handleInputChange}
                   className="choose-property"
-                  style={{ width: "36rem", height: "6rem", border: "none", color: "grey", borderRadius: "50px", boxShadow: "0px 2px 4px 0px #203c1640", padding: "15px" }}
+                  style={{
+                    width: "36rem",
+                    height: "6rem",
+                    border: "none",
+                    color: "grey",
+                    borderRadius: "50px",
+                    boxShadow: "0px 2px 4px 0px #203c1640",
+                    padding: "15px",
+                  }}
                   placeholder="Chọn loại sản phẩm"
                 >
-                  <option value="" disabled>Chọn loại sản phẩm</option>
+                  <option value="" disabled>
+                    Chọn loại sản phẩm
+                  </option>
                   {Array.isArray(categories) && categories.length > 0 ? (
                     categories.map((category) => (
                       <option key={category._id} value={category._id}>
@@ -232,9 +218,7 @@ const AddProductPage = () => {
                     <option disabled>Không có loại sản phẩm</option>
                   )}
                 </select>
-
               </div>
-
 
               <div className="product-size">
                 <label>Kích thước sản phẩm</label>
@@ -266,11 +250,11 @@ const AddProductPage = () => {
 
         <div className="btn-submit">
           <ButtonComponent onClick={handleSubmit}>Thêm</ButtonComponent>
-          <ButtonComponent onClick={() => navigate("/admin/products")}>Thoát</ButtonComponent>
+          <ButtonComponent onClick={() => navigate("/admin/products")}>
+            Thoát
+          </ButtonComponent>
         </div>
-
       </div>
-
     </div>
   );
 };

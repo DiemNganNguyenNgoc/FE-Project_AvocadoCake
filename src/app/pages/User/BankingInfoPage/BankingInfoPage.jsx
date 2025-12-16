@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../../redux/slides/cartSlide";
 import { updateOrder } from "../../../redux/slides/orderSlide";
 import { getDetailsOrder } from "../../../api/services/OrderService";
+import { getDetailPayment } from "../../../api/services/PaymentService";
 
 const BankingInfoPage = () => {
   const navigate = useNavigate();
@@ -99,19 +100,17 @@ const BankingInfoPage = () => {
 
     const checkPaymentStatus = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/api/payment/get-detail-payment/${paymentCode}`
-        );
+        const response = await getDetailPayment(paymentCode);
         if (response.data.status === "OK") {
           const payment = response.data.data;
           setPaymentStatus(payment.status);
 
           try {
-            const orderResponse = await axios.get(
-              `http://localhost:3001/api/order/get-detail-order/${payment.orderId}`
-            );
-            if (orderResponse.data.status === "OK") {
-              const order = orderResponse.data.data;
+            // 👉 GỌI SERVICE THAY VÌ axios.get
+            const orderRes = await getDetailsOrder(payment.orderId);
+
+            if (orderRes.status === "OK") {
+              const order = orderRes.data;
               setOrderStatus(order.status.statusName);
 
               if (payment.status === "SUCCESS") {

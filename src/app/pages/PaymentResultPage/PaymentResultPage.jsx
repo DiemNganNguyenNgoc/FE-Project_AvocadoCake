@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./PaymentResultPage.css"; // Tạo file CSS nếu cần
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
+import { getDetailPayment } from "../../api/services/PaymentService";
 
 const PaymentResultPage = () => {
   const [searchParams] = useSearchParams();
@@ -15,9 +16,7 @@ const PaymentResultPage = () => {
   useEffect(() => {
     const checkPaymentStatus = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/api/payment/get-detail-payment/${paymentCode}`
-        );
+        const response = await getDetailPayment(paymentCode);
         if (response.data.status === "OK") {
           const payment = response.data.data;
           if (payment.status === "SUCCESS") {

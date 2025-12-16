@@ -6,6 +6,7 @@ import SideMenuComponent_AdminManage from "../../../../components/SideMenuCompon
 import { useMutationHook } from "../../../../hooks/useMutationHook";
 import { createDiscount } from "../../../../api/services/DiscountService";
 import "./AddDiscountPage.css";
+import { getAllProduct } from "../../../../api/services/productServices";
 
 const AddDiscountPage = () => {
   const navigate = useNavigate();
@@ -31,25 +32,28 @@ const AddDiscountPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Lấy tất cả sản phẩm
-        const response = await fetch("http://localhost:3001/api/product/get-all-product", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await response.json();
-        if (Array.isArray(data.data)) {
-          setProducts(data.data);
+        const accessToken = localStorage.getItem("access_token");
+
+        if (!accessToken) {
+          console.warn("Chưa có access token");
+          return;
         }
 
+        const data = await getAllProduct(accessToken);
+        // data = res.data
 
+        if (Array.isArray(data.data)) {
+          setProducts(data.data);
+        } else {
+          console.error("Product data không đúng format", data);
+        }
       } catch (error) {
-        console.error("Lỗi khi fetch dữ liệu:", error);
+        console.error(error.message || "Lỗi khi lấy danh sách sản phẩm");
       }
     };
 
     fetchProducts();
   }, []);
-
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -100,7 +104,10 @@ const AddDiscountPage = () => {
     formData.append("discountCode", discount.discountCode);
     formData.append("discountName", discount.discountName);
     formData.append("discountValue", discount.discountValue);
-    formData.append("discountProduct", JSON.stringify(discount.discountProduct));
+    formData.append(
+      "discountProduct",
+      JSON.stringify(discount.discountProduct)
+    );
 
     formData.append("discountImage", discount.discountImage);
 
@@ -109,7 +116,7 @@ const AddDiscountPage = () => {
     for (let pair of formData.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
     }
-    console.log("FROM: ", formData)
+    console.log("FROM: ", formData);
 
     mutation.mutate(formData);
   };
@@ -123,7 +130,10 @@ const AddDiscountPage = () => {
     <div className="container-xl">
       <div className="add-discount__container">
         <div className="side-menu__discount">
-          <SideMenuComponent_AdminManage activeTab={activeTab} handleTabClick={handleTabClick} />
+          <SideMenuComponent_AdminManage
+            activeTab={activeTab}
+            handleTabClick={handleTabClick}
+          />
         </div>
 
         <div className="add-discount__content">
@@ -140,7 +150,11 @@ const AddDiscountPage = () => {
               />
               {previewImage && (
                 <div className="banner__image">
-                  <img src={previewImage} alt="Preview" className="banner__image" />
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="banner__image"
+                  />
                 </div>
               )}
             </div>
@@ -189,15 +203,23 @@ const AddDiscountPage = () => {
                 >
                   {products.length > 0 ? (
                     products.map((product) => {
-                      const isDisabled = disabledProductIds.includes(product._id);
+                      const isDisabled = disabledProductIds.includes(
+                        product._id
+                      );
                       return (
                         <div key={product._id}>
-                          <label style={{ color: isDisabled ? "#888" : "inherit" }}>
+                          <label
+                            style={{ color: isDisabled ? "#888" : "inherit" }}
+                          >
                             <input
                               type="checkbox"
                               value={product._id}
-                              checked={discount.discountProduct.includes(product._id)}
-                              onChange={() => handleProductCheckboxChange(product._id)}
+                              checked={discount.discountProduct.includes(
+                                product._id
+                              )}
+                              onChange={() =>
+                                handleProductCheckboxChange(product._id)
+                              }
                               disabled={isDisabled}
                             />
                             {` ${product.productName}`}
@@ -209,7 +231,6 @@ const AddDiscountPage = () => {
                   ) : (
                     <p>Không có sản phẩm</p>
                   )}
-
                 </div>
               </div>
 
@@ -246,10 +267,15 @@ const AddDiscountPage = () => {
 
             {/* Buttons */}
             <div className="btn__add-discount">
-              <ButtonComponent onClick={handleSubmit} disabled={mutation.isLoading}>
+              <ButtonComponent
+                onClick={handleSubmit}
+                disabled={mutation.isLoading}
+              >
                 {mutation.isLoading ? "Đang lưu..." : "Lưu"}
               </ButtonComponent>
-              <ButtonComponent onClick={() => navigate("/admin/discount-list")}>Thoát</ButtonComponent>
+              <ButtonComponent onClick={() => navigate("/admin/discount-list")}>
+                Thoát
+              </ButtonComponent>
             </div>
           </div>
         </div>

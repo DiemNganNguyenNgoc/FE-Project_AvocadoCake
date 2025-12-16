@@ -68,6 +68,7 @@
 //   return response.data;
 // };
 import axios from "axios";
+export const axiosJWT = axios.create();
 
 // Xóa các biến môi trường vì không cần thiết ở frontend
 // const PAYPAL_API_URL = process.env.PAYPAL_API_URL;
@@ -99,5 +100,33 @@ export const createQrPayment = async (paymentData) => {
   } catch (error) {
     console.error("Error creating QR payment:", error);
     throw error;
+  }
+};
+
+export const getDetailPayment = async (paymentCode) => {
+  try {
+    const res = await axiosJWT.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/payment/get-detail-payment/${paymentCode}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return res.data; // { status, data }
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi kiểm tra thanh toán.",
+      };
+    } else {
+      throw {
+        status: 500,
+        message: "Không thể kết nối đến máy chủ.",
+      };
+    }
   }
 };

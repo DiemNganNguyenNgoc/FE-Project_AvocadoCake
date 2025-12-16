@@ -5,6 +5,7 @@ import ButtonComponent from "../../../../components/ButtonComponent/ButtonCompon
 import "./AddCategoryPage.css";
 import { useNavigate } from "react-router-dom";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
+import { createCategory } from "../../../../api/services/CategoryService";
 
 const AddCategoryPage = () => {
   const navigate = useNavigate();
@@ -13,8 +14,8 @@ const AddCategoryPage = () => {
     categoryName: "",
   });
   const ExitForm = () => {
-    navigate("/admin/category-list")
-  }
+    navigate("/admin/category-list");
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCategory({ ...category, [name]: value });
@@ -24,38 +25,30 @@ const AddCategoryPage = () => {
     e.preventDefault();
 
     try {
-      // Lấy access token từ localStorage
       const accessToken = localStorage.getItem("access_token");
-      console.log(localStorage.getItem("access_token"));
 
       if (!accessToken) {
-        alert("Bạn chưa đăng nhập. Vui lòng đăng nhập để thực hiện thao tác này.");
+        alert(
+          "Bạn chưa đăng nhập. Vui lòng đăng nhập để thực hiện thao tác này."
+        );
         return;
       }
 
-      // Gửi yêu cầu API tạo category
-      const response = await fetch("http://localhost:3001/api/category/create-category", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Token: `Bearer ${accessToken}`, // Thêm access token
-        },
-        body: JSON.stringify(category),
+      await createCategory(category, accessToken);
+
+      alert("Thêm loại bánh thành công!");
+
+      // Reset form
+      setCategory({
+        categoryCode: "",
+        categoryName: "",
       });
 
-      const result = await response.json();
-      if (response.ok) {
-        alert("Thêm loại bánh thành công!");
-        // Reset form
-        setCategory({ categoryCode: "", categoryName: "" });
-      } else {
-        alert(`Thêm loại bánh thất bại: ${result.message}`);
-      }
+      navigate("/admin/category-list");
     } catch (error) {
-      alert("Đã xảy ra lỗi khi thêm loại bánh!");
+      alert(error.message || "Đã xảy ra lỗi khi thêm loại bánh!");
       console.error(error);
     }
-    navigate("/admin/category-list")
   };
   const [activeTab, setActiveTab] = useState("category");
 
@@ -92,7 +85,11 @@ const AddCategoryPage = () => {
                 </div>
                 <div className="content__item">
                   <label className="name__title">
-                    Tên loại bánh <i className="fas fa-pencil-alt" style={{ marginLeft: "5px" }}></i>
+                    Tên loại bánh{" "}
+                    <i
+                      className="fas fa-pencil-alt"
+                      style={{ marginLeft: "5px" }}
+                    ></i>
                   </label>
                   <FormComponent
                     placeholder="Bánh mùa đông"

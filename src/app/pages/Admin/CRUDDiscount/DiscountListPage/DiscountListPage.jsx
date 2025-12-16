@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../../../components/ButtonComponent/ButtonComponent";
 import CheckboxComponent from "../../../../components/CheckboxComponent/CheckboxComponent";
 import SideMenuComponent_AdminManage from "../../../../components/SideMenuComponent_AdminManage/SideMenuComponent_AdminManage";
-import { deleteDiscount, getAllDiscount } from "../../../../api/services/DiscountService";
+import {
+  deleteDiscount,
+  getAllDiscount,
+} from "../../../../api/services/DiscountService";
 import "./DiscountListPage.css";
+import { getAllCategory } from "../../../../api/services/CategoryService";
 
 const DiscountListPage = () => {
   const accessToken = localStorage.getItem("access_token");
@@ -18,27 +22,19 @@ const DiscountListPage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/category/get-all-category", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const data = await getAllCategory();
+        // data chính là res.data bạn return trong service
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await response.json();
         if (Array.isArray(data.data)) {
-          setCategories(data.data); // Lưu danh sách category
+          setCategories(data.data);
         } else {
           console.error("Categories data is not in expected format");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error(error.message || "Lỗi khi lấy danh mục");
       }
     };
+
     fetchCategories();
   }, []);
 
@@ -52,7 +48,6 @@ const DiscountListPage = () => {
           if (Array.isArray(updatedDiscounts.data)) {
             setPromos(updatedDiscounts.data);
           }
-
         } else {
           setError("Dữ liệu trả về không hợp lệ.");
         }
@@ -67,7 +62,6 @@ const DiscountListPage = () => {
     const category = categories.find((cat) => cat.id === id);
     return category ? category.categoryName : "Không xác định";
   };
-
 
   const toggleSelectAll = () => {
     setSelectedRows(
@@ -107,16 +101,17 @@ const DiscountListPage = () => {
       try {
         // Gọi API xóa khuyến mãi
         await deleteDiscount(selectedRows[0], accessToken); // Gửi chỉ 1 ID khuyến mãi
-        setPromos((prevPromos) => prevPromos.filter((promo) => promo.id !== selectedRows[0]));
+        setPromos((prevPromos) =>
+          prevPromos.filter((promo) => promo.id !== selectedRows[0])
+        );
         setSelectedRows([]); // Dọn dẹp danh sách đã chọn
         alert("Khuyến mãi đã được xóa.");
-        navigate('/admin/discount-list')
+        navigate("/admin/discount-list");
       } catch (error) {
         alert("Có lỗi xảy ra khi xóa khuyến mãi.");
       }
     }
   };
-
 
   return (
     <div>
@@ -135,7 +130,12 @@ const DiscountListPage = () => {
             <div className="discount-list__action">
               <h2 className="discount-list__title">Danh sách khuyến mãi</h2>
               <div className="btn__action">
-                <ButtonComponent className="btn btn-delete" onClick={handleDelete}>Xóa</ButtonComponent>
+                <ButtonComponent
+                  className="btn btn-delete"
+                  onClick={handleDelete}
+                >
+                  Xóa
+                </ButtonComponent>
 
                 <ButtonComponent
                   className="btn btn-add"
@@ -183,11 +183,14 @@ const DiscountListPage = () => {
                         <td>{promo.discountCode}</td>
                         <td>{promo.discountName}</td>
                         <td>{promo.discountValue} %</td>
-                        <td>{promo.discountProduct.map(p => p.productName).join(" , ")}</td>
+                        <td>
+                          {promo.discountProduct
+                            .map((p) => p.productName)
+                            .join(" , ")}
+                        </td>
 
                         <td>{promo.discountStartDate}</td>
                         <td>{promo.discountEndDate}</td>
-                      
                       </tr>
                     ))
                   ) : (
