@@ -98,6 +98,18 @@ function DesignCakePage() {
     console.log("Image URL:", url);
   };
 
+  const handleDownloadImage = () => {
+    if (!aiImageUrl) return;
+
+    const a = document.createElement("a");
+    a.href = aiImageUrl;
+    a.download = "ai-cake-design.png";
+    a.target = "_blank"; // bắt buộc với domain ngoài
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* HEADER */}
@@ -228,12 +240,27 @@ function DesignCakePage() {
               )}
 
               {/* AI IMAGE */}
+              {/* AI IMAGE */}
               {!isLoading && aiImageUrl && (
-                <img
-                  src={aiImageUrl}
-                  alt="AI Cake Design"
-                  className="max-w-xl w-full rounded-2xl shadow-xl transition-all duration-500"
-                />
+                <div className="flex flex-col items-center gap-4">
+                  <img
+                    src={aiImageUrl}
+                    alt="AI Cake Design"
+                    className="max-w-xl w-full rounded-2xl shadow-xl transition-all duration-500"
+                  />
+
+                  {/* DOWNLOAD BUTTON */}
+                  <button
+                    onClick={handleDownloadImage}
+                    className="
+        px-6 py-2 rounded-lg
+        bg-green-500 text-white font-semibold
+        hover:bg-green-600 transition
+      "
+                  >
+                    ⬇️ Tải ảnh về
+                  </button>
+                </div>
               )}
 
               {/* EMPTY STATE */}
