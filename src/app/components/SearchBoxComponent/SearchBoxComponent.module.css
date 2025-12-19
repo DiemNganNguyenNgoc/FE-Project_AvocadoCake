@@ -16,13 +16,13 @@
   height: 4.4rem;
   border-radius: 50px;
   background: #d9d9d900;
-  border: none;
+  border: 0.5px solid var(--green30);
   font-size: 1.6rem;
   text-align: left;
   padding: 0 25px;
   outline: none;
   color: var(--brown100);
-  box-shadow: 0 0 4px var(--green50), 0 0 15px var(--green30);
+  /* box-shadow: 0 0 4px var(--green50), 0 0 15px var(--green30); */
 }
 
 .search__component::placeholder {

@@ -3,17 +3,17 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { clearCart } from "../../redux/slides/cartSlide";
-import PaymentStatusCard from "./components/PaymentStatusCard";
-import PaymentHeader from "./components/PaymentHeader";
-import PaymentInfo from "./components/PaymentInfo";
-import PaymentActions from "./components/PaymentActions";
+import PaymentStatusCard from "./partials/PaymentStatusCard";
+import PaymentHeader from "./partials/PaymentHeader";
+import PaymentInfo from "./partials/PaymentInfo";
+import PaymentActions from "./partials/PaymentActions";
 import {
   SuccessIcon,
   FailedIcon,
   PendingIcon,
   ErrorIcon,
   LoadingIcon,
-} from "./components/StatusIcons";
+} from "./partials/StatusIcons";
 
 const PaymentResultPage = () => {
   const [searchParams] = useSearchParams();

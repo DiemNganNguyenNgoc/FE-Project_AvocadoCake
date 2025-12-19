@@ -125,7 +125,7 @@ const PublicVoucherPage = () => {
 
   return (
     <div className="container-xl">
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="w-full min-h-screen">
         <VoucherHero />
 
         <div className="container mx-auto px-4 py-8">
