@@ -21,6 +21,7 @@ const PaymentResultPage = () => {
   const dispatch = useDispatch();
   const [paymentStatus, setPaymentStatus] = useState("loading");
   const [paymentData, setPaymentData] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const paymentCode =
     searchParams.get("paymentCode") || searchParams.get("orderId");
@@ -31,7 +32,12 @@ const PaymentResultPage = () => {
         const apiUrl =
           process.env.REACT_APP_API_URL_BACKEND || "http://localhost:3001/api";
 
-        console.log("Checking payment with code:", paymentCode);
+        console.log(
+          "Checking payment with code:",
+          paymentCode,
+          "Retry:",
+          retryCount
+        );
 
         const response = await axios.get(
           `${apiUrl}/payment/get-detail-payment/${paymentCode}`
@@ -49,6 +55,14 @@ const PaymentResultPage = () => {
             console.log("✅ Cart cleared after successful payment");
           } else if (payment.status === "FAILED") {
             setPaymentStatus("failed");
+          } else if (payment.status === "PENDING") {
+            setPaymentStatus("pending");
+            // Auto-retry sau 3 giây nếu vẫn PENDING (tối đa 20 lần = 1 phút)
+            if (retryCount < 20) {
+              setTimeout(() => {
+                setRetryCount((prev) => prev + 1);
+              }, 3000);
+            }
           } else {
             setPaymentStatus("pending");
           }
@@ -67,7 +81,7 @@ const PaymentResultPage = () => {
       console.log("⚠️ No paymentCode found in URL");
       setPaymentStatus("error");
     }
-  }, [paymentCode, searchParams, dispatch]);
+  }, [paymentCode, searchParams, dispatch, retryCount]);
 
   // Loading state
   if (paymentStatus === "loading") {
@@ -109,7 +123,8 @@ const PaymentResultPage = () => {
           <PaymentActions
             primaryAction={{
               text: "Xem đơn hàng của tôi",
-              onClick: () => navigate("/my-orders"),
+              onClick: () =>
+                navigate(`/order-detail-history/${paymentData?.orderId}`),
             }}
             secondaryActions={[
               {
@@ -193,18 +208,31 @@ const PaymentResultPage = () => {
             <p className="text-avocado-brown-100 text-lg leading-relaxed">
               Thanh toán của bạn đang được xử lý.
               <br />
-              Vui lòng chờ trong giây lát hoặc kiểm tra lại sau.
+              {retryCount < 20 ? (
+                <>
+                  Hệ thống đang tự động kiểm tra... (lần {retryCount + 1}/20)
+                  <br />
+                  <span className="text-sm text-avocado-brown-80 mt-2 block">
+                    ⏱️ Tự động cập nhật sau 3 giây
+                  </span>
+                </>
+              ) : (
+                <>Vui lòng chờ trong giây lát hoặc kiểm tra lại sau.</>
+              )}
             </p>
           </div>
           <PaymentActions
             primaryAction={{
-              text: "Kiểm tra lại",
-              onClick: () => window.location.reload(),
+              text: "Kiểm tra lại ngay",
+              onClick: () => {
+                setRetryCount(0);
+                window.location.reload();
+              },
             }}
             secondaryActions={[
               {
-                text: "Mua thêm",
-                onClick: () => navigate("/products"),
+                text: "Xem đơn hàng",
+                onClick: () => navigate("/my-orders"),
                 variant: "primary",
               },
               {
