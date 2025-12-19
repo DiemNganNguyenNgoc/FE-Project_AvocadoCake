@@ -45,6 +45,7 @@ import SEOSettings from "../AdminSetting/usecases/SEOSettings";
 import ThemeSettings from "../AdminSetting/usecases/ThemeSettings";
 import NotificationSettings from "../AdminSetting/usecases/NotificationSettings";
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
+import ModelTraining from "../AdminSetting/usecases/ModelTraining";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
 import AdminRecipe from "../AdminRecipe";
@@ -107,6 +108,7 @@ const moduleConfigs = {
       theme: ThemeSettings,
       notification: NotificationSettings,
       shipping: ShippingSettings,
+      aiModel: ModelTraining,
     },
     basePath: "/admin/settings",
   },
