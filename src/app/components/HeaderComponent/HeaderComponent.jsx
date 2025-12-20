@@ -353,7 +353,9 @@ const HeaderComponent = () => {
 
                   {/* Ẩn coins và rank trên mobile */}
                   {user?.isAdmin === false && (
-                    <div className={`${styles.coins__wrapper} d-none d-md-flex`}>
+                    <div
+                      className={`${styles.coins__wrapper} d-none d-md-flex`}
+                    >
                       <span className="fs-5">🪙</span>
                       <span className={styles.coins__text}>
                         {isLoadingCoins ? "..." : user.coins.toLocaleString()}
@@ -562,7 +564,7 @@ const HeaderComponent = () => {
                     {user.userName || user.userEmail || "User"}
                   </span>
                 </div>
-                
+
                 {/* Coins và Rank cho mobile */}
                 {user?.isAdmin === false && (
                   <div className={styles.mobile__stats}>
