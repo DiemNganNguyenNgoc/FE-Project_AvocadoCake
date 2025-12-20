@@ -2,17 +2,20 @@
 .search__wrapper {
   display: flex;
   align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 /* Container cho input và suggestions */
 .search__input_container {
   position: relative;
-  margin-right: 10px;
+  flex: 1;
+  min-width: 0;
 }
 
 /* Styling cho search input */
 .search__component {
-  width: var(--search-box-width);
+  width: 100%;
   height: 4.4rem;
   border-radius: 50px;
   background: #d9d9d900;
@@ -92,29 +95,43 @@
 
 /* Search button styling */
 .search__button {
-  margin-left: 20px;
   padding: none;
+  flex-shrink: 0;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .search__component {
-    width: 100%;
-    min-width: 250px;
-  }
-
   .search__wrapper {
-    flex-direction: column;
-    gap: 10px;
+    gap: 6px;
   }
 
-  .search__input_container {
-    margin-right: 0;
-    width: 100%;
+  .search__component {
+    height: 36px;
+    font-size: 1.3rem;
+    padding: 0 15px;
   }
 
-  .search__button {
-    margin-left: 0;
-    width: 100%;
+  /* Thu nhỏ các button trên mobile */
+  .search__wrapper :global(button) {
+    min-width: auto;
+    padding: 6px 10px;
+    font-size: 1.3rem;
+  }
+
+  /* Thu nhỏ icon buttons */
+  .search__wrapper > button:not(:last-child) {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+
+  .suggestions__dropdown {
+    max-height: 150px;
+    font-size: 1.3rem;
+  }
+
+  .suggestion__item {
+    padding: 10px 15px;
+    font-size: 1.3rem;
   }
 }
