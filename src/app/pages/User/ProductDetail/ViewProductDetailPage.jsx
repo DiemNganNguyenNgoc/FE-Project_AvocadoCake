@@ -223,9 +223,9 @@ const ViewProductDetailPage = () => {
   // }, [product.productId, user]);
 
   useEffect(() => {
-    console.log("🚀 useEffect recommendations triggered");
-    console.log("📦 Current product:", product);
-    console.log("👤 Current user:", user);
+    console.log("useEffect recommendations triggered");
+    console.log("Current product:", product);
+    console.log("Current user:", user);
 
     const fetchRecommendations = async () => {
       setIsLoading(true);
@@ -489,7 +489,7 @@ const ViewProductDetailPage = () => {
         {/* Combo Products Section */}
         {comboProducts.length > 0 && (
           <div className="combo-section mt-4 mb-4">
-            <h3 className="mb-3">🎁 Thường mua cùng nhau</h3>
+            <h3 className="mb-3">Thường mua cùng nhau</h3>
             {loadingCombos ? (
               <div>Đang tải combo sản phẩm...</div>
             ) : (
@@ -532,7 +532,7 @@ const ViewProductDetailPage = () => {
           <ButtonComponent onClick={handleEdit}>Sửa</ButtonComponent>
         </div> */}
         <div className="recommendProduct">
-          <h3>Có thể bạn sẽ thích</h3>
+          <h2 className="mb-3">Có thể bạn sẽ thích</h2>
           {isLoading ? (
             <div>Đang tải khuyến nghị...</div>
           ) : relatedProducts.length === 0 ? (

@@ -31,9 +31,23 @@ const HeaderComponent = () => {
   const [isLoadingCoins, setIsLoadingCoins] = useState(false);
   const [userRankData, setUserRankData] = useState(null);
   const [isLoadingRank, setIsLoadingRank] = useState(false);
+  const [showOthersDropdown, setShowOthersDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleNavigationLogin = () => {
     navigate("/login");
+  };
+
+  const handleIntroduce = () => {
+    console.log("Navigating to introduce");
+    setShowOthersDropdown(false);
+    navigate("/introduce");
+  };
+
+  const handleContact = () => {
+    console.log("Navigating to contact");
+    setShowOthersDropdown(false);
+    navigate("/contact");
   };
   const handleClickCart = () => {
     navigate("/cart");
@@ -141,6 +155,41 @@ const HeaderComponent = () => {
     };
   }, [showPopover]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showOthersDropdown &&
+        !event.target.closest(`.${styles.others__dropdown}`)
+      ) {
+        setShowOthersDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showOthersDropdown]);
+
+  // Đóng mobile menu khi click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isMobileMenuOpen &&
+        !event.target.closest(`.${styles.mobile__menu}`) &&
+        !event.target.closest(`.${styles.hamburger__button}`)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileMenuOpen]);
+
+  // Cập nhật activePath và đóng dropdown khi location thay đổi
+  useEffect(() => {
+    setActivePath(location.pathname);
+    setShowOthersDropdown(false);
+    setIsMobileMenuOpen(false); // Đóng mobile menu khi chuyển trang
+  }, [location.pathname]);
+
   //Click Search
   const handleSearch = (query) => {
     if (!query.trim()) {
@@ -207,6 +256,29 @@ const HeaderComponent = () => {
     </Popover>
   );
 
+  const othersPopover = (
+    <Popover id="popover-others">
+      <Popover.Body>
+        <div className="d-flex flex-column">
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleIntroduce}
+          >
+            Giới thiệu
+          </SideMenuComponent>
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleContact}
+          >
+            Liên hệ
+          </SideMenuComponent>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
+
   return (
     <>
       <div className={`${styles["bg-white"]} ${styles["bg-shadow"]}`}>
@@ -215,8 +287,37 @@ const HeaderComponent = () => {
             <div className="container-fluid">
               {/* nav top */}
               <div className="row align-items-center">
+                {/* Hamburger Menu - chỉ hiện trên mobile */}
+                <div className="col-auto d-md-none ps-2">
+                  <button
+                    className={styles.hamburger__button}
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label="Menu"
+                  >
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d={
+                          isMobileMenuOpen
+                            ? "M6 18L18 6M6 6l12 12"
+                            : "M4 6h16M4 12h16M4 18h16"
+                        }
+                      />
+                    </svg>
+                  </button>
+                </div>
+
                 {/* Logo */}
-                <div className="col-6 col-md-2">
+                <div className="col-auto col-md-2 px-1">
                   <a
                     className="navbar-brand d-flex align-items-center"
                     href="/"
@@ -229,10 +330,8 @@ const HeaderComponent = () => {
                   </a>
                 </div>
 
-                {/* Search */}
-                <div
-                  className={`col-12 col-md-6 mt-2 mt-md-0 ${styles.navbar__search__form}`}
-                >
+                {/* Search - responsive width */}
+                <div className="col col-md-6 px-1">
                   <SearchBoxComponent
                     onSearch={handleSearch}
                     onButtonClick={(query) => handleSearch(query)}
@@ -240,7 +339,7 @@ const HeaderComponent = () => {
                 </div>
 
                 {/* Cart + Coins + Rank + User */}
-                <div className="col-6 col-md-4 d-flex justify-content-end align-items-center gap-3 mt-2 mt-md-0">
+                <div className="col-auto col-md-4 d-flex justify-content-end align-items-center gap-2 gap-md-3 pe-2">
                   {user?.isAdmin === false && (
                     <div className={styles.cart__icon__wrapper}>
                       <CartIconComponent onClick={handleClickCart} />
@@ -252,8 +351,11 @@ const HeaderComponent = () => {
                     </div>
                   )}
 
+                  {/* Ẩn coins và rank trên mobile */}
                   {user?.isAdmin === false && (
-                    <div className={styles.coins__wrapper}>
+                    <div
+                      className={`${styles.coins__wrapper} d-none d-md-flex`}
+                    >
                       <span className="fs-5">🪙</span>
                       <span className={styles.coins__text}>
                         {isLoadingCoins ? "..." : user.coins.toLocaleString()}
@@ -262,10 +364,12 @@ const HeaderComponent = () => {
                   )}
 
                   {user?.isAdmin === false && user?.isLoggedIn && (
-                    <RankBadge
-                      userRankData={userRankData}
-                      loading={isLoadingRank}
-                    />
+                    <div className="d-none d-md-block">
+                      <RankBadge
+                        userRankData={userRankData}
+                        loading={isLoadingRank}
+                      />
+                    </div>
                   )}
 
                   <Loading isLoading={showLoading} />
@@ -278,7 +382,7 @@ const HeaderComponent = () => {
                       overlay={popover}
                       rootClose
                     >
-                      <div className={styles.user__icon}>
+                      <div className={`${styles.user__icon} d-none d-md-flex`}>
                         {userImage ? (
                           <img
                             src={userImage}
@@ -294,7 +398,7 @@ const HeaderComponent = () => {
                       </div>
                     </OverlayTrigger>
                   ) : (
-                    <div className="d-flex gap-2">
+                    <div className="d-none d-md-flex gap-2">
                       <Link to="/signup" className={styles.btn__signup}>
                         Đăng kí
                       </Link>
@@ -308,8 +412,8 @@ const HeaderComponent = () => {
                 </div>
               </div>
 
-              {/* nav bottom */}
-              <div className={`row mt-3 ${styles.nav__bot}`}>
+              {/* nav bottom - chỉ hiện trên desktop */}
+              <div className={`row mt-3 ${styles.nav__bot} d-none d-md-flex`}>
                 <div
                   className={`${styles.nav__content} d-flex flex-wrap justify-content-center gap-3`}
                 >
@@ -379,18 +483,6 @@ const HeaderComponent = () => {
                         Tin tức
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
-                        to="/introduce"
-                        isActive={activePath === "/introduce"}
-                      >
-                        Giới thiệu
-                      </ButtonNoBGComponent>
-                      <ButtonNoBGComponent
-                        to="/contact"
-                        isActive={activePath === "/contact"}
-                      >
-                        Liên hệ
-                      </ButtonNoBGComponent>
-                      <ButtonNoBGComponent
                         to="/quizz"
                         isActive={activePath === "/quizz"}
                       >
@@ -402,6 +494,44 @@ const HeaderComponent = () => {
                       >
                         Game
                       </ButtonNoBGComponent>
+                      <OverlayTrigger
+                        trigger="click"
+                        placement="bottom"
+                        show={showOthersDropdown}
+                        onToggle={(nextShow) => setShowOthersDropdown(nextShow)}
+                        overlay={othersPopover}
+                        rootClose
+                      >
+                        <div>
+                          <ButtonNoBGComponent
+                            className={`${styles.others__button} ${
+                              ["/introduce", "/contact"].includes(activePath)
+                                ? styles.active
+                                : ""
+                            }`}
+                            onClick={() => {
+                              console.log("Nút Khác được click!");
+                            }}
+                          >
+                            Khác
+                            <svg
+                              className={`${styles.dropdown__icon} ${
+                                showOthersDropdown ? styles.rotate : ""
+                              }`}
+                              width="12"
+                              height="8"
+                              viewBox="0 0 12 8"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M6 8L0.803848 0.5L11.1962 0.5L6 8Z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </ButtonNoBGComponent>
+                        </div>
+                      </OverlayTrigger>
                     </>
                   )}
                 </div>
@@ -409,6 +539,252 @@ const HeaderComponent = () => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Menu Sidebar */}
+        <div
+          className={`${styles.mobile__menu} ${
+            isMobileMenuOpen ? styles.mobile__menu__open : ""
+          }`}
+        >
+          <div className={styles.mobile__menu__content}>
+            {/* User Info Section */}
+            {user?.isLoggedIn ? (
+              <div className={styles.mobile__user__section}>
+                <div className={styles.mobile__user__info}>
+                  {userImage ? (
+                    <img
+                      src={userImage}
+                      alt="avatar"
+                      className={styles.mobile__user__avatar}
+                    />
+                  ) : (
+                    <UserIconComponent />
+                  )}
+                  <span className={styles.mobile__user__name}>
+                    {user.userName || user.userEmail || "User"}
+                  </span>
+                </div>
+
+                {/* Coins và Rank cho mobile */}
+                {user?.isAdmin === false && (
+                  <div className={styles.mobile__stats}>
+                    <div className={styles.mobile__coins}>
+                      <span className="fs-5">🪙</span>
+                      <span className={styles.coins__text}>
+                        {isLoadingCoins ? "..." : user.coins.toLocaleString()}
+                      </span>
+                    </div>
+                    {user?.isLoggedIn && (
+                      <RankBadge
+                        userRankData={userRankData}
+                        loading={isLoadingRank}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={styles.mobile__auth__buttons}>
+                <Link to="/signup" className={styles.mobile__signup__btn}>
+                  Đăng kí
+                </Link>
+                <button
+                  className={styles.mobile__login__btn}
+                  onClick={handleNavigationLogin}
+                >
+                  Đăng nhập
+                </button>
+              </div>
+            )}
+
+            {/* Navigation Links */}
+            <nav className={styles.mobile__nav}>
+              {user?.isAdmin ? (
+                <>
+                  <Link
+                    to="/admin/"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/admin/" ? styles.active : ""
+                    }`}
+                  >
+                    Trang chủ
+                  </Link>
+                  <Link
+                    to="/admin/products"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/admin/products")
+                        ? styles.active
+                        : ""
+                    }`}
+                  >
+                    Sản phẩm
+                  </Link>
+                  <Link
+                    to="/admin/news"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/admin/news") ? styles.active : ""
+                    }`}
+                  >
+                    Tin tức
+                  </Link>
+                  <Link
+                    to="/introduce"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/introduce" ? styles.active : ""
+                    }`}
+                  >
+                    Giới thiệu
+                  </Link>
+                  <Link
+                    to="/admin/introduce"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/admin/introduce" ? styles.active : ""
+                    }`}
+                  >
+                    Liên hệ
+                  </Link>
+                  <Link
+                    to="/admin/dashboard"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/admin/dashboard")
+                        ? styles.active
+                        : ""
+                    }`}
+                  >
+                    Quản lí
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/" ? styles.active : ""
+                    }`}
+                  >
+                    Trang chủ
+                  </Link>
+                  <Link
+                    to="/products"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/products") ? styles.active : ""
+                    }`}
+                  >
+                    Sản phẩm
+                  </Link>
+                  <Link
+                    to="/vouchers"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/vouchers") ? styles.active : ""
+                    }`}
+                  >
+                    Voucher
+                  </Link>
+                  <Link
+                    to="/rank-benefits"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/rank-benefits")
+                        ? styles.active
+                        : ""
+                    }`}
+                  >
+                    Rank
+                  </Link>
+                  <Link
+                    to="/design-cake"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/design-cake") ? styles.active : ""
+                    }`}
+                  >
+                    Thiết kế
+                  </Link>
+                  <Link
+                    to="/news"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath.startsWith("/news") ? styles.active : ""
+                    }`}
+                  >
+                    Tin tức
+                  </Link>
+                  <Link
+                    to="/quizz"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/quizz" ? styles.active : ""
+                    }`}
+                  >
+                    Gợi ý
+                  </Link>
+                  <Link
+                    to="/minigame"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/minigame" ? styles.active : ""
+                    }`}
+                  >
+                    Game
+                  </Link>
+                  <Link
+                    to="/introduce"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/introduce" ? styles.active : ""
+                    }`}
+                  >
+                    Giới thiệu
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className={`${styles.mobile__nav__item} ${
+                      activePath === "/contact" ? styles.active : ""
+                    }`}
+                  >
+                    Liên hệ
+                  </Link>
+                </>
+              )}
+            </nav>
+
+            {/* User Menu Actions */}
+            {user?.isLoggedIn && (
+              <div className={styles.mobile__user__actions}>
+                <button
+                  className={styles.mobile__action__btn}
+                  onClick={handleUserInfo}
+                >
+                  Thông tin người dùng
+                </button>
+                {user?.isAdmin === false && (
+                  <>
+                    <button
+                      className={styles.mobile__action__btn}
+                      onClick={handleVoucher}
+                    >
+                      Voucher của tôi
+                    </button>
+                    <button
+                      className={styles.mobile__action__btn}
+                      onClick={handleRankBenefits}
+                    >
+                      Quyền lợi Rank
+                    </button>
+                  </>
+                )}
+                <button
+                  className={`${styles.mobile__action__btn} ${styles.logout__btn}`}
+                  onClick={handleLogout}
+                >
+                  Đăng xuất
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Overlay khi mobile menu mở */}
+        {isMobileMenuOpen && (
+          <div
+            className={styles.mobile__menu__overlay}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
       </div>
       <div className={styles.headerPlaceholder}></div>
     </>

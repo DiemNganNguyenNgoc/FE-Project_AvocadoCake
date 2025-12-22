@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getAllRanks, getUserRank } from "../../../api/services/RankService";
+import ButtonFormComponent from "../../../components/ButtonFormComponent/ButtonFormComponent";
 
 const RankBenefitsPage = () => {
   const [ranks, setRanks] = useState([]);
@@ -57,7 +58,7 @@ const RankBenefitsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -141,7 +142,7 @@ const RankBenefitsPage = () => {
             return (
               <div
                 key={rank._id}
-                className="relative overflow-hidden transition-all duration-300 hover:scale-105"
+                className="relative overflow-hidden transition-all duration-300 hover:scale-105 flex flex-col"
                 style={{
                   borderRadius: "16px",
                   border: isCurrentRank
@@ -162,7 +163,7 @@ const RankBenefitsPage = () => {
                 </div>
 
                 {/* Card Body */}
-                <div className="bg-white p-8">
+                <div className="bg-white p-8 flex flex-col flex-grow">
                   {/* Spending Range */}
                   <div className="mb-6 pb-6 border-b border-gray-200">
                     <p className="text-sm text-gray-600 mb-2">
@@ -178,7 +179,7 @@ const RankBenefitsPage = () => {
                   </div>
 
                   {/* Benefits List */}
-                  <div>
+                  <div className="flex-grow">
                     <p className="text-sm font-semibold text-gray-700 mb-3">
                       Đặc quyền:
                     </p>
@@ -222,7 +223,7 @@ const RankBenefitsPage = () => {
 
         {/* CTA Section */}
         {!user?.id && (
-          <div className="mt-16 text-center bg-white rounded-2xl p-12 shadow-lg border-2 border-gray-200">
+          <div className="mt-16 text-center bg-white rounded-2xl p-12 border-2 border-gray-400">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Đăng nhập để bắt đầu tích lũy
             </h2>
@@ -230,12 +231,13 @@ const RankBenefitsPage = () => {
               Tạo tài khoản ngay để theo dõi tiến độ rank của bạn và nhận được
               nhiều ưu đãi
             </p>
-            <button
-              onClick={() => (window.location.href = "/login")}
-              className="px-8 py-4 bg-avocado-green text-white font-semibold rounded-xl hover:bg-avocado-dark-green transition-colors shadow-lg"
-            >
-              Đăng nhập ngay
-            </button>
+            <div className="flex justify-center">
+              <ButtonFormComponent
+                onClick={() => (window.location.href = "/login")}
+              >
+                Đăng nhập ngay
+              </ButtonFormComponent>
+            </div>
           </div>
         )}
 
@@ -247,36 +249,38 @@ const RankBenefitsPage = () => {
             </h3>
             <div className="space-y-4 text-gray-700">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                {/* <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
                   1
-                </div>
+                </div> */}
                 <p>
-                  Mỗi lần mua hàng, tổng giá trị đơn hàng sẽ được cộng dồn vào
-                  tổng chi tiêu của bạn.
+                  1. Mỗi lần mua hàng, tổng giá trị đơn hàng sẽ được cộng dồn
+                  vào tổng chi tiêu của bạn.
                 </p>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                {/* <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
                   2
-                </div>
-                <p>Hệ thống tự động xếp hạng dựa trên tổng chi tiêu của bạn.</p>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
-                  3
-                </div>
+                </div> */}
                 <p>
-                  Mỗi hạng có phần trăm giảm giá riêng, tự động áp dụng cho mọi
-                  đơn hàng.
+                  2. Hệ thống tự động xếp hạng dựa trên tổng chi tiêu của bạn.
                 </p>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
-                  4
-                </div>
+                {/* <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                      3
+                    </div> */}
                 <p>
-                  Khi thăng hạng, bạn sẽ nhận được email thông báo kèm voucher
-                  đặc biệt!
+                  3. Mỗi hạng có phần trăm giảm giá riêng, tự động áp dụng cho
+                  mọi đơn hàng.
+                </p>
+              </div>
+              <div className="flex items-start gap-4">
+                {/* <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                  4
+                </div> */}
+                <p>
+                  4. Khi thăng hạng, bạn sẽ nhận được email thông báo kèm
+                  voucher đặc biệt!
                 </p>
               </div>
             </div>

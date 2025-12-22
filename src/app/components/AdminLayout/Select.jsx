@@ -8,7 +8,8 @@ const Select = forwardRef(
       error,
       helperText,
       options = [],
-      placeholder = "Chọn...",
+      placeholder,
+      children,
       className = "",
       ...props
     },
@@ -46,15 +47,17 @@ const Select = forwardRef(
                 {placeholder}
               </option>
             )}
-            {options.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                disabled={option.disabled}
-              >
-                {option.label}
-              </option>
-            ))}
+            {/* Support both options array and children */}
+            {children ||
+              options.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}
+                >
+                  {option.label}
+                </option>
+              ))}
           </select>
 
           {/* Dropdown Icon or Error Icon */}

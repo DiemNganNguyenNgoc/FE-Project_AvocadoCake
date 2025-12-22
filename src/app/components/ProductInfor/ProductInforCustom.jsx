@@ -11,8 +11,10 @@ const ProductInforCustom = ({ image, name, size, quantity, price }) => {
         <img
           className="imagePro1"
           src={image}
+          alt={name || "Product image"}
+          title={name || "Product"}
           style={{ objectFit: "cover" }}
-        ></img>
+        />
       </div>
       <div className="infor1">
         <span>
