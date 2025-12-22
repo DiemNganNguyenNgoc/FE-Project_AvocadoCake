@@ -12,7 +12,7 @@ import {
   Target,
 } from "lucide-react";
 import recipeAPIService from "../services/RecipeService";
-import RecipeDisplay from "../partials/RecipeDisplay";
+import SmartRecipeDisplay from "../partials/SmartRecipeDisplay";
 import GenerateImage from "../partials/GenerateImage";
 import useAdminRecipeStore from "../adminRecipeStore";
 
@@ -397,7 +397,7 @@ const SmartGenerate = () => {
             </div>
           ) : currentRecipe ? (
             <>
-              <RecipeDisplay recipe={currentRecipe} />
+              <SmartRecipeDisplay data={currentRecipe} />
 
               {/* Generate Image Section */}
               <GenerateImage
