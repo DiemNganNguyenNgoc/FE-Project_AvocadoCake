@@ -73,7 +73,7 @@ const ViewProductDetailPage = () => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/category/get-all-category",
+          `${process.env.REACT_APP_API_URL_BACKEND}/category/get-all-category`,
           {
             method: "GET", // Phương thức GET để lấy danh sách category
             headers: {
@@ -283,7 +283,7 @@ const ViewProductDetailPage = () => {
             limit: 8,
           }).toString();
 
-          const url = `http://localhost:3001/api/product/get-product-by-category/${product.productCategory}?${queryParams}`;
+          const url = `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${product.productCategory}?${queryParams}`;
           const response = await fetch(url, {
             method: "GET",
             headers: {
