@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import recipeAPIService from "../services/RecipeService";
+import Button from "../../../../components/AdminLayout/Button";
 
 /**
  * GenerateImage Component
@@ -23,7 +24,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
   const [error, setError] = useState(null);
 
   const handleGenerateImage = async () => {
-    if (!recipe || !recipe.description) {
+    if (!recipe || (!recipe.image_prompt && !recipe.description)) {
       toast.error("❌ Cần có mô tả công thức để tạo ảnh");
       return;
     }
@@ -32,10 +33,22 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
     setError(null);
 
     try {
-      // Call API với mode 1B: title + description
+      console.log("🎨 Full Recipe Object:", recipe);
+      console.log("📝 image_prompt field:", recipe.image_prompt);
+      console.log("📋 decoration_tips field:", recipe.decoration_tips);
+
+      // IMPROVED: Use full recipe_data để backend có thể trích xuất image_prompt chi tiết
+      // Nếu recipe có sẵn image_prompt từ smart generate, backend sẽ dùng nó
+      // Còn không, backend sẽ tạo prompt chi tiết từ title + description
       const result = await recipeAPIService.generateImage({
-        recipe_title: recipe.name || recipe.title,
-        recipe_description: recipe.description,
+        recipe_data: {
+          title: recipe.name || recipe.title,
+          description: recipe.description,
+          image_prompt: recipe.image_prompt || null, // Pass image_prompt if available
+          ingredients: recipe.ingredients,
+          tags: recipe.tags,
+          decoration_tips: recipe.decoration_tips || null,
+        },
       });
 
       console.log("📸 Image Generation Response:", result);
@@ -112,10 +125,12 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
           </h3>
         </div>
 
-        <button
+        <Button
           onClick={handleGenerateImage}
           disabled={loading || !recipe}
-          className="flex items-center gap-2 px-4 py-2 bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+          variant="primary"
+          size="md"
+          className="flex items-center gap-2 px-4 py-2  disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
         >
           {loading ? (
             <>
@@ -128,7 +143,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
               Tạo Ảnh
             </>
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Description */}
@@ -182,13 +197,15 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <button
+            <Button
               onClick={handleDownloadImage}
-              className="flex items-center gap-2 px-4 py-2 bg-avocado-brown-100 text-white rounded-lg hover:bg-avocado-brown-80 transition-all"
+              variant="primary"
+              size="md"
+              className="flex items-center gap-2 px-4 py-2 hover:bg-avocado-brown-80 transition-all"
             >
               <Download className="w-4 h-4" />
               Tải xuống
-            </button>
+            </Button>
 
             <a
               href={imageUrl}
