@@ -6,6 +6,7 @@ import {
   Calendar,
   Zap,
   HeartPulse,
+  Brain,
 } from "lucide-react";
 
 import Breadcrumb from "./partials/Breadcrumb";
@@ -191,9 +192,9 @@ const AdminStratergy = () => {
         {/* Header - Đơn giản, sang trọng */}
         <div className="mb-8">
           <div className="flex items-center gap-6 mb-6">
-            {/* <div className="w-20 h-20 bg-avocado-green-100 rounded-lg flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 bg-avocado-green-100 rounded-lg flex items-center justify-center shadow-lg">
               <Brain className="w-10 h-10 text-white" />
-            </div> */}
+            </div>
             <div className="flex-1">
               <h1 className="text-4xl font-bold text-avocado-brown-100 mb-2">
                 AI Strategy Assistant

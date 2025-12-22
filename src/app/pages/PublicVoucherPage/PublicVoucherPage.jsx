@@ -6,10 +6,10 @@ import {
 } from "../../api/services/VoucherService";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import VoucherHero from "./partials/VoucherHero";
-import VoucherFilters from "./partials/VoucherFilters";
-import VoucherStatistics from "./partials/VoucherStatistics";
-import VoucherGrid from "./partials/VoucherGrid";
+import VoucherHero from "./components/VoucherHero";
+import VoucherFilters from "./components/VoucherFilters";
+import VoucherStatistics from "./components/VoucherStatistics";
+import VoucherGrid from "./components/VoucherGrid";
 
 const PublicVoucherPage = () => {
   const user = useSelector((state) => state.user);
@@ -124,33 +124,31 @@ const PublicVoucherPage = () => {
   }).length;
 
   return (
-    <div className="container-xl">
-      <div className="w-full min-h-screen">
-        <VoucherHero />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <VoucherHero />
 
-        <div className="container mx-auto px-4 py-8">
-          <VoucherFilters
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            filterType={filterType}
-            setFilterType={setFilterType}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-          />
+      <div className="container mx-auto px-4 py-8">
+        <VoucherFilters
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          filterType={filterType}
+          setFilterType={setFilterType}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+        />
 
-          <VoucherStatistics
-            totalVouchers={vouchers.length}
-            savedVouchers={userVouchers.length}
-            availableVouchers={availableVouchers}
-          />
+        <VoucherStatistics
+          totalVouchers={vouchers.length}
+          savedVouchers={userVouchers.length}
+          availableVouchers={availableVouchers}
+        />
 
-          <VoucherGrid
-            loading={loading}
-            filteredVouchers={filteredVouchers}
-            getUserVoucherStatus={getUserVoucherStatus}
-            handleClaimVoucher={handleClaimVoucher}
-          />
-        </div>
+        <VoucherGrid
+          loading={loading}
+          filteredVouchers={filteredVouchers}
+          getUserVoucherStatus={getUserVoucherStatus}
+          handleClaimVoucher={handleClaimVoucher}
+        />
       </div>
     </div>
   );

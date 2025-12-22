@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Store,
-  CreditCard,
-  Search,
-  Palette,
-  Bell,
-  Truck,
-  Brain,
-} from "lucide-react";
+import { Store, CreditCard, Search, Palette, Bell, Truck } from "lucide-react";
 
 const AdminSetting = ({ onNavigate }) => {
   const settingCategories = [
@@ -58,14 +50,6 @@ const AdminSetting = ({ onNavigate }) => {
         "Thiết lập phí giao hàng, khu vực phục vụ và chính sách vận chuyển",
       icon: <Truck className="w-12 h-12" />,
       color: "bg-gradient-to-br from-indigo-500 to-indigo-600",
-    },
-    {
-      id: "aiModel",
-      title: "AI Model",
-      description:
-        "Quản lý và huấn luyện mô hình AI gợi ý sản phẩm dựa trên dữ liệu người dùng",
-      icon: <Brain className="w-12 h-12" />,
-      color: "bg-gradient-to-br from-purple-500 to-purple-600",
     },
   ];
 

@@ -17,8 +17,6 @@ const initialState = {
   detailUser: {}, // Chi tiết một status cụ thể
   isAdmin: false,
   coins: 0, // Số xu của user
-  currentRank: null, // Rank hiện tại của user
-  totalSpending: 0, // Tổng chi tiêu
 };
 
 export const userSlice = createSlice({
@@ -40,8 +38,6 @@ export const userSlice = createSlice({
         access_token = "",
         isAdmin,
         coins = 0,
-        currentRank = null,
-        totalSpending = 0,
       } = action?.payload;
       // console.log("action", action.payload);
       state.id = _id;
@@ -58,8 +54,6 @@ export const userSlice = createSlice({
       state.isLoggedIn = !!access_token;
       state.isAdmin = isAdmin;
       state.coins = coins;
-      state.currentRank = currentRank;
-      state.totalSpending = totalSpending;
     },
     resetUser: (state) => {
       state.id = "";
@@ -76,8 +70,6 @@ export const userSlice = createSlice({
       state.isAdmin = false;
       state.isLoggedIn = false;
       state.coins = 0;
-      state.currentRank = null;
-      state.totalSpending = 0;
     },
 
     setAllUser: (state, action) => {

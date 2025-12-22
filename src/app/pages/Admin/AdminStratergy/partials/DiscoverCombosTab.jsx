@@ -1,7 +1,5 @@
 import React from "react";
 import { Layers, Save, Eye } from "lucide-react";
-import Button from "../../../../components/AdminLayout/Button";
-import Input from "../../../../components/AdminLayout/Input";
 
 /**
  * Tab: Discover Combos
@@ -23,12 +21,14 @@ const DiscoverCombosTab = ({
       <div className="bg-white rounded-lg border-2 border-avocado-brown-30 p-6 shadow-sm">
         <div className="flex items-end gap-4 flex-wrap">
           <div className="flex-1 min-w-[180px]">
-            <Input
+            <label className="block text-base font-semibold text-avocado-brown-100 mb-2">
+              Min Support
+            </label>
+            <input
               type="number"
               min="0.01"
               max="0.5"
               step="0.01"
-              label="Min Support"
               value={comboParams.minSupport}
               onChange={(e) =>
                 setComboParams((prev) => ({
@@ -36,17 +36,19 @@ const DiscoverCombosTab = ({
                   minSupport: Number(e.target.value),
                 }))
               }
+              className="w-full px-4 py-3 text-base rounded-lg border-2 border-avocado-brown-30 text-avocado-brown-100 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all"
               disabled={isLoading}
-              className="border-2 border-avocado-brown-30 focus:border-avocado-green-100 focus:ring-avocado-green-30"
             />
           </div>
           <div className="flex-1 min-w-[180px]">
-            <Input
+            <label className="block text-base font-semibold text-avocado-brown-100 mb-2">
+              Min Confidence
+            </label>
+            <input
               type="number"
               min="0.1"
               max="0.9"
               step="0.01"
-              label="Min Confidence"
               value={comboParams.minConfidence}
               onChange={(e) =>
                 setComboParams((prev) => ({
@@ -54,22 +56,18 @@ const DiscoverCombosTab = ({
                   minConfidence: Number(e.target.value),
                 }))
               }
+              className="w-full px-4 py-3 text-base rounded-lg border-2 border-avocado-brown-30 text-avocado-brown-100 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all"
               disabled={isLoading}
-              className="border-2 border-avocado-brown-30 focus:border-avocado-green-100 focus:ring-avocado-green-30"
             />
           </div>
-          <Button
+          <button
             onClick={onDiscover}
             disabled={isLoading}
-            loading={isLoading}
-            icon={<Layers />}
-            bgColor="avocado-green-100"
-            textColor="avocado-brown-100"
-            hoverBgColor="avocado-green-80"
-            size="md"
+            className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 rounded-lg font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
+            <Layers className="w-5 h-5" />
             {isLoading ? "Đang tìm..." : "Phát hiện combo"}
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -83,24 +81,20 @@ const DiscoverCombosTab = ({
       {/* Actions */}
       {combos.length > 0 && (
         <div className="flex gap-3">
-          <Button
+          <button
             onClick={onSave}
-            variant="outline"
-            icon={<Save />}
-            size="md"
-            // className="border-2 border-avocado-green-100 text-avocado-green-100 hover:bg-avocado-green-10"
+            className="border-2 border-avocado-green-100 text-avocado-green-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-green-10 transition-colors flex items-center gap-2"
           >
+            <Save className="w-4 h-4" />
             Lưu kết quả
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={onViewSaved}
-            variant="outline"
-            icon={<Eye />}
-            size="md"
-            // className="border-2 border-avocado-brown-100 text-avocado-brown-100 hover:bg-avocado-brown-10"
+            className="border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-brown-10 transition-colors flex items-center gap-2"
           >
+            <Eye className="w-4 h-4" />
             Xem đã lưu
-          </Button>
+          </button>
         </div>
       )}
 
@@ -121,7 +115,7 @@ const DiscoverCombosTab = ({
                     Confidence
                   </th>
                   <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
-                    Giảm giá nhóm
+                    Bundle Discount
                   </th>
                 </tr>
               </thead>

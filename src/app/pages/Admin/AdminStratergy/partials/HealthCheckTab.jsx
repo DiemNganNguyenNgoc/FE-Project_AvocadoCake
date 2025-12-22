@@ -1,6 +1,5 @@
 import React from "react";
 import { HeartPulse, Save, Eye } from "lucide-react";
-import Button from "../../../../components/AdminLayout/Button";
 
 /**
  * Tab: Health Check
@@ -18,14 +17,14 @@ const HealthCheckTab = ({
     <div className="space-y-6">
       {/* Controls */}
       <div className="bg-white rounded-lg border-2 border-avocado-brown-30 p-6 shadow-sm">
-        <Button
+        <button
           onClick={onCheck}
           disabled={isLoading}
-          className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 rounded-lg font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <HeartPulse className="w-5 h-5" />
           {isLoading ? "Đang kiểm tra..." : "Kiểm tra hệ thống"}
-        </Button>
+        </button>
       </div>
 
       {/* Error */}

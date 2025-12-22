@@ -10,7 +10,7 @@ export const useDiscoverCombos = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [comboParams, setComboParams] = useState({
-    minSupport: 0.01,
+    minSupport: 0.05,
     minConfidence: 0.3,
   });
 

@@ -25,8 +25,6 @@ const BankingInfoPage = () => {
     selectedProductIds,
     coinsApplied = 0,
     voucherDiscount = 0,
-    rankDiscount = 0,
-    rankDiscountPercent = 0,
     finalTotalPrice: passedFinalTotal,
     originalTotalPrice: passedOriginalTotal,
   } = location.state || {};
@@ -262,9 +260,7 @@ const BankingInfoPage = () => {
           <div className="order-total">
             Tổng tiền: {finalTotalPrice?.toLocaleString() || 0} VND
           </div>
-          {(coinsAppliedFromOrder > 0 ||
-            voucherDiscountApplied > 0 ||
-            rankDiscount > 0) && (
+          {(coinsAppliedFromOrder > 0 || voucherDiscountApplied > 0) && (
             <div
               className="coins-info"
               style={{
@@ -279,16 +275,6 @@ const BankingInfoPage = () => {
                 <span style={{ fontWeight: "bold" }}>Tổng tiền gốc: </span>
                 <span>{originalTotalPrice?.toLocaleString()} VND</span>
               </div>
-              {rankDiscount > 0 && (
-                <div style={{ marginBottom: "5px" }}>
-                  <span style={{ fontWeight: "bold", color: "#d4af37" }}>
-                    Giảm giá hạng ({rankDiscountPercent}%):{" "}
-                  </span>
-                  <span style={{ color: "#d4af37" }}>
-                    -{rankDiscount?.toLocaleString()} VND
-                  </span>
-                </div>
-              )}
               {voucherDiscountApplied > 0 && (
                 <div style={{ marginBottom: "5px" }}>
                   <span style={{ fontWeight: "bold", color: "#b1e321" }}>
