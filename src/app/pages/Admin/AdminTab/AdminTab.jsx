@@ -17,7 +17,6 @@ import {
   Sparkles,
   Ticket,
   Award,
-  Newspaper,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -32,7 +31,6 @@ import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
 import AdminOrder from "../AdminOrder/AdminOrder";
 import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
-import CreateOrder from "../AdminOrder/usecases/CreateOrder";
 import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
 import AdminDiscount from "../AdminDiscount";
@@ -45,7 +43,6 @@ import SEOSettings from "../AdminSetting/usecases/SEOSettings";
 import ThemeSettings from "../AdminSetting/usecases/ThemeSettings";
 import NotificationSettings from "../AdminSetting/usecases/NotificationSettings";
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
-import ModelTraining from "../AdminSetting/usecases/ModelTraining";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
 import AdminRecipe from "../AdminRecipe";
@@ -58,8 +55,6 @@ import VoucherDetail from "../AdminVoucher/VoucherDetail";
 import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
 import AdminRating from "../AdminRating/AdminRating";
 import AdminRank from "../AdminRank/AdminRank";
-import AdminNews from "../AdminNews/AdminNews";
-import { AddNews, UpdateNews } from "../AdminNews/usecases";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -91,7 +86,6 @@ const moduleConfigs = {
   orders: {
     main: AdminOrder,
     subPages: {
-      create: CreateOrder,
       "update-status": UpdateOrderStatus,
       "view-detail": ViewOrderDetail,
       "view-detail/:orderId": ViewOrderDetail,
@@ -108,7 +102,6 @@ const moduleConfigs = {
       theme: ThemeSettings,
       notification: NotificationSettings,
       shipping: ShippingSettings,
-      aiModel: ModelTraining,
     },
     basePath: "/admin/settings",
   },
@@ -122,14 +115,6 @@ const moduleConfigs = {
       "send-email/:id": SendEmailVoucher,
     },
     basePath: "/admin/voucher",
-  },
-  news: {
-    main: AdminNews,
-    subPages: {
-      add: AddNews,
-      update: UpdateNews,
-    },
-    basePath: "/admin/news",
   },
 };
 
@@ -224,13 +209,6 @@ const navItems = [
     icon: <Cake />,
     path: "/admin/recipes",
     component: AdminRecipe,
-  },
-  {
-    id: "news",
-    text: "Tin Tức",
-    icon: <Newspaper />,
-    path: "/admin/newss",
-    component: AdminNews,
   },
   {
     id: "stratergy",

@@ -2,30 +2,27 @@
 .search__wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap;
 }
 
 /* Container cho input và suggestions */
 .search__input_container {
   position: relative;
-  flex: 1;
-  min-width: 0;
+  margin-right: 10px;
 }
 
 /* Styling cho search input */
 .search__component {
-  width: 100%;
+  width: var(--search-box-width);
   height: 4.4rem;
   border-radius: 50px;
   background: #d9d9d900;
-  border: 0.5px solid var(--green30);
+  border: none;
   font-size: 1.6rem;
   text-align: left;
   padding: 0 25px;
   outline: none;
   color: var(--brown100);
-  /* box-shadow: 0 0 4px var(--green50), 0 0 15px var(--green30); */
+  box-shadow: 0 0 4px var(--green50), 0 0 15px var(--green30);
 }
 
 .search__component::placeholder {
@@ -95,43 +92,29 @@
 
 /* Search button styling */
 .search__button {
+  margin-left: 20px;
   padding: none;
-  flex-shrink: 0;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .search__wrapper {
-    gap: 6px;
-  }
-
   .search__component {
-    height: 36px;
-    font-size: 1.3rem;
-    padding: 0 15px;
+    width: 100%;
+    min-width: 250px;
   }
 
-  /* Thu nhỏ các button trên mobile */
-  .search__wrapper :global(button) {
-    min-width: auto;
-    padding: 6px 10px;
-    font-size: 1.3rem;
+  .search__wrapper {
+    flex-direction: column;
+    gap: 10px;
   }
 
-  /* Thu nhỏ icon buttons */
-  .search__wrapper > button:not(:last-child) {
-    width: 36px;
-    height: 36px;
-    padding: 6px;
+  .search__input_container {
+    margin-right: 0;
+    width: 100%;
   }
 
-  .suggestions__dropdown {
-    max-height: 150px;
-    font-size: 1.3rem;
-  }
-
-  .suggestion__item {
-    padding: 10px 15px;
-    font-size: 1.3rem;
+  .search__button {
+    margin-left: 0;
+    width: 100%;
   }
 }

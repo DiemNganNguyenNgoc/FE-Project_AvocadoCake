@@ -1,8 +1,6 @@
 import React from "react";
 import { Sparkles, Save, Eye } from "lucide-react";
 import PromotionCard from "./PromotionCard";
-import Button from "../../../../components/AdminLayout/Button";
-import Input from "../../../../components/AdminLayout/Input";
 
 /**
  * Tab: Event Promotions
@@ -25,31 +23,28 @@ const EventPromotionsTab = ({
       <div className="bg-white rounded-lg border-2 border-avocado-brown-30 p-6 shadow-sm">
         <div className="flex items-end gap-4 flex-wrap">
           <div className="flex-1 min-w-[200px]">
-            <Input
+            <label className="block text-base font-semibold text-avocado-brown-100 mb-2">
+              Số ngày tìm kiếm sự kiện
+            </label>
+            <input
               type="number"
               min="7"
               max="365"
-              label="Số ngày tìm kiếm sự kiện"
               value={daysAhead}
               onChange={(e) => setDaysAhead(Number(e.target.value))}
+              className="w-full px-4 py-3 text-base rounded-lg border-2 border-avocado-brown-30 text-avocado-brown-100 placeholder-avocado-brown-50 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all"
               placeholder="60"
               disabled={isLoading}
-              className="border-2 border-avocado-brown-30 focus:border-avocado-green-100 focus:ring-avocado-green-30"
             />
           </div>
-          <Button
+          <button
             onClick={onFetch}
             disabled={isLoading}
-            loading={isLoading}
-            icon={<Sparkles />}
-            // bgColor="avocado-green-100"
-            // textColor="avocado-brown-100"
-            // hoverBgColor="avocado-green-80"
-            // size="md"
-            variant="primary"
+            className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 rounded-lg font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
+            <Sparkles className="w-5 h-5" />
             {isLoading ? "Đang tải..." : "Lấy khuyến nghị"}
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -63,24 +58,20 @@ const EventPromotionsTab = ({
       {/* Actions */}
       {promotions.length > 0 && (
         <div className="flex gap-3">
-          <Button
+          <button
             onClick={onSave}
-            variant="outline"
-            icon={<Save />}
-            size="md"
-            // className="border-2 border-avocado-green-100 text-avocado-green-100 hover:bg-avocado-green-10"
+            className="border-2 border-avocado-green-100 text-avocado-green-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-green-10 transition-colors flex items-center gap-2"
           >
+            <Save className="w-4 h-4" />
             Lưu kết quả
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={onViewSaved}
-            variant="outline"
-            icon={<Eye />}
-            size="md"
-            // className="border-2 border-avocado-brown-100 text-avocado-brown-100 hover:bg-avocado-brown-10"
+            className="border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-brown-10 transition-colors flex items-center gap-2"
           >
+            <Eye className="w-4 h-4" />
             Xem đã lưu
-          </Button>
+          </button>
         </div>
       )}
 
@@ -106,15 +97,13 @@ const EventPromotionsTab = ({
               Nhập số ngày và bấm "Lấy khuyến nghị" để AI phân tích và đề xuất
               các chương trình khuyến mãi phù hợp.
             </p>
-            <Button
+            <button
               onClick={onViewSaved}
-              variant="outline"
-              icon={<Eye />}
-              size="md"
-              // className="mt-4 border-2 border-avocado-brown-100 text-avocado-brown-100 hover:bg-avocado-brown-10"
+              className="mt-4 border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-brown-10 transition-colors inline-flex items-center gap-2"
             >
+              <Eye className="w-4 h-4" />
               Xem dữ liệu đã lưu
-            </Button>
+            </button>
           </div>
         )}
       </div>

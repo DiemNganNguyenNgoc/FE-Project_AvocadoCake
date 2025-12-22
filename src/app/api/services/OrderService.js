@@ -28,12 +28,12 @@ export const createOrder = async (data) => {
 
 export const getDetailsOrder = async (id) => {
   try {
-    // Sử dụng axios thông thường thay vì axiosJWT để không require authentication
-    const res = await axios.get(
+    const res = await axiosJWT.get(
       `${process.env.REACT_APP_API_URL_BACKEND}/order/get-detail-order/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
+          //   token: `Bearer ${access_token}`,
         },
       }
     );

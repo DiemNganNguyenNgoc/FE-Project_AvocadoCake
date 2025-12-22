@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./PaymentPage.css";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 import ProductInforCustom from "../../../components/ProductInfor/ProductInforCustom";
@@ -8,24 +8,21 @@ import * as PaymentService from "../../../api/services/PaymentService";
 import * as UserService from "../../../api/services/UserService";
 import * as OrderService from "../../../api/services/OrderService";
 import * as VoucherService from "../../../api/services/VoucherService";
-import * as RankService from "../../../api/services/RankService";
+import { createPayment } from "../../../redux/slides/paymentSlide";
 import { updateUserCoins } from "../../../redux/slides/userSlide";
+import axios from "axios";
 import { getDetailsOrder } from "../../../api/services/OrderService";
 import {
   clearSelectedProductDetails,
   updateOrder,
 } from "../../../redux/slides/orderSlide";
 import { toast } from "react-toastify";
+import { Ticket, X, Tag } from "lucide-react";
 import VoucherModal from "../../../components/VoucherComponents/VoucherModal";
 import ConfirmPaymentModal from "../../../components/ConfirmPaymentModal/ConfirmPaymentModal";
 
-// Import các component đã tách
-import CoinsSection from "./components/CoinsSection";
-import VoucherSection from "./components/VoucherSection";
-import PaymentMethodSelector from "./components/PaymentMethodSelector";
-import PaymentSummary from "./components/PaymentSummary";
-
 const PaymentPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.order);
@@ -33,13 +30,14 @@ const PaymentPage = () => {
   const user = useSelector((state) => state.user);
 
   const lastOrder = orderDetails.orders?.[orderDetails.orders.length - 1] || {};
-  const { orderItems = [] } = lastOrder;
+  const {
+    orderItems = [],
+    totalPrice,
+    shippingAddress,
+    paymentMethod,
+  } = lastOrder;
 
   console.log("laddd order", lastOrder);
-  console.log("🎖️ Rank Discount:", {
-    rankDiscount: lastOrder.rankDiscount,
-    rankDiscountPercent: lastOrder.rankDiscountPercent,
-  });
 
   const resolvedOrderItems = orderItems.map((item) => {
     const product = cart.products.find((p) => p.id === item.product);
@@ -62,9 +60,6 @@ const PaymentPage = () => {
     wallet: "momo",
   });
 
-  // Sepay payment method state
-  const [sepayPaymentMethod, setSepayPaymentMethod] = useState("BANK_TRANSFER"); // 'BANK_TRANSFER', 'CARD', 'NAPAS_BANK_TRANSFER'
-
   // State cho tính năng đổi xu
   const [coinsToUse, setCoinsToUse] = useState(0);
   const [showCoinsSection, setShowCoinsSection] = useState(false);
@@ -77,9 +72,6 @@ const PaymentPage = () => {
   const [selectedVouchers, setSelectedVouchers] = useState([]);
   const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
   const [voucherDiscount, setVoucherDiscount] = useState(0);
-
-  // Rank state - lấy từ API như Header
-  const [userRankInfo, setUserRankInfo] = useState(null);
 
   // Confirm payment modal
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -97,102 +89,25 @@ const PaymentPage = () => {
   const originalTotalPrice =
     (lastOrder.totalItemPrice || 0) + (lastOrder.shippingPrice || 0);
 
-  // Lấy rank discount từ order
-  // Nếu order chưa có rankDiscount (order cũ), tính từ userRankInfo API
-  let rankDiscount = 0;
-  let rankDiscountPercent = 0;
+  useEffect(() => {
+    setFinalTotalPrice(originalTotalPrice - coinsApplied - voucherDiscount);
+  }, [originalTotalPrice, coinsApplied, voucherDiscount]);
 
-  // Ưu tiên 1: Lấy từ order nếu có (và không phải 0)
-  if (
-    lastOrder.rankDiscount != null &&
-    lastOrder.rankDiscountPercent != null &&
-    !isNaN(lastOrder.rankDiscount) &&
-    !isNaN(lastOrder.rankDiscountPercent)
-  ) {
-    rankDiscount = Number(lastOrder.rankDiscount);
-    rankDiscountPercent = Number(lastOrder.rankDiscountPercent);
-    console.log(
-      `🎖️ Sử dụng rank discount từ order: ${rankDiscountPercent}% = ${rankDiscount}đ`
-    );
-  }
-  // Ưu tiên 2: Tính từ userRankInfo API nếu order không có
-  else if (userRankInfo?.currentRank && lastOrder.totalItemPrice) {
-    rankDiscountPercent = userRankInfo.currentRank.discountPercent || 0;
-    rankDiscount = (lastOrder.totalItemPrice * rankDiscountPercent) / 100;
-    console.log(
-      `🎖️ Tính rank discount từ API: ${rankDiscountPercent}% = ${rankDiscount}đ`
-    );
-  }
-  // Ưu tiên 3: Lấy từ user Redux nếu có currentRank
-  else if (user?.currentRank && lastOrder.totalItemPrice) {
-    // Nếu currentRank là object đã populate
-    if (
-      typeof user.currentRank === "object" &&
-      user.currentRank.discountPercent != null
-    ) {
-      rankDiscountPercent = user.currentRank.discountPercent || 0;
-      rankDiscount = (lastOrder.totalItemPrice * rankDiscountPercent) / 100;
-      console.log(
-        `🎖️ Tính rank discount từ Redux user: ${rankDiscountPercent}% = ${rankDiscount}đ`
-      );
+  // Lấy thông tin xu của user khi component mount
+  useEffect(() => {
+    if (user?.id && access_token) {
+      fetchUserCoins();
     }
-  }
+  }, [user, access_token]);
 
-  console.log("🎖️ PaymentPage - User from Redux:", {
-    userId: user?.id,
-    currentRank: user?.currentRank,
-    totalSpending: user?.totalSpending,
-    fullUser: user,
-  });
-
-  console.log("💰 Payment Page - Price Calculation:", {
-    originalTotalPrice,
-    rankDiscount,
-    rankDiscountPercent,
-    voucherDiscount,
-    coinsApplied,
-    userRank: user?.currentRank,
-    lastOrderData: {
-      totalItemPrice: lastOrder.totalItemPrice,
-      shippingPrice: lastOrder.shippingPrice,
-      rankDiscount: lastOrder.rankDiscount,
-      rankDiscountPercent: lastOrder.rankDiscountPercent,
-    },
-  });
-
+  // Đồng bộ trạng thái đơn hàng với backend khi component mount
   useEffect(() => {
-    setFinalTotalPrice(
-      originalTotalPrice - rankDiscount - coinsApplied - voucherDiscount
-    );
-  }, [originalTotalPrice, rankDiscount, coinsApplied, voucherDiscount]);
+    if (lastOrder?.orderId && access_token) {
+      syncOrderWithBackend();
+    }
+  }, [lastOrder?.orderId, access_token]);
 
-  // Lấy thông tin rank của user khi component mount
-  useEffect(() => {
-    const fetchUserRank = async () => {
-      if (user?.id && access_token) {
-        try {
-          const response = await RankService.getUserRank(user.id, access_token);
-          console.log("🎖️ Fetched rank from API:", response);
-          console.log("🎖️ Response data structure:", {
-            status: response?.status,
-            hasData: !!response?.data,
-            currentRank: response?.data?.currentRank,
-            discountPercent: response?.data?.currentRank?.discountPercent,
-            totalSpending: response?.data?.totalSpending,
-          });
-          if (response?.status === "OK" && response?.data) {
-            setUserRankInfo(response.data);
-          }
-        } catch (error) {
-          console.error("❌ Error fetching user rank:", error);
-        }
-      }
-    };
-
-    fetchUserRank();
-  }, [user?.id, access_token]);
-
-  const fetchUserCoins = useCallback(async () => {
+  const fetchUserCoins = async () => {
     try {
       setIsLoadingCoins(true);
       const response = await UserService.checkUserCoins(access_token);
@@ -204,9 +119,9 @@ const PaymentPage = () => {
     } finally {
       setIsLoadingCoins(false);
     }
-  }, [access_token, dispatch]);
+  };
 
-  const syncOrderWithBackend = useCallback(async () => {
+  const syncOrderWithBackend = async () => {
     try {
       const response = await getDetailsOrder(lastOrder.orderId);
       if (response?.status === "OK" && response.data) {
@@ -232,21 +147,7 @@ const PaymentPage = () => {
     } catch (error) {
       console.error("Error syncing order with backend:", error);
     }
-  }, [lastOrder.orderId, dispatch]);
-
-  // Lấy thông tin xu của user khi component mount
-  useEffect(() => {
-    if (user?.id && access_token) {
-      fetchUserCoins();
-    }
-  }, [user?.id, access_token, fetchUserCoins]);
-
-  // Đồng bộ trạng thái đơn hàng với backend khi component mount
-  useEffect(() => {
-    if (lastOrder?.orderId && access_token) {
-      syncOrderWithBackend();
-    }
-  }, [lastOrder?.orderId, access_token, syncOrderWithBackend]);
+  };
 
   const handlePaymentTypeChange = (e) => {
     setPaymentType(e.target.value);
@@ -495,8 +396,6 @@ const PaymentPage = () => {
       }
     }
 
-    // Validation cho Sepay - không cần input thêm, chỉ cần chọn phương thức
-
     // Kiểm tra xem đơn hàng có tồn tại không
     try {
       const orderCheckResponse = await getDetailsOrder(lastOrder.orderId);
@@ -620,8 +519,6 @@ const PaymentPage = () => {
             adminBankInfo: response.data.adminBankInfo,
             coinsApplied: coinsApplied,
             voucherDiscount: voucherDiscount,
-            rankDiscount: rankDiscount,
-            rankDiscountPercent: rankDiscountPercent,
             finalTotalPrice: finalTotalPrice,
             originalTotalPrice: originalTotalPrice,
             selectedVouchers: selectedVouchers,
@@ -629,45 +526,6 @@ const PaymentPage = () => {
         });
       } else {
         throw new Error(response.message || "Tạo QR thất bại");
-      }
-    } else if (paymentType === "sepay") {
-      // Xử lý thanh toán Sepay
-      const sepayData = {
-        paymentCode: `SEPAY-${Date.now()}`,
-        orderId: lastOrder.orderId,
-        totalPrice: finalTotalPrice,
-        sepayPaymentMethod: sepayPaymentMethod, // 'BANK_TRANSFER', 'CARD', 'NAPAS_BANK_TRANSFER'
-        customerInfo: {
-          userId: user?.id,
-        },
-      };
-
-      const response = await PaymentService.createSepayPayment(sepayData);
-      console.log("Sepay response:", response);
-
-      if (response?.status === "OK") {
-        dispatch(clearSelectedProductDetails());
-        setIsConfirming(false);
-        setShowConfirmModal(false);
-
-        // Tạo form để submit đến Sepay
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = response.data.checkoutURL;
-
-        // Thêm các hidden input từ checkoutFormFields
-        Object.keys(response.data.checkoutFormFields).forEach((key) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = key;
-          input.value = response.data.checkoutFormFields[key];
-          form.appendChild(input);
-        });
-
-        document.body.appendChild(form);
-        form.submit();
-      } else {
-        throw new Error(response.message || "Thanh toán Sepay thất bại");
       }
     }
   };
@@ -678,40 +536,440 @@ const PaymentPage = () => {
         <div className="PaymentInfor">
           <p className="pThongtin">Thông tin thanh toán</p>
 
-          {/* Coins Section Component */}
-          <CoinsSection
-            user={user}
-            showCoinsSection={showCoinsSection}
-            setShowCoinsSection={setShowCoinsSection}
-            isLoadingCoins={isLoadingCoins}
-            coinsToUse={coinsToUse}
-            handleCoinsChange={handleCoinsChange}
-            coinsApplied={coinsApplied}
-            originalTotalPrice={originalTotalPrice}
-            handleApplyCoins={handleApplyCoins}
-            handleCancelCoins={handleCancelCoins}
-          />
+          {/* Phần đổi xu */}
+          {user?.id && (
+            <div
+              className="coins-section"
+              style={{
+                marginBottom: "20px",
+                padding: "15px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                <h4 style={{ margin: 0, color: "#333" }}>Đổi xu thành tiền</h4>
+                <button
+                  onClick={() => setShowCoinsSection(!showCoinsSection)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#3a060e",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                  }}
+                >
+                  {showCoinsSection ? "Ẩn" : "Hiện"}
+                </button>
+              </div>
 
-          {/* Voucher Section Component */}
-          <VoucherSection
-            voucherCode={voucherCode}
-            setVoucherCode={setVoucherCode}
-            handleApplyVoucherCode={handleApplyVoucherCode}
-            selectedVouchers={selectedVouchers}
-            handleRemoveVoucher={handleRemoveVoucher}
-            setIsVoucherModalOpen={setIsVoucherModalOpen}
-            voucherDiscount={voucherDiscount}
-          />
+              {showCoinsSection && (
+                <div>
+                  <div style={{ marginBottom: "10px" }}>
+                    <span style={{ fontWeight: "bold" }}>Số xu hiện có: </span>
+                    <span style={{ color: "#007bff", fontWeight: "bold" }}>
+                      {isLoadingCoins
+                        ? "Đang tải..."
+                        : `${user.coins.toLocaleString()} xu`}
+                    </span>
+                  </div>
 
-          {/* Payment Method Selector Component */}
-          <PaymentMethodSelector
-            paymentType={paymentType}
-            handlePaymentTypeChange={handlePaymentTypeChange}
-            sepayPaymentMethod={sepayPaymentMethod}
-            setSepayPaymentMethod={setSepayPaymentMethod}
-            paymentInfo={paymentInfo}
-            handleInputChange={handleInputChange}
-          />
+                  <div style={{ marginBottom: "10px" }}>
+                    <label style={{ display: "block", marginBottom: "5px" }}>
+                      Số xu muốn sử dụng (1 xu = 1 VND):
+                    </label>
+                    <input
+                      type="number"
+                      value={coinsToUse}
+                      onChange={handleCoinsChange}
+                      min="0"
+                      max={Math.min(user.coins, originalTotalPrice)}
+                      style={{
+                        width: "100%",
+                        padding: "8px",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                      }}
+                      placeholder="Nhập số xu muốn sử dụng"
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "10px" }}>
+                    <span style={{ fontWeight: "bold" }}>Tiết kiệm được: </span>
+                    <span style={{ color: "#28a745", fontWeight: "bold" }}>
+                      {(coinsApplied + coinsToUse).toLocaleString()} VND
+                    </span>
+                  </div>
+
+                  {coinsApplied > 0 && (
+                    <div
+                      style={{
+                        marginBottom: "10px",
+                        padding: "8px",
+                        background: "#e7f3ff",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <div>
+                        Số xu đã áp dụng: {coinsApplied.toLocaleString()} xu
+                      </div>
+                      <div>
+                        Số xu muốn thêm: {coinsToUse.toLocaleString()} xu
+                      </div>
+                      <div style={{ fontWeight: "bold", color: "#b1e321" }}>
+                        Tổng số xu sẽ áp dụng:{" "}
+                        {(coinsApplied + coinsToUse).toLocaleString()} xu
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "#666",
+                          marginTop: "4px",
+                        }}
+                      >
+                        (Sẽ chỉ trừ thêm {coinsToUse.toLocaleString()} xu từ tài
+                        khoản)
+                      </div>
+                    </div>
+                  )}
+
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      onClick={handleApplyCoins}
+                      disabled={coinsToUse === 0}
+                      style={{
+                        padding: "8px 16px",
+                        background: coinsToUse === 0 ? "#ccc" : "#28a745",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: coinsToUse === 0 ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      Áp dụng xu
+                    </button>
+                    <button
+                      onClick={handleCancelCoins}
+                      style={{
+                        padding: "8px 16px",
+                        background: "#dc3545",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Hủy áp dụng
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {coinsApplied > 0 && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    padding: "10px",
+                    background: "#d4edda",
+                    borderRadius: "4px",
+                  }}
+                >
+                  <span style={{ color: "#155724", fontWeight: "bold" }}>
+                    ✓ Đã áp dụng {coinsApplied.toLocaleString()} xu
+                  </span>
+                  <div
+                    style={{
+                      marginTop: "5px",
+                      fontSize: "14px",
+                      color: "#155724",
+                    }}
+                  >
+                    Tiết kiệm được: {coinsApplied.toLocaleString()} VND
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "2px",
+                      fontSize: "12px",
+                      color: "#666",
+                    }}
+                  >
+                    (Đã trừ {coinsApplied.toLocaleString()} xu từ tài khoản)
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Phần Voucher */}
+          <div
+            className="voucher-section"
+            style={{
+              marginBottom: "20px",
+              padding: "15px",
+              border: "2px solid #b1e321",
+              borderRadius: "24px",
+              background: "white",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "15px",
+              }}
+            >
+              <Ticket
+                className="w-6 h-6"
+                style={{ color: "#b1e321", marginRight: "8px" }}
+              />
+              <h4 style={{ margin: 0, color: "#3a060e", fontWeight: "bold" }}>
+                Voucher giảm giá
+              </h4>
+            </div>
+
+            {/* Voucher Input */}
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                marginBottom: "15px",
+              }}
+            >
+              <div style={{ flex: 1, position: "relative" }}>
+                <Tag
+                  className="w-5 h-5"
+                  style={{
+                    position: "absolute",
+                    left: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "#b1e321",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Nhập mã voucher..."
+                  value={voucherCode}
+                  onChange={(e) => setVoucherCode(e.target.value)}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && handleApplyVoucherCode()
+                  }
+                  style={{
+                    width: "100%",
+                    paddingLeft: "40px",
+                    paddingRight: "12px",
+                    paddingTop: "10px",
+                    paddingBottom: "10px",
+                    border: "2px solid rgba(177, 227, 33, 0.3)",
+                    borderRadius: "24px",
+                    fontSize: "16px",
+                    background: "rgba(177, 227, 33, 0.05)",
+                  }}
+                />
+              </div>
+              <button
+                onClick={handleApplyVoucherCode}
+                style={{
+                  background: "#b1e321",
+                  color: "#3a060e",
+                  fontWeight: "600",
+                  padding: "10px 24px",
+                  borderRadius: "24px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Áp dụng
+              </button>
+              <button
+                onClick={() => setIsVoucherModalOpen(true)}
+                style={{
+                  background: "#3a060e",
+                  color: "white",
+                  fontWeight: "600",
+                  padding: "10px 24px",
+                  borderRadius: "24px",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <Ticket className="w-5 h-5" />
+                Chọn voucher
+              </button>
+            </div>
+
+            {/* Selected Vouchers */}
+            {selectedVouchers.length > 0 && (
+              <div>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#666",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Đã chọn {selectedVouchers.length} voucher:
+                </p>
+                {selectedVouchers.map((voucher) => (
+                  <div
+                    key={voucher._id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      background: "rgba(177, 227, 33, 0.1)",
+                      border: "2px solid rgba(177, 227, 33, 0.3)",
+                      borderRadius: "24px",
+                      padding: "12px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          background: "#b1e321",
+                          padding: "8px",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        <Ticket
+                          className="w-5 h-5"
+                          style={{ color: "white" }}
+                        />
+                      </div>
+                      <div>
+                        <p
+                          style={{
+                            fontWeight: "600",
+                            color: "#3a060e",
+                            margin: 0,
+                          }}
+                        >
+                          {voucher.voucherName}
+                        </p>
+                        <p
+                          style={{ fontSize: "14px", color: "#666", margin: 0 }}
+                        >
+                          Mã:{" "}
+                          <span
+                            style={{
+                              fontFamily: "monospace",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {voucher.voucherCode}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveVoucher(voucher._id)}
+                      style={{
+                        padding: "8px",
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        borderRadius: "16px",
+                      }}
+                    >
+                      <X className="w-5 h-5" style={{ color: "#dc3545" }} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {voucherDiscount > 0 && (
+              <div
+                style={{
+                  marginTop: "10px",
+                  padding: "10px",
+                  background: "#d4edda",
+                  borderRadius: "16px",
+                }}
+              >
+                <span style={{ color: "#155724", fontWeight: "bold" }}>
+                  ✓ Tiết kiệm {voucherDiscount.toLocaleString()} VND từ voucher
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div
+            className="PaymentTypeHolder"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px 20px",
+            }}
+          >
+            <label>
+              <input
+                type="radio"
+                value="paypal"
+                checked={paymentType === "paypal"}
+                onChange={handlePaymentTypeChange}
+              />
+              PayPal
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="qr"
+                checked={paymentType === "qr"}
+                onChange={handlePaymentTypeChange}
+              />
+              Thanh toán QR
+            </label>
+          </div>
+
+          {paymentType === "qr" && (
+            <div className="WalletHolder">
+              <select
+                className="E-wallet"
+                name="Wallet"
+                value={paymentInfo.userBank}
+                onChange={handleInputChange("userBank")}
+                style={{ width: "100%", margin: "10px 0" }}
+              >
+                <option value="momo">MoMo</option>
+                <option value="vnpay">VNPay</option>
+                <option value="techcombank">Techcombank</option>
+              </select>
+              <div className="inputSdt">
+                <input
+                  type="text"
+                  className="input2"
+                  placeholder={
+                    paymentInfo.userBank === "momo"
+                      ? "Nhập số điện thoại MoMo"
+                      : "Nhập số tài khoản ngân hàng"
+                  }
+                  value={paymentInfo.userBankNumber}
+                  onChange={handleInputChange("userBankNumber")}
+                  style={{ width: "100%" }}
+                />
+              </div>
+            </div>
+          )}
 
           <div className="Button-area-pay">
             <div className="button1">
@@ -745,16 +1003,85 @@ const PaymentPage = () => {
           ) : (
             <p>Không có sản phẩm nào trong đơn hàng</p>
           )}
-
-          {/* Payment Summary Component */}
-          <PaymentSummary
-            originalTotalPrice={originalTotalPrice}
-            rankDiscount={rankDiscount}
-            rankDiscountPercent={rankDiscountPercent}
-            coinsApplied={coinsApplied}
-            voucherDiscount={voucherDiscount}
-            finalTotalPrice={finalTotalPrice}
-          />
+          <div className="footerAreaPayment">
+            <div className="tamtinh" style={{ marginBottom: "10px" }}>
+              <label style={{ paddingLeft: "10px" }}>Tạm tính:</label>
+              <p className="tamtinh2">
+                {lastOrder.totalItemPrice?.toLocaleString() || 0} VND
+              </p>
+            </div>
+            <div className="tamtinhVanChuyen" style={{ marginBottom: "10px" }}>
+              <label style={{ paddingLeft: "10px" }}>Phí vận chuyển:</label>
+              <p className="tamtinhVanChuyen2">
+                {lastOrder.shippingPrice?.toLocaleString() || 0} VND
+              </p>
+            </div>
+            <div
+              className="voucher-discount"
+              style={{
+                marginBottom: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                color: voucherDiscount > 0 ? "#3a060e" : "inherit",
+              }}
+            >
+              <label style={{ paddingLeft: "10px" }}>Giảm giá voucher:</label>
+              <p
+                style={{
+                  margin: 0,
+                  fontWeight: voucherDiscount > 0 ? "bold" : "normal",
+                }}
+              >
+                {voucherDiscount > 0 ? "-" : ""}
+                {voucherDiscount.toLocaleString()} VND
+              </p>
+            </div>
+            {coinsApplied > 0 && (
+              <div
+                className="coins-discount"
+                style={{
+                  marginBottom: "10px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <label
+                  style={{
+                    paddingLeft: "10px",
+                    color: "#3a060e",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Giảm giá từ xu:
+                </label>
+                <p
+                  style={{
+                    margin: 0,
+                    fontWeight: "bold",
+                    color: "#3a060e",
+                    paddingRight: "10px",
+                  }}
+                >
+                  -{coinsApplied.toLocaleString()} VND
+                </p>
+              </div>
+            )}
+            <div
+              className="total-payment"
+              style={{
+                borderTop: "1px solid #ddd",
+                paddingTop: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              <label style={{ paddingLeft: "10px" }}>Tổng:</label>
+              <span className="finalPrice">
+                {finalTotalPrice.toLocaleString()} VND
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -782,8 +1109,6 @@ const PaymentPage = () => {
         isLoading={isConfirming}
         orderData={{
           originalTotalPrice,
-          rankDiscount,
-          rankDiscountPercent,
           voucherDiscount,
           coinsApplied,
           finalTotalPrice,

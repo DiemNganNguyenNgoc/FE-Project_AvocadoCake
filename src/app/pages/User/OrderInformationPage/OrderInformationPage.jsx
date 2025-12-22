@@ -131,28 +131,12 @@ const OrderInformationPage = () => {
       const response = await mutation.mutateAsync(orderData);
 
       if (response?.data?._id) {
-        // Merge order data with backend response to include rankDiscount fields
-        const fullOrderData = {
-          ...orderData,
-          orderId: response.data._id,
-          rankDiscount: response.data.rankDiscount || 0,
-          rankDiscountPercent: response.data.rankDiscountPercent || 0,
-          totalItemPrice: response.data.totalItemPrice || totalItemPrice,
-          totalPrice: response.data.totalPrice || totalPrice,
-        };
-
-        console.log("📦 Created order with rank discount:", {
-          orderId: fullOrderData.orderId,
-          rankDiscount: fullOrderData.rankDiscount,
-          rankDiscountPercent: fullOrderData.rankDiscountPercent,
-          totalPrice: fullOrderData.totalPrice,
-        });
-
+        const fullOrderData = { ...orderData, orderId: response.data._id };
         dispatch(
           setOrderDetails({
             selectedProductDetails: selectedProducts,
             shippingAddress,
-            totalPrice: fullOrderData.totalPrice,
+            totalPrice,
           })
         );
         dispatch(addOrder(fullOrderData));
