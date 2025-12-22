@@ -42,8 +42,8 @@
   padding: 20px;
   border: none;
   border-radius: 20px;
-  box-shadow: 0px 2px 4px 0px #203c1640;
-  background-color: var(--grey5);
+  /* box-shadow: 0px 2px 4px 0px #203c1640; */
+  /* background-color: var(--grey5); */
 }
 
 .signup__title {
@@ -66,4 +66,38 @@
   text-decoration: none;
   font-style: italic;
   padding: 8px;
+}
+
+/* Google Login Custom Button */
+.google__login__wrapper {
+  width: var(--search-box-width);
+  height: var(--search-box-height);
+}
+
+.google__login__custom {
+  width: var(--search-box-width);
+  height: var(--search-box-height);
+  border-radius: 50px;
+  border: 1px solid var(--grey);
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--brown100);
+  cursor: pointer;
+  transition: all 0.25s;
+  padding: 0 20px;
+}
+
+.google__login__custom:hover {
+  background-color: var(--grey5);
+  border-color: var(--brown100);
+}
+
+.google__icon {
+  width: 20px;
+  height: 20px;
 }

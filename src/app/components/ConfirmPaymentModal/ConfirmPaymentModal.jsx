@@ -12,6 +12,8 @@ const ConfirmPaymentModal = ({
 }) => {
   const {
     originalTotalPrice,
+    rankDiscount,
+    rankDiscountPercent,
     voucherDiscount,
     coinsApplied,
     finalTotalPrice,
@@ -50,6 +52,23 @@ const ConfirmPaymentModal = ({
                 </span>
               </div>
             )}
+
+            <div className="summary-row discount">
+              <span>
+                Giảm giá hạng
+                {rankDiscountPercent > 0 && ` (-${rankDiscountPercent}%)`}:
+              </span>
+              <span
+                className="amount discount-amount"
+                style={{
+                  color: rankDiscount > 0 ? "#d4af37" : "inherit",
+                  fontWeight: rankDiscount > 0 ? "bold" : "normal",
+                }}
+              >
+                {rankDiscount > 0 ? "-" : ""}
+                {(rankDiscount || 0).toLocaleString()} VND
+              </span>
+            </div>
 
             {coinsApplied > 0 && (
               <div className="summary-row discount">

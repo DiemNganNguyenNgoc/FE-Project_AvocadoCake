@@ -1,5 +1,7 @@
 import React from "react";
 import { Calendar, Save, Eye } from "lucide-react";
+import Button from "../../../../components/AdminLayout/Button";
+import Input from "../../../../components/AdminLayout/Input";
 
 /**
  * Tab: Upcoming Events
@@ -21,28 +23,31 @@ const UpcomingEventsTab = ({
       <div className="bg-white rounded-lg border-2 border-avocado-brown-30 p-6 shadow-sm">
         <div className="flex items-end gap-4 flex-wrap">
           <div className="flex-1 min-w-[200px]">
-            <label className="block text-base font-semibold text-avocado-brown-100 mb-2">
-              Số ngày tới
-            </label>
-            <input
+            <Input
               type="number"
               min="7"
               max="365"
+              label="Số ngày tới"
               value={daysAhead}
               onChange={(e) => setDaysAhead(Number(e.target.value))}
-              className="w-full px-4 py-3 text-base rounded-lg border-2 border-avocado-brown-30 text-avocado-brown-100 placeholder-avocado-brown-50 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all"
               placeholder="60"
               disabled={isLoading}
+              className="border-2 border-avocado-brown-30 focus:border-avocado-green-100 focus:ring-avocado-green-30"
             />
           </div>
-          <button
+          <Button
             onClick={onFetch}
             disabled={isLoading}
-            className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 rounded-lg font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            loading={isLoading}
+            icon={<Calendar />}
+            // bgColor="avocado-green-100"
+            // textColor="avocado-brown-100"
+            // hoverBgColor="avocado-green-80"
+            // size="md"
+            variant="primary"
           >
-            <Calendar className="w-5 h-5" />
             {isLoading ? "Đang tải..." : "Lấy sự kiện"}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -56,20 +61,24 @@ const UpcomingEventsTab = ({
       {/* Actions */}
       {upcomingEvents.length > 0 && (
         <div className="flex gap-3">
-          <button
+          <Button
             onClick={onSave}
-            className="border-2 border-avocado-green-100 text-avocado-green-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-green-10 transition-colors flex items-center gap-2"
+            variant="outline"
+            icon={<Save />}
+            size="md"
+            // className="border-2 border-avocado-green-100 text-avocado-green-100 hover:bg-avocado-green-10"
           >
-            <Save className="w-4 h-4" />
             Lưu kết quả
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onViewSaved}
-            className="border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-brown-10 transition-colors flex items-center gap-2"
+            variant="outline"
+            icon={<Eye />}
+            size="md"
+            // className="border-2 border-avocado-brown-100 text-avocado-brown-100 hover:bg-avocado-brown-10"
           >
-            <Eye className="w-4 h-4" />
             Xem đã lưu
-          </button>
+          </Button>
         </div>
       )}
 

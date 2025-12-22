@@ -59,6 +59,7 @@ import AdminTab from "../pages/Admin/AdminTab/AdminTab.jsx";
 import AddCategory from "../pages/Admin/AdminCategory/usecases/AddCategory.jsx";
 import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory.jsx";
 import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
+import AdminNews from "../pages/Admin/AdminNews";
 import AdminRecipe from "../pages/Admin/AdminRecipe/AdminRecipe.jsx";
 import AdminStratergy from "../pages/Admin/AdminStratergy/AdminStratergy.jsx";
 import PublicVoucherPage from "../pages/PublicVoucherPage/PublicVoucherPage.jsx";
@@ -365,20 +366,13 @@ export const routes = [
     // isShowFooter: true,
     isPrivate: true,
   },
-  {
-    path: "/admin/news",
-    page: NewsPageAdmin,
-    isShowHeader: true,
-    isShowFooter: true,
-    // isPrivate: true,
-  },
-  {
-    path: "/admin/news/add-news",
-    page: AddNews,
-    isShowHeader: true,
-    isShowFooter: true,
-    // isPrivate: true,
-  },
+  // {
+  //   path: "/admin/news",
+  //   page: AdminNews,
+  //   isShowHeader: true,
+  //   isShowFooter: true,
+  //   // isPrivate: true,
+  // },
   {
     path: "/admin/order-status/update",
     page: UpdateStatus,

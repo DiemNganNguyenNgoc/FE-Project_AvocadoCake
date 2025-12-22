@@ -18,7 +18,7 @@ const VoucherGrid = ({
 
   if (filteredVouchers.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-12 text-center">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-12 text-center">
         <Ticket className="w-16 h-16 mx-auto text-gray-400 mb-4" />
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
           Không tìm thấy voucher

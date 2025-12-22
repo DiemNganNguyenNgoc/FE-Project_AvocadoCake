@@ -122,6 +122,11 @@ const AdminSidebar = ({ isOpen, onToggle }) => {
           icon: MessageSquare,
           url: "/admin/ratings",
         },
+        {
+          title: "News",
+          icon: Newspaper,
+          url: "/admin/newss",
+        },
       ],
     },
     {
