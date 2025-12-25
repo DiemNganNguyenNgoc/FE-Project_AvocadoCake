@@ -1,35 +1,36 @@
 .producInfor {
   display: flex;
+  align-items: center; /* ⭐ CĂN GIỮA THEO CHIỀU DỌC */
+  gap: 16px;
+}
+
+.Image {
+  flex-shrink: 0;
 }
 
 .imagePro {
-  width: 100px;
-  height: 100px;
-  /* border-radius: 100px; */
-  flex-shrink: 0;
-  border-radius: 8px;
+  width: 72px;
+  height: 72px;
   object-fit: cover;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+}
+
+.producInfor > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* ⭐ TEXT Ở GIỮA ẢNH */
 }
 
 .ProName {
-  color: #3a060e;
-
-  /* Font_Title */
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  min-width: 150px;
-  max-width: 300px;
-  margin-left: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937; /* gray-800 */
+  line-height: 1.3;
 }
 
 .ProSize {
-  color: #3a060e;
-  font-family: Poppins;
-  font-size: 1.4rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-left: 10px;
+  font-size: 15px;
+  color: #6b7280; /* gray-500 */
+  margin-top: 4px;
 }

@@ -6,8 +6,8 @@ const DeleteBtn = ({ onClick }) => {
       <button className="deleteBtn" onClick={onClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="19"
-          height="24"
+          width="18"
+          height="20"
           viewBox="0 0 19 24"
           fill="none"
         >

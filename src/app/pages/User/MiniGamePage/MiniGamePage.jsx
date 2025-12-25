@@ -319,7 +319,7 @@ const MiniGamePage = () => {
       {isLoggedIn && (
         <div className={styles.coinsDisplay}>
           <span className={styles.coinsText}>
-            Xu hiện tại: {userCoins.toLocaleString()} xu
+            Xu hiện tại: {userCoins.toLocaleString()} 🪙
           </span>
         </div>
       )}
