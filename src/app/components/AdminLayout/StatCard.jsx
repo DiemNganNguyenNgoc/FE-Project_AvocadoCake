@@ -60,7 +60,7 @@ const StatCard = ({
               {change}%
             </span>
             <span
-              className={`text-base ${
+              className={`text-xl ${
                 isPositive
                   ? "text-green-600 dark:text-green-400"
                   : "text-red-600 dark:text-red-400"
@@ -75,7 +75,7 @@ const StatCard = ({
       {/* Content Section */}
       <div className="mt-auto">
         {/* Title */}
-        <h3 className="text-base font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+        <h3 className="text-xl font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
           {title}
         </h3>
 
@@ -85,7 +85,7 @@ const StatCard = ({
             {value}
           </p>
           {subtitle && (
-            <span className="text-base text-gray-500 dark:text-gray-400">
+            <span className="text-xl text-gray-500 dark:text-gray-400">
               {subtitle}
             </span>
           )}

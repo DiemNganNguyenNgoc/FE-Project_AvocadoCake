@@ -80,7 +80,7 @@ const UpdateModalExample = () => {
       <button
         type="button"
         onClick={() => setIsOpen(false)}
-        className="px-8 py-3 text-base font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm"
+        className="px-8 py-3 text-xl font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm"
         disabled={loading}
       >
         Hủy
@@ -89,7 +89,7 @@ const UpdateModalExample = () => {
         type="submit"
         form="update-form"
         disabled={loading}
-        className="px-8 py-3 text-base font-semibold bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-2xl hover:from-emerald-600 hover:to-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+        className="px-8 py-3 text-xl font-semibold bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-2xl hover:from-emerald-600 hover:to-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
       >
         {loading ? (
           <div className="flex items-center">
@@ -149,7 +149,7 @@ const UpdateModalExample = () => {
         <form id="update-form" onSubmit={handleSubmit} className="space-y-8">
           {/* Name Field */}
           <div className="group">
-            <label className="block text-base font-semibold text-gray-800 mb-3">
+            <label className="block text-xl font-semibold text-gray-800 mb-3">
               Tên Danh Mục <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -158,7 +158,7 @@ const UpdateModalExample = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full px-5 py-4 text-base border-2 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-200 ${
+                className={`w-full px-5 py-4 text-xl border-2 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-200 ${
                   errors.name
                     ? "border-red-300 bg-red-50"
                     : "border-gray-200 bg-gray-50 focus:bg-white"
@@ -205,7 +205,7 @@ const UpdateModalExample = () => {
 
           {/* Code Field */}
           <div className="group">
-            <label className="block text-base font-semibold text-gray-800 mb-3">
+            <label className="block text-xl font-semibold text-gray-800 mb-3">
               Mã Danh Mục <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -214,7 +214,7 @@ const UpdateModalExample = () => {
                 name="code"
                 value={formData.code}
                 onChange={handleInputChange}
-                className={`w-full px-5 py-4 text-base border-2 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-200 ${
+                className={`w-full px-5 py-4 text-xl border-2 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-200 ${
                   errors.code
                     ? "border-red-300 bg-red-50"
                     : "border-gray-200 bg-gray-50 focus:bg-white"
@@ -243,7 +243,7 @@ const UpdateModalExample = () => {
 
           {/* Status Field */}
           <div className="group">
-            <label className="block text-base font-semibold text-gray-800 mb-3">
+            <label className="block text-xl font-semibold text-gray-800 mb-3">
               Trạng Thái <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -251,7 +251,7 @@ const UpdateModalExample = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full px-5 py-4 text-base border-2 border-gray-200 bg-gray-50 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 focus:bg-white transition-all duration-200 appearance-none"
+                className="w-full px-5 py-4 text-xl border-2 border-gray-200 bg-gray-50 rounded-2xl focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 focus:bg-white transition-all duration-200 appearance-none"
               >
                 <option value="Active">🟢 Hoạt động</option>
                 <option value="Inactive">⚪ Không hoạt động</option>

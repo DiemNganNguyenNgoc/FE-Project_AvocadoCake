@@ -56,7 +56,7 @@ const SmartPromotionTab = ({
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-base font-medium">
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-xl font-medium">
           {error}
         </div>
       )}
@@ -100,7 +100,7 @@ const SmartPromotionTab = ({
             <h3 className="text-2xl font-semibold text-avocado-brown-100 mb-3">
               Chưa có khuyến mãi thông minh
             </h3>
-            <p className="text-base text-avocado-brown-50 max-w-md mx-auto">
+            <p className="text-xl text-avocado-brown-50 max-w-md mx-auto">
               Chọn chiến lược và bấm "Tạo khuyến mãi" để AI đề xuất.
             </p>
           </div>

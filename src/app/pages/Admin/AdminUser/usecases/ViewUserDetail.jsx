@@ -72,7 +72,7 @@ const ViewUserDetail = ({ onBack }) => {
             </div>
             <button
               onClick={handleEdit}
-              className="inline-flex items-center gap-2 px-5 py-3 text-sm md:text-base font-medium text-white bg-emerald-600 rounded-xl shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition"
+              className="inline-flex items-center gap-2 px-5 py-3 text-sm md:text-xl font-medium text-white bg-emerald-600 rounded-xl shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition"
             >
               <Edit className="w-5 h-5" />
               Chỉnh sửa
@@ -162,7 +162,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Họ
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {currentUser.familyName || "N/A"}
                     </dd>
                   </div>
@@ -170,7 +170,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Tên
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {currentUser.userName || "N/A"}
                     </dd>
                   </div>
@@ -178,7 +178,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Email
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900 break-all">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900 break-all">
                       {currentUser.userEmail || "N/A"}
                     </dd>
                   </div>
@@ -186,7 +186,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Số điện thoại
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {currentUser.userPhone || "N/A"}
                     </dd>
                   </div>
@@ -196,7 +196,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Ngày tạo
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {formatDate(currentUser.createdAt)}
                     </dd>
                   </div>
@@ -204,7 +204,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Cập nhật lần cuối
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {formatDate(currentUser.updatedAt)}
                     </dd>
                   </div>
@@ -226,7 +226,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Địa chỉ
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {currentUser.userAddress || "N/A"}
                     </dd>
                   </div>
@@ -235,7 +235,7 @@ const ViewUserDetail = ({ onBack }) => {
                       <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                         Phường/Xã
                       </dt>
-                      <dd className="mt-1 text-base md:text-lg text-slate-900">
+                      <dd className="mt-1 text-xl md:text-lg text-slate-900">
                         {currentUser.userWard}
                       </dd>
                     </div>
@@ -245,7 +245,7 @@ const ViewUserDetail = ({ onBack }) => {
                       <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                         Quận/Huyện
                       </dt>
-                      <dd className="mt-1 text-base md:text-lg text-slate-900">
+                      <dd className="mt-1 text-xl md:text-lg text-slate-900">
                         {currentUser.userDistrict}
                       </dd>
                     </div>
@@ -255,7 +255,7 @@ const ViewUserDetail = ({ onBack }) => {
                       <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                         Tỉnh/Thành phố
                       </dt>
-                      <dd className="mt-1 text-base md:text-lg text-slate-900">
+                      <dd className="mt-1 text-xl md:text-lg text-slate-900">
                         {currentUser.userCity}
                       </dd>
                     </div>
@@ -278,7 +278,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Số xu
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       {currentUser.coins || 0} xu
                     </dd>
                   </div>
@@ -288,7 +288,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Số đơn hàng
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       0
                     </dd>
                   </div>
@@ -296,7 +296,7 @@ const ViewUserDetail = ({ onBack }) => {
                     <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
                       Tổng chi tiêu
                     </dt>
-                    <dd className="mt-1 text-base md:text-lg text-slate-900">
+                    <dd className="mt-1 text-xl md:text-lg text-slate-900">
                       0 VND
                     </dd>
                   </div>

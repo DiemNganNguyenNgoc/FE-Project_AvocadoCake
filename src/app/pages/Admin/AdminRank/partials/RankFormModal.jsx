@@ -297,7 +297,7 @@ const RankFormModal = ({ isOpen, onClose, onSave, editingRank, loading }) => {
 
           {/* Color */}
           <div>
-            <label className="block text-base font-medium text-gray-700 mb-3">
+            <label className="block text-xl font-medium text-gray-700 mb-3">
               Màu Sắc
             </label>
             <div className="flex gap-2">
@@ -342,7 +342,7 @@ const RankFormModal = ({ isOpen, onClose, onSave, editingRank, loading }) => {
 
         {/* Benefits - Full Width */}
         <div className="mt-6">
-          <label className="block text-base font-medium text-gray-700 mb-3">
+          <label className="block text-xl font-medium text-gray-700 mb-3">
             Đặc Quyền
           </label>
           <div className="flex gap-2 mb-3">

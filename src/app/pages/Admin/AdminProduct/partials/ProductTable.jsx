@@ -298,7 +298,7 @@ const ProductTable = () => {
                 placeholder="Tìm kiếm sản phẩm..."
                 value={localSearchTerm}
                 onChange={handleSearchChange}
-                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
               />
             </div>
 
@@ -306,7 +306,7 @@ const ProductTable = () => {
             <div className="relative" ref={filterRef}>
               <button
                 onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl"
               >
                 <Filter className="w-5 h-5" />
                 Filter
@@ -335,7 +335,7 @@ const ProductTable = () => {
                     <select
                       value={filterCategory}
                       onChange={(e) => setFilterCategory(e.target.value)}
-                      className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                      className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
                     >
                       <option value="all">Tất cả danh mục</option>
                       {categories.map((category) => (
@@ -357,7 +357,7 @@ const ProductTable = () => {
                         placeholder="Tối thiểu"
                         value={filterPriceMin}
                         onChange={(e) => setFilterPriceMin(e.target.value)}
-                        className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                        className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
                       />
                       <span className="text-gray-400">-</span>
                       <input
@@ -365,7 +365,7 @@ const ProductTable = () => {
                         placeholder="Tối đa"
                         value={filterPriceMax}
                         onChange={(e) => setFilterPriceMax(e.target.value)}
-                        className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                        className="w-full px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
                       />
                     </div>
                   </div>
@@ -374,13 +374,13 @@ const ProductTable = () => {
                   <div className="flex gap-3">
                     <button
                       onClick={clearFilters}
-                      className="flex-1 px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+                      className="flex-1 px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl"
                     >
                       Xóa bộ lọc
                     </button>
                     <button
                       onClick={applyFilters}
-                      className="flex-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+                      className="flex-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
                     >
                       Áp dụng
                     </button>
@@ -394,7 +394,7 @@ const ProductTable = () => {
             {/* Export Button */}
             <button
               onClick={handleExport}
-              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
             >
               <Download className="w-5 h-5" />
               Export
@@ -402,13 +402,13 @@ const ProductTable = () => {
 
             {/* Items per page */}
             <div className="flex items-center gap-3">
-              <span className="text-base text-gray-600 dark:text-gray-400">
+              <span className="text-xl text-gray-600 dark:text-gray-400">
                 Show:
               </span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -430,13 +430,13 @@ const ProductTable = () => {
             <div className="flex gap-4">
               <button
                 onClick={clearSelection}
-                className="px-5 py-3 text-base font-medium text-primary hover:text-primary/80 transition-colors"
+                className="px-5 py-3 text-xl font-medium text-primary hover:text-primary/80 transition-colors"
               >
                 Bỏ chọn
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-5 py-3 text-base font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
+                className="px-5 py-3 text-xl font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
               >
                 Xóa đã chọn
               </button>
@@ -542,7 +542,7 @@ const ProductTable = () => {
                     <h3 className="text-xl font-semibold text-dark dark:text-white mb-3">
                       Không có sản phẩm
                     </h3>
-                    <p className="text-base text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
+                    <p className="text-xl text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
                       Chưa có sản phẩm nào được tìm thấy. Hãy thử điều chỉnh bộ
                       lọc của bạn.
                     </p>
@@ -568,7 +568,7 @@ const ProductTable = () => {
                         className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary cursor-pointer"
                       />
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-white">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap">
@@ -586,23 +586,23 @@ const ProductTable = () => {
                         )}
                       </div>
                     </td>
-                    <td className="px-8 py-5 text-base font-semibold text-gray-900 dark:text-white max-w-xs">
+                    <td className="px-8 py-5 text-xl font-semibold text-gray-900 dark:text-white max-w-xs">
                       <div className="truncate" title={product.productName}>
                         {product.productName}
                       </div>
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-bold text-gray-900 dark:text-white">
                       {formatPrice(product.productPrice)}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-700 dark:text-gray-300">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium text-gray-700 dark:text-gray-300">
                       {getCategoryName(product.productCategory)}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-700 dark:text-gray-300">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium text-gray-700 dark:text-gray-300">
                       <span className="px-3 py-1 bg-gray-1 dark:bg-dark-2 rounded-lg text-sm font-semibold text-dark dark:text-white">
                         {product.productSize}
                       </span>
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium">
                       <button
                         onClick={() => handleToggleVisibility(product)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
@@ -631,10 +631,10 @@ const ProductTable = () => {
                         )}
                       </button>
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium text-gray-500 dark:text-gray-400">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium text-gray-500 dark:text-gray-400">
                       {formatDate(product.createdAt)}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium">
                       <div className="flex gap-3">
                         <button
                           onClick={() => handleViewProduct(product)}
@@ -671,7 +671,7 @@ const ProductTable = () => {
       {totalPages() > 1 && (
         <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="text-base text-gray-700 dark:text-gray-300">
+            <div className="text-xl text-gray-700 dark:text-gray-300">
               Hiển thị {(currentPage - 1) * itemsPerPage + 1} đến{" "}
               {Math.min(currentPage * itemsPerPage, totalItems)} trong tổng số{" "}
               {totalItems} sản phẩm
@@ -693,7 +693,7 @@ const ProductTable = () => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 text-base rounded-xl transition-colors ${
+                    className={`px-4 py-2 text-xl rounded-xl transition-colors ${
                       currentPage === page
                         ? "bg-primary text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"

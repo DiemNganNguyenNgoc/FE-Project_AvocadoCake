@@ -14,7 +14,7 @@ const SavedDataModal = ({ isOpen, onClose, title, data }) => {
     if (!data) {
       return (
         <div className="text-center py-12">
-          <p className="text-base text-avocado-brown-50">
+          <p className="text-xl text-avocado-brown-50">
             Không có dữ liệu đã lưu.
           </p>
         </div>
@@ -316,7 +316,7 @@ const SavedDataModal = ({ isOpen, onClose, title, data }) => {
         <div className="bg-avocado-green-10 px-6 py-4 border-t-2 border-avocado-brown-30 flex justify-end">
           <button
             onClick={onClose}
-            className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-2 rounded-lg font-medium text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+            className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-2 rounded-lg font-medium text-xl hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
           >
             Đóng
           </button>

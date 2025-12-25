@@ -86,7 +86,7 @@ const AdminRecipe = () => {
           <h1 className="text-4xl font-semibold text-avocado-brown-100 mb-2">
             AI Recipe Generator
           </h1>
-          <p className="text-base text-avocado-brown-50">
+          <p className="text-xl text-avocado-brown-50">
             Tạo công thức bánh thông minh với AI
           </p>
         </div>
@@ -112,7 +112,7 @@ const AdminRecipe = () => {
             return (
               <button
                 key={tab.id}
-                className={`flex-1 flex items-center justify-center px-6 py-4 text-base font-medium transition-all ${
+                className={`flex-1 flex items-center justify-center px-6 py-4 text-xl font-medium transition-all ${
                   activeTab === tab.id
                     ? "bg-avocado-green-100 text-white"
                     : "text-avocado-brown-100 hover:bg-avocado-green-10"

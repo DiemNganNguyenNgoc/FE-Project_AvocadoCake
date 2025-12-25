@@ -291,7 +291,7 @@ const DiscountCalendar = () => {
                   </svg>
                   Tên chương trình
                 </label>
-                <p className="mt-2 text-base font-semibold text-gray-900 dark:text-white group-hover:text-avocado-green-100 transition-colors">
+                <p className="mt-2 text-xl font-semibold text-gray-900 dark:text-white group-hover:text-avocado-green-100 transition-colors">
                   {selectedDiscount.discountName}
                 </p>
               </div>
@@ -382,7 +382,7 @@ const DiscountCalendar = () => {
                       </svg>
                       Bắt đầu
                     </label>
-                    <p className="mt-2 text-base font-bold text-gray-900 dark:text-white group-hover:text-avocado-green-100 transition-colors">
+                    <p className="mt-2 text-xl font-bold text-gray-900 dark:text-white group-hover:text-avocado-green-100 transition-colors">
                       {new Date(
                         selectedDiscount.discountStartDate
                       ).toLocaleDateString("vi-VN", {
@@ -407,7 +407,7 @@ const DiscountCalendar = () => {
                       </svg>
                       Kết thúc
                     </label>
-                    <p className="mt-2 text-base font-bold text-gray-900 dark:text-white group-hover:text-red-500 transition-colors">
+                    <p className="mt-2 text-xl font-bold text-gray-900 dark:text-white group-hover:text-red-500 transition-colors">
                       {new Date(
                         selectedDiscount.discountEndDate
                       ).toLocaleDateString("vi-VN", {

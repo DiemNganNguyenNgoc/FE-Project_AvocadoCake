@@ -108,7 +108,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
             placeholder={t("search")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 pr-5 py-3 w-full border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+            className="pl-12 pr-5 py-3 w-full border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
           />
         </div>
 
@@ -157,7 +157,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                 )}
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-base font-medium text-dark dark:text-white">
+                <p className="text-xl font-medium text-dark dark:text-white">
                   {adminData.name}
                 </p>
                 <p className="text-sm text-dark-4 dark:text-dark-6">
@@ -193,7 +193,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                       <h4 className="text-lg font-semibold text-dark dark:text-white">
                         {adminData.name}
                       </h4>
-                      <p className="text-base text-dark-4 dark:text-dark-6">
+                      <p className="text-xl text-dark-4 dark:text-dark-6">
                         {adminData.email}
                       </p>
                     </div>
@@ -203,7 +203,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                   <div className="space-y-2">
                     <button
                       onClick={handleAccountSettings}
-                      className="w-full flex items-center gap-4 px-4 py-3 text-left text-dark-5 hover:bg-gray-50 rounded-xl transition-colors duration-200 dark:hover:bg-dark-3 dark:text-dark-6 text-base"
+                      className="w-full flex items-center gap-4 px-4 py-3 text-left text-dark-5 hover:bg-gray-50 rounded-xl transition-colors duration-200 dark:hover:bg-dark-3 dark:text-dark-6 text-xl"
                     >
                       <Settings className="h-5 w-5" />
                       <span>{t("accountSettings")}</span>
@@ -211,7 +211,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
 
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-4 px-4 py-3 text-left text-red-500 hover:bg-red-50 rounded-xl transition-colors duration-200 dark:hover:bg-red-900/20 text-base"
+                      className="w-full flex items-center gap-4 px-4 py-3 text-left text-red-500 hover:bg-red-50 rounded-xl transition-colors duration-200 dark:hover:bg-red-900/20 text-xl"
                     >
                       <LogOut className="h-5 w-5" />
                       <span>{t("logout")}</span>

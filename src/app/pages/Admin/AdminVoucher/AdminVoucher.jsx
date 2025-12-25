@@ -150,7 +150,7 @@ const AdminVoucher = () => {
           <h1 className="text-heading-4 font-bold text-dark dark:text-white">
             Quản lý Voucher
           </h1>
-          <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+          <p className="mt-3 text-xl text-gray-600 dark:text-gray-400">
             Tạo và quản lý voucher giảm giá cho khách hàng
           </p>
         </div>
@@ -243,7 +243,7 @@ const AdminVoucher = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-4 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-avocado-green-100 dark:bg-dark-2 dark:text-white text-base min-h-[48px]"
+              className="w-full px-4 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-avocado-green-100 dark:bg-dark-2 dark:text-white text-xl min-h-[48px]"
             >
               <option value="all">Tất cả trạng thái</option>
               <option value="active">Đang hoạt động</option>
@@ -259,7 +259,7 @@ const AdminVoucher = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="w-full px-4 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-avocado-green-100 dark:bg-dark-2 dark:text-white text-base min-h-[48px]"
+              className="w-full px-4 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-avocado-green-100 dark:bg-dark-2 dark:text-white text-xl min-h-[48px]"
             >
               <option value="all">Tất cả loại</option>
               <option value="PERCENTAGE">Giảm theo %</option>
@@ -346,7 +346,7 @@ const AdminVoucher = () => {
                 key: "usedQuantity",
                 render: (value, row) => (
                   <div>
-                    <p className="text-base font-medium text-gray-900 dark:text-white">
+                    <p className="text-xl font-medium text-gray-900 dark:text-white">
                       {row.usedQuantity}/{row.totalQuantity}
                     </p>
                     <div className="mt-1 w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -366,7 +366,7 @@ const AdminVoucher = () => {
                 header: "Thời hạn",
                 key: "endDate",
                 render: (value) => (
-                  <span className="text-base text-gray-600 dark:text-gray-400">
+                  <span className="text-xl text-gray-600 dark:text-gray-400">
                     {new Date(value).toLocaleDateString("vi-VN")}
                   </span>
                 ),

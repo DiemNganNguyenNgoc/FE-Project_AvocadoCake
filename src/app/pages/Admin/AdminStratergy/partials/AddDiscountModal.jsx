@@ -431,7 +431,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Discount Code */}
             <div className="space-y-2">
-              <label className="block text-base font-semibold text-gray-800">
+              <label className="block text-xl font-semibold text-gray-800">
                 Mã khuyến mãi <span className="text-red-500">*</span>
               </label>
               <input
@@ -439,7 +439,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
                 name="discountCode"
                 value={formData.discountCode}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 text-base rounded-2xl border-2 transition-all ${
+                className={`w-full px-4 py-3 text-xl rounded-2xl border-2 transition-all ${
                   errors.discountCode
                     ? "border-red-300 focus:border-red-500 bg-red-50"
                     : "border-gray-200 focus:border-blue-500"
@@ -453,7 +453,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
 
             {/* Discount Value */}
             <div className="space-y-2">
-              <label className="block text-base font-semibold text-gray-800">
+              <label className="block text-xl font-semibold text-gray-800">
                 Giá trị (%) <span className="text-red-500">*</span>
               </label>
               <input
@@ -463,7 +463,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
                 onChange={handleInputChange}
                 min="1"
                 max="100"
-                className={`w-full px-4 py-3 text-base rounded-2xl border-2 transition-all ${
+                className={`w-full px-4 py-3 text-xl rounded-2xl border-2 transition-all ${
                   errors.discountValue
                     ? "border-red-300 focus:border-red-500 bg-red-50"
                     : "border-gray-200 focus:border-blue-500"
@@ -478,7 +478,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
 
           {/* Discount Name - Full width */}
           <div className="space-y-2 mt-6">
-            <label className="block text-base font-semibold text-gray-800">
+            <label className="block text-xl font-semibold text-gray-800">
               Tên khuyến mãi <span className="text-red-500">*</span>
             </label>
             <input
@@ -486,7 +486,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
               name="discountName"
               value={formData.discountName}
               onChange={handleInputChange}
-              className={`w-full px-4 py-3 text-base rounded-2xl border-2 transition-all ${
+              className={`w-full px-4 py-3 text-xl rounded-2xl border-2 transition-all ${
                 errors.discountName
                   ? "border-red-300 focus:border-red-500 bg-red-50"
                   : "border-gray-200 focus:border-blue-500"
@@ -508,7 +508,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Start Date */}
             <div className="space-y-2">
-              <label className="block text-base font-semibold text-gray-800">
+              <label className="block text-xl font-semibold text-gray-800">
                 Ngày bắt đầu <span className="text-red-500">*</span>
               </label>
               <input
@@ -516,7 +516,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
                 name="discountStartDate"
                 value={formData.discountStartDate}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 text-base rounded-2xl border-2 transition-all ${
+                className={`w-full px-4 py-3 text-xl rounded-2xl border-2 transition-all ${
                   errors.discountStartDate
                     ? "border-red-300 focus:border-red-500 bg-red-50"
                     : "border-gray-200 focus:border-blue-500"
@@ -531,7 +531,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
 
             {/* End Date */}
             <div className="space-y-2">
-              <label className="block text-base font-semibold text-gray-800">
+              <label className="block text-xl font-semibold text-gray-800">
                 Ngày kết thúc <span className="text-red-500">*</span>
               </label>
               <input
@@ -539,7 +539,7 @@ const AddDiscountModal = ({ isOpen, onClose, promotionData }) => {
                 name="discountEndDate"
                 value={formData.discountEndDate}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 text-base rounded-2xl border-2 transition-all ${
+                className={`w-full px-4 py-3 text-xl rounded-2xl border-2 transition-all ${
                   errors.discountEndDate
                     ? "border-red-300 focus:border-red-500 bg-red-50"
                     : "border-gray-200 focus:border-blue-500"

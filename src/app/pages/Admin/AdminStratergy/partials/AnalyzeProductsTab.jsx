@@ -49,7 +49,7 @@ const AnalyzeProductsTab = ({
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-base font-medium">
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-xl font-medium">
           {error}
         </div>
       )}
@@ -85,19 +85,19 @@ const AnalyzeProductsTab = ({
             <table className="min-w-full">
               <thead>
                 <tr className="bg-avocado-green-10 border-b-2 border-avocado-brown-30">
-                  <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
+                  <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
                     Sản phẩm
                   </th>
-                  <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
+                  <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
                     Trạng thái
                   </th>
-                  <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
+                  <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
                     Giá
                   </th>
-                  <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
+                  <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
                     Giảm giá đề xuất
                   </th>
-                  <th className="px-6 py-4 text-left text-base font-semibold text-avocado-brown-100">
+                  <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
                     Lý do
                   </th>
                 </tr>
@@ -131,7 +131,7 @@ const AnalyzeProductsTab = ({
         ) : (
           <div className="p-12 text-center">
             <BarChart2 className="w-12 h-12 text-avocado-green-100 mx-auto mb-3" />
-            <p className="text-base text-avocado-brown-50">
+            <p className="text-xl text-avocado-brown-50">
               Chưa có dữ liệu phân tích.
             </p>
           </div>

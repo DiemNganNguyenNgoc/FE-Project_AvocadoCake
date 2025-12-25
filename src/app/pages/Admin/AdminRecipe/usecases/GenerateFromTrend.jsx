@@ -243,10 +243,10 @@ const GenerateFromTrend = () => {
                 value={formData.trend}
                 onChange={handleChange}
                 placeholder="Ví dụ: Matcha, Minimalist, Labubu, Viral TikTok..."
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder:text-avocado-brown-50 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder:text-avocado-brown-50 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
                 required
               />
-              <p className="mt-2 text-base text-avocado-brown-50 flex items-center gap-2">
+              <p className="mt-2 text-xl text-avocado-brown-50 flex items-center gap-2">
                 Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
               </p>
             </div>
@@ -265,7 +265,7 @@ const GenerateFromTrend = () => {
                 name="user_segment"
                 value={formData.user_segment}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -295,7 +295,7 @@ const GenerateFromTrend = () => {
                 name="occasion"
                 value={formData.occasion}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -324,7 +324,7 @@ const GenerateFromTrend = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",

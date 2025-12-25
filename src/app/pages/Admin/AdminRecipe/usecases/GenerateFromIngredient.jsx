@@ -94,7 +94,7 @@ const GenerateFromIngredient = () => {
             <h2 className="text-2xl font-semibold text-avocado-brown-100 mb-2">
               Tạo Công Thức Từ Nguyên Liệu
             </h2>
-            <p className="text-base text-avocado-brown-50">
+            <p className="text-xl text-avocado-brown-50">
               Nhập danh sách nguyên liệu, AI sẽ tạo công thức hoàn chỉnh
             </p>
           </div>
@@ -112,7 +112,7 @@ const GenerateFromIngredient = () => {
                   onClick={() => applyTemplate(template)}
                   type="button"
                 >
-                  <div className="font-medium text-base text-avocado-brown-100 mb-1">
+                  <div className="font-medium text-xl text-avocado-brown-100 mb-1">
                     {template.name}
                   </div>
                   <div className="text-sm text-avocado-brown-50 line-clamp-1">
@@ -137,10 +137,10 @@ const GenerateFromIngredient = () => {
                 onChange={handleChange}
                 placeholder="Ví dụ: bột mì, đường, trứng, bơ, chocolate, sữa tươi..."
                 rows={4}
-                className="w-full min-h-[100px] px-4 py-3 text-base border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder-avocado-brown-50 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
+                className="w-full min-h-[100px] px-4 py-3 text-xl border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder-avocado-brown-50 focus:border-avocado-green-100 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
                 required
               />
-              <p className="text-base text-avocado-brown-50 mt-2">
+              <p className="text-xl text-avocado-brown-50 mt-2">
                 💡 Ngăn cách các nguyên liệu bằng dấu phẩy (,)
               </p>
             </div>
@@ -155,7 +155,7 @@ const GenerateFromIngredient = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -195,7 +195,7 @@ const GenerateFromIngredient = () => {
         <div className="space-y-4">
           <button
             onClick={() => setShowResult(false)}
-            className="text-base text-avocado-brown-100 hover:text-avocado-green-100 font-medium"
+            className="text-xl text-avocado-brown-100 hover:text-avocado-green-100 font-medium"
           >
             ← Tạo công thức mới
           </button>

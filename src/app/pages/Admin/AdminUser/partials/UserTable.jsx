@@ -260,7 +260,7 @@ const UserTable = () => {
                 placeholder="Tìm kiếm người dùng..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
               />
             </div>
 
@@ -269,7 +269,7 @@ const UserTable = () => {
               <select
                 value={roleFilter}
                 onChange={(e) => handleRoleFilterChange(e.target.value)}
-                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="all">Tất cả vai trò</option>
                 <option value="admin">Admin</option>
@@ -283,7 +283,7 @@ const UserTable = () => {
             {/* Export Button */}
             <button
               onClick={handleExport}
-              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
             >
               <Download className="w-5 h-5" />
               Export
@@ -291,13 +291,13 @@ const UserTable = () => {
 
             {/* Show Dropdown */}
             <div className="flex items-center gap-3">
-              <span className="text-base text-gray-600 dark:text-gray-400">
+              <span className="text-xl text-gray-600 dark:text-gray-400">
                 Show:
               </span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => handleItemsPerPageChange(e.target.value)}
-                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -319,13 +319,13 @@ const UserTable = () => {
             <div className="flex gap-4">
               <button
                 onClick={() => toggleSelectAll()}
-                className="px-5 py-3 text-base font-medium text-primary hover:text-primary/80 transition-colors"
+                className="px-5 py-3 text-xl font-medium text-primary hover:text-primary/80 transition-colors"
               >
                 Bỏ chọn
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-5 py-3 text-base font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
+                className="px-5 py-3 text-xl font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
               >
                 Xóa đã chọn
               </button>
@@ -482,19 +482,19 @@ const UserTable = () => {
                         className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                       />
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {startIndex + index + 1}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {user.familyName || "N/A"}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {user.userName || "N/A"}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {user.userPhone || "N/A"}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {user.userEmail || "N/A"}
                     </td>
                     <td className="px-8 py-5 whitespace-nowrap">
@@ -521,13 +521,13 @@ const UserTable = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {user.orderCount || 0}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white">
                       {formatDate(user.createdAt)}
                     </td>
-                    <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                    <td className="px-8 py-5 whitespace-nowrap text-xl font-medium">
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleViewUser(user)}
@@ -563,7 +563,7 @@ const UserTable = () => {
       {/* Pagination */}
       <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-          <div className="text-base text-gray-700 dark:text-gray-300">
+          <div className="text-xl text-gray-700 dark:text-gray-300">
             Showing {startIndex + 1} to{" "}
             {Math.min(endIndex, searchFilteredUsers.length)} of{" "}
             {searchFilteredUsers.length} results
@@ -585,7 +585,7 @@ const UserTable = () => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 rounded-xl text-base transition-colors ${
+                    className={`px-4 py-2 rounded-xl text-xl transition-colors ${
                       currentPage === page
                         ? "bg-primary text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
