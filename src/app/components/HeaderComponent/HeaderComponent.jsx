@@ -240,13 +240,6 @@ const HeaderComponent = () => {
           <SideMenuComponent
             variant="link"
             className="text-start"
-            onClick={handleRankBenefits}
-          >
-            Quyền lợi Rank
-          </SideMenuComponent>
-          <SideMenuComponent
-            variant="link"
-            className="text-start"
             onClick={handleLogout}
           >
             Đăng xuất
@@ -462,7 +455,7 @@ const HeaderComponent = () => {
                         to="/rank-benefits"
                         isActive={activePath.startsWith("/rank-benefits")}
                       >
-                        Rank
+                        Hạng
                       </ButtonNoBGComponent>
                       <ButtonNoBGComponent
                         to="/design-cake"
@@ -758,12 +751,6 @@ const HeaderComponent = () => {
                       onClick={handleVoucher}
                     >
                       Voucher của tôi
-                    </button>
-                    <button
-                      className={styles.mobile__action__btn}
-                      onClick={handleRankBenefits}
-                    >
-                      Quyền lợi Rank
                     </button>
                   </>
                 )}

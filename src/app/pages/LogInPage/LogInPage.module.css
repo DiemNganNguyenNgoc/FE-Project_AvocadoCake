@@ -40,7 +40,7 @@
 
 .login__left {
   width: auto;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   border: none;
   border-radius: 20px;
   /* box-shadow: 0px 2px 4px 0px var(--grey5); */

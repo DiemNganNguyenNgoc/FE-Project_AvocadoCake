@@ -67,7 +67,7 @@
     "use-image": "^1.1.4",
     "web-vitals": "^2.1.4",
     "webfontloader": "^1.6.28",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
