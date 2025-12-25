@@ -24,16 +24,14 @@ const QuantityBtn = ({ initialQuantity, productId }) => {
     }
   };
   return (
-    <div>
-      <div className="cart-item__quantity">
-        <button className="Minus" onClick={decreaseQuantity}>
-          -
-        </button>
-        <span>{quantity}</span>
-        <button className="Add" onClick={increaseQuantity}>
-          +
-        </button>
-      </div>
+    <div className="cart-item__quantity">
+      <button className="Minus" onClick={decreaseQuantity}>
+        -
+      </button>
+      <span>{quantity}</span>
+      <button className="Add" onClick={increaseQuantity}>
+        +
+      </button>
     </div>
   );
 };

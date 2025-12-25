@@ -392,7 +392,7 @@ const OrderInformationPage = () => {
             </tr>
 
             <tr className="border-t bg-gray-50">
-              <td colSpan="3" className="p-3 text-right font-bold text-2xl">
+              <td colSpan="3" className="p-3 text-left font-bold text-2xl">
                 Tổng tiền:
               </td>
               <td className="p-3 text-right font-bold text-2xl">

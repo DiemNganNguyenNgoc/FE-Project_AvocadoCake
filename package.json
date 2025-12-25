@@ -67,7 +67,7 @@
     "use-image": "^1.1.4",
     "web-vitals": "^2.1.4",
     "webfontloader": "^1.6.28",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -93,7 +93,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "https://proj1-be.onrender.com/api",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@tailwindcss/postcss": "^4.1.12",
