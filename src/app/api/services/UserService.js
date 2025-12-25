@@ -11,6 +11,7 @@ export const loginUser = async (data) => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true, // Cho phép gửi và nhận cookies
       }
     );
     return res.data; // Trả dữ liệu nếu thành công
@@ -115,7 +116,11 @@ export const refreshToken = async () => {
 export const logoutUser = async () => {
   try {
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL_BACKEND}/user/log-out`
+      `${process.env.REACT_APP_API_URL_BACKEND}/user/log-out`,
+      {},
+      {
+        withCredentials: true, // Cho phép gửi cookies
+      }
     );
     return res.data; // Trả dữ liệu nếu thành công
   } catch (error) {
@@ -201,6 +206,56 @@ export const deleteUser = async (id, access_token) => {
     if (error.response) {
       throw {
         // status: error.response.data?.status || "ERR",
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần này (admin)
+export const getWeeklyNewUsers = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/user/weekly-new-users`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần trước (admin)
+export const getPreviousWeekNewUsers = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/user/previous-week-new-users`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
         message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
     } else {

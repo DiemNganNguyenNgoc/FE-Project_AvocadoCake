@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import { useTranslation } from "react-i18next";
 import { addToCart } from "../../redux/slides/cartSlide";
 import { useDispatch } from "react-redux";
+import {
+  trackProductView,
+  trackProductClick,
+} from "../../api/services/productServices";
 
 const CardProduct = ({
   id,
@@ -20,12 +24,50 @@ const CardProduct = ({
   //Hooks
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
+  const cardRef = useRef(null);
+  const [viewTracked, setViewTracked] = useState(false);
 
   //Const
   const finalPrice = discount ? price * (1 - discount / 100) : price;
 
+  // Track view khi card được scroll 50%
+  useEffect(() => {
+    if (!id || viewTracked) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Khi 50% card xuất hiện trong viewport
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            trackProductView(id);
+            setViewTracked(true);
+            observer.disconnect(); // Chỉ track 1 lần
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Trigger khi 50% card visible
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [id, viewTracked]);
+
   // Handle card click (navigate to detail)
   const handleCardClick = () => {
+    // Track click
+    if (id) {
+      trackProductClick(id);
+    }
+
     if (onCardClick) {
       onCardClick({ id, type, title, price: finalPrice, size });
     }
@@ -72,6 +114,7 @@ const CardProduct = ({
 
   return (
     <div
+      ref={cardRef}
       role="button"
       onClick={handleCardClick}
       className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-auto mx-2"

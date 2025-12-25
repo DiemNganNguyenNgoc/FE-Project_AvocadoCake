@@ -1,12 +1,22 @@
 {
-   "product_page":
-   {
+  "product_page": {
     "title": "Sản phẩm",
     "discount": "Khuyến mãi",
     "all_products": "Tất cả sản phẩm",
-    "unavailable": "Không có {{data}} nào"
-
-   }
-    
-
+    "unavailable": "Không có {{data}} nào",
+    "sort_by": "Xếp theo:",
+    "sort_name_asc": "Tên A-Z",
+    "sort_name_desc": "Tên Z-A",
+    "sort_newest": "Hàng mới",
+    "sort_price_high": "Giá cao xuống thấp",
+    "sort_price_low": "Giá thấp đến cao",
+    "price_filter": "Chọn mức giá",
+    "under_10k": "Dưới 10.000₫",
+    "from_10k_to_50k": "Từ 10.000₫ - 50.000₫",
+    "from_50k_to_100k": "Từ 50.000₫ - 100.000₫",
+    "from_100k_to_200k": "Từ 100.000₫ - 200.000₫",
+    "from_200k_to_500k": "Từ 200.000₫ - 500.000₫",
+    "above_500k": "Trên 500.000₫",
+    "category_filter": "Danh mục sản phẩm"
+  }
 }

@@ -32,12 +32,10 @@ export const createDiscount = async (data, access_token) => {
   }
 };
 
-
-
 export const getDetailsDiscount = async (id, access_token) => {
   try {
     const res = await axiosJWT.get(
-      `${process.env.REACT_APP_API_URL_BACKEND}/discount/get-detail-discount/${id}`,
+      `${process.env.REACT_APP_API_URL_BACKEND}/discount/get-detail/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +43,7 @@ export const getDetailsDiscount = async (id, access_token) => {
         },
       }
     );
-    console.log("DETAILDISCOUNT", res.data)
+    console.log("DETAILDISCOUNT", res.data);
     return res.data; // Trả dữ liệu nếu thành công
   } catch (error) {
     // Nếu API trả về lỗi, ném lỗi với thông tin chi tiết
@@ -69,7 +67,6 @@ export const getAllDiscount = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-          
         },
       }
     );
@@ -92,15 +89,15 @@ export const getAllDiscount = async () => {
 export const updateDiscount = async (id, access_token, data) => {
   try {
     for (let pair of data.entries()) {
-      console.log("form",`${pair[0]}: ${pair[1]}`);
-      
+      console.log("form", `${pair[0]}: ${pair[1]}`);
     }
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL_BACKEND}/discount/update-discount/${id}`,data,
-      
+      `${process.env.REACT_APP_API_URL_BACKEND}/discount/update-discount/${id}`,
+      data,
+
       {
         headers: {
-         "Content-Type": "multipart/form-data" ,
+          "Content-Type": "multipart/form-data",
           token: `Bearer ${access_token}`,
         },
       }
@@ -117,7 +114,6 @@ export const updateDiscount = async (id, access_token, data) => {
     }
   }
 };
-
 
 export const deleteDiscount = async (id, access_token) => {
   try {
@@ -141,7 +137,6 @@ export const deleteDiscount = async (id, access_token) => {
   }
 };
 
-
 export const getDiscountsByCategory = async (categoryId) => {
   try {
     const res = await axiosJWT.get(
@@ -149,7 +144,6 @@ export const getDiscountsByCategory = async (categoryId) => {
       {
         headers: {
           "Content-Type": "application/json",
-          
         },
       }
     );
@@ -165,15 +159,12 @@ export const getDiscountsByCategory = async (categoryId) => {
   }
 };
 
-export const applyDiscount= async (productId, discountCode)=>{
-try {
-  const res= await axios.post(
-  `${process.env.REACT_APP_API_URL_BACKEND}/discount/apply-discount/${productId}/${discountCode}`
-
-  )
-}
-
-catch (error) {
+export const applyDiscount = async (productId, discountCode) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/discount/apply-discount/${productId}/${discountCode}`
+    );
+  } catch (error) {
     if (error.response) {
       throw {
         message: error.response.data?.message || "Đã xảy ra lỗi.",
@@ -195,7 +186,7 @@ export const getBestsDiscount = async (id, access_token) => {
         },
       }
     );
-    console.log("DETAILDISCOUNT", res.data)
+    console.log("DETAILDISCOUNT", res.data);
     return res.data; // Trả dữ liệu nếu thành công
   } catch (error) {
     // Nếu API trả về lỗi, ném lỗi với thông tin chi tiết

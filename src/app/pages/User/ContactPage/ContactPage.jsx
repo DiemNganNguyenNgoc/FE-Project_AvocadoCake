@@ -4,7 +4,12 @@ import address from "../../../assets/img/address.png";
 const ContactPage = () => {
   return (
     <div>
-      <h1 className="h1">LIÊN HỆ</h1>
+      <div className="text-center mb-12">
+        <h1 className="productadmin__title">LIÊN HỆ</h1>
+        <h3 className="contact text-xl mt-4 text-gray-700">
+          Cách thức liên hệ với Avocado Bakery
+        </h3>
+      </div>
       <div style={{ display: "flex" }}>
         <div style={{ width: "auto" }}>
           <div style={{ marginLeft: 137, marginTop: 30 }}>

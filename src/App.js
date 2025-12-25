@@ -4,6 +4,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import WebFont from "webfontloader";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -24,7 +26,6 @@ function App() {
   const dispatch = useDispatch();
   const [showLoading, setShowLoading] = useState(false);
   const user = useSelector((state) => state.user);
-  
 
   useEffect(() => {
     WebFont.load({
@@ -46,7 +47,6 @@ function App() {
       } catch (error) {
         console.error("Token không hợp lệ", error);
         localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
         storageData = null;
       }
     }
@@ -68,7 +68,6 @@ function App() {
         } catch (error) {
           console.warn("Không thể refresh token, yêu cầu đăng nhập lại.");
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           setShowLoading(false);
           return;
         }
@@ -123,7 +122,6 @@ function App() {
           console.error("Lỗi khi tự động refresh token:", error);
           // Nếu refresh thất bại, có thể redirect về trang login
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           window.location.href = "/sign-in";
         }
       }, refreshTime);
@@ -184,7 +182,6 @@ function App() {
           console.error("Không thể refresh token:", refreshError);
           // Redirect về trang login nếu refresh thất bại
           localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
           window.location.href = "/sign-in";
         }
       }
@@ -196,6 +193,8 @@ function App() {
   const handleGetDetailsUser = async (id, token) => {
     try {
       const res = await UserService.getDetailsUser(id, token);
+      console.log("🎖️ User details from API:", res?.data);
+      console.log("🎖️ CurrentRank:", res?.data?.currentRank);
       dispatch(updateUser({ ...res?.data, access_token: token }));
     } catch (error) {
       console.error("Lỗi lấy thông tin người dùng:", error);
@@ -224,6 +223,18 @@ function App() {
   return (
     <div style={{ fontFamily: "poppins" }}>
       <Loading isLoading={showLoading} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {!showLoading && (
         <Router>
           <AuthProvider>

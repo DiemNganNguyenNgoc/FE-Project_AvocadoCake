@@ -11,9 +11,9 @@ const IntroducePage = () => {
         <ChatbotComponent />
 
         <div className="text-center mb-12">
-          <h1 className="introduce__title">GIỚI THIỆU</h1>
+          <h1 className="productadmin__title">GIỚI THIỆU</h1>
           <h3 className="text-xl mt-4 text-gray-700">
-            Chào mừng bạn đến với Avocado Bakery
+            Hành trình xây dựng thương hiệu bánh ngọt Avocado
           </h3>
         </div>
 

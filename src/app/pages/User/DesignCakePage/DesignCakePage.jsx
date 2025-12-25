@@ -1,77 +1,280 @@
-import React, { useEffect, useRef, useState } from "react";
-import cakeBase from "../../../assets/img/white.png"; // Ảnh nền trong suốt
+import React, { useState } from "react";
+import { cakes, toppings } from "../../../data/cakeOptions";
+import CakeSelector from "../../../components/CakeSelector/CakeSelector";
+import ToppingToolbar from "../../../components/ToppingToolbar/ToppingToolbar";
+import CakeStage from "../../../components/CakeStage/CakeStage";
+import TextOnCake from "../../../components/TextOnCake.tsx/TextOnCake";
 
-export default function CakeDesigner() {
-  const canvasRef = useRef(null);
-  const [color, setColor] = useState("#ffffff"); // Mặc định màu trắng
-  const cakeImgRef = useRef(null);
+function DesignCakePage() {
+  const [activeTab, setActiveTab] = useState("manual");
+  const [selectedCake, setSelectedCake] = useState(cakes[0]);
+  const [toppingList, setToppingList] = useState([]);
+  const [selectedToppingId, setSelectedToppingId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [textList, setTextList] = useState([]);
+  const [selectedTextId, setSelectedTextId] = useState(null);
+  const [newText, setNewText] = useState("");
+  const [textColor, setTextColor] = useState("#8B4513");
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+  // ===== ADD TOPPING =====
+  const handleAddTopping = (topping) => {
+    setToppingList([
+      ...toppingList,
+      {
+        ...topping,
+        id: Date.now(),
+        x: 180 + Math.random() * 40,
+        y: 180 + Math.random() * 40,
+        rotation: 0,
+        scaleX: 0.2,
+        scaleY: 0.2,
+      },
+    ]);
+  };
 
-    const cakeImg = new Image();
-    cakeImg.src = cakeBase;
-    cakeImg.onload = () => {
-      cakeImgRef.current = cakeImg;
-      drawCake(ctx, cakeImg, color);
-    };
-  }, []);
+  // ===== ADD TEXT =====
+  const handleAddText = () => {
+    if (!newText.trim()) return;
 
-  useEffect(() => {
-    if (cakeImgRef.current) {
-      const ctx = canvasRef.current.getContext("2d");
-      drawCake(ctx, cakeImgRef.current, color);
-    }
-  }, [color]);
+    setTextList([
+      ...textList,
+      {
+        id: Date.now(),
+        text: newText,
+        fontFamily: "Dancing Script, cursive",
+        x: 200,
+        y: 200,
+        rotation: 0,
+        fontSize: 28,
+        color: textColor,
+      },
+    ]);
 
-const drawCake = (ctx, cakeImg, fillColor) => {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  
-  // Vẽ nền
-  ctx.drawImage(cakeImg, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  
-  // Lấy pixel và đổi màu
-  const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-  const data = imageData.data;
-  const rgb = hexToRgb(fillColor);
+    setNewText("");
+  };
 
-  for (let i = 0; i < data.length; i += 4) {
-    if (data[i + 3] > 0) { // pixel có alpha > 0
-      data[i] = rgb.r;
-      data[i + 1] = rgb.g;
-      data[i + 2] = rgb.b;
+  async function translateToEnglish(text) {
+    try {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(
+        text
+      )}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // format: [ [ [ "translated text", "original text", ... ] ] ]
+      return data[0][0][0];
+    } catch (err) {
+      console.error("Translate failed:", err);
+      return text;
     }
   }
-  ctx.putImageData(imageData, 0, 0);
-};
 
-const hexToRgb = (hex) => {
-  const bigint = parseInt(hex.slice(1), 16);
-  return {
-    r: (bigint >> 16) & 255,
-    g: (bigint >> 8) & 255,
-    b: bigint & 255
+  const [prompt, setPrompt] = useState("");
+  const [aiImageUrl, setAiImageUrl] = useState("");
+
+  const handleGenerateAI = async () => {
+    if (!prompt.trim()) return;
+
+    setIsLoading(true); // bật skeleton
+
+    const englishPrompt = await translateToEnglish(prompt);
+    const cleanPrompt = encodeURIComponent(englishPrompt);
+    const url = `https://pollinations.ai/p/${cleanPrompt}`;
+    setAiImageUrl(url);
+
+    // tạo ảnh, sau khi load xong thì tắt skeleton
+    const img = new Image();
+    img.src = url;
+
+    img.onload = () => {
+      setIsLoading(false);
+    };
+
+    img.onerror = () => {
+      setIsLoading(false);
+    };
+    console.log("Generated AI image with prompt:", englishPrompt);
+    console.log("Image URL:", url);
   };
-};
 
+  const handleDownloadImage = () => {
+    if (!aiImageUrl) return;
+
+    const a = document.createElement("a");
+    a.href = aiImageUrl;
+    a.download = "ai-cake-design.png";
+    a.target = "_blank"; // bắt buộc với domain ngoài
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h2>Tô màu bánh kem</h2>
-      <input
-        type="color"
-        value={color}
-        onChange={(e) => setColor(e.target.value)}
-        style={{ marginBottom: "10px", cursor: "pointer" }}
-      />
-      <br />
-      <canvas
-        ref={canvasRef}
-        width={400}
-        height={400}
-        style={{ border: "1px solid #ccc", background: "transparent" }}
-      />
+    <div className="min-h-screen flex flex-col">
+      {/* HEADER */}
+      <div className="text-center mb-12">
+        <h1 className="productadmin__title">THIẾT KẾ BÁNH</h1>
+        <h3 className="text-xl mt-4 text-gray-700">
+          Chọn phong cách thiết kế của bạn
+        </h3>
+
+        {/* 👉 TAB SWITCHER */}
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            onClick={() => setActiveTab("manual")}
+            className={`
+              px-6 py-2 rounded-lg font-semibold transition
+              ${
+                activeTab === "manual"
+                  ? "bg-green-500 text-white shadow-lg"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }
+            `}
+          >
+            Thiết kế thủ công
+          </button>
+
+          <button
+            onClick={() => setActiveTab("ai")}
+            className={`
+              px-6 py-2 rounded-lg font-semibold transition
+              ${
+                activeTab === "ai"
+                  ? "bg-green-500 text-white shadow-lg"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }
+            `}
+          >
+            Thiết kế bằng AI
+          </button>
+        </div>
+      </div>
+
+      {/* =========================
+          TAB 1: MANUAL
+      ========================= */}
+      {activeTab === "manual" && (
+        <div className="flex flex-wrap gap-8 justify-center">
+          {/* LEFT: Cake Stage */}
+          <CakeStage
+            selectedCake={selectedCake}
+            toppings={toppingList}
+            setToppings={setToppingList}
+            selectedToppingId={selectedToppingId}
+            setSelectedToppingId={setSelectedToppingId}
+            textList={textList}
+            setTextList={setTextList}
+            selectedTextId={selectedTextId}
+            setSelectedTextId={setSelectedTextId}
+          />
+
+          {/* RIGHT TOOLBAR */}
+          <div className="flex flex-col gap-6 max-w-md">
+            <CakeSelector
+              cakes={cakes}
+              selectedCake={selectedCake}
+              onSelect={setSelectedCake}
+            />
+            <TextOnCake
+              newText={newText}
+              setNewText={setNewText}
+              textColor={textColor}
+              setTextColor={setTextColor}
+              onAddText={handleAddText}
+              textList={textList}
+              setTextList={setTextList}
+              selectedTextId={selectedTextId}
+            />
+            <ToppingToolbar toppings={toppings} onAdd={handleAddTopping} />
+          </div>
+        </div>
+      )}
+
+      {/* =========================
+          TAB 2: AI DESIGN
+      ========================= */}
+      {activeTab === "ai" && (
+        <div className="w-full flex flex-col items-center mt-10 px-4">
+          <div className="w-full max-w-5xl">
+            <h2 className="text-3xl font-bold text-green-700 mb-4 text-center">
+              Tạo mẫu bánh bằng AI ✨
+            </h2>
+
+            <p className="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+              Nhập mô tả chiếc bánh bạn muốn — AI sẽ tạo ra một bản concept độc
+              đáo theo phong cách riêng của bạn.
+            </p>
+
+            {/* INPUT PROMPT */}
+            <textarea
+              placeholder="Ví dụ: Bánh sinh nhật màu xanh pastel, hoa kem trắng, phong cách Hàn Quốc nhẹ nhàng..."
+              className="
+          w-full h-40 p-6 text-2xl border border-green-200 rounded-xl 
+          shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400
+        "
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleGenerateAI}
+                className="
+            px-10 py-3 rounded-xl text-xl font-semibold
+            bg-green-500 text-white shadow-md hover:bg-green-600 
+            transition duration-200
+          "
+              >
+                Tạo mẫu bằng AI
+              </button>
+            </div>
+
+            {/* AREA AI IMAGE */}
+            <div className="mt-14 flex flex-col items-center min-h-[420px] pb-5">
+              {/* SKELETON LOADING */}
+              {isLoading && (
+                <div className="w-full max-w-3xl animate-pulse">
+                  <div className="h-[420px] w-full bg-gray-200 rounded-2xl shadow-md"></div>
+                </div>
+              )}
+
+              {/* AI IMAGE */}
+              {/* AI IMAGE */}
+              {!isLoading && aiImageUrl && (
+                <div className="flex flex-col items-center gap-4">
+                  <img
+                    src={aiImageUrl}
+                    alt="AI Cake Design"
+                    className="max-w-xl w-full rounded-2xl shadow-xl transition-all duration-500"
+                  />
+
+                  {/* DOWNLOAD BUTTON */}
+                  <button
+                    onClick={handleDownloadImage}
+                    className="
+        px-6 py-2 rounded-lg
+        bg-green-500 text-white font-semibold
+        hover:bg-green-600 transition
+      "
+                  >
+                    ⬇️ Tải ảnh về
+                  </button>
+                </div>
+              )}
+
+              {/* EMPTY STATE */}
+              {!isLoading && !aiImageUrl && (
+                <p className="text-gray-500 mt-14">
+                  (AI sẽ hiển thị ảnh tại đây)
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+export default DesignCakePage;

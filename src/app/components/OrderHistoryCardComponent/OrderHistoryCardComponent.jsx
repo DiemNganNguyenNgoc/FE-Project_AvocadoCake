@@ -17,14 +17,21 @@ const OrderHistoryCardComponent = ({ order, onRateClick }) => {
   const access_token = localStorage.getItem("access_token");
   const user = useSelector((state) => state.user);
 
+  // Debug: Log order structure
+  useEffect(() => {
+    console.log("Order data:", order);
+    console.log("Order status:", order?.status);
+  }, [order]);
+
   useEffect(() => {
     const checkOrderRating = async () => {
-      if (order.status.statusName === "Đã giao" && user?.id) {
+      const statusName = order?.status?.statusName || order?.status || "";
+      if (statusName === "Đã giao" && user?.id) {
         try {
           setIsLoading(true);
           // Kiểm tra đánh giá của sản phẩm đầu tiên trong đơn hàng
           // (vì nếu có một sản phẩm được đánh giá thì đơn hàng đã được đánh giá)
-          const firstProduct = order.orderItems[0]?.product;
+          const firstProduct = order.orderItems?.[0]?.product;
           if (firstProduct) {
             const response = await getUserProductRating(
               firstProduct._id,
@@ -39,6 +46,8 @@ const OrderHistoryCardComponent = ({ order, onRateClick }) => {
         } finally {
           setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
     };
 
@@ -97,12 +106,16 @@ const OrderHistoryCardComponent = ({ order, onRateClick }) => {
     }
   };
 
+  // Lấy status name an toàn
+  const statusName =
+    order?.status?.statusName || order?.status || "Chờ xác nhận";
+
   return (
     <div className="order-card">
       <div className="order-title d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center gap-3">
-          <StatusComponent status={order.status.statusName} />
-          {order.status.statusName === "Đã giao" && !isLoading && (
+          <StatusComponent status={statusName} />
+          {statusName === "Đã giao" && !isLoading && (
             <ButtonComponent
               variant="outline-primary"
               size="sm"

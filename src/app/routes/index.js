@@ -54,6 +54,19 @@ import DeleteQuizPage from "../pages/Admin/CRUDQuiz/DeleteQuizPage/DeleteQuizPag
 import MiniGamePage from "../pages/User/MiniGamePage/MiniGamePage.jsx";
 import HomeAdminPage from "../pages/Admin/HomeAdminPage/HomeAdminPage.jsx";
 import DesignCakePage from "../pages/User/DesignCakePage/DesignCakePage.jsx";
+import AdminDashboard from "../pages/Admin/AdminDashboard/AdminDashboard";
+import AdminTab from "../pages/Admin/AdminTab/AdminTab.jsx";
+import AddCategory from "../pages/Admin/AdminCategory/usecases/AddCategory.jsx";
+import UpdateCategory from "../pages/Admin/AdminCategory/usecases/UpdateCategory.jsx";
+import AdminCategory from "../pages/Admin/AdminCategory/AdminCategory.jsx";
+import AdminNews from "../pages/Admin/AdminNews";
+import AdminRecipe from "../pages/Admin/AdminRecipe/AdminRecipe.jsx";
+import AdminStratergy from "../pages/Admin/AdminStratergy/AdminStratergy.jsx";
+import PublicVoucherPage from "../pages/PublicVoucherPage/PublicVoucherPage.jsx";
+import MyVouchersPage from "../pages/MyVouchersPage/MyVouchersPage.jsx";
+import ImageSearchResultsPage from "../pages/ImageSearchResultsPage/ImageSearchResultsPage.jsx";
+import RankBenefitsPage from "../pages/User/RankBenefitsPage/RankBenefitsPage.jsx";
+
 export const routes = [
   {
     path: "/",
@@ -288,6 +301,11 @@ export const routes = [
     // isShowFooter: true,
     isPrivate: true,
   },
+  {
+    path: "/admin/*", // Tất cả các route con của admin
+    page: AdminTab, // AdminTab sẽ quản lý các tab và nội dung
+    isPrivate: true,
+  },
 
   {
     path: "/cart",
@@ -340,20 +358,21 @@ export const routes = [
     isShowHeader: true,
     isShowFooter: true,
   },
+
   {
-    path: "/admin/news",
-    page: NewsPageAdmin,
-    isShowHeader: true,
-    isShowFooter: true,
-    // isPrivate: true,
+    path: "/admin-tab",
+    page: AdminTab,
+    // isShowHeader: true,
+    // isShowFooter: true,
+    isPrivate: true,
   },
-  {
-    path: "/admin/news/add-news",
-    page: AddNews,
-    isShowHeader: true,
-    isShowFooter: true,
-    // isPrivate: true,
-  },
+  // {
+  //   path: "/admin/news",
+  //   page: AdminNews,
+  //   isShowHeader: true,
+  //   isShowFooter: true,
+  //   // isPrivate: true,
+  // },
   {
     path: "/admin/order-status/update",
     page: UpdateStatus,
@@ -375,6 +394,13 @@ export const routes = [
     isShowFooter: true,
     isPrivate: true,
   },
+  // {
+  //   path: "/admin/dashboard",
+  //   page: AdminDashboard,
+  //   // isShowHeader: true,
+  //   // isShowFooter: true,
+  //   isPrivate: true,
+  // },
   {
     path: "*",
     page: NotFoundPage,
@@ -397,6 +423,12 @@ export const routes = [
   {
     path: "/search",
     page: SearchResultPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+  {
+    path: "/search/image-results",
+    page: ImageSearchResultsPage,
     isShowHeader: true,
     isShowFooter: true,
   },
@@ -426,7 +458,7 @@ export const routes = [
     isShowHeader: true,
   },
   {
-    path: "/admin/list-quiz",
+    path: "/admin/quiz-list",
     page: ListQuizPage,
     isShowHeader: true,
   },
@@ -452,6 +484,27 @@ export const routes = [
   {
     path: "/design-cake",
     page: DesignCakePage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+
+  // Voucher Routes - Public
+  {
+    path: "/vouchers",
+    page: PublicVoucherPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+  {
+    path: "/my-vouchers",
+    page: MyVouchersPage,
+    isShowHeader: true,
+    isShowFooter: true,
+  },
+
+  {
+    path: "/rank-benefits",
+    page: RankBenefitsPage,
     isShowHeader: true,
     isShowFooter: true,
   },

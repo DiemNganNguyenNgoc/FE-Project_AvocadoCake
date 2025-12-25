@@ -101,3 +101,62 @@ export const createQrPayment = async (paymentData) => {
     throw error;
   }
 };
+
+// ============ SEPAY PAYMENT SERVICES ============
+
+/**
+ * Tạo thanh toán Sepay
+ * @param {Object} sepayData - Dữ liệu thanh toán Sepay
+ * @param {string} sepayData.paymentCode - Mã thanh toán
+ * @param {string} sepayData.orderId - ID đơn hàng
+ * @param {number} sepayData.totalPrice - Tổng tiền thanh toán
+ * @param {string} sepayData.sepayPaymentMethod - Phương thức thanh toán Sepay ('BANK_TRANSFER' | 'CARD' | 'NAPAS_BANK_TRANSFER')
+ * @param {Object} sepayData.customerInfo - Thông tin khách hàng (optional)
+ * @returns {Promise} Response từ API
+ */
+export const createSepayPayment = async (sepayData) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/payment/sepay/create`,
+      sepayData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Sepay payment:", error);
+    throw error;
+  }
+};
+
+/**
+ * Lấy chi tiết thanh toán Sepay
+ * @param {string} paymentCode - Mã thanh toán
+ * @returns {Promise} Chi tiết thanh toán
+ */
+export const getSepayPaymentDetail = async (paymentCode) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/payment/sepay/detail/${paymentCode}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting Sepay payment detail:", error);
+    throw error;
+  }
+};
+
+/**
+ * Hủy đơn hàng Sepay
+ * @param {string} paymentCode - Mã thanh toán
+ * @returns {Promise} Kết quả hủy đơn
+ */
+export const cancelSepayOrder = async (paymentCode) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/payment/sepay/cancel/${paymentCode}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error canceling Sepay order:", error);
+    throw error;
+  }
+};

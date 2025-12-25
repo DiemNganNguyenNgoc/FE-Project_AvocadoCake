@@ -28,12 +28,12 @@ export const createOrder = async (data) => {
 
 export const getDetailsOrder = async (id) => {
   try {
-    const res = await axiosJWT.get(
+    // Sử dụng axios thông thường thay vì axiosJWT để không require authentication
+    const res = await axios.get(
       `${process.env.REACT_APP_API_URL_BACKEND}/order/get-detail-order/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
-          //   token: `Bearer ${access_token}`,
         },
       }
     );
@@ -305,6 +305,142 @@ export const applyCoinsToOrder = async (orderId, coinsToUse, access_token) => {
       throw {
         status: error.response.data?.status || "ERR",
         message: error.response.data?.message || "Đã xảy ra lỗi khi đổi xu.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Xác nhận thanh toán với voucher
+export const confirmPaymentWithVoucher = async (
+  orderId,
+  voucherData,
+  access_token
+) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/confirm-payment-voucher`,
+      { orderId, voucherData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi xác nhận thanh toán.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy top đơn hàng mới nhất
+export const getRecentOrders = async (access_token, limit = 5) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/recent-orders?limit=${limit}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi lấy đơn hàng mới nhất.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy top sản phẩm bán chạy nhất
+export const getBestSellingProducts = async (access_token, limit = 10) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/best-selling-products?limit=${limit}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi lấy sản phẩm bán chạy.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần này (admin)
+export const getWeeklyNewOrders = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/weekly-new-orders`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Lấy danh sách và số lượng user mới trong tuần trước (admin)
+export const getPreviousWeekNewOrders = async (access_token) => {
+  try {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/previous-week-new-orders`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("res", res.data);
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
     } else {
       throw { status: 500, message: "Không thể kết nối đến máy chủ." };
