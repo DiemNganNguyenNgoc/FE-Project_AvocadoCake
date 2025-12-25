@@ -1,7 +1,6 @@
 import React from "react";
 import "./FooterComponent.css";
 import img1 from "../../assets/img/AVOCADO.png";
-import { HomeIcon } from "lucide-react";
 
 const FooterComponent = () => {
   return (
@@ -13,7 +12,7 @@ const FooterComponent = () => {
             {/* logo */}
             <div className="col footer__logo">
               <a href="/">
-                <img className="logo__image" alt="AVOCADO logo" src={img1} />
+                <img className="logo__image" src={img1} />
               </a>
             </div>
 
@@ -21,22 +20,42 @@ const FooterComponent = () => {
             <div className="footer__contact">
               <ul className="footer__contact--list">
                 <li className="footer__item">
-                  <div className="footer__contact--address flex items-center">
-                    <HomeIcon className="address__icon" size={28} />
+                  <div className="footer__contact--address">
+                    <svg
+                      className="address__icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="40"
+                      viewBox="0 0 40 40"
+                      fill="none"
+                    >
+                      <path
+                        d="M8.3335 21.2659C8.3335 19.003 8.3335 17.8715 8.79093 16.877C9.24837 15.8824 10.1074 15.146 11.8256 13.6733L13.4922 12.2448C16.5978 9.58289 18.1505 8.25195 20.0002 8.25195C21.8498 8.25195 23.4025 9.58289 26.5081 12.2448L28.1747 13.6733C29.8929 15.146 30.752 15.8824 31.2094 16.877C31.6668 17.8715 31.6668 19.003 31.6668 21.2659V28.3332C31.6668 31.4759 31.6668 33.0473 30.6905 34.0236C29.7142 34.9999 28.1429 34.9999 25.0002 34.9999H15.0002C11.8575 34.9999 10.2861 34.9999 9.30981 34.0236C8.3335 33.0473 8.3335 31.4759 8.3335 28.3332V21.2659Z"
+                        stroke="#3A060E"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M24.1668 35V26C24.1668 25.4477 23.7191 25 23.1668 25H16.8335C16.2812 25 15.8335 25.4477 15.8335 26V35"
+                        stroke="#3A060E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                     <p className="address__content">
                       Địa chỉ: Đường Mạc Đĩnh Chi, khu phố Tân Hòa, Dĩ An, Bình
                       Dương{" "}
                     </p>
                   </div>
                 </li>
-                <li className="footer__item flex items-center">
-                  <div className="footer__contact--phone flex items-center">
+                <li className="footer__item">
+                  <div className="footer__contact--phone">
                     <svg
                       className="phone__icon"
                       xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 30 30"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
                       fill="none"
                     >
                       <path
@@ -49,7 +68,7 @@ const FooterComponent = () => {
                   </div>
                 </li>
                 <li className="footer__item">
-                  <div className="flex items-center footer__contact--email">
+                  <div className="footer__contact--email">
                     <svg
                       className="email__icon"
                       xmlns="http://www.w3.org/2000/svg"
