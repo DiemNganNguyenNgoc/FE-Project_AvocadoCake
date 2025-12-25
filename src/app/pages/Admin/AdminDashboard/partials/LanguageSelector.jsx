@@ -75,9 +75,7 @@ const LanguageSelector = () => {
                 }`}
               >
                 <span className="text-xl">{lang.flag}</span>
-                <span className="flex-1 font-medium text-base">
-                  {lang.name}
-                </span>
+                <span className="flex-1 font-medium text-xl">{lang.name}</span>
                 {language === lang.code && (
                   <Check className="w-5 h-5 text-primary" />
                 )}

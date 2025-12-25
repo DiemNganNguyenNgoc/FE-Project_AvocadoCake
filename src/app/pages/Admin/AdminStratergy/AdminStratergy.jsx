@@ -198,7 +198,7 @@ const AdminStratergy = () => {
               <h1 className="text-4xl font-bold text-avocado-brown-100 mb-2">
                 AI Strategy Assistant
               </h1>
-              <p className="text-base text-avocado-brown-50">
+              <p className="text-xl text-avocado-brown-50">
                 Khuyến nghị khuyến mãi thông minh từ AI - Tối ưu hóa doanh thu
                 và giữ chân khách hàng
               </p>
@@ -212,10 +212,10 @@ const AdminStratergy = () => {
                 <Info className="w-5 h-5 text-avocado-green-100" />
               </div>
               <div className="flex-1">
-                <h3 className="text-base font-semibold text-avocado-brown-100 mb-1">
+                <h3 className="text-xl font-semibold text-avocado-brown-100 mb-1">
                   Powered by RCM_PRICE AI Engine
                 </h3>
-                <p className="text-base text-avocado-brown-50 leading-relaxed">
+                <p className="text-xl text-avocado-brown-50 leading-relaxed">
                   Sử dụng Thompson Sampling + Gemini AI để phân tích dữ liệu và
                   đưa ra khuyến nghị khuyến mãi tối ưu cho từng sự kiện và sản
                   phẩm.
@@ -233,7 +233,7 @@ const AdminStratergy = () => {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg font-medium text-base transition-all ${
+                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg font-medium text-xl transition-all ${
                     activeTab === tab.key
                       ? "bg-avocado-green-100 text-white shadow-md"
                       : "bg-white text-avocado-brown-50 hover:bg-avocado-green-10 hover:text-avocado-brown-100"

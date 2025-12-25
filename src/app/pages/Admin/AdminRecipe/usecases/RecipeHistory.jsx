@@ -113,14 +113,14 @@ const RecipeHistory = () => {
                   Lịch Sử Công Thức
                 </h2>
               </div>
-              <p className="text-base text-gray-600">
+              <p className="text-xl text-gray-600">
                 Tổng cộng: <strong>{recipeHistory.length}</strong> công thức
               </p>
             </div>
             {recipeHistory.length > 0 && (
               <button
                 onClick={handleClearAll}
-                className="flex items-center gap-2 px-4 py-2 text-base bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-xl bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
                 Xóa tất cả
@@ -131,12 +131,12 @@ const RecipeHistory = () => {
           {/* Filter */}
           {recipeHistory.length > 0 && (
             <div className="bg-white rounded-2xl border border-avocado-brown-30 p-4">
-              <label className="block text-base font-medium text-avocado-brown-100 mb-3">
+              <label className="block text-xl font-medium text-avocado-brown-100 mb-3">
                 Lọc theo loại:
               </label>
               <div className="flex flex-wrap gap-2">
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xl rounded-2xl border transition-colors ${
                     filterType === "all"
                       ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
                       : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
@@ -146,7 +146,7 @@ const RecipeHistory = () => {
                   Tất cả ({recipeHistory.length})
                 </button>
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xl rounded-2xl border transition-colors ${
                     filterType === "from-ingredients"
                       ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
                       : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
@@ -157,7 +157,7 @@ const RecipeHistory = () => {
                   Từ Nguyên Liệu
                 </button>
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xl rounded-2xl border transition-colors ${
                     filterType === "from-trend"
                       ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
                       : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
@@ -168,7 +168,7 @@ const RecipeHistory = () => {
                   Từ Xu Hướng
                 </button>
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 text-base rounded-2xl border transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2 text-xl rounded-2xl border transition-colors ${
                     filterType === "smart-recipe"
                       ? "bg-avocado-green-100 text-avocado-brown-100 border-avocado-green-100"
                       : "bg-white text-gray-700 border-avocado-brown-30 hover:border-avocado-green-100"
@@ -189,7 +189,7 @@ const RecipeHistory = () => {
               <h3 className="text-xl font-semibold text-avocado-brown-100 mb-2">
                 Chưa có lịch sử
               </h3>
-              <p className="text-base text-gray-600">
+              <p className="text-xl text-gray-600">
                 Các công thức bạn tạo sẽ được lưu tại đây
               </p>
             </div>
@@ -224,7 +224,7 @@ const RecipeHistory = () => {
                         recipe.result?.title ||
                         "Công thức"}
                     </h3>
-                    <p className="text-base text-gray-600 line-clamp-2">
+                    <p className="text-xl text-gray-600 line-clamp-2">
                       {recipe.result?.recipe?.description ||
                         recipe.result?.description ||
                         ""}
@@ -282,7 +282,7 @@ const RecipeHistory = () => {
         <div className="space-y-4">
           <button
             onClick={() => setSelectedRecipe(null)}
-            className="flex items-center gap-2 px-4 py-2 text-base bg-avocado-green-10 text-avocado-brown-100 rounded-lg hover:bg-avocado-green-30 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-xl bg-avocado-green-10 text-avocado-brown-100 rounded-lg hover:bg-avocado-green-30 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Quay lại lịch sử

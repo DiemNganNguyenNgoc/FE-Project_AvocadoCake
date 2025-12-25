@@ -107,7 +107,7 @@ const AdminRating = () => {
               <h1 className="text-2xl font-bold text-gray-900">
                 Quản Lý Đánh Giá
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-xl text-gray-600 mt-1">
                 Quản lý các đánh giá và phản hồi của khách hàng
               </p>
             </div>
@@ -243,7 +243,7 @@ const AdminRating = () => {
                       }}
                     />
                   </div>
-                  <span className="text-sm text-gray-600 w-12 text-right">
+                  <span className="text-xl text-gray-600 w-12 text-right">
                     {stats.byRating[star]}
                   </span>
                 </div>

@@ -140,7 +140,7 @@ const SmartGenerate = () => {
             Smart Auto-Generate
           </h2>
         </div>
-        <p className="text-base text-gray-600 mb-4">
+        <p className="text-xl text-gray-600 mb-4">
           AI tự động tạo recipe tối ưu từ events, trends và demand forecast
         </p>
 
@@ -276,7 +276,7 @@ const SmartGenerate = () => {
           <div className="bg-white rounded-lg border border-avocado-brown-30 p-4 space-y-4">
             {/* Days Ahead */}
             <div>
-              <label className="block text-base font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
+              <label className="block text-xl font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 Thời điểm
               </label>
@@ -292,7 +292,7 @@ const SmartGenerate = () => {
                         : "border-avocado-brown-30 bg-white hover:border-avocado-green-100"
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
-                    <div className="font-medium text-base text-avocado-brown-100">
+                    <div className="font-medium text-xl text-avocado-brown-100">
                       {option.label}
                     </div>
                     <div className="text-sm text-gray-600 mt-1">
@@ -313,7 +313,7 @@ const SmartGenerate = () => {
                 value={formData.targetSegment}
                 onChange={(e) => handleChange("targetSegment", e.target.value)}
                 disabled={loading}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -328,7 +328,7 @@ const SmartGenerate = () => {
                 ))}
               </select>
               {selectedSegment && (
-                <p className="text-base text-avocado-brown-50 mt-2">
+                <p className="text-xl text-avocado-brown-50 mt-2">
                   💡 {selectedSegment.description}
                 </p>
               )}
@@ -344,7 +344,7 @@ const SmartGenerate = () => {
                 value={formData.language}
                 onChange={(e) => handleChange("language", e.target.value)}
                 disabled={loading}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -364,7 +364,7 @@ const SmartGenerate = () => {
             <button
               onClick={handleSmartGenerate}
               disabled={loading}
-              className="w-full min-h-[44px] flex items-center justify-center gap-2 px-6 py-2 text-base font-semibold bg-avocado-green-100 text-avocado-brown-100 rounded-2xl hover:bg-avocado-green-80 hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+              className="w-full min-h-[44px] flex items-center justify-center gap-2 px-6 py-2 text-xl font-semibold bg-avocado-green-100 text-avocado-brown-100 rounded-2xl hover:bg-avocado-green-80 hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
             >
               {loading ? (
                 <>
@@ -411,7 +411,7 @@ const SmartGenerate = () => {
               <h3 className="text-2xl font-bold text-avocado-brown-100 mb-2">
                 Sẵn sàng tạo recipe
               </h3>
-              <p className="text-base text-gray-600 max-w-md mb-6">
+              <p className="text-xl text-gray-600 max-w-md mb-6">
                 Chọn thời điểm và khách hàng, sau đó nhấn{" "}
                 <strong className="text-avocado-green-100">
                   Smart Generate
@@ -423,7 +423,7 @@ const SmartGenerate = () => {
                   <div className="flex items-start gap-3">
                     <Zap className="w-5 h-5 text-avocado-green-100 flex-shrink-0 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-base text-avocado-brown-100 mb-1">
+                      <h4 className="font-semibold text-xl text-avocado-brown-100 mb-1">
                         Zero Input
                       </h4>
                       <p className="text-sm text-gray-600">
@@ -437,7 +437,7 @@ const SmartGenerate = () => {
                   <div className="flex items-start gap-3">
                     <TrendingUp className="w-5 h-5 text-avocado-green-100 flex-shrink-0 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-base text-avocado-brown-100 mb-1">
+                      <h4 className="font-semibold text-xl text-avocado-brown-100 mb-1">
                         Smart Context
                       </h4>
                       <p className="text-sm text-gray-600">

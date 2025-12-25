@@ -43,6 +43,7 @@ export const UserValidationSchema = {
     isAdmin: {
       required: true,
       type: "boolean",
+      acceptString: true,
       message: "Vai trò không hợp lệ",
     },
   },
@@ -86,6 +87,7 @@ export const UserValidationSchema = {
     isAdmin: {
       required: false,
       type: "boolean",
+      acceptString: true,
       message: "Vai trò không hợp lệ",
     },
   },
@@ -123,8 +125,15 @@ export class UserValidator {
     }
 
     // Type validation
-    if (rules.type === "boolean" && typeof value !== "boolean") {
-      errors.push(rules.message || "Giá trị phải là true hoặc false");
+    if (rules.type === "boolean") {
+      // Accept string "true"/"false" if acceptString is enabled
+      if (rules.acceptString && typeof value === "string") {
+        if (value !== "true" && value !== "false") {
+          errors.push(rules.message || "Giá trị phải là true hoặc false");
+        }
+      } else if (typeof value !== "boolean") {
+        errors.push(rules.message || "Giá trị phải là true hoặc false");
+      }
     }
 
     return errors;

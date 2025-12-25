@@ -55,7 +55,7 @@ const EventPromotionsTab = ({
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-base font-medium">
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-xl font-medium">
           {error}
         </div>
       )}
@@ -102,7 +102,7 @@ const EventPromotionsTab = ({
             <h3 className="text-2xl font-semibold text-avocado-brown-100 mb-3">
               Chưa có khuyến nghị
             </h3>
-            <p className="text-base text-avocado-brown-50 max-w-md mx-auto mb-4">
+            <p className="text-xl text-avocado-brown-50 max-w-md mx-auto mb-4">
               Nhập số ngày và bấm "Lấy khuyến nghị" để AI phân tích và đề xuất
               các chương trình khuyến mãi phù hợp.
             </p>

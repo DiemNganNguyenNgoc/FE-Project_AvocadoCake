@@ -101,12 +101,12 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                 placeholder="Tìm kiếm trạng thái..."
                 value={searchTerm}
                 onChange={handleSearch}
-                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
               />
             </div>
 
             {/* Filter Button */}
-            <button className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base">
+            <button className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl">
               <Filter className="w-5 h-5" />
               Filter
             </button>
@@ -116,7 +116,7 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
             {/* Export Button */}
             <button
               onClick={handleExport}
-              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
             >
               <Download className="w-5 h-5" />
               Export
@@ -124,13 +124,13 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
 
             {/* Items per page */}
             <div className="flex items-center gap-3">
-              <span className="text-base text-gray-600 dark:text-gray-400">
+              <span className="text-xl text-gray-600 dark:text-gray-400">
                 Show:
               </span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => handleItemsPerPageChange(e.target.value)}
-                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -190,7 +190,7 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                     <p className="text-lg font-medium text-gray-500 dark:text-gray-400">
                       Không có dữ liệu trạng thái
                     </p>
-                    <p className="text-base text-gray-400 dark:text-gray-500">
+                    <p className="text-xl text-gray-400 dark:text-gray-500">
                       Hãy thêm trạng thái mới để bắt đầu
                     </p>
                   </div>
@@ -202,18 +202,18 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                   key={status._id || index}
                   className="hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors"
                 >
-                  <td className="px-8 py-5 whitespace-nowrap text-base font-semibold text-gray-900 dark:text-white">
+                  <td className="px-8 py-5 whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-white">
                     <div className="flex items-center justify-center w-10 h-10 rounded-full text-dark dark:text-white font-bold">
                       {startIndex + index + 1}
                     </div>
                   </td>
-                  <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-primary">
+                  <td className="px-8 py-5 whitespace-nowrap text-xl font-bold text-primary">
                     {status.statusCode || "N/A"}
                   </td>
-                  <td className="px-8 py-5 whitespace-nowrap text-base font-bold text-gray-900 dark:text-white">
+                  <td className="px-8 py-5 whitespace-nowrap text-xl font-bold text-gray-900 dark:text-white">
                     {status.statusName || "N/A"}
                   </td>
-                  <td className="px-8 py-5 whitespace-nowrap text-base text-gray-500 dark:text-gray-400 font-medium">
+                  <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-500 dark:text-gray-400 font-medium">
                     <div className="flex items-center gap-2">
                       <svg
                         className="w-5 h-5 text-gray-400"
@@ -231,7 +231,7 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                       <span>{formatDate(status.createdAt)}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                  <td className="px-8 py-5 whitespace-nowrap text-xl font-medium">
                     <div className="flex gap-3">
                       <button
                         onClick={() => onEdit(status)}
@@ -267,7 +267,7 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
       {/* Pagination */}
       <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-          <div className="text-base text-gray-700 dark:text-gray-300">
+          <div className="text-xl text-gray-700 dark:text-gray-300">
             Showing {startIndex + 1} to{" "}
             {Math.min(endIndex, filteredData.length)} of {filteredData.length}{" "}
             results
@@ -289,7 +289,7 @@ const StatusTable = ({ statuses, loading, onEdit, onDelete }) => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 rounded-xl text-base transition-colors ${
+                    className={`px-4 py-2 rounded-xl text-xl transition-colors ${
                       currentPage === page
                         ? "bg-primary text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"

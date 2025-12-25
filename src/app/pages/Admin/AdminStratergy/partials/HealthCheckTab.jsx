@@ -21,7 +21,7 @@ const HealthCheckTab = ({
         <Button
           onClick={onCheck}
           disabled={isLoading}
-          className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 font-semibold text-base hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-avocado-green-100 text-avocado-brown-100 px-6 py-3 font-semibold text-xl hover:bg-avocado-green-80 transition-colors focus:outline-none focus:ring-2 focus:ring-avocado-green-30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <HeartPulse className="w-5 h-5" />
           {isLoading ? "Đang kiểm tra..." : "Kiểm tra hệ thống"}
@@ -30,7 +30,7 @@ const HealthCheckTab = ({
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-base font-medium">
+        <div className="bg-red-50 border-2 border-red-300 rounded-lg px-4 py-3 text-red-700 text-xl font-medium">
           {error}
         </div>
       )}
@@ -40,14 +40,14 @@ const HealthCheckTab = ({
         <div className="flex gap-3">
           <button
             onClick={onSave}
-            className="border-2 border-avocado-green-100 text-avocado-green-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-green-10 transition-colors flex items-center gap-2"
+            className="border-2 border-avocado-green-100 text-avocado-green-100 bg-transparent px-5 py-2 rounded-lg font-medium text-xl hover:bg-avocado-green-10 transition-colors flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
             Lưu kết quả
           </button>
           <button
             onClick={onViewSaved}
-            className="border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-base hover:bg-avocado-brown-10 transition-colors flex items-center gap-2"
+            className="border-2 border-avocado-brown-100 text-avocado-brown-100 bg-transparent px-5 py-2 rounded-lg font-medium text-xl hover:bg-avocado-brown-10 transition-colors flex items-center gap-2"
           >
             <Eye className="w-4 h-4" />
             Xem đã lưu
@@ -131,7 +131,7 @@ const HealthCheckTab = ({
         ) : (
           <div className="p-12 text-center">
             <HeartPulse className="w-12 h-12 text-avocado-green-100 mx-auto mb-3" />
-            <p className="text-base text-avocado-brown-50">
+            <p className="text-xl text-avocado-brown-50">
               Chưa kiểm tra trạng thái hệ thống.
             </p>
           </div>

@@ -99,7 +99,7 @@ const SmartRecipeDisplay = ({ data }) => {
             <h2 className="text-3xl font-bold text-avocado-brown-100 mb-3">
               {recipe.title || recipe.name || "Công thức không có tên"}
             </h2>
-            <p className="text-base text-avocado-brown-70 leading-relaxed">
+            <p className="text-xl text-avocado-brown-70 leading-relaxed">
               {recipe.description || "Không có mô tả"}
             </p>
 
@@ -223,7 +223,7 @@ const SmartRecipeDisplay = ({ data }) => {
                     >
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
-                        <div className="font-bold text-gray-800 text-base leading-relaxed">
+                        <div className="font-bold text-gray-800 text-xl leading-relaxed">
                           {ing}
                         </div>
                       </div>
@@ -242,7 +242,7 @@ const SmartRecipeDisplay = ({ data }) => {
                       <div className="font-bold text-gray-800 text-lg leading-tight mb-2">
                         {ing.name || "Không có tên"}
                       </div>
-                      <div className="text-gray-600 font-semibold text-base">
+                      <div className="text-gray-600 font-semibold text-xl">
                         📦 {ing.quantity} {ing.unit}
                       </div>
                     </div>

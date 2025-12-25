@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import { USER_SEGMENTS, LANGUAGES } from "../services/RecipeService";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import Button from "../../../../components/AdminLayout/Button";
 
 /**
  * GenerateFromTrend Component
@@ -202,7 +203,7 @@ const GenerateFromTrend = () => {
           {/* Current Trends */}
           {currentTrends && currentTrends.length > 0 && (
             <div className="trends-section">
-              <h3 className="section-title">📈 Xu Hướng Mạng Xã Hội</h3>
+              <h3 className="section-title"> Xu Hướng Mạng Xã Hội</h3>
               <div className="trends-grid">
                 {currentTrends.map((trend, index) => (
                   <button
@@ -232,7 +233,6 @@ const GenerateFromTrend = () => {
                 htmlFor="trend"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🔥</span>
                 Xu hướng / Trend Keywords
                 <span className="text-red-500">*</span>
               </label>
@@ -243,11 +243,11 @@ const GenerateFromTrend = () => {
                 value={formData.trend}
                 onChange={handleChange}
                 placeholder="Ví dụ: Matcha, Minimalist, Labubu, Viral TikTok..."
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder:text-avocado-brown-50 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 placeholder:text-avocado-brown-50 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 hover:border-avocado-brown-50"
                 required
               />
-              <p className="mt-2 text-base text-avocado-brown-50 flex items-center gap-2">
-                💡 Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
+              <p className="mt-2 text-xl text-avocado-brown-50 flex items-center gap-2">
+                Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
               </p>
             </div>
 
@@ -257,7 +257,6 @@ const GenerateFromTrend = () => {
                 htmlFor="user_segment"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🎯</span>
                 Phân khúc khách hàng
                 <span className="text-red-500">*</span>
               </label>
@@ -266,7 +265,7 @@ const GenerateFromTrend = () => {
                 name="user_segment"
                 value={formData.user_segment}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -289,7 +288,6 @@ const GenerateFromTrend = () => {
                 htmlFor="occasion"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🎉</span>
                 Dịp đặc biệt (Tùy chọn)
               </label>
               <select
@@ -297,7 +295,7 @@ const GenerateFromTrend = () => {
                 name="occasion"
                 value={formData.occasion}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -319,7 +317,6 @@ const GenerateFromTrend = () => {
                 htmlFor="language"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🌐</span>
                 Ngôn ngữ
               </label>
               <select
@@ -327,7 +324,7 @@ const GenerateFromTrend = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-base bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
+                className="w-full h-[44px] min-h-[44px] px-4 py-2 text-xl bg-white border-2 border-avocado-brown-30 rounded-2xl text-avocado-brown-100 focus:outline-none focus:border-avocado-green-100 focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 appearance-none cursor-pointer hover:border-avocado-brown-50"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233A060E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -345,33 +342,34 @@ const GenerateFromTrend = () => {
 
             {/* Action Buttons */}
             <div className="form-actions">
-              <button
+              <Button
                 type="button"
                 onClick={handleReset}
                 className="btn-reset"
                 disabled={loading}
+                variant="outline"
               >
-                🔄 Làm mới
-              </button>
-              <button type="submit" className="btn-generate" disabled={loading}>
+                Làm mới
+              </Button>
+              <Button type="submit" disabled={loading} variant="primary">
                 {loading ? (
                   <>
                     <div className="loading-spinner" />
                     Đang tạo...
                   </>
                 ) : (
-                  <>✨ Tạo Công Thức</>
+                  <>Tạo Công Thức</>
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
       ) : (
         <div className="result-container">
           <div className="result-header">
-            <button onClick={() => setShowResult(false)} className="btn-back">
+            <Button onClick={() => setShowResult(false)} variant="ghost">
               ← Tạo công thức mới
-            </button>
+            </Button>
           </div>
 
           <RecipeDisplay recipe={currentRecipe} />

@@ -29,7 +29,7 @@ const Checkbox = forwardRef(
             {label && (
               <label
                 htmlFor={checkboxId}
-                className="text-base font-medium text-gray-700 dark:text-white cursor-pointer select-none"
+                className="text-xl font-medium text-gray-700 dark:text-white cursor-pointer select-none"
               >
                 {label}
               </label>

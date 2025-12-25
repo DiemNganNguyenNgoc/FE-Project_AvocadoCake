@@ -10,7 +10,7 @@ const ChatMessage = ({ type, content }) => {
     return (
       <div className="flex justify-end mb-6 animate-fadeIn">
         <div className="max-w-[80%] bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-3xl rounded-tr-lg px-6 py-4 shadow-lg">
-          <p className="text-base font-medium">{content}</p>
+          <p className="text-xl font-medium">{content}</p>
         </div>
       </div>
     );
@@ -58,7 +58,7 @@ const ChatMessage = ({ type, content }) => {
               <h4 className="text-lg font-bold text-gray-900 mb-2">
                 Kết quả phân tích AI
               </h4>
-              <p className="text-base text-gray-700 leading-relaxed">
+              <p className="text-xl text-gray-700 leading-relaxed">
                 {content.summary}
               </p>
 

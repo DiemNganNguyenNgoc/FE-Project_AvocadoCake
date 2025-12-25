@@ -143,7 +143,7 @@ const RankTable = ({
   const getStatusBadge = (isActive) => {
     return (
       <span
-        className={`inline-flex items-center px-4 py-2 rounded-full text-base font-medium ${
+        className={`inline-flex items-center px-4 py-2 rounded-full text-xl font-medium ${
           isActive ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
         }`}
       >
@@ -179,14 +179,14 @@ const RankTable = ({
                 placeholder="Tìm kiếm rank..."
                 value={localSearchTerm}
                 onChange={handleSearchChange}
-                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
               />
             </div>
 
             {/* Filter Button */}
             <button
               onClick={() => {}}
-              className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+              className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl"
             >
               <Filter className="w-5 h-5" />
               Filter
@@ -197,7 +197,7 @@ const RankTable = ({
             {/* Export Button */}
             <button
               onClick={handleExport}
-              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+              className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
             >
               <Download className="w-5 h-5" />
               Export
@@ -205,7 +205,7 @@ const RankTable = ({
 
             {/* Items per page */}
             <div className="flex items-center gap-3">
-              <span className="text-base text-gray-600 dark:text-gray-400">
+              <span className="text-xl text-gray-600 dark:text-gray-400">
                 Show:
               </span>
               <select
@@ -214,7 +214,7 @@ const RankTable = ({
                   onItemsPerPageChange &&
                   onItemsPerPageChange(parseInt(e.target.value))
                 }
-                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -235,13 +235,13 @@ const RankTable = ({
             <div className="flex gap-4">
               <button
                 onClick={clearSelection}
-                className="px-5 py-3 text-base font-medium text-primary hover:text-primary/80 transition-colors"
+                className="px-5 py-3 text-xl font-medium text-primary hover:text-primary/80 transition-colors"
               >
                 Bỏ chọn
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-5 py-3 text-base font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
+                className="px-5 py-3 text-xl font-medium bg-red text-white rounded-xl hover:bg-red/90 transition-colors"
               >
                 Xóa đã chọn
               </button>
@@ -342,7 +342,7 @@ const RankTable = ({
                     className="w-5 h-5 rounded border-stroke dark:border-stroke-dark text-primary focus:ring-primary cursor-pointer"
                   />
                 </td>
-                <td className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white font-medium">
+                <td className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white font-medium">
                   <div className="flex items-center gap-2">
                     <span style={{ fontSize: "1.5rem" }}>{rank.icon}</span>
                     <span>{rank.priority}</span>
@@ -355,7 +355,7 @@ const RankTable = ({
                       style={{ backgroundColor: rank.color }}
                     />
                     <div>
-                      <div className="text-base font-semibold text-gray-900 dark:text-white">
+                      <div className="text-xl font-semibold text-gray-900 dark:text-white">
                         {rank.rankDisplayName}
                       </div>
                       <div className="text-sm text-gray-500">
@@ -365,11 +365,11 @@ const RankTable = ({
                   </div>
                 </td>
                 <td className="px-8 py-5 whitespace-nowrap">
-                  <span className="text-base font-bold text-green-600">
+                  <span className="text-xl font-bold text-green-600">
                     {rank.discountPercent}%
                   </span>
                 </td>
-                <td className="px-8 py-5 text-base text-gray-900 dark:text-white">
+                <td className="px-8 py-5 text-xl text-gray-900 dark:text-white">
                   {rank.getSpendingRange()}
                 </td>
                 <td className="px-8 py-5">
@@ -381,7 +381,7 @@ const RankTable = ({
                 <td className="px-8 py-5 whitespace-nowrap">
                   {getStatusBadge(rank.isActive)}
                 </td>
-                <td className="px-8 py-5 whitespace-nowrap text-base font-medium">
+                <td className="px-8 py-5 whitespace-nowrap text-xl font-medium">
                   <div className="flex gap-3">
                     <button
                       onClick={() => handleEdit(rank)}
@@ -433,7 +433,7 @@ const RankTable = ({
       {totalPages > 1 && (
         <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="text-base text-gray-700 dark:text-gray-300">
+            <div className="text-xl text-gray-700 dark:text-gray-300">
               Hiển thị {(currentPage - 1) * itemsPerPage + 1} đến{" "}
               {Math.min(currentPage * itemsPerPage, totalItems)} trong tổng số{" "}
               {totalItems} ranks
@@ -455,7 +455,7 @@ const RankTable = ({
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 text-base rounded-xl transition-colors ${
+                    className={`px-4 py-2 text-xl rounded-xl transition-colors ${
                       currentPage === page
                         ? "bg-primary text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"

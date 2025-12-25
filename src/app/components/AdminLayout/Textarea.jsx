@@ -6,7 +6,7 @@ const Textarea = forwardRef(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-3">
+          <label className="block text-xl font-medium text-gray-700 dark:text-gray-300 mb-3">
             {label}
           </label>
         )}
@@ -17,7 +17,7 @@ const Textarea = forwardRef(
             rows={rows}
             className={`
             block w-full rounded-xl border transition-colors resize-none
-            px-4 py-3 text-base
+            px-4 py-3 text-xl
             ${
               error
                 ? "border-red-300 focus:border-red-500 focus:ring-red-500"
@@ -42,12 +42,12 @@ const Textarea = forwardRef(
         {(error || helperText) && (
           <div className="mt-2">
             {error && (
-              <p className="text-base text-red-600 dark:text-red-400">
+              <p className="text-xl text-red-600 dark:text-red-400">
                 {error}
               </p>
             )}
             {helperText && !error && (
-              <p className="text-base text-gray-500 dark:text-gray-400">
+              <p className="text-xl text-gray-500 dark:text-gray-400">
                 {helperText}
               </p>
             )}

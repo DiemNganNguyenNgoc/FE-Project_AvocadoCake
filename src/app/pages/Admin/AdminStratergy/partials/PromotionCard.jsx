@@ -95,7 +95,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
             <h3 className="text-2xl font-bold text-avocado-brown-100 mb-2">
               {eventName}
             </h3>
-            <p className="text-base text-avocado-brown-50 leading-relaxed">
+            <p className="text-xl text-avocado-brown-50 leading-relaxed">
               {promotion.description}
             </p>
           </div>
@@ -104,7 +104,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
               <p className="text-xs text-avocado-brown-50 font-medium mb-1">
                 Ngày diễn ra
               </p>
-              <p className="text-base font-bold text-avocado-brown-100">
+              <p className="text-xl font-bold text-avocado-brown-100">
                 {eventDate ? formatDate(eventDate) : "-"}
               </p>
             </div>
@@ -120,7 +120,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
               <p className="text-sm text-avocado-brown-50 font-medium mb-1">
                 Bắt đầu
               </p>
-              <p className="text-base font-bold text-avocado-brown-100">
+              <p className="text-xl font-bold text-avocado-brown-100">
                 {startDate ? formatDate(startDate) : "-"}
               </p>
             </div>
@@ -129,7 +129,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
               <p className="text-sm text-avocado-brown-50 font-medium mb-1">
                 Kết thúc
               </p>
-              <p className="text-base font-bold text-avocado-brown-100">
+              <p className="text-xl font-bold text-avocado-brown-100">
                 {endDate ? formatDate(endDate) : "-"}
               </p>
             </div>
@@ -158,7 +158,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
               {/* Product Header */}
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex-1">
-                  <h5 className="text-base font-bold text-avocado-brown-100 mb-2">
+                  <h5 className="text-xl font-bold text-avocado-brown-100 mb-2">
                     {product.name}
                   </h5>
                   <div className="flex items-center flex-wrap gap-2">
@@ -189,13 +189,13 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                 <div className="bg-grey9 rounded-lg px-4 py-3 border border-avocado-brown-30">
                   <p className="text-xs text-avocado-brown-50 mb-1">Giá gốc</p>
-                  <p className="text-base font-bold text-avocado-brown-100">
+                  <p className="text-xl font-bold text-avocado-brown-100">
                     {formatCurrency(product.currentPrice ?? 0)}
                   </p>
                 </div>
                 <div className="bg-avocado-green-10 rounded-lg px-4 py-3 border border-avocado-green-30">
                   <p className="text-xs text-avocado-green-100 mb-1">Giá KM</p>
-                  <p className="text-base font-bold text-avocado-green-100">
+                  <p className="text-xl font-bold text-avocado-green-100">
                     {product.discountedPrice != null
                       ? formatCurrency(product.discountedPrice)
                       : "-"}
@@ -205,7 +205,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
                   <p className="text-xs text-avocado-brown-50 mb-1">
                     Doanh thu dự kiến
                   </p>
-                  <p className="text-base font-bold text-avocado-brown-100">
+                  <p className="text-xl font-bold text-avocado-brown-100">
                     {product.expectedRevenue != null
                       ? formatCurrency(product.expectedRevenue)
                       : "-"}
@@ -238,7 +238,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
       <div className="px-6 py-5 bg-grey9 border-t border-avocado-brown-30">
         <button
           onClick={() => onAddPromotion(promotion)}
-          className="w-full bg-avocado-green-100 text-white py-4 px-6 rounded-lg font-semibold text-base hover:bg-avocado-green-80 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
+          className="w-full bg-avocado-green-100 text-white py-4 px-6 rounded-lg font-semibold text-xl hover:bg-avocado-green-80 focus:outline-none focus:ring-2 focus:ring-avocado-green-30 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Thêm khuyến mãi này

@@ -86,7 +86,7 @@ const AddUser = ({ onBack }) => {
         <form onSubmit={handleSubmit} className="p-8 space-y-8">
           {/* Personal Information */}
           <fieldset className="space-y-5">
-            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            <legend className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
               Thông tin cá nhân
             </legend>
 
@@ -139,7 +139,7 @@ const AddUser = ({ onBack }) => {
 
           {/* Contact Information */}
           <fieldset className="space-y-5">
-            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            <legend className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
               Thông tin liên hệ
             </legend>
 
@@ -229,7 +229,7 @@ const AddUser = ({ onBack }) => {
 
           {/* Security Information */}
           <fieldset className="space-y-5">
-            <legend className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            <legend className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
               Bảo mật & Phân quyền
             </legend>
 

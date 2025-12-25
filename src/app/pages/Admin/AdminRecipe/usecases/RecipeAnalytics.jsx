@@ -74,7 +74,7 @@ const RecipeAnalytics = () => {
       {/* Tabs */}
       <div className="flex gap-2 bg-white rounded-lg border border-avocado-brown-30 p-2">
         <button
-          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 text-xl rounded-lg transition-colors ${
             activeAnalyticsTab === "forecast"
               ? "bg-avocado-green-100 text-white"
               : "text-gray-700 hover:bg-avocado-green-10"
@@ -85,7 +85,7 @@ const RecipeAnalytics = () => {
           Dự báo
         </button>
         <button
-          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 text-xl rounded-lg transition-colors ${
             activeAnalyticsTab === "market"
               ? "bg-avocado-green-100 text-white"
               : "text-gray-700 hover:bg-avocado-green-10"
@@ -96,7 +96,7 @@ const RecipeAnalytics = () => {
           Thị trường
         </button>
         <button
-          className={`flex items-center gap-2 px-4 py-2 text-base rounded-lg transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 text-xl rounded-lg transition-colors ${
             activeAnalyticsTab === "segment"
               ? "bg-avocado-green-100 text-white"
               : "text-gray-700 hover:bg-avocado-green-10"
@@ -114,7 +114,7 @@ const RecipeAnalytics = () => {
           <div>
             <label
               htmlFor="segment-select"
-              className="block text-base font-medium text-avocado-brown-100 mb-2"
+              className="block text-xl font-medium text-avocado-brown-100 mb-2"
             >
               Phân khúc khách hàng:
             </label>
@@ -122,7 +122,7 @@ const RecipeAnalytics = () => {
               id="segment-select"
               value={selectedSegment}
               onChange={(e) => setSelectedSegment(e.target.value)}
-              className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+              className="w-full px-4 py-2 text-xl border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
             >
               {USER_SEGMENTS.map((segment) => (
                 <option key={segment.value} value={segment.value}>
@@ -136,7 +136,7 @@ const RecipeAnalytics = () => {
             <div>
               <label
                 htmlFor="horizon-days"
-                className="block text-base font-medium text-avocado-brown-100 mb-2"
+                className="block text-xl font-medium text-avocado-brown-100 mb-2"
               >
                 Dự báo (ngày):
               </label>
@@ -147,7 +147,7 @@ const RecipeAnalytics = () => {
                 onChange={(e) => setHorizonDays(Number(e.target.value))}
                 min="7"
                 max="90"
-                className="w-full px-4 py-2 text-base border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+                className="w-full px-4 py-2 text-xl border border-avocado-brown-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
               />
             </div>
           )}
@@ -159,7 +159,7 @@ const RecipeAnalytics = () => {
             <button
               onClick={handleForecast}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-xl bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? (
                 <>
@@ -177,7 +177,7 @@ const RecipeAnalytics = () => {
                   <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
                     Khung thời gian
                   </h3>
-                  <p className="text-base text-gray-700">
+                  <p className="text-xl text-gray-700">
                     {forecastData.forecast_window?.start} →{" "}
                     {forecastData.forecast_window?.end}
                   </p>
@@ -210,14 +210,14 @@ const RecipeAnalytics = () => {
                         className="border border-avocado-brown-30 rounded-lg p-3"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <strong className="text-base text-avocado-brown-100">
+                          <strong className="text-xl text-avocado-brown-100">
                             {rec.event}
                           </strong>
                           <span className="px-3 py-1 bg-avocado-green-100 text-white text-sm rounded-lg">
                             {Math.round(rec.viral_potential * 100)}%
                           </span>
                         </div>
-                        <p className="text-base text-gray-700">
+                        <p className="text-xl text-gray-700">
                           {rec.recipe?.title}
                         </p>
                       </div>
@@ -234,7 +234,7 @@ const RecipeAnalytics = () => {
             <button
               onClick={handleMarketInsights}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-xl bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? (
                 <>
@@ -252,7 +252,7 @@ const RecipeAnalytics = () => {
                   <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
                     Phân tích Segment
                   </h3>
-                  <p className="text-base text-gray-700">
+                  <p className="text-xl text-gray-700">
                     Tiềm năng:{" "}
                     <strong>
                       {marketInsights.data?.segment_analysis?.size_estimate}
@@ -281,7 +281,7 @@ const RecipeAnalytics = () => {
                       (strategy, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-base text-gray-700"
+                          className="flex items-start gap-2 text-xl text-gray-700"
                         >
                           <span className="text-avocado-green-100 mt-1">•</span>
                           {strategy}
@@ -300,7 +300,7 @@ const RecipeAnalytics = () => {
             <button
               onClick={handleSegmentRecommendations}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-base bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-xl bg-avocado-green-100 text-white rounded-lg hover:bg-avocado-green-80 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? (
                 <>
@@ -318,10 +318,10 @@ const RecipeAnalytics = () => {
                   <h3 className="text-lg font-semibold text-avocado-brown-100 mb-3">
                     Profile Segment
                   </h3>
-                  <p className="text-base font-medium text-gray-900 mb-2">
+                  <p className="text-xl font-medium text-gray-900 mb-2">
                     {segmentRecommendations.data?.segment_profile?.name}
                   </p>
-                  <p className="text-base text-gray-700">
+                  <p className="text-xl text-gray-700">
                     Tiềm năng thị trường:{" "}
                     {Math.round(
                       (segmentRecommendations.data?.segment_profile
@@ -340,7 +340,7 @@ const RecipeAnalytics = () => {
                       (product, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-base text-gray-700"
+                          className="flex items-start gap-2 text-xl text-gray-700"
                         >
                           <span className="text-avocado-green-100 mt-1">•</span>
                           {product}
@@ -359,7 +359,7 @@ const RecipeAnalytics = () => {
                       (tip, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-base text-gray-700"
+                          className="flex items-start gap-2 text-xl text-gray-700"
                         >
                           <span className="text-avocado-green-100 mt-1">•</span>
                           {tip}

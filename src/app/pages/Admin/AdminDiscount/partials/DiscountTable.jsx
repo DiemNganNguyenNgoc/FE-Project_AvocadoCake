@@ -154,12 +154,12 @@ const DiscountTable = ({ onEdit }) => {
                   placeholder="Tìm kiếm khuyến mãi..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                  className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
                 />
               </div>
 
               {/* Filter Button */}
-              <button className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base">
+              <button className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl">
                 <Filter className="w-5 h-5" />
                 Filter
               </button>
@@ -169,7 +169,7 @@ const DiscountTable = ({ onEdit }) => {
               {/* Refresh Button */}
               <button
                 onClick={refreshDiscounts}
-                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl"
               >
                 <svg
                   className="w-5 h-5"
@@ -190,7 +190,7 @@ const DiscountTable = ({ onEdit }) => {
               {/* Export Button */}
               <button
                 onClick={handleExport}
-                className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+                className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
               >
                 <Download className="w-5 h-5" />
                 Export
@@ -198,13 +198,13 @@ const DiscountTable = ({ onEdit }) => {
 
               {/* Items per page */}
               <div className="flex items-center gap-3">
-                <span className="text-base text-gray-600 dark:text-gray-400">
+                <span className="text-xl text-gray-600 dark:text-gray-400">
                   Show:
                 </span>
                 <select
                   value={itemsPerPage}
                   onChange={(e) => handleItemsPerPageChange(e.target.value)}
-                  className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                  className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
                 >
                   <option value={10}>10</option>
                   <option value={25}>25</option>
@@ -278,13 +278,13 @@ const DiscountTable = ({ onEdit }) => {
                     key={discount._id}
                     className="hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors"
                   >
-                    <td className="px-8 py-5 text-base text-gray-700 dark:text-gray-300 font-medium">
+                    <td className="px-8 py-5 text-xl text-gray-700 dark:text-gray-300 font-medium">
                       {startIndex + idx + 1}
                     </td>
-                    <td className="px-8 py-5 text-base font-semibold text-primary">
+                    <td className="px-8 py-5 text-xl font-semibold text-primary">
                       {discount.discountCode}
                     </td>
-                    <td className="px-8 py-5 text-base text-gray-900 dark:text-white font-bold">
+                    <td className="px-8 py-5 text-xl text-gray-900 dark:text-white font-bold">
                       {discount.discountName}
                     </td>
                     <td className="px-8 py-5">
@@ -292,7 +292,7 @@ const DiscountTable = ({ onEdit }) => {
                         {discount.discountValue}%
                       </span>
                     </td>
-                    <td className="px-8 py-5 text-base text-gray-700 dark:text-gray-300 max-w-xs truncate">
+                    <td className="px-8 py-5 text-xl text-gray-700 dark:text-gray-300 max-w-xs truncate">
                       {Array.isArray(discount.discountProduct) &&
                       discount.discountProduct.length > 0
                         ? discount.discountProduct
@@ -300,7 +300,7 @@ const DiscountTable = ({ onEdit }) => {
                             .join(", ")
                         : "Không có sản phẩm"}
                     </td>
-                    <td className="px-8 py-5 text-base text-gray-500 dark:text-gray-400 font-medium">
+                    <td className="px-8 py-5 text-xl text-gray-500 dark:text-gray-400 font-medium">
                       <div className="flex items-center gap-2">
                         <svg
                           className="w-5 h-5 text-gray-400"
@@ -318,7 +318,7 @@ const DiscountTable = ({ onEdit }) => {
                         <span>{formatDate(discount.discountStartDate)}</span>
                       </div>
                     </td>
-                    <td className="px-8 py-5 text-base text-gray-500 dark:text-gray-400 font-medium">
+                    <td className="px-8 py-5 text-xl text-gray-500 dark:text-gray-400 font-medium">
                       <div className="flex items-center gap-2">
                         <svg
                           className="w-5 h-5 text-gray-400"
@@ -388,7 +388,7 @@ const DiscountTable = ({ onEdit }) => {
                       <p className="text-lg font-medium text-gray-500 dark:text-gray-400">
                         Chưa có khuyến mãi nào
                       </p>
-                      <p className="text-base text-gray-400 dark:text-gray-500">
+                      <p className="text-xl text-gray-400 dark:text-gray-500">
                         Hãy thêm khuyến mãi mới để bắt đầu
                       </p>
                     </div>
@@ -402,7 +402,7 @@ const DiscountTable = ({ onEdit }) => {
         {/* Pagination */}
         <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="text-base text-gray-700 dark:text-gray-300">
+            <div className="text-xl text-gray-700 dark:text-gray-300">
               Showing {startIndex + 1} to{" "}
               {Math.min(endIndex, filteredData.length)} of {filteredData.length}{" "}
               results
@@ -424,7 +424,7 @@ const DiscountTable = ({ onEdit }) => {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-xl text-base transition-colors ${
+                      className={`px-4 py-2 rounded-xl text-xl transition-colors ${
                         currentPage === page
                           ? "bg-primary text-white"
                           : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"

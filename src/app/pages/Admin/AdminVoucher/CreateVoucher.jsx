@@ -124,7 +124,7 @@ const CreateVoucher = () => {
           <h1 className="text-heading-4 font-bold text-dark dark:text-white">
             Tạo voucher mới
           </h1>
-          <p className="mt-2 text-base text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-xl text-gray-600 dark:text-gray-400">
             Điền thông tin để tạo voucher giảm giá
           </p>
         </div>
@@ -185,7 +185,7 @@ const CreateVoucher = () => {
 
             {/* Image Upload */}
             <div className="lg:col-span-2">
-              <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-xl font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Hình ảnh voucher
               </label>
               
@@ -207,7 +207,7 @@ const CreateVoucher = () => {
               ) : (
                 <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-stroke dark:border-stroke-dark rounded-2xl cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-2 transition-all">
                   <ImageIcon className="w-12 h-12 text-gray-400 mb-3" />
-                  <p className="text-base font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <p className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Tải ảnh lên
                   </p>
                   <p className="text-sm text-gray-500">PNG, JPG tối đa 5MB</p>
@@ -393,7 +393,7 @@ const CreateVoucher = () => {
                   className="w-5 h-5 text-avocado-green-100 rounded-lg focus:ring-avocado-green-100 cursor-pointer"
                 />
                 <div>
-                  <label className="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                  <label className="text-xl font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                     Hiển thị công khai
                   </label>
                   <p className="text-sm text-gray-500">User có thể tự lưu</p>
@@ -409,7 +409,7 @@ const CreateVoucher = () => {
                   className="w-5 h-5 text-avocado-green-100 rounded-lg focus:ring-avocado-green-100 cursor-pointer"
                 />
                 <div>
-                  <label className="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                  <label className="text-xl font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                     Kích hoạt ngay
                   </label>
                   <p className="text-sm text-gray-500">Voucher có thể sử dụng</p>

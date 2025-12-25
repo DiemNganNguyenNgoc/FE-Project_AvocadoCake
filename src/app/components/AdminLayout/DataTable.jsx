@@ -65,7 +65,7 @@ const DataTable = ({
                   placeholder={searchPlaceholder}
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base w-80"
+                  className="pl-12 pr-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl w-80"
                 />
               </div>
             )}
@@ -73,7 +73,7 @@ const DataTable = ({
             {showFilter && (
               <button
                 onClick={onFilter}
-                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-base"
+                className="flex items-center gap-3 px-5 py-3 border border-stroke dark:border-stroke-dark rounded-xl hover:bg-gray-50 dark:hover:bg-dark-2 transition-colors text-xl"
               >
                 <Filter className="w-5 h-5" />
                 Filter
@@ -85,7 +85,7 @@ const DataTable = ({
             {showExport && (
               <button
                 onClick={onExport}
-                className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
+                className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xl"
               >
                 <Download className="w-5 h-5" />
                 Export
@@ -93,13 +93,13 @@ const DataTable = ({
             )}
 
             <div className="flex items-center gap-3">
-              <span className="text-base text-gray-600 dark:text-gray-400">
+              <span className="text-xl text-gray-600 dark:text-gray-400">
                 Show:
               </span>
               <select
                 value={itemsPerPage}
                 onChange={(e) => handleItemsPerPageChange(e.target.value)}
-                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+                className="px-4 py-2 border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-xl"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -135,7 +135,7 @@ const DataTable = ({
                 {columns.map((column, colIndex) => (
                   <td
                     key={colIndex}
-                    className="px-8 py-5 whitespace-nowrap text-base text-gray-900 dark:text-white"
+                    className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white"
                   >
                     {column.render
                       ? column.render(row[column.key], row)
@@ -151,7 +151,7 @@ const DataTable = ({
       {/* Pagination */}
       <div className="px-8 py-6 border-t border-stroke dark:border-stroke-dark">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-          <div className="text-base text-gray-700 dark:text-gray-300">
+          <div className="text-xl text-gray-700 dark:text-gray-300">
             Showing {startIndex + 1} to{" "}
             {Math.min(endIndex, filteredData.length)} of {filteredData.length}{" "}
             results
@@ -172,7 +172,7 @@ const DataTable = ({
                 <>
                   <button
                     onClick={() => handlePageChange(1)}
-                    className="px-4 py-2 text-base rounded-xl transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
+                    className="px-4 py-2 text-xl rounded-xl transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
                   >
                     1
                   </button>
@@ -192,7 +192,7 @@ const DataTable = ({
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 text-base rounded-xl transition-colors ${
+                    className={`px-4 py-2 text-xl rounded-xl transition-colors ${
                       currentPage === page
                         ? "bg-primary text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
@@ -210,7 +210,7 @@ const DataTable = ({
                   )}
                   <button
                     onClick={() => handlePageChange(totalPages)}
-                    className="px-4 py-2 text-base rounded-xl transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
+                    className="px-4 py-2 text-xl rounded-xl transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-2"
                   >
                     {totalPages}
                   </button>
