@@ -1,3 +1,8 @@
 {
-    "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "i18n-ally.localesPaths": [
+    "src/lib/i18n",
+    "src/app/locales",
+    "src/lib/i18n/locales"
+  ]
 }
