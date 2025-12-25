@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import { USER_SEGMENTS, LANGUAGES } from "../services/RecipeService";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import Button from "../../../../components/AdminLayout/Button";
 
 /**
  * GenerateFromTrend Component
@@ -202,7 +203,7 @@ const GenerateFromTrend = () => {
           {/* Current Trends */}
           {currentTrends && currentTrends.length > 0 && (
             <div className="trends-section">
-              <h3 className="section-title">📈 Xu Hướng Mạng Xã Hội</h3>
+              <h3 className="section-title"> Xu Hướng Mạng Xã Hội</h3>
               <div className="trends-grid">
                 {currentTrends.map((trend, index) => (
                   <button
@@ -232,7 +233,6 @@ const GenerateFromTrend = () => {
                 htmlFor="trend"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🔥</span>
                 Xu hướng / Trend Keywords
                 <span className="text-red-500">*</span>
               </label>
@@ -247,7 +247,7 @@ const GenerateFromTrend = () => {
                 required
               />
               <p className="mt-2 text-base text-avocado-brown-50 flex items-center gap-2">
-                💡 Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
+                Nhập từ khóa xu hướng hoặc chọn từ danh sách phía trên
               </p>
             </div>
 
@@ -257,7 +257,6 @@ const GenerateFromTrend = () => {
                 htmlFor="user_segment"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🎯</span>
                 Phân khúc khách hàng
                 <span className="text-red-500">*</span>
               </label>
@@ -289,7 +288,6 @@ const GenerateFromTrend = () => {
                 htmlFor="occasion"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🎉</span>
                 Dịp đặc biệt (Tùy chọn)
               </label>
               <select
@@ -319,7 +317,6 @@ const GenerateFromTrend = () => {
                 htmlFor="language"
                 className="flex items-center gap-2 text-lg font-medium text-avocado-brown-100 mb-3"
               >
-                <span className="text-2xl">🌐</span>
                 Ngôn ngữ
               </label>
               <select
@@ -345,33 +342,34 @@ const GenerateFromTrend = () => {
 
             {/* Action Buttons */}
             <div className="form-actions">
-              <button
+              <Button
                 type="button"
                 onClick={handleReset}
                 className="btn-reset"
                 disabled={loading}
+                variant="outline"
               >
-                🔄 Làm mới
-              </button>
-              <button type="submit" className="btn-generate" disabled={loading}>
+                Làm mới
+              </Button>
+              <Button type="submit" disabled={loading} variant="primary">
                 {loading ? (
                   <>
                     <div className="loading-spinner" />
                     Đang tạo...
                   </>
                 ) : (
-                  <>✨ Tạo Công Thức</>
+                  <>Tạo Công Thức</>
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
       ) : (
         <div className="result-container">
           <div className="result-header">
-            <button onClick={() => setShowResult(false)} className="btn-back">
+            <Button onClick={() => setShowResult(false)} variant="ghost">
               ← Tạo công thức mới
-            </button>
+            </Button>
           </div>
 
           <RecipeDisplay recipe={currentRecipe} />

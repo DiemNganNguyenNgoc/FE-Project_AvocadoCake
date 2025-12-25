@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import Button from "../../../../components/AdminLayout/Button";
 
 /**
  * GenerateFromIngredient - Tạo công thức từ nguyên liệu
@@ -172,21 +173,21 @@ const GenerateFromIngredient = () => {
 
             {/* Action Buttons */}
             <div className="flex gap-3 mt-6">
-              <button
+              <Button
                 type="button"
                 onClick={handleReset}
                 disabled={loading}
-                className="min-h-[44px] px-6 py-2 border-2 border-avocado-brown-30 text-avocado-brown-100 bg-white rounded-2xl text-base font-semibold hover:bg-avocado-brown-10 hover:border-avocado-brown-50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="outline"
               >
-                🔄 Làm mới
-              </button>
-              <button
+                Làm mới
+              </Button>
+              <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 min-h-[44px] px-6 py-2 bg-avocado-green-100 text-avocado-brown-100 rounded-2xl text-base font-semibold hover:bg-avocado-green-80 hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
+                className="flex-1 min-h-[44px] px-6 py-2 bg-avocado-green-100 text-avocado-brown-100 rounded-2xl text-lg font-semibold hover:bg-avocado-green-80 hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-avocado-green-30"
               >
-                {loading ? "⏳ Đang tạo..." : "✨ Tạo Công Thức"}
-              </button>
+                {loading ? "⏳ Đang tạo..." : "Tạo Công Thức"}
+              </Button>
             </div>
           </form>
         </>

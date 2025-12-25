@@ -40,7 +40,18 @@ const PaymentResultPage = () => {
         );
 
         const response = await axios.get(
-          `${apiUrl}/payment/get-detail-payment/${paymentCode}`
+          `${apiUrl}/payment/get-detail-payment/${paymentCode}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+            // Thêm timestamp để tránh cache
+            params: {
+              _t: new Date().getTime(),
+            },
+          }
         );
 
         console.log("✅ Payment API response:", response.data);

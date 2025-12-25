@@ -8,6 +8,7 @@ import AddQuiz from "./usecases/AddQuiz";
 import UpdateQuiz from "./usecases/UpdateQuiz";
 import ViewQuiz from "./partials/ViewQuiz";
 import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
+import Button from "../../../components/AdminLayout/Button";
 
 const AdminQuizContent = ({ onNavigate }) => {
   const {
@@ -81,13 +82,15 @@ const AdminQuizContent = ({ onNavigate }) => {
             </p>
           </div>
           <div className="mt-4 flex md:mt-0 md:ml-4">
-            <AdminButtonComponent
+            <Button
               onClick={handleAddQuiz}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-4 py-2"
+              variant="primary"
+              size="md"
             >
               <Plus className="w-4 h-4 mr-2" />
               Thêm Quiz Mới
-            </AdminButtonComponent>
+            </Button>
           </div>
         </div>
 
