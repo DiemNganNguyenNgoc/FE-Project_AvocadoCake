@@ -11,6 +11,7 @@ export const loginUser = async (data) => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true, // Cho phép gửi và nhận cookies
       }
     );
     return res.data; // Trả dữ liệu nếu thành công
@@ -115,7 +116,11 @@ export const refreshToken = async () => {
 export const logoutUser = async () => {
   try {
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL_BACKEND}/user/log-out`
+      `${process.env.REACT_APP_API_URL_BACKEND}/user/log-out`,
+      {},
+      {
+        withCredentials: true, // Cho phép gửi cookies
+      }
     );
     return res.data; // Trả dữ liệu nếu thành công
   } catch (error) {

@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./VoiceComponent.module.css";
 
 const VoiceComponent = ({ onVoiceInput }) => {
   const [isListening, setIsListening] = useState(false);
+  const [isSupported, setIsSupported] = useState(true);
+
+  useEffect(() => {
+    // Kiểm tra browser support
+    const supported =
+      "webkitSpeechRecognition" in window || "SpeechRecognition" in window;
+    setIsSupported(supported);
+  }, []);
 
   const handleVoiceSearch = () => {
-    if (
-      !("webkitSpeechRecognition" in window || "SpeechRecognition" in window)
-    ) {
-      alert("Trình duyệt không hỗ trợ tìm kiếm bằng giọng nói!");
+    if (!isSupported) {
+      alert(
+        "⚠️ Tính năng tìm kiếm bằng giọng nói chỉ hoạt động trên:\n" +
+          "✓ Google Chrome\n" +
+          "✓ Microsoft Edge\n" +
+          "✓ Opera\n\n" +
+          "Vui lòng sử dụng một trong các trình duyệt trên để sử dụng tính năng này."
+      );
       return;
     }
 
@@ -63,9 +75,19 @@ const VoiceComponent = ({ onVoiceInput }) => {
     <button
       onClick={handleVoiceSearch}
       className={styles.voiceButton}
+      disabled={!isSupported}
+      title={
+        !isSupported
+          ? "Tính năng này chỉ hoạt động trên Chrome, Edge hoặc Opera"
+          : isListening
+          ? "Đang nghe..."
+          : "Tìm kiếm bằng giọng nói"
+      }
       style={{
         color: isListening ? " #b1e321" : "#3a060e",
-        transition: "color 0.3s ease",
+        opacity: !isSupported ? 0.5 : 1,
+        cursor: !isSupported ? "not-allowed" : "pointer",
+        transition: "color 0.3s ease, opacity 0.3s ease",
       }}
     >
       {isListening ? (

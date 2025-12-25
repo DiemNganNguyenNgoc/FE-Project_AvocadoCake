@@ -131,12 +131,28 @@ const OrderInformationPage = () => {
       const response = await mutation.mutateAsync(orderData);
 
       if (response?.data?._id) {
-        const fullOrderData = { ...orderData, orderId: response.data._id };
+        // Merge order data with backend response to include rankDiscount fields
+        const fullOrderData = {
+          ...orderData,
+          orderId: response.data._id,
+          rankDiscount: response.data.rankDiscount || 0,
+          rankDiscountPercent: response.data.rankDiscountPercent || 0,
+          totalItemPrice: response.data.totalItemPrice || totalItemPrice,
+          totalPrice: response.data.totalPrice || totalPrice,
+        };
+
+        console.log("📦 Created order with rank discount:", {
+          orderId: fullOrderData.orderId,
+          rankDiscount: fullOrderData.rankDiscount,
+          rankDiscountPercent: fullOrderData.rankDiscountPercent,
+          totalPrice: fullOrderData.totalPrice,
+        });
+
         dispatch(
           setOrderDetails({
             selectedProductDetails: selectedProducts,
             shippingAddress,
-            totalPrice,
+            totalPrice: fullOrderData.totalPrice,
           })
         );
         dispatch(addOrder(fullOrderData));
@@ -183,7 +199,6 @@ const OrderInformationPage = () => {
   }, 0);
 
   // Tổng tiền đơn = tiền hàng + ship
-
   const totalPrice = useMemo(
     () => totalItemPrice + shippingPrice,
     [totalItemPrice, shippingPrice]
@@ -557,6 +572,7 @@ const OrderInformationPage = () => {
             </div>
           </div>
         </div>
+
         {/* ============Ghi chu don hang======== */}
         <div className="Note" style={{ margin: "50px 50px" }}>
           <div>

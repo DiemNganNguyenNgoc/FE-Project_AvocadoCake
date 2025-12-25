@@ -28,12 +28,12 @@ export const createOrder = async (data) => {
 
 export const getDetailsOrder = async (id) => {
   try {
-    const res = await axiosJWT.get(
+    // Sử dụng axios thông thường thay vì axiosJWT để không require authentication
+    const res = await axios.get(
       `${process.env.REACT_APP_API_URL_BACKEND}/order/get-detail-order/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
-          //   token: `Bearer ${access_token}`,
         },
       }
     );
@@ -305,6 +305,38 @@ export const applyCoinsToOrder = async (orderId, coinsToUse, access_token) => {
       throw {
         status: error.response.data?.status || "ERR",
         message: error.response.data?.message || "Đã xảy ra lỗi khi đổi xu.",
+      };
+    } else {
+      throw { status: 500, message: "Không thể kết nối đến máy chủ." };
+    }
+  }
+};
+
+// Xác nhận thanh toán với voucher
+export const confirmPaymentWithVoucher = async (
+  orderId,
+  voucherData,
+  access_token
+) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/order/confirm-payment-voucher`,
+      { orderId, voucherData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response) {
+      throw {
+        status: error.response.data?.status || "ERR",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi xác nhận thanh toán.",
       };
     } else {
       throw { status: 500, message: "Không thể kết nối đến máy chủ." };

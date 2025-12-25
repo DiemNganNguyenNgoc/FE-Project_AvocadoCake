@@ -11,21 +11,23 @@ import {
   Filter,
   Download,
 } from "lucide-react";
-import { useAdminOrderStore } from "../adminOrderStore";
 import * as StatusService from "../../../../api/services/StatusService";
 
-const OrderTable = ({ onViewOrder, onEditOrder, onDeleteOrder, orders }) => {
+const OrderTable = ({
+  onViewOrder,
+  onEditOrder,
+  onDeleteOrder,
+  orders,
+  selectedOrders,
+  loading,
+  selectOrder,
+  clearSelection,
+  sortBy,
+  sortOrder,
+  setSortBy,
+  setSortOrder,
+}) => {
   const checkboxRef = useRef(null);
-  const {
-    selectedOrders,
-    sortBy,
-    sortOrder,
-    loading,
-    selectOrder,
-    clearSelection,
-    setSortBy,
-    setSortOrder,
-  } = useAdminOrderStore();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +35,6 @@ const OrderTable = ({ onViewOrder, onEditOrder, onDeleteOrder, orders }) => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [priceRangeFilter, setPriceRangeFilter] = useState("all");
   const [statusList, setStatusList] = useState([]);
-
-  console.log("orders in OrderTable", orders);
-  console.log("loading", loading);
 
   // Fetch status list from API
   useEffect(() => {

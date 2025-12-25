@@ -1,13 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "./UserTab.module.css";
 import SideMenuComponent from "../../../components/SideMenuComponent/SideMenuComponent";
 import UserInfoPage from "../UserInfoPage/UserInfoPage";
 import OrderHistoryPage from "../OrderHistoryPage/OrderHistoryPage";
+import { getUserRank } from "../../../api/services/RankService";
 
 const UserTab = () => {
   const user = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("profile"); // Mặc định là trang Thông tin cá nhân
+  const [userRankData, setUserRankData] = useState(null);
+  const [isLoadingRank, setIsLoadingRank] = useState(false);
+  const access_token = localStorage.getItem("access_token");
+
+  // Lấy thông tin rank của user
+  useEffect(() => {
+    const fetchUserRank = async () => {
+      if (!user?.id || !access_token) {
+        return;
+      }
+
+      try {
+        setIsLoadingRank(true);
+        const response = await getUserRank(user.id, access_token);
+        if (response.status === "OK") {
+          setUserRankData(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user rank:", error);
+      } finally {
+        setIsLoadingRank(false);
+      }
+    };
+
+    fetchUserRank();
+  }, [user?.id, access_token]);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -46,6 +73,57 @@ const UserTab = () => {
             <h2 className={styles.userTopName}>
               {user.familyName + " " + user.userName}
             </h2>
+
+            {/* Rank Badge */}
+            {!isLoadingRank && userRankData && (
+              <div
+                className="mt-4 px-5 py-4 rounded-2xl inline-flex flex-col gap-3 cursor-pointer hover:shadow-sm transition-all duration-200 bg-gray-50"
+                onClick={() => (window.location.href = "/rank-benefits")}
+                title="Xem chi tiết rank"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">
+                    {userRankData.currentRank.icon}
+                  </span>
+                  <div className="flex flex-col">
+                    <span
+                      className="font-extrabold text-lg"
+                      style={{ color: userRankData.currentRank.color }}
+                    >
+                      {userRankData.currentRank.rankDisplayName}
+                    </span>
+                    <span className="text-sm text-gray-600 font-semibold">
+                      Giảm {userRankData.discountPercent}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                {userRankData.progressToNextRank?.hasNextRank && (
+                  <div className="w-full">
+                    <div className="flex justify-between text-xs text-gray-600 mb-1">
+                      <span>Tiến độ</span>
+                      <span className="font-semibold">
+                        {userRankData.progressToNextRank.progress}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                          width: `${userRankData.progressToNextRank.progress}%`,
+                          backgroundColor: userRankData.currentRank.color,
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Đến{" "}
+                      {userRankData.progressToNextRank.nextRank.rankDisplayName}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className={styles.sideMenuInfo}>
             <SideMenuComponent

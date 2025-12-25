@@ -5,6 +5,7 @@ import DiscountCalendar from "./partials/DiscountCalendar";
 import TabButton from "./partials/TabButton";
 import AddDiscount from "./usecases/AddDiscount";
 import UpdateDiscount from "./usecases/UpdateDiscount";
+import { Button } from "../../../components/AdminLayout";
 
 const AdminDiscountContent = () => {
   const [activeTab, setActiveTab] = useState("list");
@@ -54,7 +55,7 @@ const AdminDiscountContent = () => {
 
             {/* Tab Navigation */}
             <div className="flex gap-3 p-2 rounded-2xl ">
-              <TabButton
+              <Button
                 isActive={activeTab === "list"}
                 onClick={() => setActiveTab("list")}
                 icon={
@@ -74,8 +75,8 @@ const AdminDiscountContent = () => {
                 }
               >
                 Danh sách
-              </TabButton>
-              <TabButton
+              </Button>
+              <Button
                 isActive={activeTab === "calendar"}
                 onClick={() => setActiveTab("calendar")}
                 icon={
@@ -95,8 +96,8 @@ const AdminDiscountContent = () => {
                 }
               >
                 Lịch
-              </TabButton>
-              <TabButton
+              </Button>
+              <Button
                 isActive={activeTab === "add"}
                 onClick={() => setActiveTab("add")}
                 icon={
@@ -116,7 +117,7 @@ const AdminDiscountContent = () => {
                 }
               >
                 Thêm mới
-              </TabButton>
+              </Button>
             </div>
           </div>
         </div>

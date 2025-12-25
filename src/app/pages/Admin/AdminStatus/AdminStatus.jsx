@@ -14,6 +14,9 @@ import StatusTable from "./partials/StatusTable";
 import AddStatus from "./usecases/AddStatus";
 import UpdateStatus from "./usecases/UpdateStatus";
 import AdminButtonComponent from "../../../components/AdminComponents/AdminButtonComponent";
+import { Button } from "../../../components/AdminLayout";
+import { Plus } from "lucide-react";
+import { Breadcrumb } from "react-bootstrap";
 
 const AdminStatus = ({ onNavigate }) => {
   const dispatch = useDispatch();
@@ -116,27 +119,33 @@ const AdminStatus = ({ onNavigate }) => {
   return (
     <div className="min-h-screen">
       {/* Header với nút Create */}
-      <div className="text-white p-6">
-        <div className="w-full mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-green-500">
-            Quản lý Trạng thái
-          </h1>
-
-          <AdminButtonComponent
-            onClick={() => handleNavigate("add")}
-            label="Create"
-            variant="success"
-            size="large"
-            className="flex items-center gap-3 px-5 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-base"
-          >
-            Create
-          </AdminButtonComponent>
+      <div className="p-6 bg-gray-50 min-h-screen">
+        {/* Breadcrumb */}
+        <div className="mb-6">
+          <Breadcrumb currentPage="Status" />
         </div>
-      </div>
 
-      {/* Main content */}
-      <div className="w-full mx-auto px-6 py-8">
-        {/* Search bar
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Danh sách người dùng
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Quản lý tài khoản người dùng trong hệ thống
+              </p>
+            </div>
+            <Button onClick={() => handleNavigate("add")}>
+              <Plus className="w-4 h-4 mr-2" />
+              Create
+            </Button>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="w-full mx-auto px-6 py-8">
+          {/* Search bar
         <div className="mb-6">
           <SearchBar
             searchTerm={searchTerm}
@@ -145,13 +154,14 @@ const AdminStatus = ({ onNavigate }) => {
           />
         </div> */}
 
-        {/* Status table */}
-        <StatusTable
-          statuses={filteredStatuses}
-          loading={loading}
-          onEdit={(status) => handleNavigate("update", status)}
-          onDelete={handleStatusDeleted}
-        />
+          {/* Status table */}
+          <StatusTable
+            statuses={filteredStatuses}
+            loading={loading}
+            onEdit={(status) => handleNavigate("update", status)}
+            onDelete={handleStatusDeleted}
+          />
+        </div>
       </div>
     </div>
   );

@@ -13,6 +13,11 @@ import {
   Settings,
   Gamepad2,
   LogOut,
+  Cake,
+  Sparkles,
+  Ticket,
+  Award,
+  Newspaper,
 } from "lucide-react";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
 import AdminCategory from "../AdminCategory/AdminCategory";
@@ -27,6 +32,7 @@ import EditLanguage from "../AdminLanguage/usecases/EditLanguage";
 import AdminOrder from "../AdminOrder/AdminOrder";
 import UpdateOrderStatus from "../AdminOrder/usecases/UpdateOrderStatus";
 import ViewOrderDetail from "../AdminOrder/usecases/ViewOrderDetail";
+import CreateOrder from "../AdminOrder/usecases/CreateOrder";
 import AdminUser from "../AdminUser/AdminUser";
 import AdminQuiz from "../AdminQuiz/AdminQuiz";
 import AdminDiscount from "../AdminDiscount";
@@ -39,8 +45,21 @@ import SEOSettings from "../AdminSetting/usecases/SEOSettings";
 import ThemeSettings from "../AdminSetting/usecases/ThemeSettings";
 import NotificationSettings from "../AdminSetting/usecases/NotificationSettings";
 import ShippingSettings from "../AdminSetting/usecases/ShippingSettings";
+import ModelTraining from "../AdminSetting/usecases/ModelTraining";
 import HomeAdminPage from "../HomeAdminPage/HomeAdminPage";
 import AdminDemo from "../AdminDemo/AdminDemo";
+import AdminRecipe from "../AdminRecipe";
+import AdminStratergy from "../AdminStratergy";
+import AdminVoucher from "../AdminVoucher/AdminVoucher";
+import CreateVoucher from "../AdminVoucher/CreateVoucher";
+import CreateBulkVoucher from "../AdminVoucher/CreateBulkVoucher";
+import EditVoucher from "../AdminVoucher/EditVoucher";
+import VoucherDetail from "../AdminVoucher/VoucherDetail";
+import SendEmailVoucher from "../AdminVoucher/SendEmailVoucher";
+import AdminRating from "../AdminRating/AdminRating";
+import AdminRank from "../AdminRank/AdminRank";
+import AdminNews from "../AdminNews/AdminNews";
+import { AddNews, UpdateNews } from "../AdminNews/usecases";
 
 // Configuration cho từng module - dễ mở rộng
 const moduleConfigs = {
@@ -72,6 +91,7 @@ const moduleConfigs = {
   orders: {
     main: AdminOrder,
     subPages: {
+      create: CreateOrder,
       "update-status": UpdateOrderStatus,
       "view-detail": ViewOrderDetail,
       "view-detail/:orderId": ViewOrderDetail,
@@ -88,8 +108,28 @@ const moduleConfigs = {
       theme: ThemeSettings,
       notification: NotificationSettings,
       shipping: ShippingSettings,
+      aiModel: ModelTraining,
     },
     basePath: "/admin/settings",
+  },
+  voucher: {
+    main: AdminVoucher,
+    subPages: {
+      create: CreateVoucher,
+      "create-bulk": CreateBulkVoucher,
+      "edit/:id": EditVoucher,
+      "detail/:id": VoucherDetail,
+      "send-email/:id": SendEmailVoucher,
+    },
+    basePath: "/admin/voucher",
+  },
+  news: {
+    main: AdminNews,
+    subPages: {
+      add: AddNews,
+      update: UpdateNews,
+    },
+    basePath: "/admin/news",
   },
 };
 
@@ -130,6 +170,20 @@ const navItems = [
     component: AdminDiscount,
   },
   {
+    id: "voucher",
+    text: "Vouchers",
+    icon: <Ticket />,
+    path: "/admin/voucher",
+    component: AdminVoucher,
+  },
+  {
+    id: "rank",
+    text: "Ranks",
+    icon: <Award />,
+    path: "/admin/rank",
+    component: AdminRank,
+  },
+  {
     id: "category",
     text: "Category",
     icon: <LibraryBig />,
@@ -165,11 +219,39 @@ const navItems = [
     component: () => <div>Strategies Content</div>,
   },
   {
+    id: "recipes",
+    text: "Recipes",
+    icon: <Cake />,
+    path: "/admin/recipes",
+    component: AdminRecipe,
+  },
+  {
+    id: "news",
+    text: "Tin Tức",
+    icon: <Newspaper />,
+    path: "/admin/newss",
+    component: AdminNews,
+  },
+  {
+    id: "stratergy",
+    text: "AI Strategy",
+    icon: <Sparkles />,
+    path: "/admin/stratergy",
+    component: AdminStratergy,
+  },
+  {
     id: "quiz",
     text: "Quiz",
     icon: <Gamepad2 />,
     path: "/admin/quiz",
     component: AdminQuiz,
+  },
+  {
+    id: "ratings",
+    text: "Ratings",
+    icon: <Sparkles />,
+    path: "/admin/ratings",
+    component: AdminRating,
   },
   {
     id: "settings",

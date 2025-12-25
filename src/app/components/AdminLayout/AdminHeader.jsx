@@ -10,8 +10,11 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { useAdminLanguage } from "../../context/AdminLanguageContext";
+import LanguageSelector from "../../pages/Admin/AdminDashboard/partials/LanguageSelector";
 
 const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
+  const { t } = useAdminLanguage();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,14 +35,6 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // TODO: Implement search functionality
-      console.log("Searching for:", searchQuery);
-    }
   };
 
   const handleAccountSettings = () => {
@@ -106,18 +101,19 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
       {/* Right Section */}
       <div className="flex flex-1 items-center justify-end gap-3 min-[375px]:gap-6">
         {/* Search Box */}
-        <div className="relative w-full max-w-[360px]">
-          <form onSubmit={handleSearch}>
-            <input
-              type="search"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex w-full items-center gap-4 rounded-full border bg-gray-2 py-4 pl-[60px] pr-6 outline-none transition-colors focus-visible:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-dark-6 dark:focus-visible:border-primary text-base"
-            />
-            <Search className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6" />
-          </form>
+        <div className="relative w-full max-w-[320px]">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <input
+            type="text"
+            placeholder={t("search")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-12 pr-5 py-3 w-full border border-stroke dark:border-stroke-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:bg-dark-2 dark:text-white text-base"
+          />
         </div>
+
+        {/* Language Selector */}
+        <LanguageSelector />
 
         {/* Theme Toggle */}
         <button
@@ -210,7 +206,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                       className="w-full flex items-center gap-4 px-4 py-3 text-left text-dark-5 hover:bg-gray-50 rounded-xl transition-colors duration-200 dark:hover:bg-dark-3 dark:text-dark-6 text-base"
                     >
                       <Settings className="h-5 w-5" />
-                      <span>Account Settings</span>
+                      <span>{t("accountSettings")}</span>
                     </button>
 
                     <button
@@ -218,7 +214,7 @@ const AdminHeader = ({ onToggleSidebar, forceCloseMenus }) => {
                       className="w-full flex items-center gap-4 px-4 py-3 text-left text-red-500 hover:bg-red-50 rounded-xl transition-colors duration-200 dark:hover:bg-red-900/20 text-base"
                     >
                       <LogOut className="h-5 w-5" />
-                      <span>Log Out</span>
+                      <span>{t("logout")}</span>
                     </button>
                   </div>
                 </div>

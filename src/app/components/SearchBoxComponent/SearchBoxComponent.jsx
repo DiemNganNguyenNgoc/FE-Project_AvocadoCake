@@ -4,12 +4,16 @@ import "../../assets/css/reset.css";
 import styles from "./SearchBoxComponent.module.css";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import VoiceComponent from "../VoiceComponent/VoiceComponent";
+import ImageSearchComponent from "../ImageSearchComponent/ImageSearchComponent";
 import {
   getSearchSuggestions,
   searchWithHistory,
 } from "../../api/services/SearchHistoryService";
+import { searchByImage } from "../../api/services/ImageSearchService";
+import { useNavigate } from "react-router-dom";
 
 const SearchBoxComponent = ({ onSearch, onButtonClick }) => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -169,6 +173,33 @@ const SearchBoxComponent = ({ onSearch, onButtonClick }) => {
     }
   };
 
+  const handleImageSearch = async (imageFile) => {
+    try {
+      console.log("🖼️ Starting image search...");
+      setIsLoading(true);
+
+      // Call Image Search API
+      const result = await searchByImage(imageFile, 10, 0.5);
+
+      if (result.success && result.data && result.data.length > 0) {
+        console.log("✅ Image search successful:", result.data);
+
+        // Navigate to search results page with image search results
+        navigate("/search/image-results", {
+          state: { results: result.data, searchType: "image" },
+        });
+      } else {
+        console.log("⚠️ No results found");
+        alert("Không tìm thấy sản phẩm tương tự. Vui lòng thử ảnh khác!");
+      }
+    } catch (error) {
+      console.error("❌ Image search error:", error);
+      alert("Có lỗi xảy ra khi tìm kiếm bằng hình ảnh. Vui lòng thử lại!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={styles.search__wrapper}>
       <div className={styles.search__input_container}>
@@ -207,6 +238,7 @@ const SearchBoxComponent = ({ onSearch, onButtonClick }) => {
         )}
       </div>
 
+      <ImageSearchComponent onImageSearch={handleImageSearch} />
       <VoiceComponent onVoiceInput={handleVoiceInput} />
       <ButtonComponent className="search__button" onClick={handleButtonClick}>
         Tìm kiếm

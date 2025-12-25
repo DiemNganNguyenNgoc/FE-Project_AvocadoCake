@@ -280,3 +280,41 @@ export const getPreviousWeekNewProducts = async (access_token) => {
     };
   }
 };
+
+// Track product view (khi scroll 50% card)
+export const trackProductView = async (productId) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/product/track-view/${productId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    // Silent fail - không throw error để không ảnh hưởng UX
+    console.error("Failed to track product view:", error);
+  }
+};
+
+// Track product click (khi user click xem chi tiết)
+export const trackProductClick = async (productId) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL_BACKEND}/product/track-click/${productId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    // Silent fail - không throw error để không ảnh hưởng UX
+    console.error("Failed to track product click:", error);
+  }
+};
