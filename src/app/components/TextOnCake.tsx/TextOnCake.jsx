@@ -51,8 +51,8 @@ export default function TextOnCake({
         className={`px-4 py-2 rounded-lg text-white transition 
           ${
             !newText.trim()
-              ? "bg-sky-300 cursor-not-allowed"
-              : "bg-sky-500 hover:bg-blue-600"
+              ? "bg-green-300 cursor-not-allowed"
+              : "bg-green-600 text-white px-4 py-2 rounded-lg shadow"
           }`}
       >
         Thêm chữ

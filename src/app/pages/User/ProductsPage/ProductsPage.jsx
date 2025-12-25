@@ -376,7 +376,9 @@ const ProductsPage = () => {
           <h1 className="product__title">
             {t("product_page.title").toUpperCase()}
           </h1>
-          <p className="product__current-category">{currentCategoryName}</p>
+          <p className="text-xl mt-4 text-gray-700 font-bold">
+            {currentCategoryName}
+          </p>
         </div>
 
         <div className="flex flex-row gap-4">
