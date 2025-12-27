@@ -3,6 +3,7 @@ import { X, Search, Ticket } from "lucide-react";
 import VoucherCard from "./VoucherCard";
 import { getUserVouchers } from "../../api/services/VoucherService";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const VoucherModal = ({
   isOpen,
@@ -10,6 +11,10 @@ const VoucherModal = ({
   onSelectVoucher,
   selectedVouchers = [],
 }) => {
+  // Lấy thông tin đơn hàng từ Redux để kiểm tra giá trị tối thiểu
+  const orderDetails = useSelector((state) => state.order);
+  const lastOrder = orderDetails.orders?.[orderDetails.orders.length - 1] || {};
+  const currentOrderValue = lastOrder.totalItemPrice || 0;
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ACTIVE");
@@ -67,18 +72,62 @@ const VoucherModal = ({
       // Deselect
       onSelectVoucher(selectedVouchers.filter((v) => v._id !== voucher._id));
     } else {
+      // Kiểm tra giá trị đơn hàng tối thiểu
+      const minOrderValue = voucher.minOrderValue || 0;
+      if (currentOrderValue < minOrderValue) {
+        toast.error(
+          `Giá trị đơn hàng tối thiểu để sử dụng voucher này là ${minOrderValue.toLocaleString()}đ. Đơn hàng hiện tại: ${currentOrderValue.toLocaleString()}đ`
+        );
+        return;
+      }
+
       // Check if same type exists
       const sameTypeExists = selectedVouchers.some(
         (v) => v.voucherType === voucher.voucherType
       );
       if (sameTypeExists) {
-        alert("Chỉ được áp dụng 1 voucher mỗi loại!");
+        toast.warning("Chỉ được áp dụng 1 voucher mỗi loại!");
         return;
       }
+
+      // Thêm voucher và hiển thị thông báo chi tiết về giá giảm
       onSelectVoucher([
         ...selectedVouchers,
         { ...voucher, userVoucherId: userVoucher._id },
       ]);
+
+      // Hiển thị thông báo chi tiết về giá giảm
+      if (voucher.voucherType === "PERCENTAGE") {
+        const percentDiscount =
+          (currentOrderValue * voucher.discountValue) / 100;
+        const maxDiscount = voucher.maxDiscountAmount || Infinity;
+        const actualDiscount = Math.min(percentDiscount, maxDiscount);
+
+        if (percentDiscount > maxDiscount) {
+          toast.success(
+            `Đã chọn voucher! Giảm ${actualDiscount.toLocaleString()}đ (giảm tối đa ${
+              voucher.discountValue
+            }% nhưng không vượt quá ${maxDiscount.toLocaleString()}đ)`
+          );
+        } else {
+          toast.success(
+            `Đã chọn voucher! Giảm ${actualDiscount.toLocaleString()}đ (${
+              voucher.discountValue
+            }%)`
+          );
+        }
+      } else if (voucher.voucherType === "FIXED_AMOUNT") {
+        toast.success(
+          `Đã chọn voucher! Giảm ${voucher.discountValue.toLocaleString()}đ`
+        );
+      } else if (voucher.voucherType === "FREE_SHIPPING") {
+        const shippingPrice = lastOrder?.shippingPrice || 0;
+        toast.success(
+          `Đã chọn voucher! Miễn phí ship ${shippingPrice.toLocaleString()}đ`
+        );
+      } else {
+        toast.success("Đã chọn voucher!");
+      }
     }
   };
 

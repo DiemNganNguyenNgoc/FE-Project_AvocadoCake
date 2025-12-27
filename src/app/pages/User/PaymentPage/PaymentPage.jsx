@@ -283,9 +283,52 @@ const PaymentPage = () => {
           return;
         }
 
+        // Kiểm tra giá trị đơn hàng tối thiểu
+        const currentOrderValue = lastOrder.totalItemPrice || 0;
+        const minOrderValue = voucher.minOrderValue || 0;
+
+        if (currentOrderValue < minOrderValue) {
+          toast.error(
+            `Giá trị đơn hàng tối thiểu để sử dụng voucher này là ${minOrderValue.toLocaleString()}đ. Đơn hàng hiện tại: ${currentOrderValue.toLocaleString()}đ`
+          );
+          return;
+        }
+
         setSelectedVouchers([...selectedVouchers, voucher]);
         setVoucherCode("");
-        toast.success("Áp dụng voucher thành công!");
+
+        // Hiển thị thông báo chi tiết về giá giảm
+        if (voucher.voucherType === "PERCENTAGE") {
+          const percentDiscount =
+            (currentOrderValue * voucher.discountValue) / 100;
+          const maxDiscount = voucher.maxDiscountAmount || Infinity;
+          const actualDiscount = Math.min(percentDiscount, maxDiscount);
+
+          if (percentDiscount > maxDiscount) {
+            toast.success(
+              `Áp dụng voucher thành công! Giảm ${actualDiscount.toLocaleString()}đ (giảm tối đa ${
+                voucher.discountValue
+              }% nhưng không vượt quá ${maxDiscount.toLocaleString()}đ)`
+            );
+          } else {
+            toast.success(
+              `Áp dụng voucher thành công! Giảm ${actualDiscount.toLocaleString()}đ (${
+                voucher.discountValue
+              }%)`
+            );
+          }
+        } else if (voucher.voucherType === "FIXED_AMOUNT") {
+          toast.success(
+            `Áp dụng voucher thành công! Giảm ${voucher.discountValue.toLocaleString()}đ`
+          );
+        } else if (voucher.voucherType === "FREE_SHIPPING") {
+          const shippingPrice = lastOrder.shippingPrice || 0;
+          toast.success(
+            `Áp dụng voucher thành công! Miễn phí ship ${shippingPrice.toLocaleString()}đ`
+          );
+        } else {
+          toast.success("Áp dụng voucher thành công!");
+        }
       } else {
         toast.error(response.message || "Mã voucher không hợp lệ!");
       }
