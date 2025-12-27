@@ -301,7 +301,7 @@ const SmartRecipeDisplay = ({ data }) => {
 
         {/* Notes */}
         {recipe.notes && (
-          <div className="bg-yellow-50 rounded-xl p-4 border-2 border-yellow-300">
+          <div className="mb-6 bg-yellow-50 rounded-xl p-4 border-2 border-yellow-300">
             <h4 className="text-lg font-bold text-avocado-brown-100 mb-3 flex items-center gap-2">
               <Star className="w-5 h-5 text-yellow-600" />
               Lưu Ý Quan Trọng
@@ -311,6 +311,37 @@ const SmartRecipeDisplay = ({ data }) => {
                 {recipe.notes}
               </p>
             </div>
+          </div>
+        )}
+
+        {/* Image Prompt for AI Generation */}
+        {recipe.image_prompt && (
+          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border-2 border-blue-300">
+            <h4 className="text-lg font-bold text-avocado-brown-100 mb-3 flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              AI Image Prompt (Professional)
+            </h4>
+            <div className="bg-white rounded-lg p-4 border-2 border-blue-200">
+              <p className="text-gray-700 leading-relaxed text-sm font-mono whitespace-pre-line">
+                {recipe.image_prompt}
+              </p>
+            </div>
+            <p className="text-xs text-blue-600 mt-2 italic flex items-center gap-1">
+              <Sparkles className="w-3 h-3" />
+              Dùng prompt này để generate hình ảnh chuyên nghiệp cho recipe
+            </p>
           </div>
         )}
       </CollapsibleSection>
@@ -471,38 +502,57 @@ const SmartRecipeDisplay = ({ data }) => {
       )}
 
       {/* 4. MARKETING STRATEGY */}
-      {marketing_strategy && (
+      {(marketing_strategy || recipe.marketing_caption) && (
         <CollapsibleSection
           title="Chiến Lược Marketing"
           icon={Megaphone}
           isExpanded={expandedSections.marketing}
           onToggle={() => toggleSection("marketing")}
         >
-          {/* Marketing Caption */}
-          {(recipe.marketing_caption || marketing_strategy.caption_style) && (
-            <div className="mb-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4 border-2 border-pink-300">
-              <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
-                <Megaphone className="w-5 h-5 text-pink-600" />
-                {recipe.marketing_caption
-                  ? "Caption Marketing (Viral)"
-                  : "Style Caption Gợi Ý"}
+          {/* Marketing Caption - PRIORITY DISPLAY */}
+          {recipe.marketing_caption && (
+            <div className="mb-4 bg-gradient-to-r from-pink-50 via-purple-50 to-pink-50 rounded-xl p-5 border-2 border-pink-400">
+              <h5 className="font-bold text-lg text-avocado-brown-100 mb-3 flex items-center gap-2">
+                <Megaphone className="w-6 h-6 text-pink-600" />
+                Caption Marketing (Copy & Post) 🔥
               </h5>
-              <div className="bg-white rounded-lg p-4 border-2 border-pink-200">
-                <p className="text-avocado-brown-100 leading-relaxed whitespace-pre-line font-medium">
-                  {recipe.marketing_caption || marketing_strategy.caption_style}
+              <div className="bg-white rounded-lg p-5 border-2 border-pink-300">
+                <p className="text-avocado-brown-100 text-base leading-relaxed whitespace-pre-line font-medium">
+                  {recipe.marketing_caption}
                 </p>
               </div>
-              {!recipe.marketing_caption && (
-                <p className="text-sm text-purple-600 mt-2 italic">
-                  💡 Gợi ý: Backend chưa sinh caption cụ thể. Đây là style tham
-                  khảo.
+              <div className="mt-3 flex items-center gap-2 text-sm">
+                <span className="px-3 py-1 bg-pink-200 text-pink-800 rounded-full font-semibold flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  Ready to Post
+                </span>
+                <span className="text-pink-600 font-medium">
+                  📱 Copy caption này để đăng lên social media
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Caption Style (fallback) */}
+          {!recipe.marketing_caption && marketing_strategy?.caption_style && (
+            <div className="mb-4 bg-purple-50 rounded-xl p-4 border-2 border-purple-300">
+              <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
+                <Megaphone className="w-5 h-5 text-purple-600" />
+                Style Caption Gợi Ý
+              </h5>
+              <div className="bg-white rounded-lg p-4 border border-purple-200">
+                <p className="text-avocado-brown-70 leading-relaxed">
+                  {marketing_strategy.caption_style}
                 </p>
-              )}
+              </div>
+              <p className="text-sm text-purple-600 mt-2 italic">
+                💡 Gợi ý: Sử dụng style này làm template cho caption
+              </p>
             </div>
           )}
 
           {/* Primary Channels */}
-          {marketing_strategy.primary_channel && (
+          {marketing_strategy?.primary_channel && (
             <div className="mb-4">
               <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
                 <Instagram className="w-5 h-5 text-avocado-green-100" />
@@ -522,7 +572,7 @@ const SmartRecipeDisplay = ({ data }) => {
           )}
 
           {/* Posting Time */}
-          {marketing_strategy.posting_time && (
+          {marketing_strategy?.posting_time && (
             <div className="mb-4 bg-white rounded-xl p-4 border-2 border-avocado-brown-30">
               <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-avocado-green-100" />
@@ -535,7 +585,7 @@ const SmartRecipeDisplay = ({ data }) => {
           )}
 
           {/* Hashtags */}
-          {marketing_strategy.hashtags &&
+          {marketing_strategy?.hashtags &&
             marketing_strategy.hashtags.length > 0 && (
               <div className="mb-4">
                 <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
@@ -556,7 +606,7 @@ const SmartRecipeDisplay = ({ data }) => {
             )}
 
           {/* Pricing Strategy */}
-          {marketing_strategy.pricing_strategy && (
+          {marketing_strategy?.pricing_strategy && (
             <div className="bg-yellow-50 rounded-xl p-4 border-2 border-yellow-300 mb-4">
               <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-yellow-600" />
@@ -584,7 +634,7 @@ const SmartRecipeDisplay = ({ data }) => {
           )}
 
           {/* Promotion Ideas */}
-          {marketing_strategy.promotion_ideas &&
+          {marketing_strategy?.promotion_ideas &&
             marketing_strategy.promotion_ideas.length > 0 && (
               <div>
                 <h5 className="font-semibold text-avocado-brown-100 mb-2 flex items-center gap-2">
