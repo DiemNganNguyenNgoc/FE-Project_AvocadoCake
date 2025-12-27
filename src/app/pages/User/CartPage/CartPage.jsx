@@ -55,10 +55,12 @@ const CartPage = () => {
   };
 
   /* ================= TOTAL ================= */
-  const totalAmount = products.reduce((acc, product) => {
-    const discountedPrice = getDiscountedPrice(product.id, product.price);
-    return acc + discountedPrice * product.quantity;
-  }, 0);
+  const totalAmount = products
+    .filter((product) => selectedProducts.includes(product.id))
+    .reduce((total, product) => {
+      const price = getDiscountedPrice(product.id, product.price);
+      return total + price * product.quantity;
+    }, 0);
 
   /* ================= SELECT ================= */
   const toggleSelectRow = (id) => {
@@ -106,7 +108,7 @@ const CartPage = () => {
 
       {/* TABLE */}
       <div className="relative">
-        <div className="overflow-x-auto bg-white rounded-2xl border shadow-sm">
+        <div className="overflow-x-auto bg-white rounded-2xl border shadow-sm min-w-full">
           <table className="min-w-full bg-white text-lg text-gray-800 border border-gray-200 rounded-lg overflow-hidden">
             <thead className="bg-white border-b border-gray-200">
               <tr className="uppercase tracking-wide text-lg font-semibold text-gray-600">

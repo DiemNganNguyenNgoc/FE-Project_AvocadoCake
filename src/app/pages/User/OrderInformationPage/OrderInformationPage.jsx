@@ -326,286 +326,347 @@ const OrderInformationPage = () => {
           <h1 className="title"> Thông tin đơn hàng</h1>
         </div>
       </div>
-      <div className="product_area">
-        <table className="min-w-full text-2xl text-gray-700">
-          <thead className="bg-gray-100 uppercase text-2xl">
-            <tr>
-              <th className="p-3 text-left">Thông tin sản phẩm</th>
-              <th className="p-3 text-left hidden md:table-cell">Đơn giá</th>
-              <th className="p-3 text-left hidden md:table-cell">Số lượng</th>
-              <th className="p-3 text-left hidden md:table-cell">Thành tiền</th>
-            </tr>
-          </thead>
+      <div className="bg-white border shadow-sm px-5 py-2">
+        <div className="mt-10  rounded-3xl  overflow-hidden">
+          <table className="min-w-full text-base text-gray-700">
+            {/* HEADER */}
+            <thead className="bg-gray-50 text-sm uppercase tracking-wide text-gray-500">
+              <tr>
+                <th className="px-6 py-4 text-left">Sản phẩm</th>
+                <th className="px-6 py-4 text-right hidden md:table-cell">
+                  Đơn giá
+                </th>
+                <th className="px-6 py-4 text-center hidden md:table-cell">
+                  Số lượng
+                </th>
+                <th className="px-6 py-4 text-right hidden md:table-cell">
+                  Thành tiền
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {selectedProducts.map((product) => {
-              const discount = getDiscountValue(product.id);
-              const priceNum = toNumber(product.price);
-              const finalUnit = priceNum * (1 - discount / 100);
-              const lineTotal = finalUnit * product.quantity;
+            {/* BODY */}
+            <tbody className="divide-y">
+              {selectedProducts.map((product) => {
+                const discount = getDiscountValue(product.id);
+                const priceNum = toNumber(product.price);
+                const finalUnit = priceNum * (1 - discount / 100);
+                const lineTotal = finalUnit * product.quantity;
 
-              return (
-                <tr
-                  key={product.id}
-                  className="border-b hover:bg-gray-50 transition"
-                >
-                  <td className="p-3 align-top">
-                    <ProductInfor
-                      image={product.img}
-                      name={product.title}
-                      size={product.size || "Không có size"}
-                    />
+                return (
+                  <tr key={product.id} className="hover:bg-gray-50 transition">
+                    {/* PRODUCT INFO */}
+                    <td className="px-6 py-5 align-top">
+                      <ProductInfor
+                        size={product.size ? `${product.size} cm` : ""}
+                        image={product.img}
+                        name={product.title}
+                      />
 
-                    {/* Mobile layout info */}
-                    <div className="sm:hidden mt-2 text-gray-500 text-xl">
-                      <p>Giá: {finalUnit.toLocaleString()} VND</p>
-                      <p>Số lượng: {product.quantity}</p>
-                      <p>Thành tiền: {lineTotal.toLocaleString()} VND</p>
-                    </div>
-                  </td>
+                      {/* MOBILE INFO */}
+                      <div className="md:hidden mt-3 space-y-1 text-sm text-gray-500 text-xl">
+                        <p>
+                          Giá:
+                          <span className="ml-1 font-medium text-gray-800">
+                            {finalUnit.toLocaleString()} VND
+                          </span>
+                        </p>
+                        <p>Số lượng: {product.quantity}</p>
+                        <p className="font-semibold text-gray-800">
+                          Thành tiền: {lineTotal.toLocaleString()} VND
+                        </p>
+                      </div>
+                    </td>
 
-                  {/* Đơn giá */}
-                  <td className="p-3 hidden md:table-cell">
-                    {finalUnit.toLocaleString()} VND
-                  </td>
+                    {/* UNIT PRICE */}
+                    <td className="px-6 py-5 align-middle text-right hidden md:table-cell text-xl">
+                      {finalUnit.toLocaleString()} VND
+                    </td>
 
-                  {/* Số lượng */}
-                  <td className="p-3 hidden md:table-cell">
-                    x {product.quantity}
-                  </td>
+                    {/* QUANTITY */}
+                    <td className="px-6 py-5 align-middle text-center hidden md:table-cell text-xl">
+                      x {product.quantity}
+                    </td>
 
-                  {/* Thành tiền */}
-                  <td className="p-3 hidden md:table-cell font-semibold">
-                    {lineTotal.toLocaleString()} VND
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+                    {/* LINE TOTAL */}
+                    <td className="px-6 py-5 align-middle text-right font-semibold hidden md:table-cell text-xl">
+                      {lineTotal.toLocaleString()} VND
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
 
-          <tfoot>
-            <tr className="border-t">
-              <td className="p-3 text-left font-semibold">Phí vận chuyển:</td>
-              <td colSpan="3" className="p-3 text-right font-bold text-2xl">
-                {shippingPrice.toLocaleString()} VND
-              </td>
-            </tr>
+            {/* FOOTER */}
+            <tfoot className="bg-gray-50">
+              <tr>
+                <td className="px-6 py-4 font-medium text-left">
+                  Phí vận chuyển
+                </td>
+                <td colSpan="3" className="px-6 py-4 text-right font-semibold">
+                  {shippingPrice.toLocaleString()} VND
+                </td>
+              </tr>
 
-            <tr className="border-t bg-gray-50">
-              <td colSpan="3" className="p-3 text-left font-bold text-2xl">
-                Tổng tiền:
-              </td>
-              <td className="p-3 text-right font-bold text-2xl">
-                {totalPrice.toLocaleString()} VND
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div className="question" style={{ margin: "10px 50px" }}>
-        <p className="login-question">
-          {shippingPrice === 30000 && (
-            <span>
-              Bạn đã có tài khoản?{" "}
-              <Link to="/login" className="login-link" target="blank">
-                Đăng nhập
-              </Link>
+              <tr className="text-2xl">
+                <td colSpan="3" className="px-6 py-5 text-left font-bold">
+                  Tổng thanh toán
+                </td>
+                <td className="px-6 py-5 text-right font-semibold text-red-600">
+                  {totalPrice.toLocaleString()} VND
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div className="question" style={{ margin: "10px 50px" }}>
+          <p className="login-question">
+            {shippingPrice === 30000 && (
               <span>
-                {" "}
-                để&nbsp;<strong>miễn phí vận chuyển</strong>
+                Bạn đã có tài khoản?{" "}
+                <Link to="/login" className="login-link" target="blank">
+                  Đăng nhập
+                </Link>
+                <span>
+                  {" "}
+                  để&nbsp;<strong>miễn phí vận chuyển</strong>
+                </span>
               </span>
-            </span>
-          )}
-        </p>
-      </div>
+            )}
+          </p>
+        </div>
 
-      <div>
-        {/* =====Dia chi giao hang===== */}
-        <div className="shipping-info">
-          <div className="input-name">
-            <div
-              style={{
-                display: "flex",
-                padding: "10px 50px",
-                justifyContent: "space-between",
-              }}
-            >
-              <div>
-                <h2>Họ</h2>
-                <FormComponent
-                  className="input-familyName"
-                  name="family"
+        <div>
+          {/* =====Dia chi giao hang===== */}
+          {/* ================= SHIPPING INFO ================= */}
+          <div className=" rounded-3xl  p-8 mt-10 space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Địa chỉ giao hàng
+            </h2>
+
+            {/* HỌ & TÊN */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">Họ</label>
+                <input
                   type="text"
-                  placeholder="Nhập họ"
+                  placeholder="Nguyễn"
                   value={shippingAddress.familyName}
                   onChange={handleInputChange("familyName")}
-                ></FormComponent>
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
               </div>
-              <div>
-                <h2>Tên</h2>
-                <FormComponent
-                  className="input-name"
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">Tên</label>
+                <input
                   type="text"
-                  placeholder="Nhập tên"
+                  placeholder="Văn A"
                   value={shippingAddress.userName}
                   onChange={handleInputChange("userName")}
-                ></FormComponent>
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
               </div>
             </div>
-          </div>
-          <div className="input-phone-email">
-            <div
-              style={{
-                display: "flex",
-                padding: "10px 50px",
-                justifyContent: "space-between",
-              }}
-            >
-              <div>
-                <h2>Số điện thoại</h2>
-                <FormComponent
-                  className="input-phone"
-                  type="text"
-                  placeholder="Nhập số điện thoại"
+
+            {/* PHONE & EMAIL */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Số điện thoại
+                </label>
+                <input
+                  type="tel"
+                  placeholder="0123 456 789"
                   value={shippingAddress.userPhone}
                   onChange={handleInputChange("userPhone")}
-                ></FormComponent>
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
               </div>
-              <div>
-                <h2>Email</h2>
-                <FormComponent
-                  className="input-email"
-                  type="text"
-                  placeholder="Nhập email"
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="email@example.com"
                   value={shippingAddress.userEmail}
                   onChange={handleInputChange("userEmail")}
-                ></FormComponent>
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
+              </div>
+            </div>
+
+            {/* ĐỊA CHỈ */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700">
+                Địa chỉ cụ thể
+              </label>
+              <input
+                type="text"
+                placeholder="Số nhà, tên đường, hẻm..."
+                value={shippingAddress.userAddress}
+                onChange={handleInputChange("userAddress")}
+                className="w-full rounded-full border border-gray-300 px-5 py-3
+                 focus:outline-none focus:ring-1 focus:ring-slate-400"
+              />
+            </div>
+
+            {/* CITY / DISTRICT / WARD */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* CITY – ONLY HCM */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Tỉnh / Thành phố
+                </label>
+                <select
+                  value={79}
+                  disabled
+                  className="w-full rounded-full  -gray-300 px-5 py-3 bg-gray-100
+                   cursor-not-allowed"
+                >
+                  <option value={79}>Thành phố Hồ Chí Minh</option>
+                </select>
+              </div>
+
+              {/* DISTRICT */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Quận / Huyện
+                </label>
+                <select
+                  value={shippingAddress.userDistrict}
+                  onChange={handleDistrictChange}
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                >
+                  <option value="" disabled>
+                    Chọn quận / huyện
+                  </option>
+                  {districts.map((district) => (
+                    <option key={district.code} value={district.code}>
+                      {district.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* WARD */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Phường / Xã
+                </label>
+                <select
+                  value={shippingAddress.userWard || ""}
+                  onChange={handleWardChange}
+                  disabled={loadingWards}
+                  className="w-full rounded-full  border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400
+                   disabled:bg-gray-100"
+                >
+                  <option value="" disabled>
+                    {loadingWards ? "Đang tải..." : "Chọn phường / xã"}
+                  </option>
+                  {wards.map((ward) => (
+                    <option key={ward.code} value={ward.code}>
+                      {ward.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
-          <div className="address" style={{ padding: "10px 50px" }}>
-            <h2>Địa chỉ</h2>
-            <FormComponent
-              // className="input-address"
-              type="text"
-              placeholder="Nhập địa chỉ giao hàng: Số nhà, hẻm, đường,..."
-              style={{ width: "100%" }}
-              value={shippingAddress.userAddress}
-              onChange={handleInputChange("userAddress")}
-            ></FormComponent>
-          </div>
-          <div className="comboBoxHolder">
-            <div className="ProvinceHolder">
-              <select
-                className="Province"
-                value={shippingAddress.userCity}
-                onChange={handleCityChange}
-              >
-                <option value="" disabled>
-                  Chọn tỉnh
-                </option>
-                {cities.map((city) => (
-                  <option key={city.code} value={city.code}>
-                    {city.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="DistrictHolder">
-              <select
-                className="District"
-                value={shippingAddress.userDistrict}
-                onChange={handleDistrictChange}
-              >
-                <option value="" disabled>
-                  Chọn quận/huyện
-                </option>
-                {districts.map((district) => (
-                  <option key={district.code} value={district.code}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="VillageHolder">
-              <select
-                className="Village"
-                value={shippingAddress.userWard || ""}
-                onChange={handleWardChange}
-                disabled={loadingWards}
-              >
-                <option value="" disabled>
-                  {loadingWards ? "Đang tải..." : "Chọn phường/xã"}
-                </option>
-                {wards.map((ward) => (
-                  <option key={ward.code} value={ward.code}>
-                    {ward.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
 
-        {/* =====Thoi gian giao hang==== */}
-        <div className="DeliveryTimeHolder">
-          <p className="ThoiGian">Thời gian giao hàng dự kiến:</p>
-          <div className="d-flex" style={{ gap: "50px", margin: "20px 0" }}>
-            <div>
-              <h3>Chọn giờ:</h3>
-              <input
-                type="time"
-                className="clock"
-                value={deliveryTime}
-                onChange={handleDeliveryTimeChange}
-              ></input>
-            </div>
-            <div>
-              <h3>Chọn ngày:</h3>
-              <input
-                type="date"
-                id="datePicker"
-                className="Datepicker"
-                value={deliveryDate}
-                onChange={handleDeliveryDateChange}
-              />
+          {/* ================= THỜI GIAN GIAO HÀNG ================= */}
+          <div className=" rounded-3xl   p-8 mt-10">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+              Thời gian giao hàng dự kiến
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* CHỌN NGÀY */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Ngày giao hàng
+                </label>
+                <input
+                  type="date"
+                  value={deliveryDate}
+                  onChange={handleDeliveryDateChange}
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
+              </div>
+
+              {/* CHỌN GIỜ */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Giờ giao hàng
+                </label>
+                <input
+                  type="time"
+                  step={1800} // ✅ chỉ cho chọn 00 hoặc 30
+                  value={deliveryTime}
+                  onChange={handleDeliveryTimeChange}
+                  className="w-full rounded-full border border-gray-300 px-5 py-3
+                   focus:outline-none focus:ring-1 focus:ring-slate-400"
+                />
+                <p className="text-lg text-gray-500">
+                  Chỉ nhận giao theo khung giờ chẵn (00 hoặc 30)
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ============Ghi chu don hang======== */}
-        <div className="Note" style={{ margin: "50px 50px" }}>
-          <div>
-            <h2>Ghi chú đơn hàng:</h2>
-            <div>
-              <textarea
-                rows="5"
-                cols="50"
-                placeholder="Nhập ghi chú đơn hàng....."
-                className="inputNote p-4"
-                value={orderNote}
-                onChange={handleOrderNoteChange}
-              ></textarea>
-            </div>
+          {/* ================= GHI CHÚ ĐƠN HÀNG ================= */}
+          <div className=" rounded-3xl   p-8 mt-10">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Ghi chú đơn hàng
+            </h2>
+
+            <textarea
+              rows={4}
+              placeholder="Ví dụ: giao giờ hành chính, gọi trước khi giao..."
+              value={orderNote}
+              onChange={handleOrderNoteChange}
+              className="w-full rounded-2xl border border-gray-300 px-5 py-4
+               focus:outline-none focus:ring-1 focus:ring-slate-400 resize-none"
+            />
           </div>
-        </div>
 
-        {/* ================= Button======== */}
-        <div className="Button-area">
-          <button className="chinhsachBtn">
-            <a href="/chinhsach" target="_blank" className="chinhsach">
-              Chính sách đơn hàng
-            </a>
-          </button>
-          <div className="Btn_holder">
-            <div>
-              <ButtonComponent onClick={handleClickBack}>
-                Giỏ hàng
-              </ButtonComponent>
+          {/* ================= ACTION BUTTON ================= */}
+          <div className="mt-14  rounded-3xl  px-8 py-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              {/* POLICY */}
+              <a
+                href="/chinhsach"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-lg text-gray-500 hover:text-black underline underline-offset-4"
+              >
+                Chính sách đơn hàng
+              </a>
+
+              {/* ACTION BUTTONS */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <ButtonComponent onClick={handleClickBack} className="px-8">
+                  Giỏ hàng
+                </ButtonComponent>
+
+                <ButtonComponent
+                  className="Next_btn px-12"
+                  onClick={handleClickNext}
+                >
+                  Thanh toán
+                </ButtonComponent>
+              </div>
             </div>
-            <ButtonComponent className="Next_btn" onClick={handleClickNext}>
-              Thanh toán
-            </ButtonComponent>
           </div>
         </div>
       </div>
