@@ -11,7 +11,7 @@ const CakeSelector = ({ cakes, selectedCake, onSelect }) => {
 
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-3 border rounded-lg p-2 bg-white shadow-sm w-full"
+        className="flex items-center gap-3 border rounded-xl p-2 bg-white shadow-sm w-full"
       >
         {selectedCake ? (
           <>

@@ -94,16 +94,20 @@ const CartPage = () => {
   return (
     <div className="max-w-screen-xl mx-auto px-4 pb-28">
       {/* HEADER */}
-      <div className="flex items-center gap-3 py-6">
+      <div className="flex items-center justify-between py-6">
         <button
           onClick={() => navigate("/products")}
           className="p-2 rounded-full hover:bg-gray-100 transition"
         >
           <BackIconComponent />
         </button>
-        <h1 className="text-2xl font-bold tracking-wide text-gray-800">
-          Giỏ hàng
+
+        <h1 className="text-[40px] font-bold tracking-wide text-gray-800">
+          GIỎ HÀNG CỦA BẠN
         </h1>
+
+        {/* ghost block để cân */}
+        <div className="w-10" />
       </div>
 
       {/* TABLE */}

@@ -275,7 +275,7 @@ const HeaderComponent = () => {
   return (
     <>
       <div className={`${styles["bg-white"]} ${styles["bg-shadow"]}`}>
-        <div className="container-xl">
+        <div className="container-xl pb-2">
           <div className={styles.navbar}>
             <div className="container-fluid">
               {/* nav top */}
@@ -681,7 +681,7 @@ const HeaderComponent = () => {
                         : ""
                     }`}
                   >
-                    Rank
+                    Hạng
                   </Link>
                   <Link
                     to="/design-cake"
