@@ -23,7 +23,7 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
           value={selectedTopping}
           onChange={(e) => setSelectedTopping(e.target.value)}
           onKeyDown={handleKeyPress}
-          className="border rounded-lg p-2 bg-white shadow-sm flex-1 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="border rounded-xl p-2 bg-white shadow-sm flex-1 focus:outline-none focus:ring-2 focus:ring-pink-400"
         >
           <option value="">-- Chọn topping --</option>
           {toppings.map((topping) => (
@@ -35,7 +35,7 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
         <button
           onClick={handleAdd}
           disabled={!selectedTopping}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg shadow"
+          className="bg-lime-400 text-avocado-brown-100 px-4 py-2 rounded-full shadow disabled:cursor-not-allowed disabled:opacity-50"
         >
           Thêm
         </button>

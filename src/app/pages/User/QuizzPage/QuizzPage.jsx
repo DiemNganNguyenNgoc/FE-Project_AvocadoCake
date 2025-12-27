@@ -66,7 +66,7 @@ const QuizzPage = () => {
           questionId: currentQuestion._id,
           answer,
           customAnswer: answer === "custom" ? customAnswer : null,
-          
+
           sessionId: sessionId,
         },
       ];
@@ -219,6 +219,10 @@ const QuizzPage = () => {
 
   return (
     <div className="container-xl">
+      <h1 className="productadmin__title text-center">GỢI Ý</h1>
+      <p className="text-xl justify-center text-avocado-brown-100 mb-6 text-center">
+        Trả lời một vài câu hỏi để nhận gợi ý bánh phù hợp với bạn nhé!
+      </p>
       <div className={styles.quizContainer}>
         <div className={styles.progress}>
           Câu hỏi {currentIndex + 1}/{questions.length}
