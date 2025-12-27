@@ -73,7 +73,7 @@ export const getDetaillsCategory = async (id, access_token) => {
 export const getAllCategory = async () => {
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL_BACKEND}/category/get-all-category`
+      `${process.env.REACT_APP_API_URL_BACKEND}/category/get-all-category?limit=1000`
     );
     return res.data;
   } catch (error) {

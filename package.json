@@ -93,7 +93,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://proj1-be.onrender.com/api",
+  "proxy": "http://localhost:3001/api",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@tailwindcss/postcss": "^4.1.12",

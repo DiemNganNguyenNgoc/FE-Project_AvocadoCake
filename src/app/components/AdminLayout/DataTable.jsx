@@ -138,7 +138,11 @@ const DataTable = ({
                     className="px-8 py-5 whitespace-nowrap text-xl text-gray-900 dark:text-white"
                   >
                     {column.render
-                      ? column.render(row[column.key], row)
+                      ? column.render(
+                          row[column.key],
+                          row,
+                          startIndex + rowIndex
+                        )
                       : row[column.key]}
                   </td>
                 ))}

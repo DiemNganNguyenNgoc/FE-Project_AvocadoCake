@@ -129,7 +129,7 @@ const moduleConfigs = {
       add: AddNews,
       update: UpdateNews,
     },
-    basePath: "/admin/news",
+    basePath: "/admin/newss",
   },
 };
 
