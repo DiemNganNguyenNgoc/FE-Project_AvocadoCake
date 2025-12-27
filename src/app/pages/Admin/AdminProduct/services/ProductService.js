@@ -1,136 +1,76 @@
-import axios from "axios";
-import { getDetaillsCategory } from "../../../../api/services/CategoryService";
+import {
+  getAllProduct,
+  getDetailsproduct,
+  createProduct as createProductAPI,
+  updateProduct as updateProductAPI,
+  deleteProduct as deleteProductAPI,
+  searchProducts as searchProductsAPI,
+  getProductsByCategory as getProductsByCategoryAPI,
+} from "../../../../api/services/productServices";
+import { getAllCategory } from "../../../../api/services/CategoryService";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL_BACKEND || "http://localhost:3001/api";
-
-// Create axios instance with default config
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Add request interceptor to include auth token
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      config.headers.token = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Add response interceptor for error handling
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      localStorage.removeItem("access_token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
-
+/**
+ * Product Service for Admin Panel
+ * Wrapper around existing API services with consistent interface
+ */
 class ProductService {
+  // Helper to get access token
+  static getAccessToken() {
+    return localStorage.getItem("access_token");
+  }
+
   // Get all products
   static async getProducts() {
     try {
-      const response = await apiClient.get("/product/get-all-product");
-      return response.data;
+      const token = this.getAccessToken();
+      const response = await getAllProduct(token);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch products"
-      );
+      throw new Error(error.message || "Failed to fetch products");
     }
   }
 
   // Get product by ID
   static async getProductById(id) {
     try {
-      const response = await apiClient.get(`/product/get-detail-product/${id}`);
-      return response.data;
+      const token = this.getAccessToken();
+      const response = await getDetailsproduct(id, token);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch product"
-      );
+      throw new Error(error.message || "Failed to fetch product");
     }
   }
 
   // Create new product
   static async createProduct(productData) {
     try {
-      const formData = new FormData();
-
-      // Append all product fields to FormData
-      Object.keys(productData).forEach((key) => {
-        if (productData[key] !== null && productData[key] !== undefined) {
-          formData.append(key, productData[key]);
-        }
-      });
-
-      const response = await apiClient.post(
-        "/product/create-product",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return response.data;
+      const token = this.getAccessToken();
+      const response = await createProductAPI(productData, token);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to create product"
-      );
+      throw new Error(error.message || "Failed to create product");
     }
   }
 
   // Update product
   static async updateProduct(id, productData) {
     try {
-      const formData = new FormData();
-
-      // Append all product fields to FormData
-      Object.keys(productData).forEach((key) => {
-        if (productData[key] !== null && productData[key] !== undefined) {
-          formData.append(key, productData[key]);
-        }
-      });
-
-      const response = await apiClient.put(
-        `/product/update-product/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return response.data;
+      const token = this.getAccessToken();
+      const response = await updateProductAPI(id, token, productData);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to update product"
-      );
+      throw new Error(error.message || "Failed to update product");
     }
   }
 
   // Delete product
   static async deleteProduct(id) {
     try {
-      const response = await apiClient.delete(`/product/delete-product/${id}`);
-      return response.data;
+      const token = this.getAccessToken();
+      const response = await deleteProductAPI(id, token);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to delete product"
-      );
+      throw new Error(error.message || "Failed to delete product");
     }
   }
 
@@ -154,95 +94,122 @@ class ProductService {
   // Search products
   static async searchProducts(query) {
     try {
-      const response = await apiClient.get(
-        `/product/search?search=${encodeURIComponent(query)}`
-      );
-      return response.data;
+      const response = await searchProductsAPI(query);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to search products"
-      );
+      throw new Error(error.message || "Failed to search products");
     }
   }
 
   // Get products by category
   static async getProductsByCategory(categoryId) {
     try {
-      const response = await apiClient.get(
-        `/product/get-product-by-category/${categoryId}`
-      );
-      return response.data;
+      const response = await getProductsByCategoryAPI(categoryId);
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch products by category"
-      );
+      throw new Error(error.message || "Failed to fetch products by category");
     }
   }
 
   // Get all categories
   static async getCategories() {
     try {
-      const response = await apiClient.get("/category/get-all-category");
-      return response.data;
+      const response = await getAllCategory();
+      return response;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to fetch categories"
-      );
+      throw new Error(error.message || "Failed to fetch categories");
     }
   }
 
-  // Upload product image
+  // Upload product image (kept as-is, not in productServices)
   static async uploadImage(file) {
     try {
       const formData = new FormData();
       formData.append("image", file);
+      const token = this.getAccessToken();
 
-      const response = await apiClient.post("/upload/image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to upload image"
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL_BACKEND}/upload/image`,
+        {
+          method: "POST",
+          headers: {
+            token: `Bearer ${token}`,
+          },
+          body: formData,
+        }
       );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(error.message || "Failed to upload image");
     }
   }
 
-  // Toggle product status (if backend supports it)
+  // Toggle product status (kept for future use)
   static async toggleProductStatus(id, isActive) {
     try {
-      const response = await apiClient.patch(`/product/toggle-status/${id}`, {
-        isActive,
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to toggle product status"
+      const token = this.getAccessToken();
+      // This would need to be added to productServices if needed
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL_BACKEND}/product/toggle-status/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ isActive }),
+        }
       );
+
+      if (!response.ok) {
+        throw new Error("Failed to toggle product status");
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(error.message || "Failed to toggle product status");
     }
   }
 
-  // Toggle product visibility (hide/show)
+  // Toggle product visibility (kept for future use)
   static async toggleProductVisibility(id) {
     try {
-      const response = await apiClient.patch(
-        `/product/toggle-visibility/${id}`
+      const token = this.getAccessToken();
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL_BACKEND}/product/toggle-visibility/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
+          },
+        }
       );
-      return response.data;
+
+      if (!response.ok) {
+        throw new Error("Failed to toggle product visibility");
+      }
+
+      return await response.json();
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Failed to toggle product visibility"
-      );
+      throw new Error(error.message || "Failed to toggle product visibility");
     }
   }
 
+  // Fetch category by ID (already using existing API)
   static async fetchCategoryById(id) {
     try {
-      const accessToken = localStorage.getItem("access_token");
-      const response = await getDetaillsCategory(id, accessToken);
-      console.log(response);
+      const token = this.getAccessToken();
+      // Already using the shared service from api/services
+      const { getDetaillsCategory } = await import(
+        "../../../../api/services/CategoryService"
+      );
+      const response = await getDetaillsCategory(id, token);
       return response.data;
     } catch (error) {
       console.error("Error fetching category:", error);

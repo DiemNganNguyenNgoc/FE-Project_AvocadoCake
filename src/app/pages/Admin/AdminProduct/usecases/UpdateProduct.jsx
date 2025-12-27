@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { X, Upload, Package, Edit } from "lucide-react";
+import { Upload, Package, Edit, AlertCircle, Check } from "lucide-react";
 import { useAdminProductStore } from "../AdminProductContext";
 import ProductService from "../services/ProductService";
+import Modal from "../../../../components/AdminLayout/Modal";
+import Input from "../../../../components/AdminLayout/Input";
+import Textarea from "../../../../components/AdminLayout/Textarea";
+import Select from "../../../../components/AdminLayout/Select";
+import Button from "../../../../components/AdminLayout/Button";
+import Checkbox from "../../../../components/AdminLayout/Checkbox";
+import { toast } from "react-toastify";
 
 const UpdateProduct = ({ onBack }) => {
   const {
@@ -11,6 +18,7 @@ const UpdateProduct = ({ onBack }) => {
     setError,
     categories,
     setCategories,
+    setProducts,
   } = useAdminProductStore();
 
   const [formData, setFormData] = useState({
@@ -34,7 +42,12 @@ const UpdateProduct = ({ onBack }) => {
         productName: currentProduct.productName || "",
         productPrice: currentProduct.productPrice || "",
         productCategory: currentProduct.productCategory || "",
-        productSize: currentProduct.productSize || "",
+        productSize:
+          typeof currentProduct.productSize === "string"
+            ? currentProduct.productSize
+            : Array.isArray(currentProduct.productSize)
+            ? currentProduct.productSize.join(", ")
+            : String(currentProduct.productSize || ""),
         productDescription: currentProduct.productDescription || "",
         isActive:
           currentProduct.isActive !== undefined
@@ -56,14 +69,14 @@ const UpdateProduct = ({ onBack }) => {
         const response = await ProductService.getCategories();
         setCategories(response.data);
       } catch (error) {
-        setError("Không thể tải danh sách loại sản phẩm");
+        toast.error("Không thể tải danh sách loại sản phẩm");
       }
     };
 
     if (categories.length === 0) {
       fetchCategories();
     }
-  }, [categories.length, setCategories, setError]);
+  }, [categories.length, setCategories]);
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "";
@@ -93,6 +106,18 @@ const UpdateProduct = ({ onBack }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Kích thước file không được vượt quá 5MB");
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Vui lòng chọn file hình ảnh");
+        return;
+      }
+
       setImageFile(file);
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
@@ -102,11 +127,11 @@ const UpdateProduct = ({ onBack }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.productName.trim()) {
+    if (!formData.productName || !formData.productName.trim()) {
       newErrors.productName = "Tên sản phẩm là bắt buộc";
     }
 
-    if (!formData.productPrice || formData.productPrice <= 0) {
+    if (!formData.productPrice || parseFloat(formData.productPrice) <= 0) {
       newErrors.productPrice = "Giá sản phẩm phải lớn hơn 0";
     }
 
@@ -114,11 +139,17 @@ const UpdateProduct = ({ onBack }) => {
       newErrors.productCategory = "Vui lòng chọn loại sản phẩm";
     }
 
-    if (!formData.productSize.trim()) {
+    // Fix: Handle productSize validation properly for string/array/object
+    const sizeValue =
+      typeof formData.productSize === "string"
+        ? formData.productSize.trim()
+        : String(formData.productSize || "").trim();
+
+    if (!sizeValue) {
       newErrors.productSize = "Kích thước sản phẩm là bắt buộc";
     }
 
-    if (!formData.productDescription.trim()) {
+    if (!formData.productDescription || !formData.productDescription.trim()) {
       newErrors.productDescription = "Mô tả sản phẩm là bắt buộc";
     }
 
@@ -130,6 +161,7 @@ const UpdateProduct = ({ onBack }) => {
     e.preventDefault();
 
     if (!validateForm()) {
+      toast.error("Vui lòng kiểm tra lại thông tin");
       return;
     }
 
@@ -138,13 +170,16 @@ const UpdateProduct = ({ onBack }) => {
       setLoading(true);
       setError(null);
 
-      // Prepare form data
+      // Prepare form data for submission
       const submitData = new FormData();
-      submitData.append("productName", formData.productName);
-      submitData.append("productPrice", formData.productPrice);
+      submitData.append("productName", formData.productName.trim());
+      submitData.append("productPrice", parseFloat(formData.productPrice));
       submitData.append("productCategory", formData.productCategory);
-      submitData.append("productSize", formData.productSize);
-      submitData.append("productDescription", formData.productDescription);
+      submitData.append("productSize", formData.productSize.trim());
+      submitData.append(
+        "productDescription",
+        formData.productDescription.trim()
+      );
       submitData.append("isActive", formData.isActive);
 
       // Only append new image if one was selected
@@ -152,29 +187,49 @@ const UpdateProduct = ({ onBack }) => {
         submitData.append("productImage", imageFile);
       }
 
-      // Update product
+      // Log for debugging
+      console.log("Updating product with ID:", currentProduct._id);
+      console.log("Form data:", {
+        productName: formData.productName,
+        productPrice: formData.productPrice,
+        productCategory: formData.productCategory,
+        productSize: formData.productSize,
+        isActive: formData.isActive,
+        hasNewImage: !!imageFile,
+      });
+
+      // Update product via API
       const response = await ProductService.updateProduct(
         currentProduct._id,
         submitData
       );
 
-      if (response.status === "OK") {
-        // Update local state
-        updateProduct(currentProduct._id, response.data);
+      console.log("Update response:", response);
 
-        // Close modal
-        onBack();
+      if (response.status === "OK" || response.status === "SUCCESS") {
+        // Success! Now fetch fresh data to refresh the list
+        const refreshResponse = await ProductService.getProducts();
+        setProducts(refreshResponse.data);
 
-        // Show success message
-        alert("Cập nhật sản phẩm thành công!");
+        toast.success("✅ Cập nhật sản phẩm thành công!");
+
+        // Close modal after short delay to show toast
+        setTimeout(() => {
+          onBack();
+        }, 500);
       } else {
         throw new Error(
           response.message || "Có lỗi xảy ra khi cập nhật sản phẩm"
         );
       }
     } catch (error) {
-      setError(error.message || "Có lỗi xảy ra khi cập nhật sản phẩm");
       console.error("Error updating product:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Có lỗi xảy ra khi cập nhật sản phẩm";
+      toast.error(`❌ ${errorMessage}`);
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
       setLoading(false);
@@ -187,256 +242,215 @@ const UpdateProduct = ({ onBack }) => {
 
   if (!currentProduct) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg shadow-xl p-6">
-          <p className="text-gray-600">Không tìm thấy thông tin sản phẩm</p>
-          <button
-            onClick={onBack}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Quay lại
-          </button>
+      <Modal
+        isOpen={true}
+        onClose={onBack}
+        title="Lỗi"
+        icon={<AlertCircle className="w-6 h-6 text-white" />}
+        iconColor="red"
+        size="sm"
+      >
+        <div className="text-center py-8">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <p className="text-xl text-gray-600">
+            Không tìm thấy thông tin sản phẩm
+          </p>
         </div>
-      </div>
+      </Modal>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Cập nhật sản phẩm
-          </h2>
-          <button
-            onClick={handleCancel}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column - Image */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hình ảnh sản phẩm
-              </label>
-              <div className="space-y-4">
-                {/* Current Image or Upload */}
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="productImage"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="productImage"
-                    className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-                  >
-                    {imagePreview ? (
-                      <div className="relative w-full h-full">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                          <Edit className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-8 h-8 mb-4 text-gray-400" />
-                        <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">
-                            Click để chọn hình ảnh mới
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          PNG, JPG, GIF (MAX. 5MB)
-                        </p>
-                      </div>
-                    )}
-                  </label>
-                </div>
-                {errors.productImage && (
-                  <p className="text-sm text-red-600">{errors.productImage}</p>
-                )}
-                <p className="text-xs text-gray-500">
-                  Để trống nếu không muốn thay đổi hình ảnh
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column - Basic Info */}
-            <div className="space-y-4">
-              {/* Product Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tên sản phẩm *
-                </label>
-                <input
-                  type="text"
-                  name="productName"
-                  value={formData.productName}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.productName ? "border-red-300" : "border-gray-300"
-                  }`}
-                  placeholder="Nhập tên sản phẩm"
-                />
-                {errors.productName && (
-                  <p className="text-sm text-red-600">{errors.productName}</p>
-                )}
-              </div>
-
-              {/* Price */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Giá sản phẩm *
-                </label>
-                <input
-                  type="number"
-                  name="productPrice"
-                  value={formData.productPrice}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.productPrice ? "border-red-300" : "border-gray-300"
-                  }`}
-                  placeholder="Nhập giá sản phẩm"
-                  min="0"
-                  step="1000"
-                />
-                {errors.productPrice && (
-                  <p className="text-sm text-red-600">{errors.productPrice}</p>
-                )}
-              </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Loại sản phẩm *
-                </label>
-                <select
-                  name="productCategory"
-                  value={formData.productCategory}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.productCategory
-                      ? "border-red-300"
-                      : "border-gray-300"
-                  }`}
-                >
-                  <option value="">Chọn loại sản phẩm</option>
-                  {categories.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.categoryName}
-                    </option>
-                  ))}
-                </select>
-                {errors.productCategory && (
-                  <p className="text-sm text-red-600">
-                    {errors.productCategory}
-                  </p>
-                )}
-              </div>
-
-              {/* Size */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Kích thước *
-                </label>
-                <input
-                  type="text"
-                  name="productSize"
-                  value={formData.productSize}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.productSize ? "border-red-300" : "border-gray-300"
-                  }`}
-                  placeholder="Nhập kích thước sản phẩm"
-                />
-                {errors.productSize && (
-                  <p className="text-sm text-red-600">{errors.productSize}</p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Mô tả sản phẩm *
+    <Modal
+      isOpen={true}
+      onClose={handleCancel}
+      title="Cập nhật sản phẩm"
+      subtitle={`Chỉnh sửa thông tin sản phẩm: ${currentProduct.productName}`}
+      icon={<Edit className="w-6 h-6 text-white" />}
+      iconColor="blue"
+      size="xl"
+      closeOnBackdrop={false}
+      closeOnEscape={!isSubmitting}
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column - Image Upload */}
+          <div className="space-y-4">
+            <label className="block text-xl font-medium text-gray-700">
+              Hình ảnh sản phẩm
             </label>
-            <textarea
-              name="productDescription"
-              value={formData.productDescription}
-              onChange={handleInputChange}
-              rows={4}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.productDescription ? "border-red-300" : "border-gray-300"
-              }`}
-              placeholder="Nhập mô tả chi tiết về sản phẩm"
-            />
-            {errors.productDescription && (
-              <p className="text-sm text-red-600">
-                {errors.productDescription}
+
+            <div className="relative">
+              <input
+                type="file"
+                id="productImage-update"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                disabled={isSubmitting}
+              />
+
+              <label
+                htmlFor="productImage-update"
+                className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-2xl cursor-pointer transition-all ${
+                  imagePreview
+                    ? "border-blue-300 bg-blue-50"
+                    : "border-gray-300 bg-gray-50 hover:bg-gray-100"
+                } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {imagePreview ? (
+                  <div className="relative w-full h-full group">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full object-contain rounded-2xl p-2"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+                      <div className="text-center text-white">
+                        <Edit className="w-8 h-8 mx-auto mb-2" />
+                        <p className="text-sm font-medium">Đổi hình ảnh</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-6">
+                    <Upload className="w-12 h-12 mb-4 text-gray-400" />
+                    <p className="mb-2 text-sm font-semibold text-gray-700">
+                      Click để tải hình ảnh mới
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      PNG, JPG, GIF (MAX. 5MB)
+                    </p>
+                  </div>
+                )}
+              </label>
+            </div>
+
+            <p className="text-xs text-gray-500 italic flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              Để trống nếu không muốn thay đổi hình ảnh
+            </p>
+
+            {errors.productImage && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <AlertCircle className="w-4 h-4" />
+                {errors.productImage}
               </p>
             )}
           </div>
 
-          {/* Status */}
-          <div>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleInputChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <span className="ml-2 text-sm text-gray-700">
-                Sản phẩm đang hoạt động
-              </span>
-            </label>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
+          {/* Right Column - Basic Info */}
+          <div className="space-y-5">
+            {/* Product Name */}
+            <Input
+              label="Tên sản phẩm *"
+              name="productName"
+              value={formData.productName}
+              onChange={handleInputChange}
+              error={errors.productName}
+              placeholder="Nhập tên sản phẩm"
+              leftIcon={<Package className="w-5 h-5" />}
               disabled={isSubmitting}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+
+            {/* Price */}
+            <Input
+              label="Giá sản phẩm (VNĐ) *"
+              type="number"
+              name="productPrice"
+              value={formData.productPrice}
+              onChange={handleInputChange}
+              error={errors.productPrice}
+              placeholder="Nhập giá sản phẩm"
+              min="0"
+              step="1000"
+              disabled={isSubmitting}
+            />
+
+            {/* Category */}
+            <Select
+              label="Loại sản phẩm *"
+              name="productCategory"
+              value={formData.productCategory}
+              onChange={handleInputChange}
+              error={errors.productCategory}
+              disabled={isSubmitting}
             >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Đang cập nhật...
-                </>
-              ) : (
-                <>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Cập nhật sản phẩm
-                </>
-              )}
-            </button>
+              <option value="">Chọn loại sản phẩm</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.categoryName}
+                </option>
+              ))}
+            </Select>
+
+            {/* Size */}
+            <Input
+              label="Kích thước *"
+              name="productSize"
+              value={formData.productSize}
+              onChange={handleInputChange}
+              error={errors.productSize}
+              placeholder="VD: 20cm, 500g, M, L, XL..."
+              helperText="Có thể nhập nhiều size cách nhau bằng dấu phẩy"
+              disabled={isSubmitting}
+            />
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+
+        {/* Description - Full Width */}
+        <Textarea
+          label="Mô tả sản phẩm *"
+          name="productDescription"
+          value={formData.productDescription}
+          onChange={handleInputChange}
+          error={errors.productDescription}
+          rows={6}
+          placeholder="Nhập mô tả chi tiết về sản phẩm..."
+          helperText="Mô tả càng chi tiết càng giúp khách hàng hiểu rõ về sản phẩm"
+          disabled={isSubmitting}
+        />
+
+        {/* Status Checkbox */}
+        <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <Checkbox
+            label="Sản phẩm đang hoạt động"
+            name="isActive"
+            checked={formData.isActive}
+            onChange={handleInputChange}
+            helperText="Bỏ check nếu muốn tạm ẩn sản phẩm khỏi danh sách"
+            disabled={isSubmitting}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+          <Button
+            type="button"
+            onClick={handleCancel}
+            variant="outline"
+            disabled={isSubmitting}
+          >
+            Hủy
+          </Button>
+
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+            leftIcon={
+              isSubmitting ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Check className="w-4 h-4" />
+              )
+            }
+          >
+            {isSubmitting ? "Đang cập nhật..." : "Cập nhật sản phẩm"}
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 
