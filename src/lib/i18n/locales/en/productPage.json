@@ -4,6 +4,7 @@
     "discount": "Discount",
     "all_products": "All products",
     "unavailable": "No {{data}} available",
+    "no_products_title": "Empty Category",
     "sort_by": "Sort by:",
     "sort_name_asc": "Name A-Z",
     "sort_name_desc": "Name Z-A",
