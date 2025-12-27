@@ -244,16 +244,53 @@
   margin-bottom: 2rem;
 }
 
+/* Thêm rule này cho grid Tailwind */
+.promo-group {
+  grid-column: 1 / -1 !important; /* span toàn bộ các cột */
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
 .promo-group__label {
   font-weight: bold;
-  font-size: 2rem;
-  margin: 1rem 0 2rem;
+  font-size: 2.4rem;
+  margin: 0 0 2rem 0;
+  padding: 16px 24px;
+  /* background: var(--green30); */
+  color: var(--brown100);
+  border-radius: 50px;
+  /* box-shadow: 0 4px 12px rgba(201, 168, 106, 0.3); */
+  display: block;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.promo-group__label::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.promo-group__label:hover::before {
+  left: 100%;
 }
 
 /* layout sản phẩm giống .product__list */
 .promo-group__products {
   display: grid;
-  gap: 10px;
+  gap: 16px;
   grid-template-columns: repeat(3, 1fr);
 }
 

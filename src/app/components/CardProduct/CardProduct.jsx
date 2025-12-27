@@ -120,11 +120,19 @@ const CardProduct = ({
       className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-auto mx-2"
     >
       {/* Image */}
-      <img
-        src={img}
-        alt={title}
-        className="w-full md:h-100 sm:h-80 object-cover overflow-hidden"
-      />
+      <div className="relative">
+        <img
+          src={img}
+          alt={title}
+          className="w-full md:h-100 sm:h-80 object-cover overflow-hidden"
+        />
+        {/* Discount Badge */}
+        {discount > 0 && (
+          <div className="absolute top-2 right-2 bg-red-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
+            -{discount}%
+          </div>
+        )}
+      </div>
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">

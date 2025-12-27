@@ -337,7 +337,7 @@ const ProductsPage = () => {
                   size={p.productSize}
                   averageRating={p.averageRating}
                   totalRatings={p.totalRatings}
-                  onCardClick={handleDetail(p._id, g.products)}
+                  onCardClick={() => handleDetail(p._id, g.products)}
                 />
               ))}
             </div>
@@ -588,7 +588,7 @@ const ProductsPage = () => {
             </div>
 
             {/* Products grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
               {renderProductsList()}
             </div>
           </div>
