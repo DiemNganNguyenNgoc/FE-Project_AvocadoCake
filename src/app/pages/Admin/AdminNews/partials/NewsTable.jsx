@@ -105,7 +105,7 @@ const NewsTable = ({
       );
       onNavigate("update");
     } else {
-      navigate("/admin/news/update", {
+      navigate("/admin/newss/update", {
         state: {
           newsId: newsItem._id,
           newsTitle: newsItem.newsTitle,
@@ -121,7 +121,7 @@ const NewsTable = ({
     const imageUrl = newsItem.getImageUrl
       ? newsItem.getImageUrl()
       : newsItem.newsImage;
-    navigate("/admin/news/detail", {
+    navigate("/admin/newss/detail", {
       state: {
         newsImage: imageUrl,
         newsTitle: newsItem.newsTitle,

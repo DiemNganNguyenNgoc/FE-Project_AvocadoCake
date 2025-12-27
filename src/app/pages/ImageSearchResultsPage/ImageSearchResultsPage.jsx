@@ -41,7 +41,7 @@ const ImageSearchResultsPage = () => {
       {/* Header */}
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-[#3a060e] mb-3">
-          🔍 Kết quả tìm kiếm bằng hình ảnh
+          Kết quả tìm kiếm bằng hình ảnh
         </h2>
         <p className="text-lg text-gray-600">
           Tìm thấy{" "}
@@ -78,7 +78,6 @@ const ImageSearchResultsPage = () => {
                 >
                   {/* Similarity Badge */}
                   <div className="absolute top-2 right-2 z-10 bg-gradient-to-br from-[#b1e321] to-[#8bc34a] text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg shadow-[#b1e321]/30">
-                    <span className="text-base">✨</span>
                     <span>
                       {(result.similarity_score * 100).toFixed(0)}% tương tự
                     </span>

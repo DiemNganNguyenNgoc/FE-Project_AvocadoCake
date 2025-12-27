@@ -110,6 +110,7 @@ class RecipeAPIService {
       return {
         recipe: {
           name: recipeData.title,
+          title: recipeData.title,
           description: recipeData.description,
           prep_time: recipeData.prep_time,
           cook_time: recipeData.cook_time,
@@ -145,6 +146,11 @@ class RecipeAPIService {
           tips: recipeData.tips || [],
           tags: recipeData.tags || [],
           estimated_cost: recipeData.estimated_cost,
+          // NEW FIELDS from backend
+          marketing_caption: recipeData.marketing_caption,
+          decoration_tips: recipeData.decoration_tips,
+          notes: recipeData.notes,
+          image_prompt: recipeData.image_prompt,
         },
         analytics: {
           trend_score: recipeData.trend_score,
@@ -193,6 +199,7 @@ class RecipeAPIService {
       return {
         recipe: {
           name: recipeData.title,
+          title: recipeData.title,
           description: recipeData.description,
           prep_time: recipeData.prep_time,
           cook_time: recipeData.cook_time,
@@ -228,6 +235,11 @@ class RecipeAPIService {
           tips: recipeData.tips || [],
           tags: recipeData.tags || [],
           estimated_cost: recipeData.estimated_cost,
+          // NEW FIELDS from backend
+          marketing_caption: recipeData.marketing_caption,
+          decoration_tips: recipeData.decoration_tips,
+          notes: recipeData.notes,
+          image_prompt: recipeData.image_prompt,
         },
         analytics: {
           trend_score: recipeData.trend_score,
@@ -439,10 +451,12 @@ class RecipeAPIService {
       },
     });
 
-    // Transform response - backend trả về cấu trúc khác
-    // Response format: { recipe: {...}, context_analysis: {...}, marketing_strategy: {...}, trend_insights: {...}, ... }
-    if (response && response.recipe) {
-      const recipeData = response.recipe;
+    console.log("🔍 Smart Generate Raw Response:", response);
+
+    // Transform response - backend trả về: { status: "success", data: {...} }
+    // Trong đó data chứa: title, description, ingredients, instructions, marketing_caption, decoration_tips, notes, image_prompt, etc.
+    if (response && response.data) {
+      const recipeData = response.data;
 
       return {
         recipe: {
@@ -481,30 +495,52 @@ class RecipeAPIService {
           tips: recipeData.tips || [],
           tags: recipeData.tags || [],
           estimated_cost: recipeData.estimated_cost,
+          // NEW FIELDS from backend - CRITICAL: Bổ sung các trường quan trọng
+          marketing_caption: recipeData.marketing_caption,
+          decoration_tips: recipeData.decoration_tips,
+          notes: recipeData.notes,
+          image_prompt: recipeData.image_prompt,
         },
         analytics: {
-          trend_score: response.trend_insights?.trend_score || 0,
-          popularity_score:
-            response.trend_insights?.ml_predictions?.popularity_score || 0,
-          health_score: 0, // Backend không trả về field này
-          innovation_score: 0, // Backend không trả về field này
-          overall_score:
-            response.trend_insights?.ml_predictions?.overall_trend_strength ||
-            0,
-          recommendation: response.recommendation_reason || "",
-          viral_potential: {
-            score: response.trend_insights?.viral_potential_score || 0,
-            level:
-              response.trend_insights?.viral_potential_score >= 0.7
-                ? "High"
-                : response.trend_insights?.viral_potential_score >= 0.5
-                ? "Medium"
-                : "Low",
+          trend_score: recipeData.trend_score || 0,
+          popularity_score: recipeData.popularity_score || 0,
+          health_score: recipeData.health_score || 0,
+          innovation_score: recipeData.innovation_score || 0,
+          overall_score: recipeData.overall_score || 0,
+          recommendation: recipeData.recommendation || "",
+          viral_potential: recipeData.viral_potential || {
+            score: 0,
+            level: "Low",
           },
         },
-        marketing: response.marketing_strategy || {},
-        context: response.context_analysis || {},
-        next_events: response.next_events || [],
+        marketing: {
+          primary_channel: recipeData.primary_channel || [],
+          posting_time: recipeData.posting_time || "",
+          hashtags: recipeData.hashtags || [],
+          caption_style: recipeData.caption_style || "",
+          visual_theme: recipeData.visual_theme || {},
+          pricing_strategy: recipeData.pricing_strategy || {},
+          promotion_ideas: recipeData.promotion_ideas || [],
+        },
+        context: {
+          current_date:
+            recipeData.current_date || new Date().toISOString().split("T")[0],
+          day_of_week: recipeData.day_of_week || "",
+          season: recipeData.season || "",
+          month: recipeData.month || new Date().getMonth() + 1,
+          temperature: recipeData.temperature || "",
+          main_event: recipeData.main_event || "",
+          all_events: recipeData.all_events || [],
+          trending_flavors: recipeData.trending_flavors || [],
+          popular_occasions: recipeData.popular_occasions || [],
+          demand_factor: recipeData.demand_factor || 0,
+          target_segment:
+            recipeData.target_segment || recipeData.user_segment || "gen_z",
+          market_potential: recipeData.market_potential || 0,
+          competition_level: recipeData.competition_level || 0,
+          price_sensitivity: recipeData.price_sensitivity || "",
+        },
+        next_events: recipeData.next_events || [],
         metadata: {
           id: recipeData.id,
           language: recipeData.language,

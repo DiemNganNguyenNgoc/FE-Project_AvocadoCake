@@ -418,9 +418,9 @@ const HeaderComponent = () => {
                       <ButtonNoBGComponent to="/admin/products">
                         Sản phẩm
                       </ButtonNoBGComponent>
-                      <ButtonNoBGComponent to="/admin/news">
+                      {/* <ButtonNoBGComponent to="/admin/news">
                         Tin tức
-                      </ButtonNoBGComponent>
+                      </ButtonNoBGComponent> */}
                       <ButtonNoBGComponent to="/introduce">
                         Giới thiệu
                       </ButtonNoBGComponent>
@@ -612,14 +612,14 @@ const HeaderComponent = () => {
                   >
                     Sản phẩm
                   </Link>
-                  <Link
+                  {/* <Link
                     to="/admin/news"
                     className={`${styles.mobile__nav__item} ${
                       activePath.startsWith("/admin/news") ? styles.active : ""
                     }`}
                   >
                     Tin tức
-                  </Link>
+                  </Link> */}
                   <Link
                     to="/introduce"
                     className={`${styles.mobile__nav__item} ${
