@@ -4,6 +4,7 @@
     "discount": "Khuyến mãi",
     "all_products": "Tất cả sản phẩm",
     "unavailable": "Không có {{data}} nào",
+    "no_products_title": "Danh mục trống",
     "sort_by": "Xếp theo:",
     "sort_name_asc": "Tên A-Z",
     "sort_name_desc": "Tên Z-A",

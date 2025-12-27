@@ -50,7 +50,11 @@ const ProductsPage = () => {
           getAllCategory(),
           getAllDiscount(),
         ]);
-        setCategories(catRes.data);
+        // Filter only active categories
+        const activeCategories = catRes.data.filter(
+          (cat) => cat.isActive !== false
+        );
+        setCategories(activeCategories);
         setDiscounts(discRes.data);
       } catch (err) {
         console.error("Error loading init data:", err);
@@ -118,15 +122,19 @@ const ProductsPage = () => {
   ) => {
     try {
       const { data } = await getProductsByCategory(categoryId);
+      console.log("Fetched products for category:", categoryId, data);
       // Filter ra sản phẩm bị ẩn (thêm lớp bảo vệ)
-      const visibleProducts = data.filter((p) => !p.isHidden);
+      const visibleProducts = data?.filter((p) => !p.isHidden) || [];
       setAllProducts(visibleProducts);
       const filtered = filterAndSortProducts(visibleProducts);
       setProducts(filtered.slice(page * limit, (page + 1) * limit));
-      setTotalPages(Math.ceil(filtered.length / limit));
+      setTotalPages(Math.ceil(filtered.length / limit) || 1);
       setCurrentPage(page);
     } catch (err) {
       console.error("Error fetching products:", err);
+      setAllProducts([]);
+      setProducts([]);
+      setTotalPages(1);
     }
   };
 
@@ -287,11 +295,25 @@ const ProductsPage = () => {
     if (currentCategory === 1) {
       if (!promoGroups.length)
         return (
-          <p>
-            {t("product_page.unavailable", {
-              data: t("product_page.discount").toLowerCase(),
-            })}
-          </p>
+          <div className="empty-products-message">
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4m0 4h.01" />
+            </svg>
+            <h3>{t("product_page.no_products_title")}</h3>
+            <p>
+              {t("product_page.unavailable", {
+                data: t("product_page.discount").toLowerCase(),
+              })}
+            </p>
+          </div>
         );
 
       return promoGroups
@@ -315,7 +337,7 @@ const ProductsPage = () => {
                   size={p.productSize}
                   averageRating={p.averageRating}
                   totalRatings={p.totalRatings}
-                  onCardClick={handleDetail(p._id, g.products)}
+                  onCardClick={() => handleDetail(p._id, g.products)}
                 />
               ))}
             </div>
@@ -324,11 +346,25 @@ const ProductsPage = () => {
     } else {
       if (!products.length)
         return (
-          <p>
-            {t("product_page.unavailable", {
-              data: t("product").toLowerCase(),
-            })}
-          </p>
+          <div className="empty-products-message">
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4m0 4h.01" />
+            </svg>
+            <h3>{t("product_page.no_products_title")}</h3>
+            <p>
+              {t("product_page.unavailable", {
+                data: t("product").toLowerCase(),
+              })}
+            </p>
+          </div>
         );
 
       return products.map((p) => (
@@ -552,7 +588,7 @@ const ProductsPage = () => {
             </div>
 
             {/* Products grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
               {renderProductsList()}
             </div>
           </div>

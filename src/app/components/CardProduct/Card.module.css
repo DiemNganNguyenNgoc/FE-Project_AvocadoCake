@@ -78,7 +78,8 @@
 }
 
 #CardProduct {
-  width: 29rem;
+  width: 100%;
+  max-width: 32rem;
   overflow: hidden;
   border-radius: 15px;
   margin-bottom: 20px;
