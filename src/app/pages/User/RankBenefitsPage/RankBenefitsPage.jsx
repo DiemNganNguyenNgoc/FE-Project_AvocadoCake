@@ -62,8 +62,8 @@ const RankBenefitsPage = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Hệ Thống Hạng Thành Viên
+          <h1 className="text-[40px] font-bold text-[#212529] mb-4">
+            HỆ THỐNG HẠNG THÀNH VIÊN
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Tích lũy chi tiêu để nhận được nhiều ưu đãi hấp dẫn hơn. Càng mua

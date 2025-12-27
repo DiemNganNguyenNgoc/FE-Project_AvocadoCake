@@ -36,23 +36,23 @@ export default function TextOnCake({
           onKeyDown={handleKeyPress}
           onChange={(e) => setNewText(e.target.value)}
           placeholder="Nhập chữ lên bánh..."
-          className="border p-2 rounded-md flex-1"
+          className="border p-3 rounded-full flex-1 focus:outline-none focus:ring-2 focus:ring-avocado-green-80"
         />
         <input
           type="color"
           value={textColor}
           onChange={(e) => handleChangeColor(e.target.value)}
-          className="w-16 h-8 p-0 border-0"
+          className="w-16 h-8 p-0 border-0 rounded-md"
         />
       </div>
       <button
         onClick={onAddText}
         disabled={!newText.trim()}
-        className={`px-4 py-2 rounded-lg text-white transition 
+        className={`px-4 py-2 text-avocado-brown-100 transition 
           ${
             !newText.trim()
-              ? "bg-green-300 cursor-not-allowed"
-              : "bg-green-600 text-white px-4 py-2 rounded-lg shadow"
+              ? "opacity-50 cursor-not-allowed rounded-full"
+              : " bg-lime-400 rounded-full hover:shadow-md"
           }`}
       >
         Thêm chữ

@@ -318,14 +318,19 @@ const OrderInformationPage = () => {
 
   return (
     <div className="container-xl cart-container">
-      <div className="titleHolder">
-        <div>
-          <BackIconComponent className="back_btn" onClick={handleClickBack} />
-        </div>
-        <div>
-          <h1 className="title"> Thông tin đơn hàng</h1>
-        </div>
+      <div className="relative flex items-center py-6">
+        {/* BACK BUTTON TRÁI */}
+        <BackIconComponent
+          onClick={handleClickBack}
+          className="absolute left-0 cursor-pointer"
+        />
+
+        {/* TITLE Ở GIỮA CHUẨN */}
+        <h1 className="absolute left-1/2 -translate-x-1/2 text-4xl lg:text-[40px] font-bold text-center">
+          THÔNG TIN ĐƠN HÀNG
+        </h1>
       </div>
+
       <div className="bg-white border shadow-sm px-5 py-2">
         <div className="mt-10  rounded-3xl  overflow-hidden">
           <table className="min-w-full text-base text-gray-700">
