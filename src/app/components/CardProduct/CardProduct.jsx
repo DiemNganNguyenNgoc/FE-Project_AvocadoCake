@@ -117,7 +117,7 @@ const CardProduct = ({
       ref={cardRef}
       role="button"
       onClick={handleCardClick}
-      className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-auto mx-2"
+      className="cursor-pointer bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-auto mx-2"
     >
       {/* Image */}
       <div className="relative">
@@ -128,7 +128,7 @@ const CardProduct = ({
         />
         {/* Discount Badge */}
         {discount > 0 && (
-          <div className="absolute top-2 right-2 bg-red-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
+          <div className="absolute top-4 right-4 bg-red-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg">
             -{discount}%
           </div>
         )}
@@ -142,7 +142,7 @@ const CardProduct = ({
         {/* Price */}
         <div className="mt-2">
           {discount > 0 && (
-            <span className="line-through text-gray-400 mr-2">
+            <span className="line-through text-gray-400 mr-2 pr-2">
               {price.toLocaleString(i18n.language)}₫
             </span>
           )}
@@ -160,7 +160,7 @@ const CardProduct = ({
         {/* Add to cart button */}
         <ButtonComponent
           onClick={handleAddToCart}
-          className="mt-2 rounded-xl bg-gradient-to-r from-lime-300 to-emerald-500  text-amber-950 hover:text-amber-950 text-b py-2 px-4 w-full md:text-xl sm:text-base z-10"
+          className="mt-2 rounded-2xl bg-gradient-to-r from-lime-300 to-emerald-500  text-amber-950 hover:text-amber-950 text-b py-2 px-4 w-full md:text-xl sm:text-base z-10"
         >
           {t("button.add_to_cart")}
         </ButtonComponent>
