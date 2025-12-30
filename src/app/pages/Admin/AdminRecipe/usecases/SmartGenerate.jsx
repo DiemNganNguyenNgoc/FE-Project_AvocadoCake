@@ -148,31 +148,31 @@ const SmartGenerate = () => {
           <div className="bg-white rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <Calendar className="w-4 h-4 text-avocado-green-100" />
-              <span className="font-medium text-sm text-avocado-brown-100">
+              <span className="font-medium text-xl text-avocado-brown-100">
                 Auto Events
               </span>
             </div>
-            <p className="text-sm text-gray-600">Tự động nhận diện sự kiện</p>
+            <p className="text-xl text-gray-600">Tự động nhận diện sự kiện</p>
           </div>
 
           <div className="bg-white rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="w-4 h-4 text-avocado-green-100" />
-              <span className="font-medium text-sm text-avocado-brown-100">
+              <span className="font-medium text-xl text-avocado-brown-100">
                 ML Trends
               </span>
             </div>
-            <p className="text-sm text-gray-600">Dự đoán xu hướng</p>
+            <p className="text-xl text-gray-600">Dự đoán xu hướng</p>
           </div>
 
           <div className="bg-white rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <Target className="w-4 h-4 text-avocado-green-100" />
-              <span className="font-medium text-sm text-avocado-brown-100">
+              <span className="font-medium text-xl text-avocado-brown-100">
                 Viral Score
               </span>
             </div>
-            <p className="text-sm text-gray-600">Đánh giá viral potential</p>
+            <p className="text-xl text-gray-600">Đánh giá viral potential</p>
           </div>
         </div>
       </div>
@@ -210,7 +210,7 @@ const SmartGenerate = () => {
                 {/* Events */}
                 {contextPreview.events && contextPreview.events.length > 0 && (
                   <div className="bg-avocado-green-10 rounded-lg p-3">
-                    <p className="text-sm font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
+                    <p className="text-xl font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       Sự kiện
                     </p>
@@ -218,7 +218,7 @@ const SmartGenerate = () => {
                       {contextPreview.events.map((event, idx) => (
                         <div
                           key={idx}
-                          className="text-sm text-gray-700 flex items-start gap-2"
+                          className="text-xl text-gray-700 flex items-start gap-2"
                         >
                           <span className="text-avocado-green-100 mt-0.5">
                             •
@@ -233,7 +233,7 @@ const SmartGenerate = () => {
                 {/* Trends */}
                 {contextPreview.trends && contextPreview.trends.length > 0 && (
                   <div className="bg-avocado-green-10 rounded-lg p-3">
-                    <p className="text-sm font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
+                    <p className="text-xl font-medium text-avocado-brown-100 mb-2 flex items-center gap-2">
                       <TrendingUp className="w-4 h-4" />
                       Xu hướng
                     </p>
@@ -253,20 +253,20 @@ const SmartGenerate = () => {
                 {/* Demand Forecast */}
                 {contextPreview.demand_forecast && (
                   <div className="bg-avocado-green-10 rounded-lg p-3">
-                    <p className="text-sm font-medium text-avocado-brown-100 mb-2">
+                    <p className="text-xl font-medium text-avocado-brown-100 mb-2">
                       Dự báo nhu cầu
                     </p>
                     <div className="text-lg font-bold text-avocado-green-100">
                       {contextPreview.demand_forecast.level || "Medium"}
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-xl text-gray-600 mt-1">
                       Score: {contextPreview.demand_forecast.score || "N/A"}
                     </p>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-gray-500 text-sm text-center py-4">
+              <p className="text-gray-500 text-xl text-center py-4">
                 Không có dữ liệu
               </p>
             )}
@@ -295,7 +295,7 @@ const SmartGenerate = () => {
                     <div className="font-medium text-xl text-avocado-brown-100">
                       {option.label}
                     </div>
-                    <div className="text-sm text-gray-600 mt-1">
+                    <div className="text-xl text-gray-600 mt-1">
                       {option.description}
                     </div>
                   </button>
@@ -389,7 +389,7 @@ const SmartGenerate = () => {
               <p className="text-lg font-semibold text-avocado-brown-100 mb-2">
                 AI đang phân tích...
               </p>
-              <div className="text-sm text-gray-600 space-y-1 text-center">
+              <div className="text-xl text-gray-600 space-y-1 text-center">
                 <p>Phát hiện events & trends</p>
                 <p>Dự đoán nhu cầu</p>
                 <p>Tạo recipe tối ưu</p>
@@ -426,7 +426,7 @@ const SmartGenerate = () => {
                       <h4 className="font-semibold text-xl text-avocado-brown-100 mb-1">
                         Zero Input
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xl text-gray-600">
                         AI tự động phân tích
                       </p>
                     </div>
@@ -440,7 +440,7 @@ const SmartGenerate = () => {
                       <h4 className="font-semibold text-xl text-avocado-brown-100 mb-1">
                         Smart Context
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xl text-gray-600">
                         Auto detect trends
                       </p>
                     </div>

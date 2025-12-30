@@ -202,7 +202,7 @@ const RecipeHistory = () => {
                   className="bg-white rounded-2xl border border-avocado-brown-30 hover:border-avocado-green-100 hover:shadow-lg transition-all p-4 cursor-pointer"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="flex items-center gap-2 px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-sm rounded-2xl">
+                    <span className="flex items-center gap-2 px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-xl rounded-2xl">
                       {getTypeIcon(recipe.type)}
                       {getTypeLabel(recipe.type)}
                     </span>
@@ -231,7 +231,7 @@ const RecipeHistory = () => {
                     </p>
 
                     {/* Input Info */}
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-xl">
                       {recipe.data?.ingredients && (
                         <div className="flex gap-2">
                           <span className="font-medium text-avocado-brown-100">
@@ -265,10 +265,10 @@ const RecipeHistory = () => {
                     </div>
 
                     <div className="flex items-center justify-between pt-3 border-t border-avocado-brown-30">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-xl text-gray-500">
                         {formatDate(recipe.timestamp)}
                       </span>
-                      <span className="text-sm text-avocado-green-100 font-medium">
+                      <span className="text-xl text-avocado-green-100 font-medium">
                         Nhấn để xem chi tiết →
                       </span>
                     </div>

@@ -147,7 +147,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-600">
+      <p className="text-xl text-gray-600">
         🎨 AI tự động tạo ảnh minh họa chuyên nghiệp từ mô tả công thức{" "}
         <span className="font-semibold text-avocado-green-100">
           (Free, Unlimited - Pollinations AI)
@@ -157,7 +157,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
       {/* Error Message */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm text-red-600">⚠️ {error}</p>
+          <p className="text-xl text-red-600">⚠️ {error}</p>
         </div>
       )}
 
@@ -169,7 +169,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
             <p className="text-lg font-semibold text-avocado-brown-100">
               AI đang vẽ ảnh...
             </p>
-            <div className="text-sm text-gray-600 space-y-1">
+            <div className="text-xl text-gray-600 space-y-1">
               <p>🌐 Dịch Vietnamese → English</p>
               <p>🎨 Tạo professional food photography</p>
               <p>✨ Chờ một chút...</p>
@@ -220,7 +220,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
 
           {/* Info */}
           <div className="bg-avocado-green-10 rounded-lg p-4 space-y-2">
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-xl">
               <span className="font-medium text-avocado-brown-100">
                 Provider:
               </span>
@@ -228,11 +228,11 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
                 Pollinations AI (Free, Unlimited)
               </span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-xl">
               <span className="font-medium text-avocado-brown-100">Size:</span>
               <span className="text-gray-700">1024x1024 pixels</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-xl">
               <span className="font-medium text-avocado-brown-100">
                 Quality:
               </span>
@@ -251,7 +251,7 @@ const GenerateImage = ({ recipe, onImageGenerated }) => {
           <p className="text-lg font-semibold text-gray-500 mb-2">
             Chưa có công thức
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-xl text-gray-400">
             Tạo công thức trước để có thể tạo ảnh minh họa
           </p>
         </div>

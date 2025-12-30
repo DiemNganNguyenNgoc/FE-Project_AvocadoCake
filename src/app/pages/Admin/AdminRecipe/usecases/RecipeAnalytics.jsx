@@ -191,7 +191,7 @@ const RecipeAnalytics = () => {
                     {forecastData.top_forecasted_events?.map((event, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-sm rounded-lg"
+                        className="px-3 py-1 bg-avocado-green-10 text-avocado-brown-100 text-xl rounded-lg"
                       >
                         {event}
                       </span>
@@ -213,7 +213,7 @@ const RecipeAnalytics = () => {
                           <strong className="text-xl text-avocado-brown-100">
                             {rec.event}
                           </strong>
-                          <span className="px-3 py-1 bg-avocado-green-100 text-white text-sm rounded-lg">
+                          <span className="px-3 py-1 bg-avocado-green-100 text-white text-xl rounded-lg">
                             {Math.round(rec.viral_potential * 100)}%
                           </span>
                         </div>

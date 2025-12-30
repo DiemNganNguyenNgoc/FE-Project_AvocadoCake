@@ -18,6 +18,9 @@ import {
   Calendar,
 } from "lucide-react";
 
+// Import formatting utilities
+import { formatMarkdownText, parseStepText } from "../utils/formatText";
+
 /**
  * RecipeDisplay - Component hiển thị chi tiết công thức
  * React thuần + TailwindCSS
@@ -30,7 +33,7 @@ const RecipeDisplay = ({ recipe }) => {
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           Không có dữ liệu công thức
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-xl text-gray-600 dark:text-gray-400">
           Dữ liệu công thức không hợp lệ hoặc bị thiếu
         </p>
       </div>
@@ -79,7 +82,7 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Clock className="w-4 h-4" />
-              <span className="text-sm font-medium">Thời gian</span>
+              <span className="text-xl font-medium">Thời gian</span>
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white">
               {recipeData.prep_time} phút
@@ -91,7 +94,7 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Users className="w-4 h-4" />
-              <span className="text-sm font-medium">Khẩu phần</span>
+              <span className="text-xl font-medium">Khẩu phần</span>
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white">
               {recipeData.servings} người
@@ -103,7 +106,7 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Flame className="w-4 h-4" />
-              <span className="text-sm font-medium">Độ khó</span>
+              <span className="text-xl font-medium">Độ khó</span>
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white capitalize">
               {recipeData.difficulty}
@@ -115,7 +118,7 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <DollarSign className="w-4 h-4" />
-              <span className="text-sm font-medium">Chi phí</span>
+              <span className="text-xl font-medium">Chi phí</span>
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white">
               {recipeData.estimated_cost}
@@ -147,7 +150,7 @@ const RecipeDisplay = ({ recipe }) => {
         </div>
       )}
 
-      {/* Instructions */}
+      {/* Instructions - Enhanced */}
       {recipeData.instructions && recipeData.instructions.length > 0 && (
         <div className="bg-white dark:bg-dark-2 rounded-xl p-6 border border-gray-200 dark:border-stroke-dark">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -155,19 +158,66 @@ const RecipeDisplay = ({ recipe }) => {
             Hướng dẫn thực hiện
           </h3>
           <ol className="space-y-4">
-            {recipeData.instructions.map((instruction, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-4 bg-gray-50 dark:bg-dark-3 rounded-lg p-4"
-              >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                  {index + 1}
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed pt-1">
-                  {instruction}
-                </p>
-              </li>
-            ))}
+            {recipeData.instructions.map((instruction, index) => {
+              const { title, content } = parseStepText(instruction);
+
+              return (
+                <li
+                  key={index}
+                  className="flex items-start gap-4 bg-gray-50 dark:bg-dark-3 rounded-lg p-4"
+                >
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1">
+                    {title && (
+                      <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                        {formatMarkdownText(title)}
+                      </h4>
+                    )}
+                    <div className="text-gray-700 dark:text-gray-300">
+                      {content.split("\n").map((line, lineIdx) => {
+                        if (!line.trim()) return null;
+
+                        // Check if line contains TIPS (but might have text before it)
+                        const tipsMatch = line.match(
+                          /(.*)(\*\*TIPS:\*\*|\*\*Tips:\*\*)(.*)/i
+                        );
+
+                        if (tipsMatch) {
+                          const [, beforeTips, tipsLabel, afterTips] =
+                            tipsMatch;
+
+                          return (
+                            <div key={lineIdx}>
+                              {/* Text before TIPS */}
+                              {beforeTips.trim() && (
+                                <p className="mb-2">
+                                  {formatMarkdownText(beforeTips.trim())}
+                                </p>
+                              )}
+
+                              {/* TIPS box */}
+                              <div className="mt-4 mb-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
+                                <div className="text-yellow-900 dark:text-yellow-200 font-medium">
+                                  {formatMarkdownText(tipsLabel + afterTips)}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <p key={lineIdx} className="mb-2 last:mb-0">
+                            {formatMarkdownText(line)}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </div>
       )}
@@ -204,7 +254,7 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {analytics.trend_score !== undefined && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
                   Xu hướng
                 </p>
                 <p
@@ -219,7 +269,7 @@ const RecipeDisplay = ({ recipe }) => {
 
             {analytics.popularity_score !== undefined && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
                   Phổ biến
                 </p>
                 <p
@@ -234,7 +284,7 @@ const RecipeDisplay = ({ recipe }) => {
 
             {analytics.health_score !== undefined && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
                   Sức khỏe
                 </p>
                 <p
@@ -249,7 +299,7 @@ const RecipeDisplay = ({ recipe }) => {
 
             {analytics.innovation_score !== undefined && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
                   Sáng tạo
                 </p>
                 <p
@@ -304,10 +354,10 @@ const RecipeDisplay = ({ recipe }) => {
               <div className="flex items-start gap-3">
                 <Target className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                     Đánh giá:
                   </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
                     {analytics.recommendation}
                   </p>
                 </div>
@@ -323,7 +373,7 @@ const RecipeDisplay = ({ recipe }) => {
           {recipeData.tags.map((tag, index) => (
             <span
               key={index}
-              className="px-4 py-2 bg-gray-100 dark:bg-dark-3 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-full border border-gray-200 dark:border-stroke-dark"
+              className="px-4 py-2 bg-gray-100 dark:bg-dark-3 text-gray-700 dark:text-gray-300 text-xl font-medium rounded-full border border-gray-200 dark:border-stroke-dark"
             >
               #{tag}
             </span>
@@ -351,7 +401,7 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Hashtags */}
             {marketing.hashtags && marketing.hashtags.length > 0 && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                   <Hash className="w-4 h-4" />
                   Hashtags đề xuất:
                 </p>
@@ -359,7 +409,7 @@ const RecipeDisplay = ({ recipe }) => {
                   {marketing.hashtags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-medium rounded-full"
+                      className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xl font-medium rounded-full"
                     >
                       #{tag}
                     </span>
@@ -371,7 +421,7 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Post Caption */}
             {marketing.post_caption && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   📱 Caption đề xuất:
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -384,14 +434,14 @@ const RecipeDisplay = ({ recipe }) => {
             {marketing.target_platforms &&
               marketing.target_platforms.length > 0 && (
                 <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                     🎯 Nền tảng đề xuất:
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {marketing.target_platforms.map((platform, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-gray-100 dark:bg-dark-4 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg"
+                        className="px-3 py-1 bg-gray-100 dark:bg-dark-4 text-gray-700 dark:text-gray-300 text-xl font-medium rounded-lg"
                       >
                         {platform}
                       </span>
@@ -403,7 +453,7 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Viral Potential */}
             {analytics?.viral_potential && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                   <Zap className="w-4 h-4" />
                   Tiềm năng viral:
                 </p>
@@ -421,7 +471,7 @@ const RecipeDisplay = ({ recipe }) => {
                   </span>
                 </div>
                 {analytics.viral_potential.level && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">
                     Mức độ: <strong>{analytics.viral_potential.level}</strong>
                   </p>
                 )}
@@ -443,14 +493,14 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Detected Events */}
             {context.detected_events && context.detected_events.length > 0 && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   📅 Sự kiện phát hiện:
                 </p>
                 <ul className="space-y-1">
                   {context.detected_events.map((event, idx) => (
                     <li
                       key={idx}
-                      className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2"
+                      className="text-xl text-gray-700 dark:text-gray-300 flex items-start gap-2"
                     >
                       <CheckCircle className="w-4 h-4 text-indigo-500 flex-shrink-0 mt-0.5" />
                       {event}
@@ -463,14 +513,14 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Active Trends */}
             {context.active_trends && context.active_trends.length > 0 && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   🔥 Xu hướng đang hot:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {context.active_trends.map((trend, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-sm font-medium rounded-full"
+                      className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-blue-500 text-white text-xl font-medium rounded-full"
                     >
                       {trend}
                     </span>
@@ -482,14 +532,14 @@ const RecipeDisplay = ({ recipe }) => {
             {/* Demand Level */}
             {context.demand_forecast && (
               <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                <p className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   📊 Dự báo nhu cầu:
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="text-2xl font-bold text-indigo-600">
                     {context.demand_forecast.level || "N/A"}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-xl text-gray-600 dark:text-gray-400">
                     Score: {context.demand_forecast.score || "N/A"}
                   </div>
                 </div>
@@ -518,7 +568,7 @@ const RecipeDisplay = ({ recipe }) => {
                     <h4 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">
                       {event.event_name || "N/A"}
                     </h4>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-wrap items-center gap-3 text-xl text-gray-600 dark:text-gray-400">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {event.event_date || "N/A"}
@@ -545,7 +595,7 @@ const RecipeDisplay = ({ recipe }) => {
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                         Theme đề xuất:
                       </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <p className="text-xl font-medium text-gray-900 dark:text-white">
                         {event.suggested_theme}
                       </p>
                     </div>

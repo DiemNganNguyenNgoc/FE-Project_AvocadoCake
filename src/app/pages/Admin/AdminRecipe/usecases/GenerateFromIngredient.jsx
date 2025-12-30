@@ -115,7 +115,7 @@ const GenerateFromIngredient = () => {
                   <div className="font-medium text-xl text-avocado-brown-100 mb-1">
                     {template.name}
                   </div>
-                  <div className="text-sm text-avocado-brown-50 line-clamp-1">
+                  <div className="text-xl text-avocado-brown-50 line-clamp-1">
                     {template.ingredients}
                   </div>
                 </button>
