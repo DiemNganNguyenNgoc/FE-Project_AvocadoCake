@@ -126,6 +126,12 @@ const OrderHistoryCardComponent = ({ order, onRateClick }) => {
             </ButtonComponent>
           )}
         </div>
+        <ButtonComponent
+          className="btn-detail-top"
+          onClick={() => handleViewDetails(order._id)}
+        >
+          Chi tiết
+        </ButtonComponent>
       </div>
       <div className="order-products">
         {Array.isArray(order.orderItems) && order.orderItems.length > 0 ? (
@@ -167,13 +173,20 @@ const OrderHistoryCardComponent = ({ order, onRateClick }) => {
         )}
 
         <div className="order-footer d-flex justify-content-between align-items-center">
-          <ButtonComponent
-            className="btn-detail"
-            onClick={() => handleViewDetails(order._id)}
-          >
-            Chi tiết
-          </ButtonComponent>
-          <div className="order-total d-flex text-center gap-5">
+          {!order?.isPaid && order?.paymentStatus === "PENDING" && (
+            <ButtonComponent
+              // className="btn-pay-now"
+              // variant="primary"
+              onClick={() =>
+                navigate(`/payment`, {
+                  state: { orderId: order._id },
+                })
+              }
+            >
+              Thanh toán ngay
+            </ButtonComponent>
+          )}
+          <div className="order-total d-flex text-center gap-5 ms-auto">
             <label>Tổng số tiền: </label>{" "}
             <div>{totalAmount.toLocaleString()} VND</div>
           </div>

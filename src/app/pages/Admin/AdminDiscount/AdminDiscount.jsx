@@ -149,7 +149,9 @@ const AdminDiscountContent = () => {
           {activeTab === "list" && (
             <DiscountTable onEdit={handleEditDiscount} />
           )}
-          {activeTab === "calendar" && <DiscountCalendar />}
+          {activeTab === "calendar" && (
+            <DiscountCalendar onEdit={handleEditDiscount} />
+          )}
           {activeTab === "add" && <AddDiscount onSubmit={handleAddDiscount} />}
           {activeTab === "update" && selectedDiscountId && (
             <UpdateDiscount

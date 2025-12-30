@@ -64,6 +64,29 @@ const PaymentResultPage = () => {
             setPaymentStatus("success");
             dispatch(clearCart());
             console.log("✅ Cart cleared after successful payment");
+
+            // ✅ GỬI EMAIL SAU KHI THANH TOÁN THÀNH CÔNG
+            if (payment.orderId) {
+              try {
+                console.log("📧 Sending payment success email...");
+                await axios.post(
+                  `${apiUrl}/payment/send-payment-success-email/${payment.orderId}`,
+                  {},
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                console.log("✅ Payment success email sent successfully");
+              } catch (emailError) {
+                // Không throw error, chỉ log để không ảnh hưởng UX
+                console.error(
+                  "⚠️ Failed to send payment success email:",
+                  emailError
+                );
+              }
+            }
           } else if (payment.status === "FAILED") {
             setPaymentStatus("failed");
           } else if (payment.status === "PENDING") {
@@ -206,8 +229,8 @@ const PaymentResultPage = () => {
         <PaymentHeader
           status="pending"
           icon={<PendingIcon />}
-          title="Đang xử lý thanh toán"
-          subtitle="Giao dịch của bạn đang được xử lý"
+          title="Đơn hàng đã được nhận"
+          subtitle="Đơn hàng của bạn đã được tạo nhưng chưa thanh toán"
         />
         <div className="p-8 space-y-6">
           <PaymentInfo
@@ -217,33 +240,41 @@ const PaymentResultPage = () => {
           />
           <div className="text-center py-6">
             <p className="text-avocado-brown-100 text-lg leading-relaxed">
-              Thanh toán của bạn đang được xử lý.
+              Đơn hàng của bạn đã được nhận nhưng chưa hoàn tất thanh toán.
               <br />
-              {retryCount < 20 ? (
+              Vui lòng thanh toán để hoàn tất đơn hàng.
+              {retryCount < 20 && (
                 <>
-                  Hệ thống đang tự động kiểm tra... (lần {retryCount + 1}/20)
                   <br />
                   <span className="text-sm text-avocado-brown-80 mt-2 block">
-                    ⏱️ Tự động cập nhật sau 3 giây
+                    ⏱️ Hệ thống đang kiểm tra thanh toán... (lần{" "}
+                    {retryCount + 1}/20)
                   </span>
                 </>
-              ) : (
-                <>Vui lòng chờ trong giây lát hoặc kiểm tra lại sau.</>
               )}
             </p>
           </div>
           <PaymentActions
             primaryAction={{
-              text: "Kiểm tra lại ngay",
-              onClick: () => {
-                setRetryCount(0);
-                window.location.reload();
-              },
+              text: "Thanh toán ngay",
+              onClick: () =>
+                navigate(`/payment`, {
+                  state: { orderId: paymentData?.orderId },
+                }),
             }}
             secondaryActions={[
+              // {
+              //   text: "Kiểm tra lại",
+              //   onClick: () => {
+              //     setRetryCount(0);
+              //     window.location.reload();
+              //   },
+              //   variant: "primary",
+              // },
               {
                 text: "Xem đơn hàng",
-                onClick: () => navigate("/my-orders"),
+                onClick: () =>
+                  navigate(`/order-detail-history/${paymentData?.orderId}`),
                 variant: "primary",
               },
               {

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { processQuery } from "../../api/services/ChatbotService";
+import { chatbot, processQuery } from "../../api/services/ChatbotService";
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
 
@@ -15,6 +15,7 @@ const ChatbotComponent = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState(null); // Lưu session ID cho conversation
   const user = useSelector((state) => state.user);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -52,25 +53,29 @@ const ChatbotComponent = () => {
     setIsLoading(true);
 
     try {
-      // Send message to backend
-      const response = await processQuery(input, user?.id || null);
+      // Send message to backend với session_id
+      const response = await chatbot(input, sessionId, user?.id || null);
+
+      // Lưu session_id từ response để dùng cho tin nhắn tiếp theo
+      if (response.session_id && !sessionId) {
+        setSessionId(response.session_id);
+      }
 
       // Add bot response to chat
-      if (response.status === "OK") {
-        const botMessage = {
-          type: "bot",
-          content: response.message,
-          data: response.data,
-        };
-        setMessages((prev) => [...prev, botMessage]);
-      } else {
-        throw new Error(response.message || "Đã xảy ra lỗi");
-      }
+      const botMessage = {
+        type: "bot",
+        content: response.text,
+        intent: response.intent,
+        confidence: response.confidence,
+      };
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error sending message:", error);
       const errorMessage = {
         type: "bot",
-        content: "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
+        content:
+          error.message ||
+          "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
         isError: true,
       };
       setMessages((prev) => [...prev, errorMessage]);

@@ -249,13 +249,13 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         <h2 className="text-xl font-semibold text-gray-800 mb-2">
           Cập nhật khuyến mãi
         </h2>
-        <p className="text-gray-600 text-sm">Chỉnh sửa thông tin khuyến mãi</p>
+        <p className="text-gray-600 text-lg">Chỉnh sửa thông tin khuyến mãi</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Banner Upload */}
         <div className="bg-gray-50 rounded-xl p-6 border-2 border-dashed border-gray-200 hover:border-brand-300 transition-colors">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-lg font-medium text-gray-700 mb-3">
             Banner khuyến mãi
           </label>
           <input
@@ -290,7 +290,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
-                <p className="text-sm text-gray-500">
+                <p className="text-lg text-gray-500">
                   Click để chọn hình ảnh mới
                 </p>
               </div>
@@ -302,7 +302,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Discount Code */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Mã khuyến mãi <span className="text-red-500">*</span>
             </label>
             <input
@@ -324,7 +324,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
           {/* Discount Value */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Giá trị khuyến mãi (%) <span className="text-red-500">*</span>
             </label>
             <input
@@ -351,7 +351,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
         {/* Discount Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-lg font-medium text-gray-700 mb-2">
             Tên khuyến mãi <span className="text-red-500">*</span>
           </label>
           <input
@@ -373,7 +373,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
         {/* Product Selection */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-lg font-medium text-gray-700 mb-3">
             Chọn sản phẩm áp dụng <span className="text-red-500">*</span>
           </label>
           <div
@@ -393,13 +393,13 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
                     onChange={() => handleProductChange(product._id)}
                     className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 border-gray-300"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-lg text-gray-700">
                     {product.productName}
                   </span>
                 </label>
               ))
             ) : (
-              <p className="text-gray-500 text-sm">Không có sản phẩm nào</p>
+              <p className="text-gray-500 text-lg">Không có sản phẩm nào</p>
             )}
           </div>
           {errors.discountProduct && (
@@ -412,7 +412,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         {/* Date Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Ngày bắt đầu <span className="text-red-500">*</span>
             </label>
             <input
@@ -434,7 +434,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Ngày kết thúc <span className="text-red-500">*</span>
             </label>
             <input

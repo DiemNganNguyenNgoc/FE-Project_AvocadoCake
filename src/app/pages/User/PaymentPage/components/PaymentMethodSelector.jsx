@@ -21,7 +21,7 @@ const PaymentMethodSelector = ({
           gap: "10px",
         }}
       >
-        <label style={{ cursor: "pointer" }}>
+        {/* <label style={{ cursor: "pointer" }}>
           <input
             type="radio"
             value="paypal"
@@ -30,7 +30,7 @@ const PaymentMethodSelector = ({
             style={{ marginRight: "5px" }}
           />
           PayPal
-        </label>
+        </label> */}
         <label style={{ cursor: "pointer" }}>
           <input
             type="radio"
