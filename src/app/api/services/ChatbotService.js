@@ -8,9 +8,13 @@ import axios from "axios";
  */
 export const processQuery = async (query, userId = null) => {
   try {
+    console.log("Sending query to chatbot:", query, "User ID:", userId);
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL_BACKEND}/chatbot/process-query`,
-      { query, userId },
+      "http://localhost:8002/chat",
+      {
+        message: query,
+        session_id: userId,
+      },
       {
         headers: {
           "Content-Type": "application/json",
@@ -21,7 +25,8 @@ export const processQuery = async (query, userId = null) => {
   } catch (error) {
     if (error.response) {
       throw {
-        message: error.response.data?.message || "Đã xảy ra lỗi khi xử lý tin nhắn.",
+        message:
+          error.response.data?.message || "Đã xảy ra lỗi khi xử lý tin nhắn.",
       };
     } else {
       throw { message: "Không thể kết nối đến máy chủ." };
@@ -52,7 +57,9 @@ export const getArticleDetails = async (productId) => {
   } catch (error) {
     if (error.response) {
       throw {
-        message: error.response.data?.message || "Đã xảy ra lỗi khi lấy thông tin bài viết.",
+        message:
+          error.response.data?.message ||
+          "Đã xảy ra lỗi khi lấy thông tin bài viết.",
       };
     } else {
       throw { message: "Không thể kết nối đến máy chủ." };

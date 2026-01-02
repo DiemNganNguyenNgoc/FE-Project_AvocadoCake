@@ -665,7 +665,7 @@ const OrderInformationPage = () => {
                 </ButtonComponent>
 
                 <ButtonComponent
-                  className="Next_btn px-12"
+                  className="Next_btn px-2"
                   onClick={handleClickNext}
                 >
                   Thanh toán

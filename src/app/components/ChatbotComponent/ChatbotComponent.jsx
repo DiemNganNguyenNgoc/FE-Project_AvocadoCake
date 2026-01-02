@@ -54,23 +54,28 @@ const ChatbotComponent = () => {
     try {
       // Send message to backend
       const response = await processQuery(input, user?.id || null);
-
+      console.log("BOT RESPONSE RAW:", response);
+      console.log("BOT RESPONSE MESSAGE:", response.status, response.message);
       // Add bot response to chat
-      if (response.status === "OK") {
+      if (response.status === "200" || response.text != null) {
         const botMessage = {
           type: "bot",
-          content: response.message,
+          content: response.text,
           data: response.data,
         };
         setMessages((prev) => [...prev, botMessage]);
       } else {
+        console.error("Error response from chatbot:", response);
         throw new Error(response.message || "Đã xảy ra lỗi");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Full error object:", error); // log toàn bộ error
+      console.error("Backend response data:", error.response); // log data gốc
       const errorMessage = {
         type: "bot",
-        content: "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
+        content:
+          error.response?.data?.message ||
+          "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
         isError: true,
       };
       setMessages((prev) => [...prev, errorMessage]);
