@@ -51,7 +51,7 @@ export default function TextOnCake({
         className={`px-4 py-2 text-avocado-brown-100 transition 
           ${
             !newText.trim()
-              ? "opacity-50 cursor-not-allowed rounded-full"
+              ? "opacity-50 bg-lime-400 cursor-not-allowed rounded-full"
               : " bg-lime-400 rounded-full hover:shadow-md"
           }`}
       >
