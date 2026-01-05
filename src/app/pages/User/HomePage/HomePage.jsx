@@ -26,6 +26,7 @@ const HomePage = () => {
   //Hooks
   const [promos, setPromos] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [displayCategories, setDisplayCategories] = useState([]); // 5 random categories to display
   const [error, setError] = useState("");
   const [arrImgs, setArrImg] = useState([]); // promo images
   const [products, setProducts] = useState([]); // product list
@@ -186,8 +187,13 @@ const HomePage = () => {
         const response = await getAllCategory();
         setCategories(response.data);
 
+        // Shuffle and get 5 random categories for display
+        const shuffled = [...response.data].sort(() => Math.random() - 0.5);
+        const randomFive = shuffled.slice(0, 5);
+        setDisplayCategories(randomFive);
+
         if (response.data.length > 0) {
-          const firstCategoryId = response.data[0]._id;
+          const firstCategoryId = randomFive[0]._id;
           setCurrentCategory(firstCategoryId);
           fetchProducts(0, 9, firstCategoryId);
         }
@@ -322,7 +328,7 @@ const HomePage = () => {
             paddingBottom: 25,
           }}
         >
-          {categories.map((category) => (
+          {displayCategories.map((category) => (
             <ButtonNoBGComponent
               key={category._id}
               onClick={() => handleCategoryClick(category._id)}

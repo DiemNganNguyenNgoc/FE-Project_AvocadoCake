@@ -31,19 +31,26 @@ const ViewProductDetailPage = () => {
 
   console.log("Product Data from location:", productData); // Thêm log này
 
-  const [product, setProduct] = useState(
-    productData || {
-      productName: "",
-      productPrice: "",
-      productSize: "",
-      productCategory: "",
-      productImage: null,
-      productDescription: "",
-      averageRating: 0,
-      totalRatings: 0,
-      discount: "",
-    }
-  );
+  // Map productId ngay từ initial state
+  const initialProduct = productData
+    ? {
+        ...productData,
+        productId: productData._id || productData.productId,
+      }
+    : {
+        productName: "",
+        productPrice: "",
+        productSize: "",
+        productCategory: "",
+        productImage: null,
+        productDescription: "",
+        averageRating: 0,
+        totalRatings: 0,
+        discount: "",
+        productId: null,
+      };
+
+  const [product, setProduct] = useState(initialProduct);
 
   useEffect(() => {
     if (productData) {
@@ -53,6 +60,7 @@ const ViewProductDetailPage = () => {
         productId: productData._id || productData.productId,
       };
       console.log("🔍 Mapped product data:", mappedProduct);
+      console.log("🔍 productId value:", mappedProduct.productId);
       setProduct(mappedProduct);
       window.scrollTo(0, 0);
     }
@@ -350,21 +358,38 @@ const ViewProductDetailPage = () => {
 
   // Fetch ratings when product changes
   useEffect(() => {
+    console.log("🎬 Ratings useEffect triggered!");
+    console.log("🎬 Current product.productId:", product.productId);
+
     const fetchRatings = async () => {
       if (product.productId) {
         try {
           setLoadingRatings(true);
+          console.log("🔍 Fetching ratings for productId:", product.productId);
           const response = await getProductRatings(product.productId);
+          console.log("📊 Ratings response:", response);
           if (response.status === "OK") {
+            console.log("✅ Ratings data:", response.data);
+            console.log("📝 Number of ratings:", response.data?.length || 0);
             setRatings(response.data);
             // Reset visible count khi product thay đổi
             setVisibleRatingsCount(10);
+          } else {
+            console.log("⚠️ Response status not OK:", response);
+            setRatings([]);
           }
         } catch (error) {
-          console.error("Error fetching ratings:", error);
+          console.error("❌ Error fetching ratings:", error);
+          setRatings([]);
         } finally {
           setLoadingRatings(false);
         }
+      } else {
+        console.log(
+          "⚠️ No productId available for fetching ratings, value is:",
+          product.productId
+        );
+        console.log("⚠️ Full product object:", product);
       }
     };
 
@@ -558,6 +583,11 @@ const ViewProductDetailPage = () => {
               />
             </div>
           </div>
+
+          {/* Debug info */}
+          {console.log("🎯 Current ratings state:", ratings)}
+          {console.log("🎯 Loading ratings:", loadingRatings)}
+          {console.log("🎯 Ratings length:", ratings?.length || 0)}
 
           {loadingRatings ? (
             <div>Đang tải đánh giá...</div>

@@ -273,69 +273,132 @@ const SmartRecipeDisplay = ({ data }) => {
           <div className="mb-6">
             <h4 className="text-lg font-bold text-avocado-brown-100 mb-3 flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-avocado-green-100" />
-              Cách Làm ({recipe.instructions.length} bước)
+              Cách Làm
             </h4>
             <ol className="space-y-4">
-              {recipe.instructions.map((step, idx) => {
-                const { title, content } = parseStepText(step);
+              {(() => {
+                // Join all instructions into one string if array
+                const fullText = Array.isArray(recipe.instructions)
+                  ? recipe.instructions.join("\n")
+                  : recipe.instructions;
 
-                return (
-                  <li
-                    key={idx}
-                    className="flex gap-4 rounded-lg p-5 border-2 border-avocado-brown-30 hover:border-avocado-green-100 transition-colors shadow-sm"
-                  >
-                    <div className="flex-shrink-0 bg-avocado-green-100 w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
-                      {idx + 1}
-                    </div>
-                    <div className="flex-1">
-                      {title && (
-                        <h5 className="text-2xl font-bold text-avocado-brown-100 mb-3">
-                          {formatMarkdownText(title)}
-                        </h5>
-                      )}
-                      <div className="text-avocado-brown-70">
-                        {content.split("\n").map((line, lineIdx) => {
-                          if (!line.trim()) return null;
+                let steps = [];
 
-                          // Check if line contains TIPS (but might have text before it)
-                          const tipsMatch = line.match(
-                            /(.*)(\*\*TIPS:\*\*|\*\*Tips:\*\*)(.*)/i
-                          );
+                // Try markdown format first: **1. Title:**
+                const markdownPattern = /\*\*(\d+)\.\s+([^*]+)\*\*/g;
+                let match;
+                let lastIndex = 0;
 
-                          if (tipsMatch) {
-                            const [, beforeTips, tipsLabel, afterTips] =
-                              tipsMatch;
+                while ((match = markdownPattern.exec(fullText)) !== null) {
+                  if (steps.length > 0) {
+                    const content = fullText
+                      .substring(lastIndex, match.index)
+                      .trim();
+                    steps[steps.length - 1].content = content;
+                  }
 
-                            return (
-                              <div key={lineIdx}>
-                                {/* Text before TIPS */}
-                                {beforeTips.trim() && (
-                                  <p className="mb-2">
-                                    {formatMarkdownText(beforeTips.trim())}
-                                  </p>
-                                )}
+                  steps.push({
+                    number: match[1],
+                    title: match[2].trim().replace(/:$/, ""),
+                    content: "",
+                  });
 
-                                {/* TIPS box */}
-                                <div className="mt-4 mb-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                                  <div className="text-yellow-900 font-medium">
-                                    {formatMarkdownText(tipsLabel + afterTips)}
+                  lastIndex = match.index + match[0].length;
+                }
+
+                if (steps.length > 0) {
+                  const remaining = fullText.substring(lastIndex).trim();
+                  steps[steps.length - 1].content = remaining;
+                }
+
+                // If no markdown format found, try plain text format: "Bước 1:", "Bước 2:", etc.
+                if (steps.length === 0 && Array.isArray(recipe.instructions)) {
+                  steps = recipe.instructions.map((instruction, idx) => {
+                    // Try to extract title from patterns like "Bước 1: Title. Content"
+                    const stepMatch = instruction.match(
+                      /^(Bước\s*\d+|Step\s*\d+)\s*:\s*([^.]+)\.(.*)/i
+                    );
+
+                    if (stepMatch) {
+                      return {
+                        number: idx + 1,
+                        title: stepMatch[2].trim(),
+                        content: stepMatch[3].trim(),
+                      };
+                    }
+
+                    // If no clear title, use the whole instruction as content
+                    return {
+                      number: idx + 1,
+                      title: "",
+                      content: instruction,
+                    };
+                  });
+                }
+
+                return steps.map((step, idx) => {
+                  const { title, content } = step;
+
+                  return (
+                    <li
+                      key={idx}
+                      className="flex gap-4 rounded-lg p-5 border-2 border-avocado-brown-30 hover:border-avocado-green-100 transition-colors shadow-sm"
+                    >
+                      <div className="flex-shrink-0 bg-avocado-green-100 w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+                        {idx + 1}
+                      </div>
+                      <div className="flex-1">
+                        {title && (
+                          <h5 className="text-2xl font-bold text-avocado-brown-100 mb-3">
+                            {formatMarkdownText(title)}
+                          </h5>
+                        )}
+                        <div className="text-avocado-brown-70">
+                          {content.split("\n").map((line, lineIdx) => {
+                            if (!line.trim()) return null;
+
+                            // Check if line contains TIPS (but might have text before it)
+                            const tipsMatch = line.match(
+                              /(.*)(\*\*TIPS:\*\*|\*\*Tips:\*\*)(.*)/i
+                            );
+
+                            if (tipsMatch) {
+                              const [, beforeTips, tipsLabel, afterTips] =
+                                tipsMatch;
+
+                              return (
+                                <div key={lineIdx}>
+                                  {/* Text before TIPS */}
+                                  {beforeTips.trim() && (
+                                    <p className="mb-2">
+                                      {formatMarkdownText(beforeTips.trim())}
+                                    </p>
+                                  )}
+
+                                  {/* TIPS box */}
+                                  <div className="mt-4 mb-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                                    <div className="text-yellow-900 font-medium">
+                                      {formatMarkdownText(
+                                        tipsLabel + afterTips
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          }
+                              );
+                            }
 
-                          return (
-                            <p key={lineIdx} className="mb-2 last:mb-0">
-                              {formatMarkdownText(line)}
-                            </p>
-                          );
-                        })}
+                            return (
+                              <p key={lineIdx} className="mb-2 last:mb-0">
+                                {formatMarkdownText(line)}
+                              </p>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })}
+                    </li>
+                  );
+                });
+              })()}
             </ol>
           </div>
         )}

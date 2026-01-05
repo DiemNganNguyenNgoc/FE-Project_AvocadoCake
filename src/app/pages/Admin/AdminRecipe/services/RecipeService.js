@@ -3,6 +3,8 @@
  * Base URL: http://localhost:8000/api/v1
  */
 
+import { transformRecipeResponse } from "../utils/recipeTransformHelper";
+
 const RECIPE_API_BASE_URL =
   process.env.REACT_APP_RECIPE_API_URL ||
   "https://rcm-recipe-3.onrender.com/api/v1/";
@@ -15,9 +17,18 @@ class RecipeAPIService {
       : RECIPE_API_BASE_URL + "/";
 
     // Base URL cho root endpoints (không có /api/v1/)
-    // Extract base URL without /api/v1/
-    const url = new URL(this.baseURL);
-    this.rootURL = `${url.protocol}//${url.host}/`;
+    // Xử lý cả absolute URLs (http://...) và relative URLs (/recipe-api)
+    if (
+      this.baseURL.startsWith("http://") ||
+      this.baseURL.startsWith("https://")
+    ) {
+      // Absolute URL - extract protocol và host
+      const url = new URL(this.baseURL);
+      this.rootURL = `${url.protocol}//${url.host}/`;
+    } else {
+      // Relative URL - dùng relative path
+      this.rootURL = this.baseURL.replace(/\/api\/v1\/$/, "/");
+    }
 
     console.log("🔧 RecipeService initialized:");
     console.log("   baseURL:", this.baseURL);
@@ -101,16 +112,18 @@ class RecipeAPIService {
     );
 
     // Transform backend response to match frontend expectations
-    // Backend returns: { status: "success", data: {...} }
+    // Backend returns: { result: { recipe: {...}, analytics: {...}, metadata: {...} } }
     // Frontend expects: { recipe: {...}, analytics: {...} }
-    if (response && response.data) {
-      const recipeData = response.data;
+    if (response && response.result && response.result.recipe) {
+      const recipeData = response.result.recipe;
+      const analyticsData = response.result.analytics || {};
+      const metadataData = response.result.metadata || {};
 
       // Map backend fields to frontend expected format
       return {
         recipe: {
-          name: recipeData.title,
-          title: recipeData.title,
+          name: recipeData.name || recipeData.title,
+          title: recipeData.title || recipeData.name,
           description: recipeData.description,
           prep_time: recipeData.prep_time,
           cook_time: recipeData.cook_time,
@@ -147,6 +160,57 @@ class RecipeAPIService {
           tags: recipeData.tags || [],
           estimated_cost: recipeData.estimated_cost,
           // NEW FIELDS from backend
+          marketing_caption: recipeData.marketing_caption,
+          decoration_tips: recipeData.decoration_tips,
+          notes: recipeData.notes,
+          image_prompt: recipeData.image_prompt,
+        },
+        analytics: analyticsData,
+        metadata: metadataData,
+      };
+    }
+
+    // Fallback: old format with response.data
+    if (response && response.data) {
+      const recipeData = response.data;
+
+      return {
+        recipe: {
+          name: recipeData.title || recipeData.name,
+          title: recipeData.title || recipeData.name,
+          description: recipeData.description,
+          prep_time: recipeData.prep_time,
+          cook_time: recipeData.cook_time,
+          servings: recipeData.servings,
+          difficulty: recipeData.difficulty,
+          ingredients: Array.isArray(recipeData.ingredients)
+            ? recipeData.ingredients
+                .map((ing) => {
+                  if (typeof ing === "string") return ing;
+                  if (ing.name) {
+                    const parts = [];
+                    if (ing.quantity) parts.push(ing.quantity);
+                    if (ing.unit) parts.push(ing.unit);
+                    if (ing.name) parts.push(ing.name);
+                    return parts.join(" ");
+                  }
+                  return "";
+                })
+                .filter((ing) => ing.trim() !== "")
+            : [],
+          instructions: Array.isArray(recipeData.instructions)
+            ? recipeData.instructions
+                .map((inst) => {
+                  if (typeof inst === "string") return inst;
+                  if (inst.step) return inst.step;
+                  if (inst.instruction) return inst.instruction;
+                  return "";
+                })
+                .filter((inst) => inst.trim() !== "")
+            : [],
+          tips: recipeData.tips || [],
+          tags: recipeData.tags || [],
+          estimated_cost: recipeData.estimated_cost,
           marketing_caption: recipeData.marketing_caption,
           decoration_tips: recipeData.decoration_tips,
           notes: recipeData.notes,
@@ -190,16 +254,18 @@ class RecipeAPIService {
     });
 
     // Transform backend response to match frontend expectations
-    // Backend returns: { status: "success", data: {...} }
+    // Backend returns: { result: { recipe: {...}, analytics: {...}, metadata: {...} } }
     // Frontend expects: { recipe: {...}, analytics: {...} }
-    if (response && response.data) {
-      const recipeData = response.data;
+    if (response && response.result && response.result.recipe) {
+      const recipeData = response.result.recipe;
+      const analyticsData = response.result.analytics || {};
+      const metadataData = response.result.metadata || {};
 
       // Map backend fields to frontend expected format
       return {
         recipe: {
-          name: recipeData.title,
-          title: recipeData.title,
+          name: recipeData.name || recipeData.title,
+          title: recipeData.title || recipeData.name,
           description: recipeData.description,
           prep_time: recipeData.prep_time,
           cook_time: recipeData.cook_time,
@@ -236,6 +302,57 @@ class RecipeAPIService {
           tags: recipeData.tags || [],
           estimated_cost: recipeData.estimated_cost,
           // NEW FIELDS from backend
+          marketing_caption: recipeData.marketing_caption,
+          decoration_tips: recipeData.decoration_tips,
+          notes: recipeData.notes,
+          image_prompt: recipeData.image_prompt,
+        },
+        analytics: analyticsData,
+        metadata: metadataData,
+      };
+    }
+
+    // Fallback: old format with response.data
+    if (response && response.data) {
+      const recipeData = response.data;
+
+      return {
+        recipe: {
+          name: recipeData.title || recipeData.name,
+          title: recipeData.title || recipeData.name,
+          description: recipeData.description,
+          prep_time: recipeData.prep_time,
+          cook_time: recipeData.cook_time,
+          servings: recipeData.servings,
+          difficulty: recipeData.difficulty,
+          ingredients: Array.isArray(recipeData.ingredients)
+            ? recipeData.ingredients
+                .map((ing) => {
+                  if (typeof ing === "string") return ing;
+                  if (ing.name) {
+                    const parts = [];
+                    if (ing.quantity) parts.push(ing.quantity);
+                    if (ing.unit) parts.push(ing.unit);
+                    if (ing.name) parts.push(ing.name);
+                    return parts.join(" ");
+                  }
+                  return "";
+                })
+                .filter((ing) => ing.trim() !== "")
+            : [],
+          instructions: Array.isArray(recipeData.instructions)
+            ? recipeData.instructions
+                .map((inst) => {
+                  if (typeof inst === "string") return inst;
+                  if (inst.step) return inst.step;
+                  if (inst.instruction) return inst.instruction;
+                  return "";
+                })
+                .filter((inst) => inst.trim() !== "")
+            : [],
+          tips: recipeData.tips || [],
+          tags: recipeData.tags || [],
+          estimated_cost: recipeData.estimated_cost,
           marketing_caption: recipeData.marketing_caption,
           decoration_tips: recipeData.decoration_tips,
           notes: recipeData.notes,

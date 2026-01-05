@@ -82,10 +82,22 @@ const RecipeDisplay = ({ recipe }) => {
           <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Clock className="w-4 h-4" />
-              <span className="text-xl font-medium">Thời gian</span>
+              <span className="text-xl font-medium">Thời gian chuẩn bị</span>
             </div>
             <p className="text-lg font-bold text-gray-900 dark:text-white">
-              {recipeData.prep_time} phút
+              {recipeData.prep_time}
+            </p>
+          </div>
+        )}
+
+        {recipeData.cook_time && (
+          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
+              <Flame className="w-4 h-4" />
+              <span className="text-xl font-medium">Thời gian nấu</span>
+            </div>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">
+              {recipeData.cook_time}
             </p>
           </div>
         )}
@@ -135,17 +147,36 @@ const RecipeDisplay = ({ recipe }) => {
             Nguyên liệu
           </h3>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {recipeData.ingredients.map((ingredient, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-3 bg-gray-50 dark:bg-dark-3 rounded-lg p-3"
-              >
-                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">
-                  {ingredient}
-                </span>
-              </li>
-            ))}
+            {recipeData.ingredients.map((ingredient, index) => {
+              // Handle both string and object formats
+              let displayText = "";
+
+              if (typeof ingredient === "string") {
+                displayText = ingredient;
+              } else if (
+                typeof ingredient === "object" &&
+                ingredient !== null
+              ) {
+                // Object format: {name, quantity, unit, category}
+                const parts = [];
+                if (ingredient.quantity) parts.push(ingredient.quantity);
+                if (ingredient.unit) parts.push(ingredient.unit);
+                if (ingredient.name) parts.push(ingredient.name);
+                displayText = parts.join(" ");
+              }
+
+              return (
+                <li
+                  key={index}
+                  className="flex items-start gap-3 bg-gray-50 dark:bg-dark-3 rounded-lg p-3"
+                >
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700 dark:text-gray-300">
+                    {displayText}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -158,66 +189,130 @@ const RecipeDisplay = ({ recipe }) => {
             Hướng dẫn thực hiện
           </h3>
           <ol className="space-y-4">
-            {recipeData.instructions.map((instruction, index) => {
-              const { title, content } = parseStepText(instruction);
+            {(() => {
+              // Join all instructions into one string if array
+              const fullText = Array.isArray(recipeData.instructions)
+                ? recipeData.instructions.join("\n")
+                : recipeData.instructions;
 
-              return (
-                <li
-                  key={index}
-                  className="flex items-start gap-4 bg-gray-50 dark:bg-dark-3 rounded-lg p-4"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1">
-                    {title && (
-                      <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                        {formatMarkdownText(title)}
-                      </h4>
-                    )}
-                    <div className="text-gray-700 dark:text-gray-300">
-                      {content.split("\n").map((line, lineIdx) => {
-                        if (!line.trim()) return null;
+              let steps = [];
 
-                        // Check if line contains TIPS (but might have text before it)
-                        const tipsMatch = line.match(
-                          /(.*)(\*\*TIPS:\*\*|\*\*Tips:\*\*)(.*)/i
-                        );
+              // Try markdown format first: **1. Title:**
+              const markdownPattern = /\*\*(\d+)\.\s+([^*]+)\*\*/g;
+              let match;
+              let lastIndex = 0;
 
-                        if (tipsMatch) {
-                          const [, beforeTips, tipsLabel, afterTips] =
-                            tipsMatch;
+              while ((match = markdownPattern.exec(fullText)) !== null) {
+                if (steps.length > 0) {
+                  const content = fullText
+                    .substring(lastIndex, match.index)
+                    .trim();
+                  steps[steps.length - 1].content = content;
+                }
 
-                          return (
-                            <div key={lineIdx}>
-                              {/* Text before TIPS */}
-                              {beforeTips.trim() && (
-                                <p className="mb-2">
-                                  {formatMarkdownText(beforeTips.trim())}
-                                </p>
-                              )}
+                steps.push({
+                  number: match[1],
+                  title: match[2].trim().replace(/:$/, ""),
+                  content: "",
+                });
 
-                              {/* TIPS box */}
-                              <div className="mt-4 mb-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
-                                <div className="text-yellow-900 dark:text-yellow-200 font-medium">
-                                  {formatMarkdownText(tipsLabel + afterTips)}
+                lastIndex = match.index + match[0].length;
+              }
+
+              if (steps.length > 0) {
+                const remaining = fullText.substring(lastIndex).trim();
+                steps[steps.length - 1].content = remaining;
+              }
+
+              // If no markdown format found, try plain text format: "Bước 1:", "Bước 2:", etc.
+              if (
+                steps.length === 0 &&
+                Array.isArray(recipeData.instructions)
+              ) {
+                steps = recipeData.instructions.map((instruction, idx) => {
+                  // Try to extract title from patterns like "Bước 1: Title. Content"
+                  const stepMatch = instruction.match(
+                    /^(Bước\s*\d+|Step\s*\d+)\s*:\s*([^.]+)\.(.*)/i
+                  );
+
+                  if (stepMatch) {
+                    return {
+                      number: idx + 1,
+                      title: stepMatch[2].trim(),
+                      content: stepMatch[3].trim(),
+                    };
+                  }
+
+                  // If no clear title, use the whole instruction as content
+                  return {
+                    number: idx + 1,
+                    title: "",
+                    content: instruction,
+                  };
+                });
+              }
+
+              return steps.map((step, index) => {
+                const { title, content } = step;
+
+                return (
+                  <li
+                    key={index}
+                    className="flex items-start gap-4 bg-gray-50 dark:bg-dark-3 rounded-lg p-4"
+                  >
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      {title && (
+                        <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                          {formatMarkdownText(title)}
+                        </h4>
+                      )}
+                      <div className="text-gray-700 dark:text-gray-300">
+                        {content.split("\n").map((line, lineIdx) => {
+                          if (!line.trim()) return null;
+
+                          // Check if line contains TIPS (but might have text before it)
+                          const tipsMatch = line.match(
+                            /(.*)(\*\*TIPS:\*\*|\*\*Tips:\*\*)(.*)/i
+                          );
+
+                          if (tipsMatch) {
+                            const [, beforeTips, tipsLabel, afterTips] =
+                              tipsMatch;
+
+                            return (
+                              <div key={lineIdx}>
+                                {/* Text before TIPS */}
+                                {beforeTips.trim() && (
+                                  <p className="mb-2">
+                                    {formatMarkdownText(beforeTips.trim())}
+                                  </p>
+                                )}
+
+                                {/* TIPS box */}
+                                <div className="mt-4 mb-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
+                                  <div className="text-yellow-900 dark:text-yellow-200 font-medium">
+                                    {formatMarkdownText(tipsLabel + afterTips)}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        }
+                            );
+                          }
 
-                        return (
-                          <p key={lineIdx} className="mb-2 last:mb-0">
-                            {formatMarkdownText(line)}
-                          </p>
-                        );
-                      })}
+                          return (
+                            <p key={lineIdx} className="mb-2 last:mb-0">
+                              {formatMarkdownText(line)}
+                            </p>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              );
-            })}
+                  </li>
+                );
+              });
+            })()}
           </ol>
         </div>
       )}
@@ -240,6 +335,47 @@ const RecipeDisplay = ({ recipe }) => {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Decoration Tips */}
+      {recipeData.decoration_tips && (
+        <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-xl p-6 border border-pink-200 dark:border-pink-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Sparkles className="w-6 h-6 text-pink-600" />
+            Mẹo trang trí
+          </h3>
+          <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            {formatMarkdownText(recipeData.decoration_tips)}
+          </div>
+        </div>
+      )}
+
+      {/* Notes */}
+      {recipeData.notes && (
+        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <AlertCircle className="w-6 h-6 text-blue-600" />
+            Lưu ý quan trọng
+          </h3>
+          <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            {formatMarkdownText(recipeData.notes)}
+          </div>
+        </div>
+      )}
+
+      {/* Marketing Caption */}
+      {recipeData.marketing_caption && (
+        <div className="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <Megaphone className="w-6 h-6 text-purple-600" />
+            Marketing Caption
+          </h3>
+          <div className="bg-white dark:bg-dark-3 rounded-lg p-4">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+              {recipeData.marketing_caption}
+            </p>
+          </div>
         </div>
       )}
 
