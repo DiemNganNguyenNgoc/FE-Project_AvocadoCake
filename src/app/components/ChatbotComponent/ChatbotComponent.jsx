@@ -97,7 +97,7 @@ const ChatbotComponent = () => {
     <div className={styles["chatbot-container"]}>
       {/* Chatbot toggle button */}
       <button
-        className={`${styles["chatbot-toggle"]} ${
+        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${
           isOpen ? styles["open"] : ""
         }`}
         onClick={toggleChatbot}

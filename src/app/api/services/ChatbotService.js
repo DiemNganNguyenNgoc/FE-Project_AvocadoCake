@@ -10,7 +10,7 @@ export const processQuery = async (query, userId = null) => {
   try {
     console.log("Sending query to chatbot:", query, "User ID:", userId);
     const res = await axios.post(
-      "http://localhost:8002/chat",
+      `${process.env.REACT_APP_CHATBOT_API_URL}/chat`,
       {
         message: query,
         session_id: userId,
