@@ -205,3 +205,80 @@ export const smartFormatText = (text, type = "default") => {
       return formatParagraphsWithMarkdown(text);
   }
 };
+
+/**
+ * Format decoration tips or notes with proper line breaks
+ * - Remove ### headers
+ * - Break at "Bước X:"
+ * - Break at "TIPS:"
+ * - Break at bullet points (-)
+ * @param {string} text - Text cần format
+ * @returns {JSX[]} - Array of formatted sections
+ */
+export const formatDecorationOrNotes = (text) => {
+  if (!text) return null;
+
+  // Remove ### headers
+  let cleanedText = text.replace(/###\s*/g, "");
+
+  cleanedText = cleanedText
+    .replace(/\*\*(?!\w)/g, "")
+    .replace(/(?<!\w)\*\*/g, "");
+
+  // Split by patterns that should create new lines
+  // Match: "Bước X:", "TIPS:", or lines starting with "-"
+  const parts = cleanedText.split(/(?=Bước \d+:|TIPS:|^- )/gm);
+
+  return parts
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .map((part, index) => {
+      // Check if this is a TIPS section
+      const isTips = part.startsWith("TIPS:");
+
+      // Check if this is a bullet point
+      const isBullet = part.startsWith("-");
+
+      // Check if this is a step
+      const isStep = part.match(/^Bước \d+:/);
+
+      if (isTips) {
+        return (
+          <div
+            key={index}
+            className="mt-4 mb-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded"
+          >
+            <div className="text-yellow-900 dark:text-yellow-200">
+              {formatMarkdownText(part)}
+            </div>
+          </div>
+        );
+      }
+
+      if (isBullet) {
+        return (
+          <div key={index} className="mb-2 pl-4">
+            <span className="text-gray-700 dark:text-gray-300">
+              {formatMarkdownText(part)}
+            </span>
+          </div>
+        );
+      }
+
+      if (isStep) {
+        return (
+          <div key={index} className="mb-4 mt-3">
+            <div className="font-semibold text-gray-900 dark:text-white mb-2">
+              {formatMarkdownText(part)}
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <p key={index} className="mb-2 text-gray-700 dark:text-gray-300">
+          {formatMarkdownText(part)}
+        </p>
+      );
+    });
+};

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import { USER_SEGMENTS, LANGUAGES } from "../services/RecipeService";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import GenerateImage from "../partials/GenerateImage";
 import Button from "../../../../components/AdminLayout/Button";
 
 /**
@@ -28,6 +29,7 @@ const GenerateFromTrend = () => {
   });
 
   const [showResult, setShowResult] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
 
   /**
    * Load trends on mount
@@ -74,6 +76,7 @@ const GenerateFromTrend = () => {
     try {
       toast.info("🤖 Đang tạo công thức từ xu hướng...");
 
+      setGeneratedImage(null); // Reset image when generating new recipe
       await generateFromTrend(formData);
 
       setShowResult(true);
@@ -94,6 +97,15 @@ const GenerateFromTrend = () => {
       language: "vi",
     });
     setShowResult(false);
+    setGeneratedImage(null);
+  };
+
+  /**
+   * Handle image generated
+   */
+  const handleImageGenerated = (imageData) => {
+    setGeneratedImage(imageData);
+    console.log("Image generated:", imageData);
   };
 
   /**
@@ -373,6 +385,12 @@ const GenerateFromTrend = () => {
           </div>
 
           <RecipeDisplay recipe={currentRecipe} />
+
+          {/* Generate Image Section */}
+          <GenerateImage
+            recipe={currentRecipe?.recipe}
+            onImageGenerated={handleImageGenerated}
+          />
         </div>
       )}
     </div>

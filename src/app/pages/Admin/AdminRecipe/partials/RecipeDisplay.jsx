@@ -19,7 +19,11 @@ import {
 } from "lucide-react";
 
 // Import formatting utilities
-import { formatMarkdownText, parseStepText } from "../utils/formatText";
+import {
+  formatMarkdownText,
+  parseStepText,
+  formatDecorationOrNotes,
+} from "../utils/formatText";
 
 /**
  * RecipeDisplay - Component hiển thị chi tiết công thức
@@ -60,7 +64,7 @@ const RecipeDisplay = ({ recipe }) => {
   return (
     <div className="space-y-6">
       {/* Recipe Header */}
-      <div className="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-2xl p-6 border border-primary/20">
+      <div className="bg-avocado-green-10 dark:from-primary/20 dark:to-primary/10 rounded-3xl p-6 ">
         <div className="flex items-start gap-4">
           <div className="text-5xl">🍰</div>
           <div className="flex-1">
@@ -68,9 +72,22 @@ const RecipeDisplay = ({ recipe }) => {
               {recipeData.name || "Công thức không tên"}
             </h2>
             {recipeData.description && (
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                 {recipeData.description}
               </p>
+            )}
+            {/* Tags moved here - below description */}
+            {recipeData.tags && recipeData.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {recipeData.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-avocado-green-50 text-avocado-brown-100 dark:text-primary-light text-sm font-medium rounded-full "
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -79,7 +96,7 @@ const RecipeDisplay = ({ recipe }) => {
       {/* Recipe Info Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {recipeData.prep_time && (
-          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+          <div className="bg-white dark:bg-dark-2 rounded-3xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-xl font-medium">Thời gian chuẩn bị</span>
@@ -91,7 +108,7 @@ const RecipeDisplay = ({ recipe }) => {
         )}
 
         {recipeData.cook_time && (
-          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+          <div className="bg-white dark:bg-dark-2 rounded-3xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Flame className="w-4 h-4" />
               <span className="text-xl font-medium">Thời gian nấu</span>
@@ -103,7 +120,7 @@ const RecipeDisplay = ({ recipe }) => {
         )}
 
         {recipeData.servings && (
-          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+          <div className="bg-white dark:bg-dark-2 rounded-3xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Users className="w-4 h-4" />
               <span className="text-xl font-medium">Khẩu phần</span>
@@ -115,7 +132,7 @@ const RecipeDisplay = ({ recipe }) => {
         )}
 
         {recipeData.difficulty && (
-          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+          <div className="bg-white dark:bg-dark-2 rounded-3xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <Flame className="w-4 h-4" />
               <span className="text-xl font-medium">Độ khó</span>
@@ -127,7 +144,7 @@ const RecipeDisplay = ({ recipe }) => {
         )}
 
         {recipeData.estimated_cost && (
-          <div className="bg-white dark:bg-dark-2 rounded-xl p-4 border border-gray-200 dark:border-stroke-dark">
+          <div className="bg-white dark:bg-dark-2 rounded-3xl p-4 border border-gray-200 dark:border-stroke-dark">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-1">
               <DollarSign className="w-4 h-4" />
               <span className="text-xl font-medium">Chi phí</span>
@@ -141,7 +158,7 @@ const RecipeDisplay = ({ recipe }) => {
 
       {/* Ingredients */}
       {recipeData.ingredients && recipeData.ingredients.length > 0 && (
-        <div className="bg-white dark:bg-dark-2 rounded-xl p-6 border border-gray-200 dark:border-stroke-dark">
+        <div className="bg-white dark:bg-dark-2 rounded-3xl p-6 border border-gray-200 dark:border-stroke-dark">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <ChefHat className="w-6 h-6 text-primary" />
             Nguyên liệu
@@ -183,9 +200,9 @@ const RecipeDisplay = ({ recipe }) => {
 
       {/* Instructions - Enhanced */}
       {recipeData.instructions && recipeData.instructions.length > 0 && (
-        <div className="bg-white dark:bg-dark-2 rounded-xl p-6 border border-gray-200 dark:border-stroke-dark">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-primary" />
+        <div className="bg-white dark:bg-dark-2 rounded-3xl p-6 border border-gray-200 dark:border-stroke-dark">
+          <h3 className="text-md font-bold text-avocado-brown-100 mb-4 flex items-center gap-2">
+            {/* <Sparkles className="w-6 h-6 text-primary" /> */}
             Hướng dẫn thực hiện
           </h3>
           <ol className="space-y-4">
@@ -292,7 +309,7 @@ const RecipeDisplay = ({ recipe }) => {
                                 )}
 
                                 {/* TIPS box */}
-                                <div className="mt-4 mb-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
+                                <div className="mt-4 mb-4 bg-avocado-green-10 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
                                   <div className="text-yellow-900 dark:text-yellow-200 font-medium">
                                     {formatMarkdownText(tipsLabel + afterTips)}
                                   </div>
@@ -340,26 +357,26 @@ const RecipeDisplay = ({ recipe }) => {
 
       {/* Decoration Tips */}
       {recipeData.decoration_tips && (
-        <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-xl p-6 border border-pink-200 dark:border-pink-800">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-pink-600" />
+        <div className="bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-3xl p-6 border border-pink-200 dark:border-pink-800">
+          <h3 className="text-md font-bold text-avocado-brown-100 mb-4 flex items-center gap-2">
+            {/* <Sparkles className="w-6 h-6 text-pink-600" /> */}
             Mẹo trang trí
           </h3>
           <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {formatMarkdownText(recipeData.decoration_tips)}
+            {formatDecorationOrNotes(recipeData.decoration_tips)}
           </div>
         </div>
       )}
 
       {/* Notes */}
       {recipeData.notes && (
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <AlertCircle className="w-6 h-6 text-blue-600" />
+        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl p-6 border border-blue-200 dark:border-blue-800">
+          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            {/* <AlertCircle className="w-6 h-6 text-blue-600" /> */}
             Lưu ý quan trọng
           </h3>
           <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {formatMarkdownText(recipeData.notes)}
+            {formatDecorationOrNotes(recipeData.notes)}
           </div>
         </div>
       )}
@@ -376,144 +393,6 @@ const RecipeDisplay = ({ recipe }) => {
               {recipeData.marketing_caption}
             </p>
           </div>
-        </div>
-      )}
-
-      {/* Analytics Scores */}
-      {analytics && Object.keys(analytics).length > 0 && (
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <TrendingUp className="w-6 h-6 text-purple-600" />
-            Phân tích AI
-          </h3>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {analytics.trend_score !== undefined && (
-              <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
-                  Xu hướng
-                </p>
-                <p
-                  className={`text-2xl font-bold ${getScoreColor(
-                    analytics.trend_score
-                  )}`}
-                >
-                  {analytics.trend_score}
-                </p>
-              </div>
-            )}
-
-            {analytics.popularity_score !== undefined && (
-              <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
-                  Phổ biến
-                </p>
-                <p
-                  className={`text-2xl font-bold ${getScoreColor(
-                    analytics.popularity_score
-                  )}`}
-                >
-                  {analytics.popularity_score}
-                </p>
-              </div>
-            )}
-
-            {analytics.health_score !== undefined && (
-              <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
-                  Sức khỏe
-                </p>
-                <p
-                  className={`text-2xl font-bold ${getScoreColor(
-                    analytics.health_score
-                  )}`}
-                >
-                  {analytics.health_score}
-                </p>
-              </div>
-            )}
-
-            {analytics.innovation_score !== undefined && (
-              <div className="bg-white dark:bg-dark-3 rounded-lg p-4 text-center">
-                <p className="text-xl text-gray-600 dark:text-gray-400 mb-1">
-                  Sáng tạo
-                </p>
-                <p
-                  className={`text-2xl font-bold ${getScoreColor(
-                    analytics.innovation_score
-                  )}`}
-                >
-                  {analytics.innovation_score}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Overall Score */}
-          {analytics.overall_score !== undefined && (
-            <div className="mt-4 bg-white dark:bg-dark-3 rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Award className="w-6 h-6 text-purple-600" />
-                  <span className="text-lg font-bold text-gray-900 dark:text-white">
-                    Điểm tổng thể
-                  </span>
-                </div>
-                <span
-                  className={`text-3xl font-bold ${getScoreColor(
-                    analytics.overall_score
-                  )}`}
-                >
-                  {analytics.overall_score}
-                </span>
-              </div>
-
-              {/* Score bar */}
-              <div className="mt-3 h-3 bg-gray-200 dark:bg-dark-4 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all ${
-                    analytics.overall_score >= 80
-                      ? "bg-green-500"
-                      : analytics.overall_score >= 60
-                      ? "bg-yellow-500"
-                      : "bg-red-500"
-                  }`}
-                  style={{ width: `${analytics.overall_score}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Recommendation */}
-          {analytics.recommendation && (
-            <div className="mt-4 bg-white dark:bg-dark-3 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <Target className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-                    Đánh giá:
-                  </p>
-                  <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {analytics.recommendation}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tags */}
-      {recipeData.tags && recipeData.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {recipeData.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="px-4 py-2 bg-gray-100 dark:bg-dark-3 text-gray-700 dark:text-gray-300 text-xl font-medium rounded-full border border-gray-200 dark:border-stroke-dark"
-            >
-              #{tag}
-            </span>
-          ))}
         </div>
       )}
 
