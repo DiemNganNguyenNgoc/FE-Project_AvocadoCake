@@ -26,7 +26,7 @@ const SearchResultPage = () => {
         productDescription,
         productPrice,
       } = selectedProduct;
-      navigate("/view-product-detail", {
+      navigate(`/view-product-detail/${productId}`, {
         state: {
           productId,
           productName,
@@ -74,9 +74,9 @@ const SearchResultPage = () => {
               const imageUrl = product.productImage.startsWith("http")
                 ? product.productImage
                 : `https://res.cloudinary.com/dlyl41lgq/image/upload/v2/${product.productImage.replace(
-                    "\\",
-                    "/"
-                  )}`;
+                  "\\",
+                  "/"
+                )}`;
               console.log("Product ID in ProductsPage:", product._id);
               return (
                 <CardProduct
@@ -90,7 +90,7 @@ const SearchResultPage = () => {
                   // discount={findPromoApplied(product._id)}
                   averageRating={product.averageRating}
                   size={product.productSize}
-                  onClick={() => handleDetail(product._id)}
+                  onCardClick={() => handleDetail(product._id, products)}
                 />
               );
             })

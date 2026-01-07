@@ -219,9 +219,9 @@ const ProductsPage = () => {
     return url.startsWith("http")
       ? url
       : `https://res.cloudinary.com/dlyl41lgq/image/upload/v2/${url.replace(
-          "\\",
-          "/"
-        )}`;
+        "\\",
+        "/"
+      )}`;
   };
 
   const getDiscountPercent = (productId) => {
@@ -285,7 +285,7 @@ const ProductsPage = () => {
     const p = source.find((prod) => prod._id === productId);
     if (!p) return alert("Product not found!");
 
-    navigate("/view-product-detail", {
+    navigate(`/view-product-detail/${productId}`, {
       state: { ...p },
     });
   };
@@ -430,17 +430,15 @@ const ProductsPage = () => {
                   {t("product_page.category_filter")}
                 </h3>
                 <span
-                  className={`category-dropdown__icon ${
-                    isCategoryExpanded ? "expanded" : ""
-                  }`}
+                  className={`category-dropdown__icon ${isCategoryExpanded ? "expanded" : ""
+                    }`}
                 >
                   ▼
                 </span>
               </div>
               <div
-                className={`category-dropdown__content ${
-                  isCategoryExpanded ? "expanded" : ""
-                }`}
+                className={`category-dropdown__content ${isCategoryExpanded ? "expanded" : ""
+                  }`}
               >
                 <SideMenuComponent
                   key="all-products"
@@ -545,41 +543,36 @@ const ProductsPage = () => {
               </span>
               <div className="product__sort-buttons">
                 <button
-                  className={`product__sort-btn ${
-                    sortBy === "name_asc" ? "active" : ""
-                  }`}
+                  className={`product__sort-btn ${sortBy === "name_asc" ? "active" : ""
+                    }`}
                   onClick={() => handleSortChange("name_asc")}
                 >
                   {t("product_page.sort_name_asc")}
                 </button>
                 <button
-                  className={`product__sort-btn ${
-                    sortBy === "name_desc" ? "active" : ""
-                  }`}
+                  className={`product__sort-btn ${sortBy === "name_desc" ? "active" : ""
+                    }`}
                   onClick={() => handleSortChange("name_desc")}
                 >
                   {t("product_page.sort_name_desc")}
                 </button>
                 <button
-                  className={`product__sort-btn ${
-                    sortBy === "newest" ? "active" : ""
-                  }`}
+                  className={`product__sort-btn ${sortBy === "newest" ? "active" : ""
+                    }`}
                   onClick={() => handleSortChange("newest")}
                 >
                   {t("product_page.sort_newest")}
                 </button>
                 <button
-                  className={`product__sort-btn ${
-                    sortBy === "price_high" ? "active" : ""
-                  }`}
+                  className={`product__sort-btn ${sortBy === "price_high" ? "active" : ""
+                    }`}
                   onClick={() => handleSortChange("price_high")}
                 >
                   {t("product_page.sort_price_high")}
                 </button>
                 <button
-                  className={`product__sort-btn ${
-                    sortBy === "price_low" ? "active" : ""
-                  }`}
+                  className={`product__sort-btn ${sortBy === "price_low" ? "active" : ""
+                    }`}
                   onClick={() => handleSortChange("price_low")}
                 >
                   {t("product_page.sort_price_low")}

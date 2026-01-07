@@ -145,7 +145,7 @@ const QuizzPage = () => {
   };
 
   const handleProductClick = (product) => {
-    navigate("/view-product-detail", {
+    navigate(`/view-product-detail/${product._id}`, {
       state: {
         productId: product._id,
         productName: product.productName,
@@ -193,7 +193,7 @@ const QuizzPage = () => {
                 price={product.productPrice}
                 discount={product.productDiscount}
                 averageRating={product.averageRating}
-                onClick={() => handleProductClick(product)}
+                onCardClick={() => handleProductClick(product)}
               />
             ))}
           </div>

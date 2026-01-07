@@ -187,7 +187,7 @@ export const routes = [
     isPrivate: true,
   },
   {
-    path: "/view-product-detail/",
+    path: "/view-product-detail/:productId",
     page: ViewProductDetailPage,
     isShowHeader: true,
     isShowFooter: true,

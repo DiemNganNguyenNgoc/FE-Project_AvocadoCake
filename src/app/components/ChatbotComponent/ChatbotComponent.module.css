@@ -45,7 +45,8 @@
   flex-direction: column;
   overflow: hidden;
   animation: slideIn 0.3s ease;
-  border: 1px solid #3a060e; /* Gold border */
+  border: 1px solid #3a060e;
+  /* Gold border */
 }
 
 @keyframes slideIn {
@@ -53,6 +54,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -60,8 +62,10 @@
 }
 
 .chatbot-header {
-  background-color: #3a060e; /* Vietnamese red */
-  color: #b1e321; /* Gold */
+  background-color: #3a060e;
+  /* Vietnamese red */
+  color: #b1e321;
+  /* Gold */
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -97,7 +101,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-image: url("https://www.transparenttextures.com/patterns/rice-paper.png"); /* Subtle texture */
+  background-image: url("https://www.transparenttextures.com/patterns/rice-paper.png");
+  /* Subtle texture */
 }
 
 .message {
@@ -128,13 +133,17 @@
 }
 
 .message.bot .message-avatar {
-  background-color: #b1e321; /* Vietnamese red */
-  color: #3a060e; /* Gold */
+  background-color: #b1e321;
+  /* Vietnamese red */
+  color: #3a060e;
+  /* Gold */
 }
 
 .message.user .message-avatar {
-  background-color: #cfe199; /* Gold */
-  color: #310405; /* Vietnamese red */
+  background-color: #cfe199;
+  /* Gold */
+  color: #310405;
+  /* Vietnamese red */
 }
 
 .message-content {
@@ -149,7 +158,8 @@
 .message.bot .message-content {
   border-top-left-radius: 4px;
   background-color: white;
-  border-left: 3px solid #2b0607; /* Vietnamese red accent */
+  border-left: 3px solid #2b0607;
+  /* Vietnamese red accent */
   white-space: pre-line;
 }
 
@@ -180,13 +190,16 @@
 }
 
 .chatbot-input input:focus {
-  border-color: #85af06; /* Vietnamese red */
+  border-color: #85af06;
+  /* Vietnamese red */
   box-shadow: 0 0 0 2px rgba(200, 22, 29, 0.2);
 }
 
 .chatbot-input button {
-  background-color: #b1e321; /* Vietnamese red */
-  color: #128616; /* Gold */
+  background-color: #b1e321;
+  /* Vietnamese red */
+  color: #128616;
+  /* Gold */
   border: none;
   border-radius: 50%;
   width: 36px;
@@ -218,7 +231,8 @@
   height: 8px;
   width: 8px;
   margin: 0 1px;
-  background-color: #3e0916; /* Vietnamese red */
+  background-color: #3e0916;
+  /* Vietnamese red */
   border-radius: 50%;
   display: inline-block;
   animation: bounce 1.4s infinite ease-in-out both;
@@ -233,14 +247,47 @@
 }
 
 @keyframes bounce {
+
   0%,
   80%,
   100% {
     transform: scale(0);
   }
+
   40% {
     transform: scale(1);
   }
+}
+
+/* Product recommendations in chat */
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.chatbot-product-card {
+  width: 100%;
+  max-width: 250px;
+  align-self: flex-start;
+  transform: scale(0.9);
+  transform-origin: left top;
+  margin-bottom: -15px;
+  /* Adjust for scale */
+}
+
+/* Ensure CardProduct inside chatbot doesn't overflow */
+.chatbot-product-card :global(.card) {
+  width: 100%;
+  margin: 0 !important;
 }
 
 /* Responsive styles */
@@ -256,5 +303,9 @@
     width: 50px;
     height: 50px;
     font-size: 20px;
+  }
+
+  .chatbot-product-card {
+    max-width: 220px;
   }
 }

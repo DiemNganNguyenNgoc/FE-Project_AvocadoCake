@@ -65,7 +65,7 @@ const HomePage = () => {
         productPrice,
       } = selectedProduct;
 
-      navigate("/view-product-detail", {
+      navigate(`/view-product-detail/${productId}`, {
         state: {
           productId,
           productName,
@@ -277,7 +277,7 @@ const HomePage = () => {
               discount={findPromoApplied(product._id)}
               averageRating={product.averageRating}
               size={product.productSize}
-              onClick={() => handleDetailProduct(product._id)}
+              onCardClick={() => handleDetailProduct(product._id)}
             />
           ))}
         </div>
@@ -342,7 +342,7 @@ const HomePage = () => {
               price={product.productPrice}
               discount={findPromoApplied(product._id)}
               averageRating={product.averageRating}
-              onClick={() => handleDetailProduct(product._id)}
+              onCardClick={() => handleDetailProduct(product._id)}
             />
           ))}
         </div>

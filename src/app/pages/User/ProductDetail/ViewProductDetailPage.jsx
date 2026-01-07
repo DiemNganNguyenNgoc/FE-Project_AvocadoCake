@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "./ViewProductDetailPage.css";
 import SizeComponent from "../../../components/SizeComponent/SizeComponent";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
@@ -22,6 +22,8 @@ import CardProduct from "../../../components/CardProduct/CardProduct";
 const ViewProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { id: paramId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   console.log("userrr", user.id);
@@ -31,19 +33,9 @@ const ViewProductDetailPage = () => {
 
   console.log("Product Data from location:", productData); // Thêm log này
 
-  const [product, setProduct] = useState(
-    productData || {
-      productName: "",
-      productPrice: "",
-      productSize: "",
-      productCategory: "",
-      productImage: null,
-      productDescription: "",
-      averageRating: 0,
-      totalRatings: 0,
-      discount: "",
-    }
-  );
+  const [product, setProduct] = useState(productData);
+
+  console.log("Product Data from state:", paramId);
 
   useEffect(() => {
     if (productData) {
@@ -58,14 +50,63 @@ const ViewProductDetailPage = () => {
     }
   }, [productData]);
 
+
+  useEffect(() => {
+    if (!paramId) return;
+    console.log("Current product:", product);
+
+    const fetchProduct = async () => {
+      try {
+        const res = await getDetailsproduct(paramId);
+        console.log("Product data from API:", res.data);
+        setProduct({
+          ...res.data,
+          productId: res.data._id,
+        });
+      } catch (error) {
+        navigate("/products");
+      }
+    };
+
+    fetchProduct();
+  }, [paramId]);
+  const productId = location.state?.productId;
+
+  useEffect(() => {
+    if (!productId) {
+      console.log("Không có dữ liệu sản phẩm");
+      return;
+    }
+
+    const fetchProduct = async () => {
+      try {
+        const res = await getDetailsproduct(productId);
+        setProduct({ ...res.data, productId: res.data._id });
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        setProduct(null);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+
+
+
+
   // Thêm useEffect để log khi product thay đổi
   useEffect(() => {
     console.log("Product state changed:", product);
   }, [product]);
 
-  const [imagePreview, setImagePreview] = useState(
-    product.productImage || null
-  );
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (product?.productImage) {
+      setImagePreview(product.productImage);
+    }
+  }, [product]);
 
   //Lay danh sach Category
   const [categories, setCategories] = useState([]); // State lưu danh sách category
@@ -232,12 +273,12 @@ const ViewProductDetailPage = () => {
       try {
         const userId = user?.id || null;
         console.log("✅ USER ID:", userId);
-        console.log("✅ PRODUCT ID:", product.productId);
+        console.log("✅ PRODUCT ID:", product?.productId);
 
         let recommendedProducts = [];
 
         // Nếu có userId, lấy recommendations từ AI
-        if (userId && product.productId) {
+        if (userId && product?.productId) {
           try {
             const response = await getRecommendations(
               userId,
@@ -276,14 +317,14 @@ const ViewProductDetailPage = () => {
         }
 
         // Nếu không có AI recommendations, fallback sang sản phẩm cùng category
-        if (recommendedProducts.length === 0 && product.productCategory) {
+        if (recommendedProducts.length === 0 && product?.productCategory) {
           console.log("Fallback to category recommendations");
           const queryParams = new URLSearchParams({
             page: 0,
             limit: 8,
           }).toString();
 
-          const url = `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${product.productCategory}?${queryParams}`;
+          const url = `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${product?.productCategory}?${queryParams}`;
           const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -292,7 +333,7 @@ const ViewProductDetailPage = () => {
           });
 
           const data = await response.json();
-          const currentProductId = product.productId || product._id;
+          const currentProductId = product?.productId || product?._id;
           const fallbackProducts = Array.isArray(data.data)
             ? data.data.filter((p) => p._id !== currentProductId)
             : [];
@@ -327,17 +368,13 @@ const ViewProductDetailPage = () => {
       }
     };
 
-    if (product.productId) {
-      console.log(
-        "🎯 Calling fetchRecommendations with productId:",
-        product.productId
-      );
+    if (product?.productId) {
       fetchRecommendations();
     } else {
       console.log("⚠️ No productId found, skipping recommendations");
       console.log("⚠️ Product object:", product);
     }
-  }, [product.productId, user]);
+  }, [product?.productId, user, productData]);
 
   const [ratings, setRatings] = useState([]);
   const [loadingRatings, setLoadingRatings] = useState(false);
@@ -348,10 +385,9 @@ const ViewProductDetailPage = () => {
   const [comboProducts, setComboProducts] = useState([]);
   const [loadingCombos, setLoadingCombos] = useState(false);
 
-  // Fetch ratings when product changes
   useEffect(() => {
     const fetchRatings = async () => {
-      if (product.productId) {
+      if (product?.productId) {
         try {
           setLoadingRatings(true);
           const response = await getProductRatings(product.productId);
@@ -369,12 +405,11 @@ const ViewProductDetailPage = () => {
     };
 
     fetchRatings();
-  }, [product.productId]);
+  }, [product?.productId, productData]);
 
-  // Fetch combo products when product changes
   useEffect(() => {
     const fetchCombos = async () => {
-      if (product.productId) {
+      if (product?.productId) {
         try {
           setLoadingCombos(true);
           console.log("Fetching combos for product:", product.productId);
@@ -429,12 +464,12 @@ const ViewProductDetailPage = () => {
     };
 
     fetchCombos();
-  }, [product.productId]);
+  }, [product?.productId, productData]);
 
   return (
     <div>
       <div className="container-xl mb-3">
-        <h1 className="view-product-detail-title">Chi tiết sản phẩm</h1>
+        <h1 className="view-product-detail-title text-[40px] font-bold text-[#212529] mb-4">CHI TIẾT SẢN PHẨM</h1>
         {/* info top */}
         <div className="view__product-info d-flex gap-3">
           {/* top left */}
@@ -458,7 +493,7 @@ const ViewProductDetailPage = () => {
                 <div>
                   {categories
                     .filter(
-                      (category) => category._id === product.productCategory
+                      (category) => category._id === productData.productCategory
                     ) // Lọc danh mục có id trùng
                     .map((category) => (
                       <div key={category._id}>{category.categoryName}</div>
@@ -522,7 +557,7 @@ const ViewProductDetailPage = () => {
           <textarea
             className="product-description"
             readOnly={true}
-            // defaultValue={"Chưa có mô tả"}
+          // defaultValue={"Chưa có mô tả"}
           >
             {product.productDescription}
           </textarea>
@@ -549,7 +584,7 @@ const ViewProductDetailPage = () => {
             <div className="d-flex align-items-center gap-3">
               <RatingStar
                 rating={product.averageRating}
-                setRating={() => {}}
+                setRating={() => { }}
                 isEditable={false}
                 size={24}
                 showRating={true}
@@ -572,7 +607,7 @@ const ViewProductDetailPage = () => {
                         <div className="mt-1">
                           <RatingStar
                             rating={rating.rating}
-                            setRating={() => {}}
+                            setRating={() => { }}
                             isEditable={false}
                             size={16}
                             showRating={false}

@@ -286,9 +286,9 @@ const MiniGamePage = () => {
   const remainingAttempts = maxAttempts - attempts;
 
   // Khi nhấn vào sản phẩm
-  const handleDetailProduct = () => {
+  const handleDetailProduct = (product) => {
     if (product) {
-      navigate("/view-product-detail", {
+      navigate(`/view-product-detail/${product.id}`, {
         state: {
           productId: product.id,
           productName: product.name,
@@ -364,13 +364,11 @@ const MiniGamePage = () => {
               .map((char, index) => (
                 <span
                   key={index}
-                  className={`${styles.puzzleChar} ${
-                    char === "_" ? styles.emptyChar : ""
-                  } ${
-                    flyingChar && flyingChar.targetIndex === index
+                  className={`${styles.puzzleChar} ${char === "_" ? styles.emptyChar : ""
+                    } ${flyingChar && flyingChar.targetIndex === index
                       ? styles.flyingTarget
                       : ""
-                  }`}
+                    }`}
                 >
                   {char}
                 </span>
@@ -470,9 +468,8 @@ const MiniGamePage = () => {
           {/* Hiển thị sản phẩm dưới dạng CardProduct */}
           {product && (
             <div
-              className={`${styles.productSection} ${
-                showCelebration ? styles.productCelebration : ""
-              } ${showRegret ? styles.productRegret : ""}`}
+              className={`${styles.productSection} ${showCelebration ? styles.productCelebration : ""
+                } ${showRegret ? styles.productRegret : ""}`}
             >
               <h3 className={styles.productSectionTitle}>
                 Sản phẩm của ngày hôm nay:
@@ -487,7 +484,7 @@ const MiniGamePage = () => {
                   discount={product.discount}
                   averageRating={product.rating}
                   totalRatings={product.totalRatings || 0}
-                  onClick={handleDetailProduct}
+                  onCardClick={() => handleDetailProduct(product)}
                 />
               </div>
             </div>

@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { processQuery } from "../../api/services/ChatbotService";
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
+import { getDetailsproduct } from "../../api/services/productServices";
 
 const ChatbotComponent = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -83,23 +86,81 @@ const ChatbotComponent = () => {
       setIsLoading(false);
     }
   };
+  const fetchProduct = async (productId) => {
+    try {
+      const res = await getDetailsproduct(productId);
+      const product = res.data;
+      console.log("Product data fetched:", product);
+
+      // Navigate with the fetched product data directly
+      navigate(`/view-product-detail/${productId}`, {
+        state: {
+          productId: product._id,
+          productName: product.productName,
+          productSize: product.productSize,
+          productImage: product.productImage,
+          productDescription: product.productDescription,
+          productCategory: product.productCategory._id,
+          productPrice: product.productPrice,
+          averageRating: product.averageRating || 5.0,
+          totalRatings: product.totalRatings || 0,
+          discount: product.discount || 0,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
 
   const renderMessageContent = (message) => {
+    console.log("MESSAGE DATA:", message.content);
+
     if (message.isError) {
       return <div className={styles["error-message"]}>{message.content}</div>;
     }
 
-    // Regular text message
-    return <div>{message.content}</div>;
+
+    // Khi click vào link sản phẩm
+    const handleClick = (e) => {
+      const link = e.target.closest("a");
+      if (link) {
+        e.preventDefault(); // Ngăn reload trang
+
+        const match = link.getAttribute("href").match(/\/view-product-detail\/([a-f0-9]+)/);
+        if (match) {
+          const productId = match[1];
+          console.log("Product ID:", productId);
+          fetchProduct(productId);
+        }
+      }
+    };
+
+
+    return (
+      <div
+        className={styles["message-wrapper"]}
+        onClick={handleClick} // gắn sự kiện click
+      >
+        {message.content && (
+          <div
+            className="chat-message"
+            dangerouslySetInnerHTML={{ __html: message.content }}
+          />
+        )}
+      </div>
+    );
   };
+
+
+
+
 
   return (
     <div className={styles["chatbot-container"]}>
       {/* Chatbot toggle button */}
       <button
-        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${
-          isOpen ? styles["open"] : ""
-        }`}
+        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${isOpen ? styles["open"] : ""
+          }`}
         onClick={toggleChatbot}
         aria-label="Toggle chatbot"
       >
@@ -124,9 +185,8 @@ const ChatbotComponent = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`${styles["message"]} ${
-                  message.type === "bot" ? styles["bot"] : styles["user"]
-                }`}
+                className={`${styles["message"]} ${message.type === "bot" ? styles["bot"] : styles["user"]
+                  }`}
               >
                 <div className={styles["message-avatar"]}>
                   {message.type === "bot" ? <FaRobot /> : <FaUser />}

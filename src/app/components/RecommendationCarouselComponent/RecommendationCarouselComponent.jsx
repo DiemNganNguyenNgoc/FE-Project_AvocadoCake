@@ -37,7 +37,7 @@ const RecommendationCarouselComponent = ({ products }) => {
 
   const handleDetail = (product) => {
     if (product) {
-      navigate("/view-product-detail", {
+      navigate(`/view-product-detail/${product._id}`, {
         state: {
           productId: product._id,
           productName: product.productName,
