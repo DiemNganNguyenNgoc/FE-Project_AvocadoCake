@@ -318,9 +318,9 @@ const ViewProductDetailPage = () => {
           const shuffled = [...recommendedProducts].sort(
             () => Math.random() - 0.5
           );
-          displayProducts = shuffled.slice(0, 5);
+          displayProducts = shuffled.slice(0, 10);
           console.log(
-            "Randomly selected 5 products from",
+            "Randomly selected 10 products from",
             recommendedProducts.length,
             "products"
           );
@@ -532,7 +532,7 @@ const ViewProductDetailPage = () => {
                     averageRating={comboProduct.averageRating || 5.0}
                     totalRatings={comboProduct.totalRatings || 0}
                     onCardClick={() =>
-                      navigate("/product-detail", { state: comboProduct })
+                      navigate("/view-product-detail", { state: comboProduct })
                     }
                   />
                 ))}
@@ -547,10 +547,8 @@ const ViewProductDetailPage = () => {
           <textarea
             className="product-description"
             readOnly={true}
-            // defaultValue={"Chưa có mô tả"}
-          >
-            {product.productDescription}
-          </textarea>
+            value={product.productDescription || "Chưa có mô tả"}
+          />
         </div>
 
         {/* <div className="btn__update">

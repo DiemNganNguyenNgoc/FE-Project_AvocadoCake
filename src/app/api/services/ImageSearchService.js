@@ -8,10 +8,10 @@ const IMAGE_SEARCH_API_URL =
  * Search for similar products by uploading an image
  * @param {File} imageFile - The image file to search
  * @param {number} topK - Number of results to return (default: 10)
- * @param {number} threshold - Minimum similarity threshold (default: 0.5)
+ * @param {number} threshold - Minimum similarity threshold (default: 0.65)
  * @returns {Promise} - Promise containing search results
  */
-export const searchByImage = async (imageFile, topK = 10, threshold = 0.5) => {
+export const searchByImage = async (imageFile, topK = 10, threshold = 0.65) => {
   try {
     const formData = new FormData();
     formData.append("file", imageFile);
@@ -72,7 +72,7 @@ export const searchByImage = async (imageFile, topK = 10, threshold = 0.5) => {
 export const searchByImageUrl = async (
   imageUrl,
   topK = 10,
-  threshold = 0.5
+  threshold = 0.65
 ) => {
   try {
     const response = await axios.post(

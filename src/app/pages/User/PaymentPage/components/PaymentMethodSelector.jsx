@@ -31,7 +31,7 @@ const PaymentMethodSelector = ({
           />
           PayPal
         </label> */}
-        <label style={{ cursor: "pointer" }}>
+        {/* <label style={{ cursor: "pointer" }}>
           <input
             type="radio"
             value="qr"
@@ -40,7 +40,7 @@ const PaymentMethodSelector = ({
             style={{ marginRight: "5px" }}
           />
           Thanh toán QR
-        </label>
+        </label> */}
         <label style={{ cursor: "pointer" }}>
           <input
             type="radio"
@@ -49,7 +49,7 @@ const PaymentMethodSelector = ({
             onChange={handlePaymentTypeChange}
             style={{ marginRight: "5px" }}
           />
-          Sepay
+          Thanh toán QR
         </label>
       </div>
 
@@ -92,7 +92,7 @@ const PaymentMethodSelector = ({
       )}
 
       {/* QR Payment Details */}
-      {paymentType === "qr" && (
+      {/* {paymentType === "qr" && (
         <div className="WalletHolder" style={{ padding: "10px 20px" }}>
           <label
             htmlFor="wallet-select"
@@ -156,7 +156,7 @@ const PaymentMethodSelector = ({
             />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

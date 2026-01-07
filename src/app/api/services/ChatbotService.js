@@ -7,7 +7,7 @@ import axios from "axios";
  * @param {string} userId - Optional user ID for personalized responses
  * @returns {Promise} - The response from the chatbot API
  */
-export const processQuery = async (userId = null, query) => {
+export const processQuery = async (query, userId = null) => {
   try {
     console.log("Sending query to chatbot:", query, "User ID:", userId);
     const res = await axios.post(

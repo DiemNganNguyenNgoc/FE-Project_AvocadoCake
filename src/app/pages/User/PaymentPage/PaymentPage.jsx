@@ -80,7 +80,7 @@ const PaymentPage = () => {
     };
   });
 
-  const [paymentType, setPaymentType] = useState("qr");
+  const [paymentType, setPaymentType] = useState("sepay"); // Changed default from "qr" to "sepay"
   const [paymentInfo, setPaymentInfo] = useState({
     userBank: "momo", // Khởi tạo mặc định là momo
     userBankNumber: "",
@@ -617,7 +617,7 @@ const PaymentPage = () => {
     }
 
     // Validation cho payment type QR
-    if (paymentType === "qr") {
+    /* if (paymentType === "qr") {
       if (!paymentInfo.userBank) {
         alert("Vui lòng chọn loại ví thanh toán!");
         return;
@@ -626,7 +626,7 @@ const PaymentPage = () => {
         alert("Vui lòng nhập số điện thoại hoặc số tài khoản!");
         return;
       }
-    }
+    } */
 
     // Validation cho Sepay - không cần input thêm, chỉ cần chọn phương thức
 
@@ -737,7 +737,7 @@ const PaymentPage = () => {
       } else {
         throw new Error(response.message || "Thanh toán PayPal thất bại");
       }
-    } else if (paymentType === "qr") {
+    } /* else if (paymentType === "qr") {
       const response = await PaymentService.createQrPayment(paymentData);
       console.log("QR response:", response);
 
@@ -763,7 +763,7 @@ const PaymentPage = () => {
       } else {
         throw new Error(response.message || "Tạo QR thất bại");
       }
-    } else if (paymentType === "sepay") {
+    } */ else if (paymentType === "sepay") {
       // Xử lý thanh toán Sepay
       const sepayData = {
         paymentCode: `SEPAY-${Date.now()}`,

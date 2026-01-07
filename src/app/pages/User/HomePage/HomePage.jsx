@@ -107,11 +107,21 @@ const HomePage = () => {
   const fetchProducts = async (page = 0, limit = 9, categoryId = null) => {
     try {
       const response = await getProductsByCategory(categoryId);
-      if (Array.isArray(response.data)) {
-        setProducts(response.data.slice(0, 4));
+
+      // Handle different response formats
+      let productsData = [];
+      if (Array.isArray(response)) {
+        productsData = response;
+      } else if (Array.isArray(response.data)) {
+        productsData = response.data;
+      } else if (response.data && Array.isArray(response.data.data)) {
+        productsData = response.data.data;
       } else {
-        console.error("Products data is not in expected format");
+        console.error("Products data is not in expected format:", response);
+        return;
       }
+
+      setProducts(productsData.slice(0, 4));
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -185,14 +195,41 @@ const HomePage = () => {
     const fetchCategories = async () => {
       try {
         const response = await getAllCategory();
-        setCategories(response.data);
+        const allCategories = response.data;
+
+        // Filter categories that have products
+        const categoriesWithProducts = [];
+        for (const category of allCategories) {
+          try {
+            const productResponse = await getProductsByCategory(category._id);
+            // Check if category has products
+            const hasProducts =
+              (Array.isArray(productResponse) && productResponse.length > 0) ||
+              (Array.isArray(productResponse.data) &&
+                productResponse.data.length > 0) ||
+              (productResponse.data &&
+                Array.isArray(productResponse.data.data) &&
+                productResponse.data.data.length > 0);
+
+            if (hasProducts) {
+              categoriesWithProducts.push(category);
+            }
+          } catch (error) {
+            // Skip category if error
+            console.log(`No products for category ${category.categoryName}`);
+          }
+        }
+
+        setCategories(categoriesWithProducts);
 
         // Shuffle and get 5 random categories for display
-        const shuffled = [...response.data].sort(() => Math.random() - 0.5);
+        const shuffled = [...categoriesWithProducts].sort(
+          () => Math.random() - 0.5
+        );
         const randomFive = shuffled.slice(0, 5);
         setDisplayCategories(randomFive);
 
-        if (response.data.length > 0) {
+        if (categoriesWithProducts.length > 0) {
           const firstCategoryId = randomFive[0]._id;
           setCurrentCategory(firstCategoryId);
           fetchProducts(0, 9, firstCategoryId);
