@@ -27,12 +27,12 @@ const EventPromotionsTab = ({
           <div className="flex-1 min-w-[200px]">
             <Input
               type="number"
-              min="7"
+              min="3"
               max="365"
               label="Số ngày tìm kiếm sự kiện"
               value={daysAhead}
               onChange={(e) => setDaysAhead(Number(e.target.value))}
-              placeholder="60"
+              placeholder="07"
               disabled={isLoading}
               className="border-2 border-avocado-brown-30 focus:border-avocado-green-100 focus:ring-avocado-green-30"
             />

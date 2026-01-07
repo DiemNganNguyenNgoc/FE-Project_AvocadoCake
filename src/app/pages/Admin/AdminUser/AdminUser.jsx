@@ -61,7 +61,7 @@ const AdminUserContent = ({ onNavigate }) => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 min-h-screen">
       {/* Breadcrumb */}
       <div className="mb-6">
         <Breadcrumb currentPage="Users" />

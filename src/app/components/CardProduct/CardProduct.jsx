@@ -13,13 +13,13 @@ const CardProduct = ({
   id,
   type,
   img,
-  size,
+  size = 10,
   title,
   price,
-  discount,
-  averageRating,
-  totalRatings,
-  onCardClick,
+  discount = 0,
+  averageRating = 5.0,
+  totalRatings = 0,
+  onCardClick = null,
 }) => {
   //Hooks
   const dispatch = useDispatch();
@@ -181,15 +181,6 @@ CardProduct.propTypes = {
   totalRatings: PropTypes.number,
   onCardClick: PropTypes.func,
   onAddToCart: PropTypes.func,
-};
-
-CardProduct.defaultProps = {
-  size: 10,
-  discount: 0,
-  averageRating: 5.0,
-  totalRatings: 0,
-  onCardClick: null,
-  onAddToCart: null,
 };
 
 export default CardProduct;
