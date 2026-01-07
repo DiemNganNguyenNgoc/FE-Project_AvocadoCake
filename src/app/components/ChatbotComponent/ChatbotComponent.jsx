@@ -53,28 +53,29 @@ const ChatbotComponent = () => {
     setIsLoading(true);
 
     try {
-      // Send message to backend với session_id
-      const response = await chatbot(input, sessionId, user?.id || null);
-
-      // Lưu session_id từ response để dùng cho tin nhắn tiếp theo
-      if (response.session_id && !sessionId) {
-        setSessionId(response.session_id);
-      }
-
+      // Send message to backend
+      const response = await processQuery(input, user?.id || null);
+      console.log("BOT RESPONSE RAW:", response);
+      console.log("BOT RESPONSE MESSAGE:", response.status, response.message);
       // Add bot response to chat
-      const botMessage = {
-        type: "bot",
-        content: response.text,
-        intent: response.intent,
-        confidence: response.confidence,
-      };
-      setMessages((prev) => [...prev, botMessage]);
+      if (response.status === "200" || response.text != null) {
+        const botMessage = {
+          type: "bot",
+          content: response.text,
+          data: response.data,
+        };
+        setMessages((prev) => [...prev, botMessage]);
+      } else {
+        console.error("Error response from chatbot:", response);
+        throw new Error(response.message || "Đã xảy ra lỗi");
+      }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Full error object:", error); // log toàn bộ error
+      console.error("Backend response data:", error.response); // log data gốc
       const errorMessage = {
         type: "bot",
         content:
-          error.message ||
+          error.response?.data?.message ||
           "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau.",
         isError: true,
       };
@@ -97,7 +98,7 @@ const ChatbotComponent = () => {
     <div className={styles["chatbot-container"]}>
       {/* Chatbot toggle button */}
       <button
-        className={`${styles["chatbot-toggle"]} ${
+        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${
           isOpen ? styles["open"] : ""
         }`}
         onClick={toggleChatbot}

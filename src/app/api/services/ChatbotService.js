@@ -7,24 +7,15 @@ import axios from "axios";
  * @param {string} userId - Optional user ID for personalized responses
  * @returns {Promise} - The response from the chatbot API
  */
-export const chatbot = async (message, sessionId = null, userId = null) => {
+export const processQuery = async (userId = null, query) => {
   try {
-    const requestBody = {
-      message,
-      platform: "web",
-    };
-
-    // Add optional fields if provided
-    if (sessionId) {
-      requestBody.session_id = sessionId;
-    }
-    if (userId) {
-      requestBody.user_id = userId;
-    }
-
+    console.log("Sending query to chatbot:", query, "User ID:", userId);
     const res = await axios.post(
       `${process.env.REACT_APP_CHATBOT_API_URL}/chat`,
-      requestBody,
+      {
+        message: query,
+        session_id: userId,
+      },
       {
         headers: {
           "Content-Type": "application/json",
@@ -36,40 +27,7 @@ export const chatbot = async (message, sessionId = null, userId = null) => {
     if (error.response) {
       throw {
         message:
-          error.response.data?.detail ||
-          error.response.data?.message ||
-          "Đã xảy ra lỗi khi xử lý tin nhắn.",
-      };
-    } else {
-      throw { message: "Không thể kết nối đến máy chủ." };
-    }
-  }
-};
-
-/**
- * Send feedback for a chatbot conversation
- * @param {string} sessionId - The session ID
- * @param {number} rating - Rating from 1-5
- * @param {string} comment - Optional comment
- * @returns {Promise} - The response from the API
- */
-export const sendFeedback = async (sessionId, rating, comment = null) => {
-  try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_CHATBOT_API_URL}/feedback`,
-      { session_id: sessionId, rating, comment },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    if (error.response) {
-      throw {
-        message:
-          error.response.data?.detail || "Đã xảy ra lỗi khi gửi đánh giá.",
+          error.response.data?.message || "Đã xảy ra lỗi khi xử lý tin nhắn.",
       };
     } else {
       throw { message: "Không thể kết nối đến máy chủ." };

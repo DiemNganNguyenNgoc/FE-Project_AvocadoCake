@@ -31,15 +31,33 @@ const DraggableTopping = ({ topping, isSelected, onSelect, onChange }) => {
 
   const handleTransformEnd = useCallback(() => {
     const node = shapeRef.current;
+    const scaleX = Math.max(0.5, Math.min(node.scaleX(), 3));
+    const scaleY = Math.max(0.5, Math.min(node.scaleY(), 3));
+
     onChange({
       ...topping,
       x: node.x(),
       y: node.y(),
       rotation: node.rotation(),
-      scaleX: node.scaleX(),
-      scaleY: node.scaleY(),
+      scaleX,
+      scaleY,
     });
+
+    node.scaleX(1);
+    node.scaleY(1);
+    node.width(node.width() * scaleX);
+    node.height(node.height() * scaleY);
   }, [onChange, topping]);
+
+  const handleWheel = useCallback(
+    (e) => {
+      e.evt.preventDefault();
+      const node = shapeRef.current;
+      node.rotation(node.rotation() + e.evt.deltaY * 0.2);
+      onChange({ ...topping, rotation: node.rotation() });
+    },
+    [onChange, topping]
+  );
 
   useEffect(() => {
     if (isSelected && trRef.current) {
@@ -64,8 +82,20 @@ const DraggableTopping = ({ topping, isSelected, onSelect, onChange }) => {
         onTap={handleSelect}
         onDragEnd={handleDragEnd}
         onTransformEnd={handleTransformEnd}
+        onWheel={handleWheel}
       />
-      {isSelected && <Transformer ref={trRef} rotateEnabled />}
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          rotateEnabled
+          enabledAnchors={[
+            "top-left",
+            "top-right",
+            "bottom-left",
+            "bottom-right",
+          ]}
+        />
+      )}
     </>
   );
 };
@@ -84,9 +114,7 @@ const DraggableText = ({ textItem, isSelected, onSelect, onChange }) => {
   );
 
   const handleDragEnd = useCallback(
-    (e) => {
-      onChange({ ...textItem, x: e.target.x(), y: e.target.y() });
-    },
+    (e) => onChange({ ...textItem, x: e.target.x(), y: e.target.y() }),
     [onChange, textItem]
   );
 
@@ -96,7 +124,7 @@ const DraggableText = ({ textItem, isSelected, onSelect, onChange }) => {
       ...textItem,
       x: node.x(),
       y: node.y(),
-      fontSize: node.fontSize,
+      fontSize: node.fontSize(),
     });
   }, [onChange, textItem]);
 
@@ -130,45 +158,36 @@ const DraggableText = ({ textItem, isSelected, onSelect, onChange }) => {
   );
 };
 
-// ===== Cake Stage Component =====
+// ===== Cake Stage =====
 const CakeStage = ({
   selectedCake,
   toppings,
   setToppings,
   textList,
   setTextList,
+  selectedToppingId,
+  setSelectedToppingId,
   selectedTextId,
   setSelectedTextId,
 }) => {
-  const [cakeImage] = useImage(selectedCake?.src);
-  const [selectedToppingId, setSelectedToppingId] = useState(null);
   const stageRef = useRef();
+  const [cakeImage] = useImage(selectedCake?.src);
 
-  // Undo/Redo history
-  const [history, setHistory] = useState([]);
-  const [future, setFuture] = useState([]);
-
-  // Clipboard
-  const clipboardRef = useRef(null);
-
-  const saveHistory = useCallback(() => {
-    setHistory((h) => [
-      ...h,
-      { toppings: [...toppings], textList: [...textList] },
-    ]);
-    setFuture([]);
-  }, [toppings, textList]);
-
-  const handleStageClick = useCallback((e) => {
-    // Nếu click không phải topping/text
-    if (e.target.name() !== "topping" && e.target.name() !== "text") {
-      setSelectedToppingId(null);
-      setSelectedTextId(null);
-    }
-  }, []);
+  // Click ngoài stage để unselect
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!stageRef.current) return;
+      const stageDom = stageRef.current.container();
+      if (!stageDom.contains(e.target)) {
+        setSelectedToppingId(null);
+        setSelectedTextId(null);
+      }
+    };
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, [setSelectedToppingId, setSelectedTextId]);
 
   const handleDeleteSelected = useCallback(() => {
-    saveHistory();
     if (selectedToppingId !== null) {
       setToppings(toppings.filter((_, i) => i !== selectedToppingId));
       setSelectedToppingId(null);
@@ -183,20 +202,19 @@ const CakeStage = ({
     textList,
     setToppings,
     setTextList,
-    saveHistory,
   ]);
 
   const toggleFlipTopping = useCallback(() => {
     if (selectedToppingId === null) return;
-    saveHistory();
     setToppings((prev) =>
       prev.map((t, i) =>
         i === selectedToppingId ? { ...t, scaleX: t.scaleX * -1 } : t
       )
     );
-  }, [selectedToppingId, setToppings, saveHistory]);
+  }, [selectedToppingId, setToppings]);
 
   const handleExport = useCallback(() => {
+    if (!stageRef.current) return;
     const uri = stageRef.current.toDataURL({ mimeType: "image/png" });
     const link = document.createElement("a");
     link.download = "my-cake.png";
@@ -204,77 +222,12 @@ const CakeStage = ({
     link.click();
   }, []);
 
-  // Keydown for Delete, Ctrl+C/V/Z/Y
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.ctrlKey && e.key === "c") {
-        if (selectedToppingId !== null)
-          clipboardRef.current = {
-            type: "topping",
-            item: toppings[selectedToppingId],
-          };
-        else if (selectedTextId !== null)
-          clipboardRef.current = {
-            type: "text",
-            item: textList[selectedTextId],
-          };
-      } else if (e.ctrlKey && e.key === "v") {
-        if (clipboardRef.current) {
-          saveHistory();
-          if (clipboardRef.current.type === "topping") {
-            setToppings([
-              ...toppings,
-              { ...clipboardRef.current.item, x: 200, y: 200, id: Date.now() },
-            ]);
-          } else if (clipboardRef.current.type === "text") {
-            setTextList([
-              ...textList,
-              { ...clipboardRef.current.item, x: 200, y: 200, id: Date.now() },
-            ]);
-          }
-        }
-      } else if (e.ctrlKey && e.key === "z") {
-        if (history.length > 0) {
-          const last = history[history.length - 1];
-          setFuture((f) => [
-            ...f,
-            { toppings: [...toppings], textList: [...textList] },
-          ]);
-          setToppings(last.toppings);
-          setTextList(last.textList);
-          setHistory((h) => h.slice(0, h.length - 1));
-          setSelectedToppingId(null);
-          setSelectedTextId(null);
-        }
-      } else if (e.key === "Delete" || e.key === "Backspace") {
-        handleDeleteSelected();
-      }
-    },
-    [
-      selectedToppingId,
-      selectedTextId,
-      toppings,
-      textList,
-      history,
-      future,
-      saveHistory,
-      handleDeleteSelected,
-    ]
-  );
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
-
   return (
     <div className="flex flex-col items-center gap-3">
       <Stage
         width={400}
         height={400}
         ref={stageRef}
-        onMouseDown={handleStageClick}
-        onTouchStart={handleStageClick}
         className="border shadow-md rounded-lg bg-white"
       >
         <Layer>
