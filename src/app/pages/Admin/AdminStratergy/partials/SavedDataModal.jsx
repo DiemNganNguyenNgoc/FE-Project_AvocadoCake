@@ -158,7 +158,7 @@ const SavedDataModal = ({ isOpen, onClose, title, data }) => {
                   Còn lại
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-avocado-brown-100">
-                  Discount Range
+                  Mức giảm
                 </th>
               </tr>
             </thead>

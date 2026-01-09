@@ -201,7 +201,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
                       : "-"}
                   </p>
                 </div>
-                <div className="bg-grey9 rounded-lg px-4 py-3 border border-avocado-brown-30">
+                {/* <div className="bg-grey9 rounded-lg px-4 py-3 border border-avocado-brown-30">
                   <p className="text-xs text-avocado-brown-50 mb-1">
                     Doanh thu dự kiến
                   </p>
@@ -210,7 +210,7 @@ const PromotionCard = ({ promotion, onAddPromotion }) => {
                       ? formatCurrency(product.expectedRevenue)
                       : "-"}
                   </p>
-                </div>
+                </div> */}
               </div>
 
               {/* AI Reasoning - Elegant design */}

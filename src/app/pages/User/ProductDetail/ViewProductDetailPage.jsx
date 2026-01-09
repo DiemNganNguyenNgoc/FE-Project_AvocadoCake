@@ -288,7 +288,7 @@ const ViewProductDetailPage = () => {
           console.log("Fallback to category recommendations");
           const queryParams = new URLSearchParams({
             page: 0,
-            limit: 8,
+            limit: 20,
           }).toString();
 
           const url = `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${product.productCategory}?${queryParams}`;
@@ -311,22 +311,14 @@ const ViewProductDetailPage = () => {
 
         console.log("Final recommended products:", recommendedProducts);
 
-        // Random 5 sản phẩm để hiển thị (nếu có nhiều hơn 5)
-        let displayProducts = recommendedProducts;
-        if (recommendedProducts.length > 5) {
-          // Shuffle array và lấy 5 sản phẩm đầu tiên
-          const shuffled = [...recommendedProducts].sort(
-            () => Math.random() - 0.5
-          );
-          displayProducts = shuffled.slice(0, 10);
-          console.log(
-            "Randomly selected 10 products from",
-            recommendedProducts.length,
-            "products"
-          );
-        }
+        // Hiển thị tất cả sản phẩm được recommend (không giới hạn)
+        console.log(
+          "Displaying all",
+          recommendedProducts.length,
+          "recommended products"
+        );
 
-        setRelatedProducts(displayProducts);
+        setRelatedProducts(recommendedProducts);
       } catch (error) {
         console.error("Lỗi khi lấy khuyến nghị hoặc fallback:", error);
         setRelatedProducts([]);
