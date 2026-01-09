@@ -50,7 +50,6 @@ const ViewProductDetailPage = () => {
     }
   }, [productData]);
 
-
   useEffect(() => {
     if (!paramId) return;
     console.log("Current product:", product);
@@ -90,10 +89,6 @@ const ViewProductDetailPage = () => {
 
     fetchProduct();
   }, [productId]);
-
-
-
-
 
   // Thêm useEffect để log khi product thay đổi
   useEffect(() => {
@@ -346,12 +341,12 @@ const ViewProductDetailPage = () => {
 
         // Random 5 sản phẩm để hiển thị (nếu có nhiều hơn 5)
         let displayProducts = recommendedProducts;
-        if (recommendedProducts.length > 5) {
+        if (recommendedProducts.length > 10) {
           // Shuffle array và lấy 5 sản phẩm đầu tiên
           const shuffled = [...recommendedProducts].sort(
             () => Math.random() - 0.5
           );
-          displayProducts = shuffled.slice(0, 5);
+          displayProducts = shuffled.slice(0, 10);
           console.log(
             "Randomly selected 5 products from",
             recommendedProducts.length,
@@ -469,7 +464,9 @@ const ViewProductDetailPage = () => {
   return (
     <div>
       <div className="container-xl mb-3">
-        <h1 className="view-product-detail-title text-[40px] font-bold text-[#212529] mb-4">CHI TIẾT SẢN PHẨM</h1>
+        <h1 className="view-product-detail-title text-[40px] font-bold text-[#212529] mb-4">
+          CHI TIẾT SẢN PHẨM
+        </h1>
         {/* info top */}
         <div className="view__product-info d-flex gap-3">
           {/* top left */}
@@ -557,7 +554,7 @@ const ViewProductDetailPage = () => {
           <textarea
             className="product-description"
             readOnly={true}
-          // defaultValue={"Chưa có mô tả"}
+            // defaultValue={"Chưa có mô tả"}
           >
             {product.productDescription}
           </textarea>
@@ -584,7 +581,7 @@ const ViewProductDetailPage = () => {
             <div className="d-flex align-items-center gap-3">
               <RatingStar
                 rating={product.averageRating}
-                setRating={() => { }}
+                setRating={() => {}}
                 isEditable={false}
                 size={24}
                 showRating={true}
@@ -607,7 +604,7 @@ const ViewProductDetailPage = () => {
                         <div className="mt-1">
                           <RatingStar
                             rating={rating.rating}
-                            setRating={() => { }}
+                            setRating={() => {}}
                             isEditable={false}
                             size={16}
                             showRating={false}
