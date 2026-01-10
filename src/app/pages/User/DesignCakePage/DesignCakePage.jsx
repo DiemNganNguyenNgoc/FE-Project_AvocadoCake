@@ -87,6 +87,7 @@ function DesignCakePage() {
     const englishPrompt = await translateToEnglish(prompt);
     console.log("Translated prompt:", englishPrompt);
     const url = `https://image.pollinations.ai/prompt/${englishPrompt}?width=1024&height=1024&nologo=true`;
+    // const url = `https://gen.pollinations.ai/image/${englishPrompt}?width=1024&height=1024&nologo=true`;
     setAiImageUrl(url);
 
     // tạo ảnh, sau khi load xong thì tắt skeleton

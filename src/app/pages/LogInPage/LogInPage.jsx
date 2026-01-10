@@ -69,7 +69,7 @@ const LogInPage = () => {
       setStatusMessage({
         type: "Error",
         message:
-          typeof errorMessage === "object"
+          typeof errorMessage === "Login failed"
             ? JSON.stringify(errorMessage)
             : errorMessage,
       });
