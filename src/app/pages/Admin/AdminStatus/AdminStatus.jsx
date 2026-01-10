@@ -119,7 +119,7 @@ const AdminStatus = ({ onNavigate }) => {
   return (
     <div className="min-h-screen">
       {/* Header với nút Create */}
-      <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="p-6 min-h-screen">
         {/* Breadcrumb */}
         <div className="mb-6">
           <Breadcrumb currentPage="Status" />

@@ -178,8 +178,8 @@ const SearchBoxComponent = ({ onSearch, onButtonClick }) => {
       console.log("🖼️ Starting image search...");
       setIsLoading(true);
 
-      // Call Image Search API
-      const result = await searchByImage(imageFile, 10, 0.5);
+      // Call Image Search API with threshold 0.65
+      const result = await searchByImage(imageFile, 10, 0.65);
 
       if (result.success && result.data && result.data.length > 0) {
         console.log("✅ Image search successful:", result.data);

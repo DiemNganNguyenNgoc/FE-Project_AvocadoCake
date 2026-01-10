@@ -34,9 +34,26 @@ const ViewProductDetailPage = () => {
 
   console.log("Product Data from location:", productData); // Thêm log này
 
-  const [product, setProduct] = useState(productData);
+  // Map productId ngay từ initial state
+  const initialProduct = productData
+    ? {
+        ...productData,
+        productId: productData._id || productData.productId,
+      }
+    : {
+        productName: "",
+        productPrice: "",
+        productSize: "",
+        productCategory: "",
+        productImage: null,
+        productDescription: "",
+        averageRating: 0,
+        totalRatings: 0,
+        discount: "",
+        productId: null,
+      };
 
-  console.log("Product Data from state:", paramId);
+  const [product, setProduct] = useState(initialProduct);
 
   useEffect(() => {
     if (productData) {
@@ -46,6 +63,7 @@ const ViewProductDetailPage = () => {
         productId: productData._id || productData.productId,
       };
       console.log("🔍 Mapped product data:", mappedProduct);
+      console.log("🔍 productId value:", mappedProduct.productId);
       setProduct(mappedProduct);
       window.scrollTo(0, 0);
     }
@@ -317,7 +335,7 @@ const ViewProductDetailPage = () => {
           console.log("Fallback to category recommendations");
           const queryParams = new URLSearchParams({
             page: 0,
-            limit: 8,
+            limit: 20,
           }).toString();
 
           const url = `${process.env.REACT_APP_API_URL_BACKEND}/product/get-product-by-category/${product?.productCategory}?${queryParams}`;
@@ -355,7 +373,7 @@ const ViewProductDetailPage = () => {
           );
         }
 
-        setRelatedProducts(displayProducts);
+        setRelatedProducts(recommendedProducts);
       } catch (error) {
         console.error("Lỗi khi lấy khuyến nghị hoặc fallback:", error);
         setRelatedProducts([]);
@@ -382,21 +400,38 @@ const ViewProductDetailPage = () => {
   const [loadingCombos, setLoadingCombos] = useState(false);
 
   useEffect(() => {
+    console.log("🎬 Ratings useEffect triggered!");
+    console.log("🎬 Current product.productId:", product.productId);
+
     const fetchRatings = async () => {
       if (product?.productId) {
         try {
           setLoadingRatings(true);
+          console.log("🔍 Fetching ratings for productId:", product.productId);
           const response = await getProductRatings(product.productId);
+          console.log("📊 Ratings response:", response);
           if (response.status === "OK") {
+            console.log("✅ Ratings data:", response.data);
+            console.log("📝 Number of ratings:", response.data?.length || 0);
             setRatings(response.data);
             // Reset visible count khi product thay đổi
             setVisibleRatingsCount(10);
+          } else {
+            console.log("⚠️ Response status not OK:", response);
+            setRatings([]);
           }
         } catch (error) {
-          console.error("Error fetching ratings:", error);
+          console.error("❌ Error fetching ratings:", error);
+          setRatings([]);
         } finally {
           setLoadingRatings(false);
         }
+      } else {
+        console.log(
+          "⚠️ No productId available for fetching ratings, value is:",
+          product.productId
+        );
+        console.log("⚠️ Full product object:", product);
       }
     };
 
@@ -540,7 +575,7 @@ const ViewProductDetailPage = () => {
                     averageRating={comboProduct.averageRating || 5.0}
                     totalRatings={comboProduct.totalRatings || 0}
                     onCardClick={() =>
-                      navigate("/product-detail", { state: comboProduct })
+                      navigate("/view-product-detail", { state: comboProduct })
                     }
                   />
                 ))}
@@ -555,10 +590,8 @@ const ViewProductDetailPage = () => {
           <textarea
             className="product-description"
             readOnly={true}
-            // defaultValue={"Chưa có mô tả"}
-          >
-            {product.productDescription}
-          </textarea>
+            value={product.productDescription || "Chưa có mô tả"}
+          />
         </div>
 
         {/* <div className="btn__update">
@@ -591,6 +624,11 @@ const ViewProductDetailPage = () => {
               />
             </div>
           </div>
+
+          {/* Debug info */}
+          {console.log("🎯 Current ratings state:", ratings)}
+          {console.log("🎯 Loading ratings:", loadingRatings)}
+          {console.log("🎯 Ratings length:", ratings?.length || 0)}
 
           {loadingRatings ? (
             <div>Đang tải đánh giá...</div>

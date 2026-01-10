@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getDetailsDiscount,
 } from "../services/DiscountService";
+import { Button } from "../../../../components/AdminLayout";
 
 const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
   const { isLoading } = useAdminDiscount();
@@ -52,12 +53,20 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
               return date.toISOString().split("T")[0];
             };
 
+            // Parse discountProduct - có thể là array of objects hoặc array of IDs
+            let productIds = [];
+            if (Array.isArray(discount.discountProduct)) {
+              productIds = discount.discountProduct.map((p) =>
+                typeof p === "object" && p !== null ? p._id : p
+              );
+            }
+            console.log("[DEBUG] Parsed productIds:", productIds);
+
             setFormData({
               discountCode: discount.discountCode || "",
               discountName: discount.discountName || "",
               discountValue: discount.discountValue || "",
-              discountProduct:
-                discount.discountProduct?.map((p) => p._id || p) || [],
+              discountProduct: productIds,
               discountImage: null, // Keep null for new uploads
               discountStartDate: formatDateForInput(discount.discountStartDate),
               discountEndDate: formatDateForInput(discount.discountEndDate),
@@ -165,14 +174,24 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("[DEBUG] formData before validation:", formData);
+    console.log("[DEBUG] discountProduct array:", formData.discountProduct);
+    console.log(
+      "[DEBUG] discountProduct length:",
+      formData.discountProduct.length
+    );
+
     if (!validateForm()) {
+      console.log("[DEBUG] Validation failed with errors:", errors);
       return;
     }
 
     const submitData = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === "discountProduct") {
-        submitData.append(key, JSON.stringify(formData[key]));
+        const jsonString = JSON.stringify(formData[key]);
+        console.log("[DEBUG] discountProduct JSON:", jsonString);
+        submitData.append(key, jsonString);
       } else if (key === "discountImage" && formData[key]) {
         // Only append image if a new one is selected
         submitData.append(key, formData[key]);
@@ -180,6 +199,12 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         submitData.append(key, formData[key]);
       }
     });
+
+    // Log FormData content
+    console.log("[DEBUG] FormData entries:");
+    for (let pair of submitData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
     try {
       await onSubmit(discountId, submitData);
@@ -224,13 +249,13 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         <h2 className="text-xl font-semibold text-gray-800 mb-2">
           Cập nhật khuyến mãi
         </h2>
-        <p className="text-gray-600 text-sm">Chỉnh sửa thông tin khuyến mãi</p>
+        <p className="text-gray-600 text-lg">Chỉnh sửa thông tin khuyến mãi</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Banner Upload */}
         <div className="bg-gray-50 rounded-xl p-6 border-2 border-dashed border-gray-200 hover:border-brand-300 transition-colors">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-lg font-medium text-gray-700 mb-3">
             Banner khuyến mãi
           </label>
           <input
@@ -265,7 +290,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
-                <p className="text-sm text-gray-500">
+                <p className="text-lg text-gray-500">
                   Click để chọn hình ảnh mới
                 </p>
               </div>
@@ -277,7 +302,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Discount Code */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Mã khuyến mãi <span className="text-red-500">*</span>
             </label>
             <input
@@ -299,7 +324,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
           {/* Discount Value */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Giá trị khuyến mãi (%) <span className="text-red-500">*</span>
             </label>
             <input
@@ -326,7 +351,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
         {/* Discount Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-lg font-medium text-gray-700 mb-2">
             Tên khuyến mãi <span className="text-red-500">*</span>
           </label>
           <input
@@ -348,7 +373,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
         {/* Product Selection */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-lg font-medium text-gray-700 mb-3">
             Chọn sản phẩm áp dụng <span className="text-red-500">*</span>
           </label>
           <div
@@ -368,13 +393,13 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
                     onChange={() => handleProductChange(product._id)}
                     className="w-4 h-4 text-brand-600 rounded focus:ring-brand-500 border-gray-300"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-lg text-gray-700">
                     {product.productName}
                   </span>
                 </label>
               ))
             ) : (
-              <p className="text-gray-500 text-sm">Không có sản phẩm nào</p>
+              <p className="text-gray-500 text-lg">Không có sản phẩm nào</p>
             )}
           </div>
           {errors.discountProduct && (
@@ -387,7 +412,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
         {/* Date Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Ngày bắt đầu <span className="text-red-500">*</span>
             </label>
             <input
@@ -409,7 +434,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-lg font-medium text-gray-700 mb-2">
               Ngày kết thúc <span className="text-red-500">*</span>
             </label>
             <input
@@ -433,11 +458,7 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
 
         {/* Submit Buttons */}
         <div className="flex gap-3 pt-6 border-t border-gray-200">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="flex-1 bg-brand-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
+          <Button type="submit" disabled={isLoading} className="flex-1">
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <svg
@@ -465,14 +486,10 @@ const UpdateDiscount = ({ discountId, onSubmit, onCancel }) => {
             ) : (
               "Cập nhật khuyến mãi"
             )}
-          </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-6 py-3 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
-          >
+          </Button>
+          <Button type="button" onClick={onCancel} variant="outline">
             Hủy
-          </button>
+          </Button>
         </div>
       </form>
     </div>

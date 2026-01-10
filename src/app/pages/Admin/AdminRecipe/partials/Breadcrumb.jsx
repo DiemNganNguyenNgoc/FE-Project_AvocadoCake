@@ -82,12 +82,12 @@ const Breadcrumb = () => {
             {item.isClickable ? (
               <button
                 onClick={() => handleBreadcrumbClick(item.path)}
-                className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                className="inline-flex items-center text-xl font-medium text-blue-600 hover:text-blue-800 transition-colors"
               >
                 {item.label}
               </button>
             ) : (
-              <span className="text-sm font-medium text-gray-500">
+              <span className="text-xl font-medium text-gray-500">
                 {item.label}
               </span>
             )}

@@ -126,7 +126,7 @@ class StratergyService {
    * @param {string|null} eventType - Loại sự kiện cụ thể hoặc null = tất cả
    * @returns {Promise} Response chứa danh sách promotions
    */
-  async getEventPromotions(daysAhead = 60, eventType = null) {
+  async getEventPromotions(daysAhead = 7, eventType = null) {
     try {
       const params = { days_ahead: daysAhead };
       if (eventType) {

@@ -645,3 +645,27 @@
     max-width: 320px;
   }
 }
+
+/* ===========================
+   Popover Fix - Prevent scrolling with content
+=========================== */
+/* Override Bootstrap Popover styles to fix position */
+:global(.popover) {
+  position: fixed !important;
+  z-index: 1060 !important;
+}
+
+:global(#popover-basic) {
+  position: fixed !important;
+  z-index: 1060 !important;
+}
+
+:global(#popover-others) {
+  position: fixed !important;
+  z-index: 1060 !important;
+}
+
+/* Đảm bảo popover body không bị scroll */
+:global(.popover-body) {
+  overflow: visible !important;
+}

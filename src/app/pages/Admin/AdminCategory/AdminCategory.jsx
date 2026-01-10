@@ -245,11 +245,19 @@ const AdminCategory = ({ onNavigate }) => {
           </div>
 
           <div className="flex items-center justify-between h-16">
-            <div>
+            {/* <div>
               <h1 className="text-2xl font-bold text-avocado-brown-100">
                 Quản Lý Danh Mục
               </h1>
               <p className="text-sm text-avocado-brown-50 mt-1">
+                Quản lý các danh mục sản phẩm trong hệ thống
+              </p>
+            </div> */}
+            <div>
+              <h1 className="text-heading-4 font-bold text-dark dark:text-white">
+                Quản lý danh mục
+              </h1>
+              <p className="mt-3 text-xl text-gray-600 dark:text-gray-400">
                 Quản lý các danh mục sản phẩm trong hệ thống
               </p>
             </div>

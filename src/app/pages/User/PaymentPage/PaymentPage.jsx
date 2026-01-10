@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./PaymentPage.css";
 import ButtonComponent from "../../../components/ButtonComponent/ButtonComponent";
 import ProductInforCustom from "../../../components/ProductInfor/ProductInforCustom";
@@ -27,12 +27,22 @@ import PaymentSummary from "./components/PaymentSummary";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.order);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user);
 
-  const lastOrder = orderDetails.orders?.[orderDetails.orders.length - 1] || {};
+  // State để lưu order từ database (khi user quay lại thanh toán)
+  const [loadedOrder, setLoadedOrder] = useState(null);
+  const [isLoadingOrder, setIsLoadingOrder] = useState(false);
+
+  // Nếu có orderId từ location.state, sử dụng loadedOrder
+  // Nếu không, sử dụng lastOrder từ Redux
+  const orderFromState = location.state?.orderId
+    ? loadedOrder
+    : orderDetails.orders?.[orderDetails.orders.length - 1];
+  const lastOrder = orderFromState || {};
   const { orderItems = [] } = lastOrder;
 
   console.log("laddd order", lastOrder);
@@ -41,7 +51,23 @@ const PaymentPage = () => {
     rankDiscountPercent: lastOrder.rankDiscountPercent,
   });
 
+  // Xử lý orderItems - ưu tiên lấy từ populated product trong order
   const resolvedOrderItems = orderItems.map((item) => {
+    // Nếu item.product đã được populate (có productName, productImage, etc.)
+    if (
+      item.product &&
+      typeof item.product === "object" &&
+      item.product.productName
+    ) {
+      return {
+        ...item,
+        img: item.product.productImage || "default_image_url",
+        name: item.product.productName || "Unknown Product",
+        price: item.product.productPrice || 0,
+      };
+    }
+
+    // Fallback: tìm trong cart (cho trường hợp order mới từ Redux)
     const product = cart.products.find((p) => p.id === item.product);
     return {
       ...item,
@@ -54,7 +80,7 @@ const PaymentPage = () => {
     };
   });
 
-  const [paymentType, setPaymentType] = useState("qr");
+  const [paymentType, setPaymentType] = useState("sepay"); // Changed default from "qr" to "sepay"
   const [paymentInfo, setPaymentInfo] = useState({
     userBank: "momo", // Khởi tạo mặc định là momo
     userBankNumber: "",
@@ -241,12 +267,76 @@ const PaymentPage = () => {
     }
   }, [user?.id, access_token, fetchUserCoins]);
 
+  // Load order từ database nếu có orderId trong location.state (thanh toán lại)
+  useEffect(() => {
+    const loadOrderFromDatabase = async () => {
+      const orderIdFromState = location.state?.orderId;
+      if (orderIdFromState) {
+        try {
+          setIsLoadingOrder(true);
+          console.log("📦 Loading order from database:", orderIdFromState);
+
+          const response = await getDetailsOrder(orderIdFromState);
+
+          if (response?.status === "OK" && response.data) {
+            const order = response.data;
+            console.log("✅ Loaded order:", order);
+
+            // Set loaded order với đầy đủ thông tin
+            setLoadedOrder({
+              orderId: order._id,
+              orderItems: order.orderItems || [],
+              totalItemPrice: order.totalItemPrice || 0,
+              shippingPrice: order.shippingPrice || 30000,
+              totalPrice: order.totalPrice || 0,
+              rankDiscount: order.rankDiscount || 0,
+              rankDiscountPercent: order.rankDiscountPercent || 0,
+              coinsUsed: order.coinsUsed || 0,
+              vouchersUsed: order.vouchersUsed || [],
+              voucherDiscount: order.voucherDiscount || 0,
+            });
+
+            // Cập nhật coins đã sử dụng nếu có
+            if (order.coinsUsed > 0) {
+              setCoinsApplied(order.coinsUsed);
+            }
+
+            // Cập nhật voucher đã sử dụng nếu có
+            if (order.voucherDiscount > 0) {
+              setVoucherDiscount(order.voucherDiscount);
+            }
+            if (order.vouchersUsed && order.vouchersUsed.length > 0) {
+              setSelectedVouchers(order.vouchersUsed);
+            }
+          } else {
+            console.error("❌ Failed to load order");
+            toast.error("Không thể tải thông tin đơn hàng");
+            navigate("/order-history");
+          }
+        } catch (error) {
+          console.error("❌ Error loading order:", error);
+          toast.error("Có lỗi xảy ra khi tải đơn hàng");
+          navigate("/order-history");
+        } finally {
+          setIsLoadingOrder(false);
+        }
+      }
+    };
+
+    loadOrderFromDatabase();
+  }, [location.state?.orderId, navigate]);
+
   // Đồng bộ trạng thái đơn hàng với backend khi component mount
   useEffect(() => {
-    if (lastOrder?.orderId && access_token) {
+    if (lastOrder?.orderId && access_token && !location.state?.orderId) {
       syncOrderWithBackend();
     }
-  }, [lastOrder?.orderId, access_token, syncOrderWithBackend]);
+  }, [
+    lastOrder?.orderId,
+    access_token,
+    syncOrderWithBackend,
+    location.state?.orderId,
+  ]);
 
   const handlePaymentTypeChange = (e) => {
     setPaymentType(e.target.value);
@@ -527,7 +617,7 @@ const PaymentPage = () => {
     }
 
     // Validation cho payment type QR
-    if (paymentType === "qr") {
+    /* if (paymentType === "qr") {
       if (!paymentInfo.userBank) {
         alert("Vui lòng chọn loại ví thanh toán!");
         return;
@@ -536,7 +626,7 @@ const PaymentPage = () => {
         alert("Vui lòng nhập số điện thoại hoặc số tài khoản!");
         return;
       }
-    }
+    } */
 
     // Validation cho Sepay - không cần input thêm, chỉ cần chọn phương thức
 
@@ -647,7 +737,7 @@ const PaymentPage = () => {
       } else {
         throw new Error(response.message || "Thanh toán PayPal thất bại");
       }
-    } else if (paymentType === "qr") {
+    } /* else if (paymentType === "qr") {
       const response = await PaymentService.createQrPayment(paymentData);
       console.log("QR response:", response);
 
@@ -673,7 +763,7 @@ const PaymentPage = () => {
       } else {
         throw new Error(response.message || "Tạo QR thất bại");
       }
-    } else if (paymentType === "sepay") {
+    } */ else if (paymentType === "sepay") {
       // Xử lý thanh toán Sepay
       const sepayData = {
         paymentCode: `SEPAY-${Date.now()}`,
@@ -717,89 +807,103 @@ const PaymentPage = () => {
 
   return (
     <div className="container-xl">
-      <div className="container-xl-pay">
-        <div className="PaymentInfor">
-          <p className="pThongtin">Thông tin thanh toán</p>
+      {isLoadingOrder ? (
+        <div className="p-16 text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-lg font-medium text-avocado-brown-100 mt-4">
+            Đang tải thông tin đơn hàng...
+          </p>
+        </div>
+      ) : (
+        <div className="container-xl-pay">
+          <div className="PaymentInfor">
+            <p className="pThongtin">Thông tin thanh toán</p>
 
-          {/* Coins Section Component */}
-          <CoinsSection
-            user={user}
-            showCoinsSection={showCoinsSection}
-            setShowCoinsSection={setShowCoinsSection}
-            isLoadingCoins={isLoadingCoins}
-            coinsToUse={coinsToUse}
-            handleCoinsChange={handleCoinsChange}
-            coinsApplied={coinsApplied}
-            originalTotalPrice={originalTotalPrice}
-            handleApplyCoins={handleApplyCoins}
-            handleCancelCoins={handleCancelCoins}
-          />
+            {/* Coins Section Component */}
+            <CoinsSection
+              user={user}
+              showCoinsSection={showCoinsSection}
+              setShowCoinsSection={setShowCoinsSection}
+              isLoadingCoins={isLoadingCoins}
+              coinsToUse={coinsToUse}
+              handleCoinsChange={handleCoinsChange}
+              coinsApplied={coinsApplied}
+              originalTotalPrice={originalTotalPrice}
+              handleApplyCoins={handleApplyCoins}
+              handleCancelCoins={handleCancelCoins}
+            />
 
-          {/* Voucher Section Component */}
-          <VoucherSection
-            voucherCode={voucherCode}
-            setVoucherCode={setVoucherCode}
-            handleApplyVoucherCode={handleApplyVoucherCode}
-            selectedVouchers={selectedVouchers}
-            handleRemoveVoucher={handleRemoveVoucher}
-            setIsVoucherModalOpen={setIsVoucherModalOpen}
-            voucherDiscount={voucherDiscount}
-          />
+            {/* Voucher Section Component */}
+            <VoucherSection
+              voucherCode={voucherCode}
+              setVoucherCode={setVoucherCode}
+              handleApplyVoucherCode={handleApplyVoucherCode}
+              selectedVouchers={selectedVouchers}
+              handleRemoveVoucher={handleRemoveVoucher}
+              setIsVoucherModalOpen={setIsVoucherModalOpen}
+              voucherDiscount={voucherDiscount}
+            />
 
-          {/* Payment Method Selector Component */}
-          <PaymentMethodSelector
-            paymentType={paymentType}
-            handlePaymentTypeChange={handlePaymentTypeChange}
-            sepayPaymentMethod={sepayPaymentMethod}
-            setSepayPaymentMethod={setSepayPaymentMethod}
-            paymentInfo={paymentInfo}
-            handleInputChange={handleInputChange}
-          />
+            {/* Payment Method Selector Component */}
+            <PaymentMethodSelector
+              paymentType={paymentType}
+              handlePaymentTypeChange={handlePaymentTypeChange}
+              sepayPaymentMethod={sepayPaymentMethod}
+              setSepayPaymentMethod={setSepayPaymentMethod}
+              paymentInfo={paymentInfo}
+              handleInputChange={handleInputChange}
+            />
 
-          <div className="Button-area-pay">
-            <div className="button1">
-              <ButtonComponent onClick={handleClickBack}>
-                Quay lại
-              </ButtonComponent>
-            </div>
-            <div className="button2">
-              <ButtonComponent className="customBtn2" onClick={handleClickPay}>
-                Thanh toán
-              </ButtonComponent>
+            <div className="Button-area-pay">
+              <div className="button1">
+                <ButtonComponent onClick={handleClickBack}>
+                  Quay lại
+                </ButtonComponent>
+              </div>
+              <div className="button2">
+                <ButtonComponent
+                  className="customBtn2"
+                  onClick={handleClickPay}
+                >
+                  Thanh toán
+                </ButtonComponent>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="final-order">
-          {resolvedOrderItems.length > 0 ? (
-            resolvedOrderItems.map((product, index) => (
-              <ProductInforCustom
-                key={index}
-                image={product.img}
-                name={product.name}
-                price={
-                  (
-                    product.price * (1 - product.discountPercent / 100) || 0
-                  ).toLocaleString() + " VND"
-                }
-                quantity={product.quantity}
-              />
-            ))
-          ) : (
-            <p>Không có sản phẩm nào trong đơn hàng</p>
-          )}
+          <div className="final-order">
+            {resolvedOrderItems.length > 0 ? (
+              resolvedOrderItems.map((product, index) => (
+                <ProductInforCustom
+                  key={index}
+                  image={product.img}
+                  name={product.name}
+                  price={
+                    (
+                      product.price * (1 - product.discountPercent / 100) || 0
+                    ).toLocaleString() + " VND"
+                  }
+                  quantity={product.quantity}
+                />
+              ))
+            ) : (
+              <p>Không có sản phẩm nào trong đơn hàng</p>
+            )}
 
-          {/* Payment Summary Component */}
-          <PaymentSummary
-            originalTotalPrice={originalTotalPrice}
-            rankDiscount={rankDiscount}
-            rankDiscountPercent={rankDiscountPercent}
-            coinsApplied={coinsApplied}
-            voucherDiscount={voucherDiscount}
-            finalTotalPrice={finalTotalPrice}
-          />
+            {/* Payment Summary Component */}
+            <PaymentSummary
+              originalTotalPrice={originalTotalPrice}
+              rankDiscount={rankDiscount}
+              rankDiscountPercent={rankDiscountPercent}
+              coinsApplied={coinsApplied}
+              voucherDiscount={voucherDiscount}
+              finalTotalPrice={finalTotalPrice}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Voucher Modal */}
       <VoucherModal

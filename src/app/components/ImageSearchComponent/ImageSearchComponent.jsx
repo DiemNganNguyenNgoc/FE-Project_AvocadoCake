@@ -4,6 +4,56 @@ const ImageSearchComponent = ({ onImageSearch }) => {
   const [isSearching, setIsSearching] = useState(false);
   const fileInputRef = useRef(null);
 
+  // Resize image to reduce file size
+  const resizeImage = (file, maxSize = 1024) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          // Calculate new dimensions
+          if (width > height && width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                // Create new File object with same name
+                const resizedFile = new File([blob], file.name, {
+                  type: "image/jpeg",
+                  lastModified: Date.now(),
+                });
+                resolve(resizedFile);
+              } else {
+                reject(new Error("Failed to resize image"));
+              }
+            },
+            "image/jpeg",
+            0.7
+          );
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleImageSelect = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -14,17 +64,20 @@ const ImageSearchComponent = ({ onImageSearch }) => {
       return;
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("Kích thước ảnh không được vượt quá 10MB!");
-      return;
-    }
-
     setIsSearching(true);
 
     try {
+      // Always resize all images to ensure they fit server limits
+      console.log(
+        `🔄 Resizing image from ${(file.size / (1024 * 1024)).toFixed(2)}MB...`
+      );
+      const imageToUpload = await resizeImage(file, 800);
+      console.log(
+        `✅ Resized to ${(imageToUpload.size / (1024 * 1024)).toFixed(2)}MB`
+      );
+
       // Call API to search by image
-      await onImageSearch(file);
+      await onImageSearch(imageToUpload);
     } catch (error) {
       console.error("Error searching by image:", error);
       alert("Có lỗi xảy ra khi tìm kiếm bằng hình ảnh. Vui lòng thử lại!");

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useAdminRecipeStore from "../adminRecipeStore";
 import RecipeDisplay from "../partials/RecipeDisplay";
+import GenerateImage from "../partials/GenerateImage";
 import Button from "../../../../components/AdminLayout/Button";
 
 /**
@@ -18,6 +19,7 @@ const GenerateFromIngredient = () => {
   });
 
   const [showResult, setShowResult] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
 
   // Language options
   const LANGUAGES = [
@@ -61,6 +63,7 @@ const GenerateFromIngredient = () => {
     }
 
     try {
+      setGeneratedImage(null); // Reset image when generating new recipe
       await generateFromIngredients(formData);
       setShowResult(true);
       toast.success("Tạo công thức thành công!");
@@ -75,6 +78,12 @@ const GenerateFromIngredient = () => {
       language: "vi",
     });
     setShowResult(false);
+    setGeneratedImage(null);
+  };
+
+  const handleImageGenerated = (imageData) => {
+    setGeneratedImage(imageData);
+    console.log("Image generated:", imageData);
   };
 
   const applyTemplate = (template) => {
@@ -115,7 +124,7 @@ const GenerateFromIngredient = () => {
                   <div className="font-medium text-xl text-avocado-brown-100 mb-1">
                     {template.name}
                   </div>
-                  <div className="text-sm text-avocado-brown-50 line-clamp-1">
+                  <div className="text-xl text-avocado-brown-50 line-clamp-1">
                     {template.ingredients}
                   </div>
                 </button>
@@ -201,6 +210,12 @@ const GenerateFromIngredient = () => {
           </button>
 
           <RecipeDisplay recipe={currentRecipe} />
+
+          {/* Generate Image Section */}
+          <GenerateImage
+            recipe={currentRecipe?.recipe}
+            onImageGenerated={handleImageGenerated}
+          />
         </div>
       )}
     </div>

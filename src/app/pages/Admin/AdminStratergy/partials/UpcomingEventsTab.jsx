@@ -99,10 +99,10 @@ const UpcomingEventsTab = ({
                     Còn lại
                   </th>
                   <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
-                    Discount Range
+                    Mức giảm
                   </th>
                   <th className="px-6 py-4 text-left text-xl font-semibold text-avocado-brown-100">
-                    Target Categories
+                    Danh mục mục tiêu
                   </th>
                 </tr>
               </thead>

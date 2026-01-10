@@ -374,6 +374,24 @@ const HeaderComponent = () => {
                       onToggle={(nextShow) => setShowPopover(nextShow)}
                       overlay={popover}
                       rootClose
+                      container={document.body}
+                      popperConfig={{
+                        strategy: "fixed",
+                        modifiers: [
+                          {
+                            name: "preventOverflow",
+                            options: {
+                              boundary: "viewport",
+                            },
+                          },
+                          {
+                            name: "flip",
+                            options: {
+                              fallbackPlacements: ["top", "bottom"],
+                            },
+                          },
+                        ],
+                      }}
                     >
                       <div className={`${styles.user__icon} d-none d-md-flex`}>
                         {userImage ? (
@@ -494,6 +512,24 @@ const HeaderComponent = () => {
                         onToggle={(nextShow) => setShowOthersDropdown(nextShow)}
                         overlay={othersPopover}
                         rootClose
+                        container={document.body}
+                        popperConfig={{
+                          strategy: "fixed",
+                          modifiers: [
+                            {
+                              name: "preventOverflow",
+                              options: {
+                                boundary: "viewport",
+                              },
+                            },
+                            {
+                              name: "flip",
+                              options: {
+                                fallbackPlacements: ["top", "bottom"],
+                              },
+                            },
+                          ],
+                        }}
                       >
                         <div>
                           <ButtonNoBGComponent

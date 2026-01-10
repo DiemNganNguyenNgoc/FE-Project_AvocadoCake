@@ -8,7 +8,7 @@ const Breadcrumb = ({ currentPage = "Quiz" }) => {
         <li className="inline-flex items-center">
           <a
             href="#"
-            className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
+            className="inline-flex items-center text-lg font-medium text-gray-700 hover:text-blue-600"
           >
             <Home className="w-4 h-4 mr-2" />
             Home
@@ -17,7 +17,7 @@ const Breadcrumb = ({ currentPage = "Quiz" }) => {
         <li>
           <div className="flex items-center">
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="ml-1 text-sm font-medium text-gray-500 md:ml-2">
+            <span className="ml-1 text-lg font-medium text-gray-500 md:ml-2">
               {currentPage}
             </span>
           </div>

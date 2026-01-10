@@ -162,7 +162,7 @@ const AdminVoucher = () => {
             variant="secondary"
             size="lg"
             icon={<Copy />}
-            className="min-h-[48px]"
+            // className="min-h-[48px]"
           >
             Tạo hàng loạt
           </Button>
@@ -171,7 +171,7 @@ const AdminVoucher = () => {
             variant="primary"
             size="lg"
             icon={<Plus />}
-            className="min-h-[48px]"
+            // className="min-h-[48px]"
           >
             Tạo voucher
           </Button>

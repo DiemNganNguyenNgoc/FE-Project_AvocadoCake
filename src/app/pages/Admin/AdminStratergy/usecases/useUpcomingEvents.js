@@ -9,7 +9,7 @@ export const useUpcomingEvents = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [daysAhead, setDaysAhead] = useState(60);
+  const [daysAhead, setDaysAhead] = useState(7);
 
   const fetchUpcomingEvents = async () => {
     setIsLoading(true);

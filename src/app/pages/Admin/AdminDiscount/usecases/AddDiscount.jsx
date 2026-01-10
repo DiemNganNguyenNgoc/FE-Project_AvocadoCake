@@ -278,7 +278,7 @@ const AddDiscount = ({ onSubmit }) => {
                   <p className="text-lg font-semibold text-gray-700 group-hover:text-blue-700 transition-colors">
                     Click để chọn hình ảnh
                   </p>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-lg text-gray-500 mt-2">
                     PNG, JPG, GIF, WebP tối đa 5MB
                   </p>
                 </div>
@@ -290,7 +290,7 @@ const AddDiscount = ({ onSubmit }) => {
         {/* Primary Information Section - Gestalt: Similarity & Grouping */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            {/* <span className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-3">
+            {/* <span className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-white text-lg font-bold mr-3">
               1
             </span> */}
             Thông tin cơ bản
@@ -315,7 +315,7 @@ const AddDiscount = ({ onSubmit }) => {
                 placeholder="VD: SALE50, NEWUSER..."
               />
               {errors.discountCode && (
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+                <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -357,7 +357,7 @@ const AddDiscount = ({ onSubmit }) => {
                 </span>
               </div>
               {errors.discountValue && (
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+                <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -393,7 +393,7 @@ const AddDiscount = ({ onSubmit }) => {
               placeholder="VD: Flash Sale cuối tuần, Ưu đãi khách hàng mới..."
             />
             {errors.discountName && (
-              <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+              <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="currentColor"
@@ -414,7 +414,7 @@ const AddDiscount = ({ onSubmit }) => {
         {/* Product Selection Section - Gestalt: Proximity & Common Region */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            {/* <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-3">
+            {/* <span className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-lg font-bold mr-3">
               2
             </span> */}
             Sản phẩm áp dụng
@@ -494,7 +494,7 @@ const AddDiscount = ({ onSubmit }) => {
                             {product.productName}
                           </h4>
                           <div className="flex items-center space-x-3 mt-1">
-                            <span className="text-sm font-bold text-green-600">
+                            <span className="text-lg font-bold text-green-600">
                               {new Intl.NumberFormat("vi-VN", {
                                 style: "currency",
                                 currency: "VND",
@@ -547,7 +547,7 @@ const AddDiscount = ({ onSubmit }) => {
               )}
             </div>
             {errors.discountProduct && (
-              <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+              <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="currentColor"
@@ -568,7 +568,7 @@ const AddDiscount = ({ onSubmit }) => {
         {/* Date Selection Section - Gestalt: Symmetry & Balance */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
           <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            {/* <span className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-3">
+            {/* <span className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center text-white text-lg font-bold mr-3">
               3
             </span> */}
             Thời gian áp dụng
@@ -591,7 +591,7 @@ const AddDiscount = ({ onSubmit }) => {
                 } focus:outline-none focus:ring-4 focus:ring-blue-200 shadow-sm hover:shadow-md`}
               />
               {errors.discountStartDate && (
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+                <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -624,7 +624,7 @@ const AddDiscount = ({ onSubmit }) => {
                 } focus:outline-none focus:ring-4 focus:ring-blue-200 shadow-sm hover:shadow-md`}
               />
               {errors.discountEndDate && (
-                <div className="flex items-center text-red-600 text-sm font-medium bg-red-50 p-3 rounded-xl">
+                <div className="flex items-center text-red-600 text-lg font-medium bg-red-50 p-3 rounded-xl">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -725,10 +725,10 @@ const AddDiscount = ({ onSubmit }) => {
                 />
               </svg>
               <div>
-                <p className="text-blue-800 font-semibold text-sm">
+                <p className="text-blue-800 font-semibold text-lg">
                   💡 Mẹo tạo khuyến mãi hiệu quả:
                 </p>
-                <ul className="text-blue-700 text-sm mt-2 space-y-1">
+                <ul className="text-blue-700 text-lg mt-2 space-y-1">
                   <li>• Mã khuyến mãi nên ngắn gọn, dễ nhớ</li>
                   <li>• Tên khuyến mãi nên hấp dẫn và mô tả rõ ưu đãi</li>
                   <li>• Chọn sản phẩm phù hợp với mục tiêu bán hàng</li>

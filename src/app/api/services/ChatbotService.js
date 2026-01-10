@@ -2,7 +2,8 @@ import axios from "axios";
 
 /**
  * Process a user query and get a response from the chatbot
- * @param {string} query - The user's query text
+ * @param {string} message - The user's message text
+ * @param {string} sessionId - Optional session ID for conversation continuity
  * @param {string} userId - Optional user ID for personalized responses
  * @returns {Promise} - The response from the chatbot API
  */

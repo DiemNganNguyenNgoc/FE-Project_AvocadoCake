@@ -219,7 +219,7 @@ const DiscountTable = ({ onEdit }) => {
         {/* Error Message */}
         {error && (
           <div className="px-8 py-4 border-b border-stroke dark:border-stroke-dark">
-            <div className="p-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl">
+            <div className="p-4 text-lg text-red-700 bg-red-50 border border-red-200 rounded-xl">
               <div className="flex items-center">
                 <svg
                   className="w-4 h-4 mr-2"
@@ -245,28 +245,28 @@ const DiscountTable = ({ onEdit }) => {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-dark-2">
               <tr>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-20">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-20">
                   STT
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Mã khuyến mãi
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Tên khuyến mãi
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Giá trị
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Sản phẩm áp dụng
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Ngày bắt đầu
                 </th>
-                <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-8 py-4 text-left text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Ngày kết thúc
                 </th>
-                <th className="px-8 py-4 text-center text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-40">
+                <th className="px-8 py-4 text-center text-lg font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-40">
                   Thao tác
                 </th>
               </tr>
@@ -288,7 +288,7 @@ const DiscountTable = ({ onEdit }) => {
                       {discount.discountName}
                     </td>
                     <td className="px-8 py-5">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-light-7 text-green-dark">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-lg font-medium bg-green-light-7 text-green-dark">
                         {discount.discountValue}%
                       </span>
                     </td>

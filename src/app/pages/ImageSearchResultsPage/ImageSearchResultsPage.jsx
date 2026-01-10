@@ -85,6 +85,7 @@ const ImageSearchResultsPage = () => {
 
                   <CardProduct
                     id={product.id || product._id}
+                    type="primary"
                     img={product.productImage}
                     title={product.productName}
                     price={product.productPrice || 0}

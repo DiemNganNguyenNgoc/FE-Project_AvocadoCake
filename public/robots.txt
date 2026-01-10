@@ -1,3 +1,76 @@
-# https://www.robotstxt.org/robotstxt.html
+# Robots.txt for Avocado Sweet Love
+# Website: https://avocadosweetlove.shop
+# Updated: January 2026
+
+# Allow all search engines to crawl public pages
 User-agent: *
-Disallow:
+
+# Block admin pages - bảo mật trang quản trị
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /login
+Disallow: /register
+
+# Block API endpoints - bảo vệ API
+Disallow: /api/*
+Disallow: */api/*
+
+# Block user account pages - bảo mật thông tin cá nhân
+Disallow: /profile
+Disallow: /profile/*
+Disallow: /account
+Disallow: /account/*
+Disallow: /checkout
+Disallow: /cart
+
+# Block search and filter URLs to avoid duplicate content
+Disallow: /*?*
+Disallow: /search?*
+Disallow: /*filter=*
+Disallow: /*sort=*
+
+# Block private files and sensitive directories
+Disallow: /private/
+Disallow: /.env
+Disallow: /config/
+Disallow: /node_modules/
+
+# Allow public pages - các trang được phép index
+Allow: /
+Allow: /products
+Allow: /products/*
+Allow: /recipes
+Allow: /recipes/*
+Allow: /about
+Allow: /contact
+Allow: /blog
+Allow: /blog/*
+
+# Allow CSS, JS, and images for better indexing
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Sitemap location - giúp Google crawl hiệu quả hơn
+Sitemap: https://avocadosweetlove.shop/sitemap.xml
+
+# Crawl-delay để không quá tải server (optional)
+# Crawl-delay: 1
+
+# Block bad bots - chặn các bot xấu
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
