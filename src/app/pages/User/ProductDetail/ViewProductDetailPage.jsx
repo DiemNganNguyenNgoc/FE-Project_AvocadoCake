@@ -18,6 +18,7 @@ import { getProductRatings } from "../../../api/services/OrderService";
 import { ListGroup } from "react-bootstrap";
 import StratergyService from "../../Admin/AdminStratergy/services/StratergyService";
 import CardProduct from "../../../components/CardProduct/CardProduct";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ViewProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -373,8 +374,8 @@ const ViewProductDetailPage = () => {
 
   const [ratings, setRatings] = useState([]);
   const [loadingRatings, setLoadingRatings] = useState(false);
-  const [visibleRatingsCount, setVisibleRatingsCount] = useState(10); // Hiển thị 10 comments đầu tiên
-  const RATINGS_PER_PAGE = 10;
+  const [visibleRatingsCount, setVisibleRatingsCount] = useState(5); // Hiển thị 5 comments đầu tiên
+  const RATINGS_PER_PAGE = 5;
 
   // State cho combo products
   const [comboProducts, setComboProducts] = useState([]);
@@ -596,37 +597,61 @@ const ViewProductDetailPage = () => {
           ) : ratings.length > 0 ? (
             <>
               <ListGroup>
-                {ratings.slice(0, visibleRatingsCount).map((rating, index) => (
-                  <ListGroup.Item key={index} className="rating-item">
-                    <div className="d-flex justify-content-between align-items-start mb-2">
-                      <div>
-                        <strong>{rating.userName}</strong>
-                        <div className="mt-1">
-                          <RatingStar
-                            rating={rating.rating}
-                            setRating={() => {}}
-                            isEditable={false}
-                            size={16}
-                            showRating={false}
-                          />
-                        </div>
-                      </div>
-                      <small className="text-muted">
-                        {new Date(rating.createdAt).toLocaleDateString("vi-VN")}
-                      </small>
-                    </div>
-                    {rating.comment && (
-                      <p className="rating-comment mb-0 mt-2">
-                        {rating.comment}
-                      </p>
-                    )}
-                  </ListGroup.Item>
-                ))}
+                <AnimatePresence mode="sync">
+                  {ratings
+                    .slice(0, visibleRatingsCount)
+                    .map((rating, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, height: 0, y: -10 }}
+                        animate={{ opacity: 1, height: "auto", y: 0 }}
+                        exit={{ opacity: 0, height: 0, y: -10 }}
+                        transition={{
+                          duration: 0.3,
+                          delay: index * 0.05,
+                          ease: "easeInOut",
+                        }}
+                        style={{ overflow: "hidden" }}
+                      >
+                        <ListGroup.Item className="rating-item">
+                          <div className="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                              <strong>{rating.userName}</strong>
+                              <div className="mt-1">
+                                <RatingStar
+                                  rating={rating.rating}
+                                  setRating={() => {}}
+                                  isEditable={false}
+                                  size={16}
+                                  showRating={false}
+                                />
+                              </div>
+                            </div>
+                            <small className="text-muted">
+                              {new Date(rating.createdAt).toLocaleDateString(
+                                "vi-VN"
+                              )}
+                            </small>
+                          </div>
+                          {rating.comment && (
+                            <p className="rating-comment mb-0 mt-2">
+                              {rating.comment}
+                            </p>
+                          )}
+                        </ListGroup.Item>
+                      </motion.div>
+                    ))}
+                </AnimatePresence>
               </ListGroup>
 
               {/* Nút "Xem thêm" */}
               {visibleRatingsCount < ratings.length && (
-                <div className="text-center mt-3">
+                <motion.div
+                  className="text-center mt-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <ButtonComponent
                     onClick={() =>
                       setVisibleRatingsCount((prev) => prev + RATINGS_PER_PAGE)
@@ -635,19 +660,24 @@ const ViewProductDetailPage = () => {
                   >
                     Xem thêm ({ratings.length - visibleRatingsCount} đánh giá)
                   </ButtonComponent>
-                </div>
+                </motion.div>
               )}
 
               {/* Nút "Thu gọn" khi đã xem nhiều hơn 10 */}
               {visibleRatingsCount > RATINGS_PER_PAGE && (
-                <div className="text-center mt-2">
+                <motion.div
+                  className="text-center mt-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <ButtonComponent
                     onClick={() => setVisibleRatingsCount(RATINGS_PER_PAGE)}
                     style={{ minWidth: "150px" }}
                   >
                     Thu gọn
                   </ButtonComponent>
-                </div>
+                </motion.div>
               )}
             </>
           ) : (

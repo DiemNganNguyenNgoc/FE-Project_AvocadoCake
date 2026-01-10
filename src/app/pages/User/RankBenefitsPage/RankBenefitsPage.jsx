@@ -100,7 +100,7 @@ const RankBenefitsPage = () => {
                     className="bg-gray-50 p-4"
                     style={{ borderRadius: "16px" }}
                   >
-                    <div className="flex justify-between text-sm mb-2 text-gray-700">
+                    <div className="flex justify-between text-lg mb-2 text-gray-700">
                       <span>Tiến độ đến rank tiếp theo</span>
                       <span className="font-bold">
                         {userRankData.progressToNextRank.progress}%
@@ -114,7 +114,7 @@ const RankBenefitsPage = () => {
                         }}
                       />
                     </div>
-                    <p className="text-sm mt-2 text-gray-600">
+                    <p className="text-lg mt-2 text-gray-600">
                       Còn{" "}
                       {formatCurrency(
                         userRankData.progressToNextRank.remainingSpending
@@ -159,14 +159,14 @@ const RankBenefitsPage = () => {
                   <div className="text-3xl font-bold mb-2 text-avocado-green-100">
                     {rank.discountPercent}%
                   </div>
-                  <p className="text-sm text-gray-600">Giảm giá mọi đơn hàng</p>
+                  <p className="text-lg text-gray-600">Giảm giá mọi đơn hàng</p>
                 </div>
 
                 {/* Card Body */}
                 <div className="bg-white p-8 flex flex-col flex-grow">
                   {/* Spending Range */}
                   <div className="mb-6 pb-6 border-b border-gray-200">
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-lg text-gray-600 mb-2">
                       Hạn mức chi tiêu
                     </p>
                     <div className="font-semibold text-gray-900">
@@ -180,7 +180,7 @@ const RankBenefitsPage = () => {
 
                   {/* Benefits List */}
                   <div className="flex-grow">
-                    <p className="text-sm font-semibold text-gray-700 mb-3">
+                    <p className="text-lg font-semibold text-gray-700 mb-3">
                       Đặc quyền:
                     </p>
                     <ul className="space-y-3">
@@ -199,7 +199,7 @@ const RankBenefitsPage = () => {
                               d="M5 13l4 4L19 7"
                             />
                           </svg>
-                          <span className="text-sm text-gray-700">
+                          <span className="text-lg text-gray-700">
                             {benefit}
                           </span>
                         </li>
@@ -210,7 +210,7 @@ const RankBenefitsPage = () => {
                   {/* Description */}
                   {rank.description && (
                     <div className="mt-6 pt-6 border-t border-gray-200">
-                      <p className="text-sm text-gray-600 italic">
+                      <p className="text-lg text-gray-600 italic">
                         {rank.description}
                       </p>
                     </div>

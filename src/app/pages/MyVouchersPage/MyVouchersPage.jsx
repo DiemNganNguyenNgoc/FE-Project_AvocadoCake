@@ -57,15 +57,17 @@ const MyVouchersPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="container-xl mx-auto mb-20">
       {/* Header */}
       <div className=" border-b-2 border-avocado-brown-30 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center text-white">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-avocado-brown-100 border-2 border-white rounded-2xl mb-4">
+            {/* <div className="inline-flex items-center justify-center w-20 h-20 bg-avocado-brown-100 border-2 border-white rounded-2xl mb-4">
               <Ticket className="w-10 h-10" />
-            </div>
-            <h1 className="text-4xl font-bold mb-2">Voucher Của Tôi</h1>
+            </div> */}
+            <h1 className="text-6xl font-bold mb-2 text-avocado-brown-100">
+              Voucher Của Tôi
+            </h1>
             <p className="text-avocado-brown-100/95 text-lg">
               Quản lý tất cả voucher đã lưu
             </p>
@@ -100,7 +102,7 @@ const MyVouchersPage = () => {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-avocado-brown-100/60 mb-2 font-medium">
+                    <p className="text-lg text-avocado-brown-100/60 mb-2 font-medium">
                       {tab.label}
                     </p>
                     <p className="text-4xl font-bold text-avocado-brown-100">
@@ -124,7 +126,7 @@ const MyVouchersPage = () => {
                 <button
                   key={tab.value}
                   onClick={() => setActiveTab(tab.value)}
-                  className={`flex-1 flex items-center justify-center space-x-3 py-5 px-6 font-semibold text-base transition-colors ${
+                  className={`flex-1 flex items-center justify-center space-x-3 py-5 px-6 font-semibold text-lg transition-colors ${
                     isActive
                       ? "text-avocado-brown-100 border-b-3 border-avocado-green-80 bg-avocado-green-10"
                       : "text-gray-5 hover:text-avocado-brown-100 hover:bg-gray-1"
@@ -134,7 +136,7 @@ const MyVouchersPage = () => {
                   <Icon className="w-6 h-6" />
                   <span>{tab.label}</span>
                   <span
-                    className={`px-3 py-1 text-sm font-bold rounded-full ${
+                    className={`px-3 py-1 text-lg font-bold rounded-full ${
                       isActive
                         ? "bg-avocado-green-80 text-white"
                         : "bg-gray-3 text-gray-6"
