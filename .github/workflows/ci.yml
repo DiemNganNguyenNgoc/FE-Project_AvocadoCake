@@ -2,9 +2,13 @@ name: Avocado Cake CI/CD
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [ "main", "master" ]
+    branches:
+      - main
+      - master
 
 jobs:
   ci-cd:
