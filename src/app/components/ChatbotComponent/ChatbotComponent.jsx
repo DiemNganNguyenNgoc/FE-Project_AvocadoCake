@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { processQuery } from "../../api/services/ChatbotService";
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
