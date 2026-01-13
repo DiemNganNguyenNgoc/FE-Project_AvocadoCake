@@ -373,7 +373,7 @@ const ViewProductDetailPage = () => {
           );
         }
 
-        setRelatedProducts(recommendedProducts);
+        setRelatedProducts(displayProducts);
       } catch (error) {
         console.error("Lỗi khi lấy khuyến nghị hoặc fallback:", error);
         setRelatedProducts([]);

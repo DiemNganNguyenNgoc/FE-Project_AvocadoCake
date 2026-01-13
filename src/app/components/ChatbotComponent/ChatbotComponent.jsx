@@ -1,14 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-import { processQuery } from "../../api/services/ChatbotService";
-=======
 import { chatbot, processQuery } from "../../api/services/ChatbotService";
->>>>>>> refactor-admin_page_nhn
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
 import { getDetailsproduct } from "../../api/services/productServices";
+import { useNavigate } from "react-router-dom";
 
 const ChatbotComponent = () => {
   const navigate = useNavigate();
@@ -124,14 +120,15 @@ const ChatbotComponent = () => {
       return <div className={styles["error-message"]}>{message.content}</div>;
     }
 
-
     // Khi click vào link sản phẩm
     const handleClick = (e) => {
       const link = e.target.closest("a");
       if (link) {
         e.preventDefault(); // Ngăn reload trang
 
-        const match = link.getAttribute("href").match(/\/view-product-detail\/([a-f0-9]+)/);
+        const match = link
+          .getAttribute("href")
+          .match(/\/view-product-detail\/([a-f0-9]+)/);
         if (match) {
           const productId = match[1];
           console.log("Product ID:", productId);
@@ -139,7 +136,6 @@ const ChatbotComponent = () => {
         }
       }
     };
-
 
     return (
       <div
@@ -156,16 +152,13 @@ const ChatbotComponent = () => {
     );
   };
 
-
-
-
-
   return (
     <div className={styles["chatbot-container"]}>
       {/* Chatbot toggle button */}
       <button
-        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${isOpen ? styles["open"] : ""
-          }`}
+        className={`w-20 h-20 p-2 ${styles["chatbot-toggle"]} ${
+          isOpen ? styles["open"] : ""
+        }`}
         onClick={toggleChatbot}
         aria-label="Toggle chatbot"
       >
@@ -190,8 +183,9 @@ const ChatbotComponent = () => {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`${styles["message"]} ${message.type === "bot" ? styles["bot"] : styles["user"]
-                  }`}
+                className={`${styles["message"]} ${
+                  message.type === "bot" ? styles["bot"] : styles["user"]
+                }`}
               >
                 <div className={styles["message-avatar"]}>
                   {message.type === "bot" ? <FaRobot /> : <FaUser />}
