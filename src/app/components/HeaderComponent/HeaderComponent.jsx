@@ -49,6 +49,11 @@ const HeaderComponent = () => {
     setShowOthersDropdown(false);
     navigate("/contact");
   };
+  const handleNews = () => {
+    console.log("Navigating to news");
+    setShowOthersDropdown(false);
+    navigate("/news");
+  };
   const handleClickCart = () => {
     navigate("/cart");
   };
@@ -266,6 +271,13 @@ const HeaderComponent = () => {
             onClick={handleContact}
           >
             Liên hệ
+          </SideMenuComponent>
+          <SideMenuComponent
+            variant="link"
+            className="text-start"
+            onClick={handleNews}
+          >
+            Tin tức
           </SideMenuComponent>
         </div>
       </Popover.Body>
@@ -487,12 +499,12 @@ const HeaderComponent = () => {
                       >
                         Thiết kế 2
                       </ButtonNoBGComponent> */}
-                      <ButtonNoBGComponent
+                      {/* <ButtonNoBGComponent
                         to="/news"
                         isActive={activePath.startsWith("/news")}
                       >
                         Tin tức
-                      </ButtonNoBGComponent>
+                      </ButtonNoBGComponent> */}
                       <ButtonNoBGComponent
                         to="/quizz"
                         isActive={activePath === "/quizz"}
@@ -534,7 +546,9 @@ const HeaderComponent = () => {
                         <div>
                           <ButtonNoBGComponent
                             className={`${styles.others__button} ${
-                              ["/introduce", "/contact"].includes(activePath)
+                              ["/introduce", "/contact", "/news"].includes(
+                                activePath
+                              )
                                 ? styles.active
                                 : ""
                             }`}
