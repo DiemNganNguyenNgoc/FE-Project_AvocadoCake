@@ -2,17 +2,13 @@ name: Avocado Cake CI/CD
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: ["main", "master"]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: ["main", "master"]
 
 jobs:
   ci-cd:
-    name: "CI: Test + Build + Deploy"
+    name: CI: Test + Build + Deploy (Vercel)
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +30,12 @@ jobs:
       - name: Build project
         run: CI=false npm run build
 
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
       - name: Deploy to Vercel
         if: github.event_name == 'push'
-        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
