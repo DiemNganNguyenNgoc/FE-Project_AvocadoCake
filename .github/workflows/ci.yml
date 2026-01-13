@@ -7,9 +7,8 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  # CI: Build (GitHub Actions)
-  ci:
-    name: "CI: Build"
+  ci-cd:
+    name: CI: Test + Build + Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -25,35 +24,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run unit tests
+        run: npm test -- --watch=false --passWithNoTests
+
       - name: Build project
         run: CI=false npm run build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: build/
-
-  # CD: Deploy + Run (Server / Nginx)
-  cd:
-    name: "CD: Deploy + Run"
-    needs: ci
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-output
-          path: build/
-
-      - name: Deploy to server
-        uses: easedigital/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
-          REMOTE_USER: ${{ secrets.SERVER_USER }}
-          SOURCE: "build/"
-          TARGET: "/var/www/avocado-cake"
-          ARGS: "-rlgoDzvc -i --delete"
+      - name: Deploy to Vercel
+        if: github.event_name == 'push'
+        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
