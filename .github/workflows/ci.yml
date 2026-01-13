@@ -12,7 +12,7 @@ on:
 
 jobs:
   ci-cd:
-    name: CI: Test + Build + Deploy
+    name: "CI: Test + Build + Deploy"
     runs-on: ubuntu-latest
 
     steps:
