@@ -5,6 +5,7 @@ import { processQuery } from "../../api/services/ChatbotService";
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
 import { getDetailsproduct } from "../../api/services/productServices";
+import { useNavigate } from "react-router-dom";
 
 const ChatbotComponent = () => {
   const navigate = useNavigate();
@@ -120,14 +121,15 @@ const ChatbotComponent = () => {
       return <div className={styles["error-message"]}>{message.content}</div>;
     }
 
-
     // Khi click vào link sản phẩm
     const handleClick = (e) => {
       const link = e.target.closest("a");
       if (link) {
         e.preventDefault(); // Ngăn reload trang
 
-        const match = link.getAttribute("href").match(/\/view-product-detail\/([a-f0-9]+)/);
+        const match = link
+          .getAttribute("href")
+          .match(/\/view-product-detail\/([a-f0-9]+)/);
         if (match) {
           const productId = match[1];
           console.log("Product ID:", productId);
@@ -135,7 +137,6 @@ const ChatbotComponent = () => {
         }
       }
     };
-
 
     return (
       <div
@@ -151,10 +152,6 @@ const ChatbotComponent = () => {
       </div>
     );
   };
-
-
-
-
 
   return (
     <div className={styles["chatbot-container"]}>

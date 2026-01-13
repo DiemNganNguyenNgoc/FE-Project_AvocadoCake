@@ -18,9 +18,26 @@ function DesignCakePage() {
   const [selectedTextId, setSelectedTextId] = useState(null);
   const [newText, setNewText] = useState("");
   const [textColor, setTextColor] = useState("#8B4513");
+  const [totalPrice, setTotalPrice] = useState(cakes[0]?.price || 0);
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+
+  // ===== CALCULATE TOTAL PRICE =====
+  const calculateTotalPrice = () => {
+    const cakePrice = selectedCake?.price || 0;
+    const toppingsPrice = toppingList.reduce(
+      (sum, topping) => sum + (topping.price || 0),
+      0
+    );
+    const textPrice = textList.length * 20000; // 20k per text
+    return cakePrice + toppingsPrice + textPrice;
+  };
+
+  // Update total price whenever items change
+  React.useEffect(() => {
+    setTotalPrice(calculateTotalPrice());
+  }, [selectedCake, toppingList, textList]);
 
   // ===== ADD TOPPING =====
   const handleAddTopping = (topping) => {
@@ -131,7 +148,7 @@ function DesignCakePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="container-xl flex flex-col">
       {/* HEADER */}
       <div className="text-center mb-12">
         <h1 className="productadmin__title">THIẾT KẾ BÁNH</h1>
@@ -140,7 +157,7 @@ function DesignCakePage() {
         </h3>
 
         {/* 👉 TAB SWITCHER */}
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex justify-center gap-4 mt-6 px-4 h-18">
           <button
             onClick={() => setActiveTab("manual")}
             className={`
@@ -158,7 +175,7 @@ function DesignCakePage() {
           <button
             onClick={() => setActiveTab("ai")}
             className={`
-              px-6 py-2 rounded-full font-semibold transition
+              px-6 py-2 rounded-full font-semibold transition 
               ${
                 activeTab === "ai"
                   ? "bg-lime-400 text-avocado-brown-100 shadow-lg"
@@ -191,6 +208,53 @@ function DesignCakePage() {
 
           {/* RIGHT TOOLBAR */}
           <div className="flex flex-col gap-6 max-w-md">
+            {/* PRICE DISPLAY */}
+            <div className="bg-white p-6 rounded-2xl border border-gray-300">
+              <h3 className="text-xl font-semibold text-gray-700 mb-3">
+                Giá tạm tính
+              </h3>
+              <div className="space-y-2 text-xl text-gray-600">
+                <div className="flex justify-between">
+                  <span>Bánh nền:</span>
+                  <span className="font-medium">
+                    {(selectedCake?.price || 0).toLocaleString("vi-VN")}₫
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Topping ({toppingList.length}):</span>
+                  <span className="font-medium">
+                    {toppingList
+                      .reduce((sum, t) => sum + (t.price || 0), 0)
+                      .toLocaleString("vi-VN")}
+                    ₫
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Chữ ({textList.length}):</span>
+                  <span className="font-medium">
+                    {(textList.length * 20000).toLocaleString("vi-VN")}₫
+                  </span>
+                </div>
+                <div className="border-t border-gray-300 pt-2 mt-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-2xl font-bold text-green-700">
+                      Tổng cộng:
+                    </span>
+                    <span className="text-3xl font-bold text-green-700">
+                      {totalPrice.toLocaleString("vi-VN")}₫
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">📌 Lưu ý:</span> Đây chỉ là
+                  giá tham khảo. Sau khi thiết kế xong, vui lòng gửi cho cửa
+                  hàng để được định giá chính xác và tư vấn chi tiết hơn.
+                </p>
+              </div>
+            </div>
+
             <CakeSelector
               cakes={cakes}
               selectedCake={selectedCake}
@@ -225,7 +289,7 @@ function DesignCakePage() {
                 </h2>
 
                 <p className="text-gray-600 mb-6">
-                  Đăng nhập để tạo mẫu bánh độc đáo bằng AI ✨
+                  Đăng nhập để tạo mẫu bánh độc đáo bằng AI
                 </p>
 
                 <button
@@ -239,7 +303,7 @@ function DesignCakePage() {
               <>
                 {/* TITLE */}
                 <h2 className="text-3xl font-bold text-green-700 mb-4 text-center">
-                  Tạo mẫu bánh bằng AI ✨
+                  Tạo mẫu bánh bằng AI
                 </h2>
                 <p className="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
                   Nhập mô tả chiếc bánh bạn muốn — AI sẽ tạo ra một bản concept

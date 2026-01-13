@@ -23,12 +23,12 @@ const ToppingToolbar = ({ toppings, onAdd }) => {
           value={selectedTopping}
           onChange={(e) => setSelectedTopping(e.target.value)}
           onKeyDown={handleKeyPress}
-          className="border rounded-xl p-2 bg-white shadow-sm flex-1 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="border-2 border-gray-300 rounded-full px-4 py-2 h-18 bg-white shadow-sm flex-1 focus:outline-none focus:ring-2 focus:ring-green-400"
         >
-          <option value="">-- Chọn topping --</option>
+          <option value="">— Chọn topping —</option>
           {toppings.map((topping) => (
             <option key={topping.id} value={topping.id}>
-              {topping.name}
+              {topping.name} - {(topping.price || 0).toLocaleString("vi-VN")}₫
             </option>
           ))}
         </select>
