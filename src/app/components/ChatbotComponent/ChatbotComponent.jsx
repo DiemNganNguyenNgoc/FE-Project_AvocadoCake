@@ -1,11 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { processQuery } from "../../api/services/ChatbotService";
-=======
-import { chatbot, processQuery } from "../../api/services/ChatbotService";
->>>>>>> refactor-admin_page_nhn
 import styles from "./ChatbotComponent.module.css";
 import { FaPaperPlane, FaTimes, FaRobot, FaUser } from "react-icons/fa";
 import { getDetailsproduct } from "../../api/services/productServices";

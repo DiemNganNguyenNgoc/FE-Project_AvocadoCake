@@ -1,6 +1,9 @@
 import { jwtDecode } from "jwt-decode";
 
 export const isJsonString = (data) => {
+  if (typeof data !== "string") {
+    return false;
+  }
   try {
     JSON.parse(data);
   } catch (error) {

@@ -72,7 +72,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false --roots ./src ./tests --testMatch \"<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}\" \"<rootDir>/tests/**/*.{spec,test}.{js,jsx,ts,tsx}\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
