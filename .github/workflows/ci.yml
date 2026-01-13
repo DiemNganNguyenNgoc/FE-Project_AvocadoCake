@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci-cd:
-    name: CI: Test + Build + Deploy (Vercel)
+    name: Test + Build + Deploy (Vercel)
     runs-on: ubuntu-latest
 
     steps:
