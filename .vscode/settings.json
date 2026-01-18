@@ -4,5 +4,6 @@
     "src/app/locales",
     "src/lib/i18n",
     "src/lib/i18n/locales"
-  ]
+  ],
+  "postman.settings.dotenv-detection-notification-visibility": false
 }

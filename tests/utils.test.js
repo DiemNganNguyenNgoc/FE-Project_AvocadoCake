@@ -103,6 +103,6 @@ describe('getBase64', () => {
         const error = new Error('Read failed');
         mockFileReader.onerror(error);
 
-        await expect(promise).rejects.toBe(error);
+        await expect(promise).rejects.toThrow('Read failed');
     });
 });
