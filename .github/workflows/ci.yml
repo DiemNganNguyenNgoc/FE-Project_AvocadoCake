@@ -2,26 +2,49 @@ name: Avocado Cake CI/CD
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "master"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "master"]
 
 jobs:
   ci:
     name: CI - Test & Build
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: npm
 
-      - run: npm install
-      - run: npm test -- --watch=false --passWithNoTests
-      - run: CI=false npm run build
+      - name: Install dependencies
+        run: npm install
 
-  #deploy-vercel: auto update 
-  #CD local: run auto-update.ps1 to update code
-    
+      - name: Run unit tests
+        run: npm test -- --watch=false --passWithNoTests
+
+      - name: Build project (ignore lint)
+        run: CI=false npm run build
+
+  deploy-vercel:
+    name: CD - Deploy to Vercel
+    needs: ci                # ✅ CHỈ CHẠY KHI CI PASS
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel (Production)
+        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
