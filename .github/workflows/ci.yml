@@ -22,17 +22,6 @@ jobs:
       - run: npm test -- --watch=false --passWithNoTests
       - run: CI=false npm run build
 
-  deploy-vercel:
-    name: CD - Deploy Vercel
-    needs: ci
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: npm install -g vercel
-
-      - run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  #deploy-vercel: auto update 
+  #CD local: run auto-update.ps1 to update code
+    
