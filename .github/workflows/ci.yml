@@ -32,7 +32,8 @@ jobs:
         continue-on-error: true
 
   deploy-vercel:
-    name: CD - Deploy to Vercel                
+    name: CD - Deploy to Vercel   
+    needs: ci
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
