@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: CI - Run Tests Only
+    name: CI
     runs-on: ubuntu-latest
 
     steps:

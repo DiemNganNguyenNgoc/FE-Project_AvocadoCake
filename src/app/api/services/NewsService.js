@@ -1,12 +1,11 @@
 import axios from "axios";
 import api from "../APIClient";
-import { data } from "jquery";
-
+// 
 export const axiosJWT = axios.create();
 
 // export const createnews = async (data) => {
 //   const res = await axios.post(`${process.env.REACT_APP_API_URL_BACKEND}/news/create-news`, data)
-  
+
 //   return res.data
 // };
 // 
@@ -19,7 +18,7 @@ export const createNews = async (data, access_token) => {
       {
         headers: {
           //"Content-Type": "application/json",
-          "Content-Type": "multipart/form-data" ,
+          "Content-Type": "multipart/form-data",
           token: `Bearer ${access_token}`,
         },
       }
@@ -29,11 +28,11 @@ export const createNews = async (data, access_token) => {
     if (error.response) {
       console.log("err", error);
       throw {
-  
+
         // status: error.response.data?.status || "ERR",
         message: error.response.data?.message || "Đã xảy ra lỗi.",
       };
-      
+
     } else {
       throw { status: 500, message: "Không thể kết nối đến máy chủ." };
     }
@@ -99,11 +98,11 @@ export const getAllNews = async () => {
 export const updateNews = async (id, access_token, data) => {
   try {
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL_BACKEND}/news/update-news/${id}`,data,
-      
+      `${process.env.REACT_APP_API_URL_BACKEND}/news/update-news/${id}`, data,
+
       {
         headers: {
-          "Content-Type": "multipart/form-data" ,
+          "Content-Type": "multipart/form-data",
           token: `Bearer ${access_token}`,
         },
       }
@@ -121,11 +120,11 @@ export const updateNews = async (id, access_token, data) => {
   }
 };
 
-export const deleteNews = async (newsId,access_token) => {
+export const deleteNews = async (newsId, access_token) => {
   try {
     const res = await axios.delete(
       `${process.env.REACT_APP_API_URL_BACKEND}/news/delete-news/${newsId}`,
-      
+
       {
         headers: {
           "Content-Type": "application/json",

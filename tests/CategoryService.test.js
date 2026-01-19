@@ -19,36 +19,50 @@ describe("CategoryService", () => {
     const access_token = "mock-token";
     const categoryId = "cat-123";
 
+    const mockCategories = [
+        { id: "1", categoryCode: "C01", categoryName: "Cakes", isActive: true },
+        { id: "2", categoryCode: "C02", categoryName: "Breads", isActive: false },
+        { id: "3", categoryCode: "C03", categoryName: "Cookies", isActive: true }
+    ];
+
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     describe("getAllCategory", () => {
         it("should return all categories on success", async () => {
-            const mockData = [{ id: 1, categoryName: "Cakes" }];
-            axios.get.mockResolvedValue({ data: mockData });
+            axios.get.mockResolvedValue({ data: mockCategories });
 
             const result = await getAllCategory();
 
             expect(axios.get).toHaveBeenCalledWith(
                 expect.stringContaining("/category/get-all-category")
             );
-            expect(result).toEqual(mockData);
+            expect(result).toEqual(mockCategories);
         });
 
-        it("should throw error on failure", async () => {
+        it("should throw default message on network failure", async () => {
+            axios.get.mockRejectedValue(new Error("Network Error"));
+
+            await expect(getAllCategory()).rejects.toEqual({
+                status: 500,
+                message: "Không thể kết nối đến máy chủ.",
+            });
+        });
+
+        it("should throw fallback error message on failure if message is missing", async () => {
             axios.get.mockRejectedValue({
-                response: { data: { message: "Fetch error" } },
+                response: { data: {} },
             });
 
             await expect(getAllCategory()).rejects.toEqual({
-                message: "Fetch error",
+                message: "Đã xảy ra lỗi khi lấy danh mục.",
             });
         });
     });
 
     describe("createCategory", () => {
-        it("should call axios.post with transformed data", async () => {
+        it("should call axios.post with transformed data for Active status", async () => {
             const inputData = { categoryCode: "C01", categoryName: "Birthday", status: "Active" };
             const mockResponse = { data: { success: true } };
             axios.post.mockResolvedValue(mockResponse);
@@ -71,15 +85,37 @@ describe("CategoryService", () => {
             expect(result).toEqual(mockResponse.data);
         });
 
-        it("should throw error on failure", async () => {
-            axios.post.mockRejectedValue({ response: { data: { message: "Failed" } } });
-            await expect(createCategory({}, access_token)).rejects.toEqual({ message: "Failed" });
+        it("should call axios.post with transformed data for Inactive status", async () => {
+            const inputData = { categoryCode: "C01", categoryName: "Birthday", status: "Inactive" };
+            const mockResponse = { data: { success: true } };
+            axios.post.mockResolvedValue(mockResponse);
+
+            await createCategory(inputData, access_token);
+
+            expect(axios.post).toHaveBeenCalledWith(
+                expect.any(String),
+                expect.objectContaining({ isActive: false }),
+                expect.any(Object)
+            );
+        });
+
+        it("should throw default message on connection failure", async () => {
+            axios.post.mockRejectedValue(new Error("Connect Error"));
+            await expect(createCategory({}, access_token)).rejects.toEqual({
+                status: 500,
+                message: "Không thể kết nối đến máy chủ."
+            });
+        });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(createCategory({}, access_token)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
         });
     });
 
     describe("getDetaillsCategory", () => {
         it("should return category details", async () => {
-            const mockData = { id: categoryId, name: "Birthday" };
+            const mockData = mockCategories[0];
             axios.get.mockResolvedValue({ data: mockData });
 
             const result = await getDetaillsCategory(categoryId, access_token);
@@ -87,9 +123,19 @@ describe("CategoryService", () => {
             expect(result).toEqual(mockData);
         });
 
-        it("should throw error on failure", async () => {
-            axios.get.mockRejectedValue({ response: { data: { message: "Not found" } } });
-            await expect(getDetaillsCategory(categoryId, access_token)).rejects.toEqual({ message: "Not found" });
+        it("should throw network error on connection failure", async () => {
+            axios.get.mockRejectedValue(new Error());
+            await expect(getDetaillsCategory(categoryId, access_token)).rejects.toEqual({
+                Discount: 500,
+                message: "Không thể kết nối đến máy chủ."
+            });
+        });
+
+        it("should throw fallback message on response error", async () => {
+            axios.get.mockRejectedValue({ response: { data: {} } });
+            await expect(getDetaillsCategory(categoryId, access_token)).rejects.toEqual({
+                message: "Đã xảy ra lỗi."
+            });
         });
     });
 
@@ -113,9 +159,12 @@ describe("CategoryService", () => {
             expect(result).toEqual(mockResponse.data);
         });
 
-        it("should throw error on failure", async () => {
-            axios.put.mockRejectedValue({ response: { data: { message: "Update failed" } } });
-            await expect(updateCategory(categoryId, access_token, {})).rejects.toEqual({ message: "Update failed" });
+        it("should throw network error on connection failure", async () => {
+            axios.put.mockRejectedValue(new Error());
+            await expect(updateCategory(categoryId, access_token, {})).rejects.toEqual({
+                status: 500,
+                message: "Không thể kết nối đến máy chủ."
+            });
         });
     });
 
@@ -133,9 +182,11 @@ describe("CategoryService", () => {
             expect(result).toEqual(mockResponse.data);
         });
 
-        it("should throw error on failure", async () => {
-            axios.delete.mockRejectedValue({ response: { data: { message: "Delete failed" } } });
-            await expect(deleteCategory(categoryId, access_token)).rejects.toEqual({ message: "Delete failed" });
+        it("should throw network error on connection failure", async () => {
+            axios.delete.mockRejectedValue(new Error());
+            await expect(deleteCategory(categoryId, access_token)).rejects.toEqual({
+                message: "Không thể kết nối đến máy chủ."
+            });
         });
     });
 });

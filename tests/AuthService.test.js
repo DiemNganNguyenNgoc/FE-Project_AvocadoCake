@@ -56,6 +56,11 @@ describe("AuthService", () => {
                 message: "Không thể kết nối đến máy chủ.",
             });
         });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(forgotPassword(email)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
+        });
     });
 
     describe("verifyOTP", () => {
@@ -80,6 +85,11 @@ describe("AuthService", () => {
         it("should throw default message on network failure", async () => {
             axios.post.mockRejectedValue(new Error());
             await expect(verifyOTP(email, otp)).rejects.toEqual({ message: "Không thể kết nối đến máy chủ." });
+        });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(verifyOTP(email, otp)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
         });
     });
 
@@ -106,6 +116,11 @@ describe("AuthService", () => {
             axios.post.mockRejectedValue(new Error());
             await expect(resetPassword(email, newPassword)).rejects.toEqual({ message: "Không thể kết nối đến máy chủ." });
         });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(resetPassword(email, newPassword)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
+        });
     });
 
     describe("loginWithGoogle", () => {
@@ -131,6 +146,11 @@ describe("AuthService", () => {
             axios.post.mockRejectedValue(new Error());
             await expect(loginWithGoogle(token)).rejects.toEqual({ message: "Không thể kết nối đến máy chủ." });
         });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(loginWithGoogle(token)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
+        });
     });
 
     describe("loginWithFacebook", () => {
@@ -155,6 +175,11 @@ describe("AuthService", () => {
         it("should throw default message on network failure", async () => {
             axios.post.mockRejectedValue(new Error());
             await expect(loginWithFacebook(token)).rejects.toEqual({ message: "Không thể kết nối đến máy chủ." });
+        });
+
+        it("should throw fallback message if response has no message", async () => {
+            axios.post.mockRejectedValue({ response: { data: {} } });
+            await expect(loginWithFacebook(token)).rejects.toEqual({ message: "Đã xảy ra lỗi." });
         });
     });
 });
