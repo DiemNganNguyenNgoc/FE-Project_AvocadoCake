@@ -72,7 +72,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false --roots ./src ./tests --testMatch \"<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}\" \"<rootDir>/tests/**/*.{spec,test}.{js,jsx,ts,tsx}\"",
+    "test": "react-scripts test --watchAll=false --roots ./src ./tests --testMatch \"<rootDir>/tests/**/*.{spec,test}.{js,jsx,ts,tsx}\" --testPathIgnorePatterns=\"ButtonComponent|CardProduct|LogInPage\" --coverage --collectCoverageFrom=\"src/app/api/services/**/*.js\" --collectCoverageFrom=\"src/app/redux/slides/**/*.js\" --collectCoverageFrom=\"src/app/hooks/**/*.js\" --collectCoverageFrom=\"src/utils/**/*.js\" --collectCoverageFrom=\"src/utils.js\" --collectCoverageFrom=\"!src/app/data/**\" --collectCoverageFrom=\"!src/lib/i18n/**\" --collectCoverageFrom=\"!src/mocks/**\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

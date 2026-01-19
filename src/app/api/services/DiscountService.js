@@ -1,6 +1,5 @@
 import axios from "axios";
 import api from "../APIClient";
-import { data } from "jquery";
 
 export const axiosJWT = axios.create();
 

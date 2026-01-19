@@ -1,6 +1,5 @@
 import axios from "axios";
 import api from "../APIClient";
-import { data } from "jquery";
 
 export const axiosJWT = axios.create();
 
@@ -150,8 +149,7 @@ export const deleteProduct = async (productId, access_token) => {
 export const searchProducts = async (query) => {
   try {
     const res = await axiosJWT.get(
-      `${
-        process.env.REACT_APP_API_URL_BACKEND
+      `${process.env.REACT_APP_API_URL_BACKEND
       }/product/search?search=${encodeURIComponent(query)}`,
 
       {
